@@ -12,6 +12,7 @@ const Wrapper=styled.div`
 
 
 function Userweather(props){
+    console.log("변경확인")
     const [loginuser,Setloginuser,removeloginuser]=useCookies(['userinfo'])
     const {userregion}=props;
     const axiosinstance=CreateAxios();
