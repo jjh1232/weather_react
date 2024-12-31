@@ -212,6 +212,17 @@ const commentdelete=(id)=>{
     return false;
  }
 
+
+ //좋아요기능
+ const likes=()=>{
+  axiosinstance.get(`/noticelike/${noticedetail.num}`).then((res)=>{
+    console.log("좋아요기능"+res.data)
+    noticedetailget();
+  }).catch(()=>{
+    
+    alert("오류")
+  })
+ }
 return(
   <Wrapper>
    
@@ -291,7 +302,8 @@ commentdelete={commentdelete}
 
 
 
-
+<button onClick={likes}>좋아요</button> 
+{noticedetail.likes}
 </div>
   
 </Wrapper>

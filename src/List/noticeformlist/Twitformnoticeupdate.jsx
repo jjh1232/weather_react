@@ -143,7 +143,7 @@ const filedelete=(id,range)=>{
 const twitnoticecreate=()=>{
 
     console.log("글작성 파일확인"+newfilelist)
-    axiosinstance.post("/noticecreate",{
+    axiosinstance.put(`/noticeupdate/${noticeid}`,{
         username:cookie.userinfo["username"],
         nickname:cookie.userinfo["nickname"],
         title:newtitle,
@@ -152,7 +152,7 @@ const twitnoticecreate=()=>{
     }).then((res)=>{
         alert("글작성성공")
         //사실어차피리로드해야해서리..
-        props.setIsupdatas(false)
+        
         window.location.reload();
         
         
@@ -205,7 +205,7 @@ useEffect(()=>{
         
         확인할내용2:{newcontent} 
         <br/>
-        <button >제출</button>
+        <button onClick={twitnoticecreate}>제출</button>
         </Modaliner>
         </Modalouter>
     )

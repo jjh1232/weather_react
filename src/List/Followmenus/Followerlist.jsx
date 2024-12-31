@@ -37,12 +37,12 @@ function Followerlist(props){
  
      const modalclose=(e)=>{
         e.preventDefault();
-         console.log("실행감지1"+modalref.current)
-             console.log("실행감지2"+e.target)
-             if(ismodal&&!modalref.current.contains(e.target)){
-                console.log("모달열려있음")
-                setIsmodal(false)
-            }
+        console.log("실행감지1"+modalref.current)
+        console.log("실행감지2"+e.target)
+        if(ismodal&&!modalref.current.contains(e.target)){
+           console.log("모달열려있음")
+           setIsmodal(false)
+       }
  
          
      }

@@ -7,6 +7,7 @@ import axios from "axios";
 import Twitcomment from "./Twitcomment";
 import { useCookies } from "react-cookie";
 import Twitformnoticeupdate from "./Twitformnoticeupdate";
+import Noticelikes from "../../UI/Noticetools/Noticelikes";
 
 const Wrapper=styled.div`
     border:1px solid
@@ -23,7 +24,7 @@ export default function Twitformlist(props){
     const axiosinstance=CreateAxios();
     const [loginuser,setloginuser,removeloginuser]=useCookies();
     const [isupdate,setIsupdate]=useState(false)
-
+    const [islike,setIslike]=useState(false);
     useEffect(()=>{
         if(isreple){
             console.log("트루")
@@ -35,6 +36,11 @@ export default function Twitformlist(props){
 
     },[isreple])
 
+    useEffect(()=>{
+      if(loginuser){
+        islikes(post.num);
+      }
+    },[])
     const showreply=()=>{
         console.log("쇼리플")
         
@@ -146,7 +152,33 @@ const commentdelete=(id)=>{
       })
  }
 
+ 
+ //좋아요기능==========================================
+ const onlike=(id)=>{
+  
+  axiosinstance.get(`/noticelike/${id}`).then((res)=>{
+   
+    console.log("좋아요기능"+res.data)
+    
+  }).catch(()=>{
+    
+    alert("오류")
+  })
+ }
 
+ //==========================좋아요 여부체크?==========================
+ const islikes=(num)=>{
+ console.log(num)
+  axiosinstance.get(`/noticelikecheck/${num}`)
+  .then((res)=>{
+    setIslike(res.data);
+
+  }).catch(()=>{
+    
+    
+  })
+
+}
     return (
         <Wrapper>
         
@@ -157,6 +189,7 @@ const commentdelete=(id)=>{
             
             {<div dangerouslySetInnerHTML={{__html:post.text}}></div>}
 
+            
             <br/>
             <button onClick={()=>{
                 setIsreple(!isreple)
@@ -164,6 +197,13 @@ const commentdelete=(id)=>{
             }>
             showreply
             </button>
+
+            <button onClick={()=>{onlike(post.num)}}>좋아요</button>
+            {post.likes}
+            {islike?"true":"false"}
+            <h5>
+            {post.red}
+            </h5>
             {isreple&&<>
                 <Twitcomment comments={comments} noticeid={post.num} 
                 commentcreate={commentsubmit}

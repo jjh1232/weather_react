@@ -108,8 +108,8 @@ const filedelete=(id,range)=>{
 }
 
 //제출
-const twitnoticecreate=()=>{
-
+const createtwitnotice=()=>{
+   
     console.log("글작성 파일확인"+filelist)
     axiosinstance.post("/noticecreate",{
         username:cookie.userinfo["username"],
@@ -170,7 +170,7 @@ const twitnoticecreate=()=>{
         파일인덱스:{fileindex.current} 
         확인할내용2:{content} 
         <br/>
-        <button onClick={twitnoticecreate}>제출</button>
+        <button onClick={createtwitnotice}>제출</button>
         </Wrapper>
     )
 }
