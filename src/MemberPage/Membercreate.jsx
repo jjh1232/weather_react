@@ -23,7 +23,9 @@ function membercreate(){
             password: '',
             confirmpassword: '',
             nickname: '', 
-            region:''
+            region:'',
+            gridx:'' ,
+            gridy:''
         }
     );
 
@@ -78,6 +80,7 @@ const confirmpass=()=>{
 
         
     }
+    //주소 선택
 const regionpop=(e)=>{
     e.preventDefault();
    
@@ -93,8 +96,11 @@ const regiondata=(regions)=>{
 //레기온테이터받음
 const onGetdata=(newdata)=>{
     console.log(newdata)
-    setloginform({...loginform,region:newdata})
+   
+    setloginform({...loginform,region:newdata.region
+        ,gridx:newdata.gridx,gridy:newdata.gridy})
 }
+
 //인증확인및 가입요청
 const membercreate=()=>{
     if(isemail===false){
@@ -103,15 +109,16 @@ const membercreate=()=>{
     if(passconfirm===false){
         alert("비밀번호확인을 확인해주세요")
     }
+    if(loginform.nickname)
     if(isemail===true && passconfirm===true){
         axios.post("/open/membercreate",{
             username:loginform.username,
             password:loginform.password,
            
             nickname:loginform.nickname,
-            region:loginform.region.juso,
-            gridx:loginform.region.gridx,
-            gridy:loginform.region.gridy
+            region:loginform.region,
+            gridx:loginform.gridx,
+            gridy:loginform.gridy
         }).then((res)=>{
             alert("회원님의 이메일로 인증메일을보냈습니다! 인증후 사용해주세요")
             navigate("/main")
@@ -136,7 +143,7 @@ return(
     {passconfirm?"":"비밀번호가일치하지않습니다"}</td></tr>
     
     <tr><td>닉네임:<input type="text" value={loginform.nickname} onChange={(e)=>setloginform({...loginform,nickname:e.target.value})}/></td></tr>
-    <tr><td>지역:<input type="text" value={loginform.region.juso} readOnly /> 
+    <tr><td>지역:<input type="text" value={loginform.region} readOnly /> 
      <Weatherregion title="지역찾기" onGetdata={onGetdata}/></td></tr>
      </tbody>
      </table>

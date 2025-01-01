@@ -13,7 +13,9 @@ const Wrapper=styled.div`
     border:1px solid
 
 `
-
+const Weatherdata =styled.div`
+    text-align: right;
+`
 export default function Twitformlist(props){
 
     const {key,post}=props;
@@ -179,9 +181,10 @@ const commentdelete=(id)=>{
   })
 
 }
+//==========================렌더링==============================
     return (
         <Wrapper>
-        
+          <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
         {post.nickname}@{post.username}
             <br/>
             {post.title}

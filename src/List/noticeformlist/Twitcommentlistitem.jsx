@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Commentform from "../../Noticepage/Commentform";
+import styled from "styled-components";
+
+
 
 export default function Twitcommentlistitem(props)
 {
@@ -13,8 +16,10 @@ return (
     <br/>
     <div onClick={()=>{
         setIsreple(!isreple)
-    }}>
+    }}> 
     {comment.nickname}@{comment.username}
+
+    
     <br/>
     {comment.text}
     <br/>

@@ -3,7 +3,16 @@ import { useState } from "react";
 import Button from "../UI/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
+const Wrapper=styled.div`
+position: relative;
+left:28.5%;
+width:43%;
+height:100%;
+ border: 1px solid;
+
+`
 function Memberpasswordfind(){
 const [email,Setemail]=useState();
 const url=`/open/passwordfind`
@@ -16,26 +25,21 @@ const findpassword=()=>{
     }
 
   }).then((res)=>{
-      if(res.data==="x"){
-        alert("이메일이존재하지않습니다")
-      }
-      else{
-        alert("이메일에임시비밀번호를발급하였습니다")
-        navigate("/main")
-      }
+    alert(res.data)
+    navigate(`/main`)
   })
 }
 
 
   return (
-    <React.Fragment>
+    <Wrapper>
       비밀번호를찾으려는 이메일을 작성해 주십시오
       <br/>
       이메일:<input type="text" onChange={(e)=>Setemail(e.target.value)}/>
       <Button title="확인" onClick={findpassword}/>
 
 
-    </React.Fragment>
+    </Wrapper>
   
   )
 }

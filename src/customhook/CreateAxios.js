@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 
 import  {useCookies}  from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 
  function CreateAxios(){
      const [loginuser,setLoginuser,removeLoginuser]=useCookies();
 
-
+    const navigate=useNavigate();
  const instance= 
 axios.create({
     withCredentials:true,
@@ -58,7 +59,7 @@ instance.interceptors.request.use(
             return newConfig;
         }
         */
-        return config;
+        //return config;
     },(err)=>{
         console.log("요청단계에러")
         //만약 액세스토큰요청후 
@@ -112,8 +113,10 @@ instance.interceptors.response.use(
             }).catch((err)=>{
                 console.log("리프레쉬토큰도오류!")
                 alert("다시로그인해주세요!")
+                removeLoginuser("Refreshtoken");
+                removeLoginuser("Acesstoken");
                 //로그아웃
-            })
+            })  
 
             
         }

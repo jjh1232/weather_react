@@ -214,7 +214,7 @@ const naverlogin=()=>{
     removeloginuser("Acesstoken");
     alert("로그아웃되었습니다")
     Setislogin(false)
-    window.location.reload()
+    navigate("/main")
   }
 
 

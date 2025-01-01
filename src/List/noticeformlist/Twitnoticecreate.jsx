@@ -3,11 +3,15 @@ import { useCookies } from "react-cookie";
 import ReactQuill from "react-quill";
 import CreateAxios from "../../customhook/CreateAxios";
 import styled from "styled-components";
-
+import * as Weatherpa from "../../UI/Noticetools/Weatherpar"
 const Wrapper=styled.div`
     overflow: auto;
     width:100%;
     height: 100%;
+`
+const Weathercss=styled.div`
+    text-align: right;
+
 `
 
 export default function Twitnoticecreate(props){
@@ -26,6 +30,10 @@ export default function Twitnoticecreate(props){
     const [filelist,setFilelist]=useState([{
                 
     }])
+    let temp=cookie.weather.t1H
+    let rain=cookie.weather.rn1
+    let pty=Weatherpa.getpty(cookie.weather.pty);
+    let sky=Weatherpa.getsky(cookie.weather.sky);
     //모듈 설정
     
     const fileindex=useRef(1)
@@ -116,6 +124,10 @@ const createtwitnotice=()=>{
         nickname:cookie.userinfo["nickname"],
         title:title,
         text:content,
+        temp:temp,
+        sky:sky,
+        pty:pty,
+        rain:rain,
         files:filelist
     }).then((res)=>{
         alert("글작성성공")
@@ -130,6 +142,10 @@ const createtwitnotice=()=>{
 
     return (
         <Wrapper>
+         <Weathercss> {//날씨css
+         }       
+        {temp},{rain},{sky},{pty}
+        </Weathercss>
         이메일:{cookie.userinfo["username"]}
         <br/>
         닉네임:{cookie.userinfo["nickname"]}

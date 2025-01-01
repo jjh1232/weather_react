@@ -34,6 +34,8 @@ function Userweather(props){
             console.log(res)
             console.log(asd)
             setWeatherdata(res.data)
+            Setloginuser("weather",res.data[2])
+            
           }).catch((err)=>{
 
           })
