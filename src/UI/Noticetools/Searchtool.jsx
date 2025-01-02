@@ -67,8 +67,7 @@ export default function Searchtool(props){
          setSearchdatas((prev)=>({...prev,keyword:e.target.value}))
     }}/>
     <button onClick={search}>검색</button>
-    <br/>기존값{searchdata.keywords}
-   <br/> 바뀐값{searchdatas.keyword}
+    
     </>
   )
 

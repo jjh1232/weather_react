@@ -46,7 +46,7 @@ export default function Twitformex(props){
             keywords:"",
             pages:1
         })
-     
+        const [statuschange,setStatuschange]=useState()
        //}=props;
         //console.log(`트윗폼메인함수시작`+totalpages.length)
        
@@ -146,6 +146,7 @@ export default function Twitformex(props){
                 }else{
                     ///...은배열이개별원소가된다 .객체의경우나머지를의미하게됨
                     console.log("포스트추가")
+                    //전개연산자로재활당을해야하는데어떻게하지..
                 setNotice([...notice,...res.data.content])
                 let arr=totalpageget(res.data.totalPages).length-1
                 
@@ -193,7 +194,14 @@ useEffect(()=>{
        const setpagehandler=()=>{
         setPage(1)
        }
-    
+       //글작성시상태변경
+       const redataon=()=>{
+        console.log("글작성시리렌더노티스지워준뒤다시")
+        //배열아니면map을못받고 스프레드연산자를 배열밖에서안쓰면map이안되고..
+        //일단무식하게그냥새로고침..
+        //setNotice([...notice])
+        window.location.reload();
+       }
        //==============렌더링!==============================================================
        return (
         <>
@@ -201,15 +209,19 @@ useEffect(()=>{
         
         
         <Wrapper>
-        <Noticeformbutton/>
-        
         <button onClick={()=>{
             setIscreate(true)
-        }}> 글작성하기 </button>
+        }}> 글작성하기 </button>{statuschange}
+        <Noticeformbutton/>
+        
+        
         <br/>
+        
+
         {iscreate &&<Modalout>
+
         <Modalin>
-        <Twitnoticecreate setIscreate={setIscreate}/>
+        <Twitnoticecreate setIscreate={setIscreate} redataget={redataon}/>
         </Modalin>
         
         </Modalout>}

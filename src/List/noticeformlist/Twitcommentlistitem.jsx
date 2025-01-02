@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Commentform from "../../Noticepage/Commentform";
 import styled from "styled-components";
-
+import Replycomment from "../../UI/Replycomment";
 
 
 export default function Twitcommentlistitem(props)
@@ -26,6 +26,7 @@ return (
     {comment.redtime}
     <br/>
     </div>
+     
     {isreple&&<>
         <Commentform 
         noticenum={noticeid}
@@ -36,6 +37,7 @@ return (
        
 </>
     }
+    
     </>
 )
 }

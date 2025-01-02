@@ -76,13 +76,13 @@ instance.interceptors.response.use(
         removeLoginuser("Acesstoken");
         //삭제해줘야함
         setLoginuser("Acesstoken",res.headers.get("Authorization"),{path:"/"})
-       
+        setLoginuser("Refreshtoken",res.headers.get("refreshtoken"),{path:"/"})
         console.log("리스폰스")
         return res;
     },(err)=>{
         console.log("응답단계에러")
         console.log(err)
-        console.log(err.response.status)
+        console.log(err.response.status)//500을줌
         if(err.response.status===401){
             console.log("스태이터스에러")
             const refreshtoken=loginuser.Refreshtoken
@@ -115,12 +115,14 @@ instance.interceptors.response.use(
                 alert("다시로그인해주세요!")
                 removeLoginuser("Refreshtoken");
                 removeLoginuser("Acesstoken");
+                removeLoginuser("userinfo");
+                removeLoginuser("weather");
                 //로그아웃
             })  
 
             
         }
-        return Promise.reject(error);
+        return Promise.reject(err);
     }
 )
 

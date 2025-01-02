@@ -133,7 +133,7 @@ const createtwitnotice=()=>{
         alert("글작성성공")
         //사실어차피리로드해야해서리..
         props.setIscreate(false)
-        window.location.reload();
+        props.redataget();
         
         
     })

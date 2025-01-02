@@ -12,23 +12,29 @@ export default function Twitcomment(props){
 
     }=props
 
+    console.log("메인코멘트에서코멘츠"+comments)
     return (
         <>
         {comments&&comments.map((data)=>{
             return (<>
-                
-                <Twitcommentlistitem
+               {data.depth===0 &&
+               <div>
+               <Twitcommentlistitem
                 comment={data} 
                 noticeid={noticeid}
                 commentsubmit={commentcreate}
                 
                 />
-               <Replycomment parentid={data.id} commentslist={comments}
+               
+               <Replycomment 
+               parentid={data.id}
+                commentslist={comments}
                  commentupdate={commentupdate}
                  commentdelete={commentdelete}
-                 //스타일드
-                 formstyle="twitform"
                  />
+                 </div>
+               }
+              
 
 
                 

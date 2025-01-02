@@ -26,7 +26,7 @@ window.location.reload();
             }}>
                 트위터형
             </button>
-            <button onClick={()=>{navigate(`/notice?form=previewform`)
+            <button onClick={()=>{navigate(`/favoritenotice`)
               window.location.reload();
             }}>
                 미리보기형

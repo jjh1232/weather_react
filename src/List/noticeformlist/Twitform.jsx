@@ -7,6 +7,8 @@ import Searchtool from "../../UI/Noticetools/Searchtool";
 import { useLocation } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
+
+//현재안씀
 export default function Twitform({posts,noticecreate,setpagequery
     ,noticereset,querydatas,totalpages}){
     //const {posts,onClickItem,noticecreate,querydatas

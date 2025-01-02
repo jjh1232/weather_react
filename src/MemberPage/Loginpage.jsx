@@ -212,6 +212,7 @@ const naverlogin=()=>{
     removeloginuser("userinfo");
     removeloginuser("Refreshtoken");
     removeloginuser("Acesstoken");
+    removeloginuser("weather")
     alert("로그아웃되었습니다")
     Setislogin(false)
     navigate("/main")

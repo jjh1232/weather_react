@@ -33,6 +33,8 @@ import Twitformex from "./List/noticeformlist/Twitformex";
 import Statetest from "./customhook/Statetest";
 import Userimage from"./MemberPage/Memberupdata/Userimage";
 import Manyimage from "./UI/Manyim/Manyimage";
+import FavoriteNotice from "./List/noticeformlist/Favoritenotice";
+
 const MainTitleText = styled.p`
     font-size: 24px;
     font-weight: bold;
@@ -69,15 +71,16 @@ function App(props) {
     <RightSideBar/>
    
     <Routes>
+    <Route path="/favoritenotice" element={<FavoriteNotice/>}/>
     <Route path="manyimage" element={<Manyimage/>}/>
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
     <Route path="/notice/twitform" element={<Twitformex/>}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
-    <Route index element={<CenterPage/>}/>
+    <Route index element={<Twitformex/>}/>
     <Route path="notice" element={<CenterPage/>}/>
     <Route path="userprofile" element={<Userimage/>}/>
-      <Route path="main" element={<CenterPage/>}/>
+      <Route path="main" element={<Twitformex/>}/>
       <Route path="noticeex/:page" element={<Noticemainex/>}/>
       <Route path="noticelogic" element={<NoticelistView/>}/>
       <Route path="noticecreate" element={<Noticecreate/>}/>

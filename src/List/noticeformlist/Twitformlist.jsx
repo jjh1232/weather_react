@@ -39,7 +39,7 @@ export default function Twitformlist(props){
     },[isreple])
 
     useEffect(()=>{
-      if(loginuser){
+      if(loginuser.userinfo){
         islikes(post.num);
       }
     },[])
@@ -170,6 +170,7 @@ const commentdelete=(id)=>{
 
  //==========================좋아요 여부체크?==========================
  const islikes=(num)=>{
+  
  console.log(num)
   axiosinstance.get(`/noticelikecheck/${num}`)
   .then((res)=>{
@@ -179,7 +180,7 @@ const commentdelete=(id)=>{
     
     
   })
-
+  
 }
 //==========================렌더링==============================
     return (

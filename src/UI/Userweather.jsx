@@ -45,7 +45,7 @@ function Userweather(props){
           //유저주소없음
             axios.get("http://localhost:8081/open/weatherdata")
             .then((res)=>{
-                console.log(res)
+                console.log("날씨데이터"+res)
                 setWeatherdata(res.data)
             }).catch((err)=>{
               console.log("날씨정보를가져오지못했습니다")
