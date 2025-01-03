@@ -27,6 +27,7 @@ export default function Twitformlist(props){
     const [loginuser,setloginuser,removeloginuser]=useCookies();
     const [isupdate,setIsupdate]=useState(false)
     const [islike,setIslike]=useState(false);
+    const [likenum,setLikenum]=useState(post.likes)
     useEffect(()=>{
         if(isreple){
             console.log("트루")
@@ -40,7 +41,7 @@ export default function Twitformlist(props){
 
     useEffect(()=>{
       if(loginuser.userinfo){
-        islikes(post.num);
+       // islikes(post.num);
       }
     },[])
     const showreply=()=>{
@@ -161,6 +162,14 @@ const commentdelete=(id)=>{
   axiosinstance.get(`/noticelike/${id}`).then((res)=>{
    
     console.log("좋아요기능"+res.data)
+    if(islike){
+        setIslike(!islike)
+        setLikenum(likenum-1)
+    }
+    else{
+      setIslike(!islike)
+      setLikenum(likenum+1)
+    }
     
   }).catch(()=>{
     
@@ -168,7 +177,8 @@ const commentdelete=(id)=>{
   })
  }
 
- //==========================좋아요 여부체크?==========================
+ //==========================로그인좋아요 여부체크?==========================
+ /*
  const islikes=(num)=>{
   
  console.log(num)
@@ -182,9 +192,11 @@ const commentdelete=(id)=>{
   })
   
 }
+  */
 //==========================렌더링==============================
     return (
         <Wrapper>
+        {process.env.PUBLIC_URL}여기
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
         {post.nickname}@{post.username}
             <br/>
@@ -203,7 +215,7 @@ const commentdelete=(id)=>{
             </button>
 
             <button onClick={()=>{onlike(post.num)}}>좋아요</button>
-            {post.likes}
+            {likenum}
             {islike?"true":"false"}
             <h5>
             {post.red}

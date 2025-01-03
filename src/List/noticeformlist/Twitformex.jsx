@@ -121,7 +121,7 @@ export default function Twitformex(props){
           }
         }).then((res)=>{
           
-            console.log(res.data)
+            console.log(res)
            
             
             const newcontent=res.data.content;
@@ -207,7 +207,7 @@ useEffect(()=>{
         <>
        
         
-        
+       {process.env.PUBLIC_URL}
         <Wrapper>
         <button onClick={()=>{
             setIscreate(true)
@@ -220,7 +220,7 @@ useEffect(()=>{
 
         {iscreate &&<Modalout>
 
-        <Modalin>
+        <Modalin><button onClick={()=>{setIscreate(false)}}>글작성끄기</button>
         <Twitnoticecreate setIscreate={setIscreate} redataget={redataon}/>
         </Modalin>
         

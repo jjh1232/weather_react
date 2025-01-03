@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import CreateAxios from "../../customhook/CreateAxios";
 import styled from "styled-components";
 import * as Weatherpa from "../../UI/Noticetools/Weatherpar"
+import { useNavigate } from "react-router-dom";
 const Wrapper=styled.div`
     overflow: auto;
     width:100%;
@@ -25,7 +26,7 @@ export default function Twitnoticecreate(props){
     const quillref=useRef();
   
     const axiosinstance=CreateAxios();
-
+    const navigate=useNavigate();
     //그냥 이미지로쓰는거와 첨부는 따로 쓰자
     const [filelist,setFilelist]=useState([{
                 
@@ -57,6 +58,7 @@ const imagehandler=()=>{
             const result = await axiosinstance.post('/contentimage', formdata)
             
             console.log('성공 시, 백엔드가 보내주는 데이터', result);
+            
             const imgurl =process.env.PUBLIC_URL+"/noticeimages/"+result.data;
            //절대경로가안됨..
             console.log("절대경로"+imgurl)
@@ -134,6 +136,7 @@ const createtwitnotice=()=>{
         //사실어차피리로드해야해서리..
         props.setIscreate(false)
         props.redataget();
+        
         
         
     })

@@ -34,6 +34,8 @@ import Statetest from "./customhook/Statetest";
 import Userimage from"./MemberPage/Memberupdata/Userimage";
 import Manyimage from "./UI/Manyim/Manyimage";
 import FavoriteNotice from "./List/noticeformlist/Favoritenotice";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const MainTitleText = styled.p`
     font-size: 24px;
@@ -44,8 +46,9 @@ const MainTitleText = styled.p`
 
 function App(props) {
   
-
+const queryClient=new QueryClient()
   return (
+    <QueryClientProvider client={queryClient}>
     <div className="background" style={{
      // backgroundImage:'url(/front/background/rain.gif)',
      backgroundColor:"skyblue",
@@ -106,6 +109,8 @@ function App(props) {
     </BrowserRouter>
     </CookiesProvider>
     </div>
+     <ReactQueryDevtools/>
+    </QueryClientProvider>
   )
   
 }

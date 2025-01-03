@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Buttonlist=styled.div`
-width:28%;
+width:30%;
 border:1px solid;
 float:right;
 `
@@ -18,18 +18,18 @@ export default function Noticeformbutton(){
         <button onClick={()=>{navigate(`/notice?form=noticeform`)
             window.location.reload();
         }}>
-                게시판형
+                게시
             </button>
             <button onClick={()=>{navigate(`/notice/twitform`)
 window.location.reload();
 
             }}>
-                트위터형
+                일반게시글
             </button>
             <button onClick={()=>{navigate(`/favoritenotice`)
               window.location.reload();
             }}>
-                미리보기형
+                좋아요 한게시글
             </button>
             
             </Buttonlist>
