@@ -16,6 +16,11 @@ const Wrapper=styled.div`
 const Weatherdata =styled.div`
     text-align: right;
 `
+const Profileview=styled.div`
+    border:1px solid;
+    width:45px;
+    height:45px;
+`
 export default function Twitformlist(props){
 
     const {key,post}=props;
@@ -44,6 +49,7 @@ export default function Twitformlist(props){
        // islikes(post.num);
       }
     },[])
+    
     const showreply=()=>{
         console.log("쇼리플")
         
@@ -196,9 +202,16 @@ const commentdelete=(id)=>{
 //==========================렌더링==============================
     return (
         <Wrapper>
-        {process.env.PUBLIC_URL}여기
+        <Profileview>
+    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
+   style={{objectFit:"fill",width:"100%",height:"100%"}}
+  
+                />
+                
+     </Profileview>
+     {post.nickname}@{post.username}
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
-        {post.nickname}@{post.username}
+          
             <br/>
             {post.title}
             <br/>

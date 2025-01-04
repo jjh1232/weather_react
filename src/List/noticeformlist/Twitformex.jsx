@@ -126,7 +126,7 @@ export default function Twitformex(props){
             
             const newcontent=res.data.content;
           
-            console.log("뉴"+newcontent)
+            console.log("뉴");
             if(res.data.content.length===0){
                 console.log("자료가없어요!")
             }

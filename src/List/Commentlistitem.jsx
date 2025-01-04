@@ -59,6 +59,7 @@ function Commentlistitem(props){
         Setreplyclick(!replyclick)
     }}
     >
+      
       {data.nickname}님 <br/>
       {data.text}<br/>
       {data.redtime} <br/>

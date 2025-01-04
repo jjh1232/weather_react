@@ -9,11 +9,18 @@ import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import { css } from "styled-components";
 
+const Profileview=styled.div`
+    border:1px solid;
+    width:45px;
+    height:45px;
+`
+
 const Wrapper=styled.div`
 
 border:0.1px solid;
 position: relative;
 left: 5%;
+
 
 ${(props)=>{
   switch(props.formstyle){
@@ -58,6 +65,11 @@ const axiosinstance=CreateAxios();
   return(
             <Wrapper formstyle={formstyle}>
             {isupdate?<div>{/*업데이트트루구간 */}
+            <Profileview>
+    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
+   style={{objectFit:"fill",width:"100%",height:"100%"}}  />
+               </Profileview>
+     
               {comment.name}님<br/>
               
             <input type="text" defaultValue={comment.text} onChange={(e)=>{Setupdatecomment(e.target.value)}} /><br/>
@@ -72,6 +84,10 @@ const axiosinstance=CreateAxios();
             {/*업데이트트루종료 */}</div>
 
             :<div>{/*업데이트폴스구간 */}
+             <Profileview>
+    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
+   style={{objectFit:"fill",width:"100%",height:"100%"}}  />
+               </Profileview>
             {comment.nickname}님<br/>
             {comment.text}<br/>
             {comment.redtime}<br/>
