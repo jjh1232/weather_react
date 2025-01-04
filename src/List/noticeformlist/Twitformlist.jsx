@@ -8,6 +8,7 @@ import Twitcomment from "./Twitcomment";
 import { useCookies } from "react-cookie";
 import Twitformnoticeupdate from "./Twitformnoticeupdate";
 import Noticelikes from "../../UI/Noticetools/Noticelikes";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
     border:1px solid
@@ -24,14 +25,14 @@ const Profileview=styled.div`
 export default function Twitformlist(props){
 
     const {key,post}=props;
-
+    const navigate=useNavigate();
     const [isreple,setIsreple]=useState(false);
 
     const [comments,setComments]=useState();
     const axiosinstance=CreateAxios();
     const [loginuser,setloginuser,removeloginuser]=useCookies();
     const [isupdate,setIsupdate]=useState(false)
-    const [islike,setIslike]=useState(false);
+    const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
     useEffect(()=>{
         if(isreple){
@@ -202,6 +203,9 @@ const commentdelete=(id)=>{
 //==========================렌더링==============================
     return (
         <Wrapper>
+        <div onClick={()=>{
+          navigate(`/userpage/${post.username}`);
+        }}>
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -210,6 +214,7 @@ const commentdelete=(id)=>{
                 
      </Profileview>
      {post.nickname}@{post.username}
+     </div>
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
           
             <br/>
@@ -229,8 +234,10 @@ const commentdelete=(id)=>{
 
             <button onClick={()=>{onlike(post.num)}}>좋아요</button>
             {likenum}
+            
             {islike?"true":"false"}
-            <h5>
+            
+              <h5>
             {post.red}
             </h5>
             {isreple&&<>

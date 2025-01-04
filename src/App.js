@@ -36,6 +36,8 @@ import Manyimage from "./UI/Manyim/Manyimage";
 import FavoriteNotice from "./List/noticeformlist/Favoritenotice";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import UserDetail from "./MemberPage/Memberupdata/UserDetail";
+
 
 const MainTitleText = styled.p`
     font-size: 24px;
@@ -102,7 +104,7 @@ const queryClient=new QueryClient()
       <Route path="stompex" element={<Stompalrams/>}/>
      <Route path="chatui" element={<ChatUi/>}/>
       <Route path="userviewtest" element={<Userviewtest/>}/>
-      
+      <Route path="/userpage/:username" element={<UserDetail/>}/>
       
     </Routes>
     
