@@ -151,7 +151,9 @@ const commentdelete=(id)=>{
     setIsupdate(true)
 
  }
+
  const postDelete=()=>{
+    if(window.confirm("정말로삭제하시겠습니까?")){
       axiosinstance.delete(`/noticedelete/${post.num}`)
       .then((res)=>{
         alert("정상적으로삭제되었습니다")
@@ -160,6 +162,9 @@ const commentdelete=(id)=>{
       }).catch((err)=>{
         alert("에러가났어요")
       })
+    }else{
+     // alert("삭제취소")
+    }
  }
 
  

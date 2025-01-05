@@ -71,9 +71,10 @@ function Commentlistitem(props){
               Setisupdate(true)
       }}/>
       <Button title="삭제" onClick={()=>{
-              alert("정말로삭제하겠습니까?")
+         if(window.confirm("정말로삭제하시겠습니까?")){
+              
               Setisupdate(commentdelete(data.id));
-            
+         }
             }}/>
       </div>
       :""}

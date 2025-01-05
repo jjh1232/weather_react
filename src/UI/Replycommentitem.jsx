@@ -70,8 +70,7 @@ const axiosinstance=CreateAxios();
    style={{objectFit:"fill",width:"100%",height:"100%"}}  />
                </Profileview>
      
-              {comment.name}님<br/>
-              
+              {comment.nickname}님 @{comment.username}<br/>
             <input type="text" defaultValue={comment.text} onChange={(e)=>{Setupdatecomment(e.target.value)}} /><br/>
             {comment.redtime}<br/>
                   <Button title="수정완료" onClick={(e)=>{
@@ -88,7 +87,8 @@ const axiosinstance=CreateAxios();
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}  />
                </Profileview>
-            {comment.nickname}님<br/>
+            {comment.nickname}님
+            @{comment.username}<br/>
             {comment.text}<br/>
             {comment.redtime}<br/>
             
@@ -99,9 +99,9 @@ const axiosinstance=CreateAxios();
                     Setisupdate(true)
             }}/>
              <Button title="삭제" onClick={()=>{
-              alert("정말로삭제하겠습니까?")
+              if(window.confirm("정말로삭제하시겠습니까")){
               Setisupdate(commentdelete(comment.id));
-              
+              }
             }}/>
             {/*쿠키검사트루구간종료 */}
              </div>                       

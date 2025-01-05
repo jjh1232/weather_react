@@ -23,7 +23,8 @@ export default function Twitcomment(props){
                 comment={data} 
                 noticeid={noticeid}
                 commentsubmit={commentcreate}
-                
+                commentupdate={commentupdate}
+                 commentdelete={commentdelete}
                 />
                
                <Replycomment 
