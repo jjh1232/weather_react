@@ -17,7 +17,7 @@ left:28.5%;
 width:43%;
 height:100%;
  border: 1px solid;
-
+ top: 8%;
 `
 const Modalout=styled.div`
 width:45% ;
@@ -40,6 +40,9 @@ background-color: #FFFFFF;
 export default function Twitformex(props){
     //const {posts,onClickItem,noticecreate,querydatas
    
+   
+   
+
         let [query,setQuery]=useSearchParams({
             form:"twitform",
             selectoptions:"title",
@@ -78,6 +81,7 @@ export default function Twitformex(props){
        }
        //스크롤페이지변경시 실행 
        
+
        const [iscreate,setIscreate]=useState(false)
 
        //이거 어싱크함수로 밖에빼서 한번해볼까함 

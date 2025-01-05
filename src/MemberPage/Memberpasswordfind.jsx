@@ -11,7 +11,7 @@ left:28.5%;
 width:43%;
 height:100%;
  border: 1px solid;
-
+ top: 8%;
 `
 function Memberpasswordfind(){
 const [email,Setemail]=useState();

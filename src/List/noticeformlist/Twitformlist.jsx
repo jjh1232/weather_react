@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import Twitformnoticeupdate from "./Twitformnoticeupdate";
 import Noticelikes from "../../UI/Noticetools/Noticelikes";
 import { useNavigate } from "react-router-dom";
+import Simpleprofile from "../../MemberPage/Memberupdata/Simpleprofile";
 
 const Wrapper=styled.div`
     border:1px solid
@@ -34,6 +35,10 @@ export default function Twitformlist(props){
     const [isupdate,setIsupdate]=useState(false)
     const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
+
+     const [ishover,setIshover]=useState(false);
+
+
     useEffect(()=>{
         if(isreple){
             console.log("트루")
@@ -67,6 +72,7 @@ export default function Twitformlist(props){
    
 
     }
+    //=============================코멘트작성=============================
     const commentsubmit=(
       username,usernickname,comment,noticenum,depth,cnum
     )=>{
@@ -188,7 +194,8 @@ const commentdelete=(id)=>{
     alert("오류")
   })
  }
-
+//마우스위치
+ const [xy,setXY]=useState({x:-1000,y:-1000})
  //==========================로그인좋아요 여부체크?==========================
  /*
  const islikes=(num)=>{
@@ -208,9 +215,15 @@ const commentdelete=(id)=>{
 //==========================렌더링==============================
     return (
         <Wrapper>
-        <div onClick={()=>{
+        <div className={ishover?"profileover":"profile"}
+        onMouseOver={(e)=>{
+          setXY({x:e.clientX,y:e.clientY}) ,setIshover(true)}}
+        onMouseOut={()=>{setIshover(false)}}
+        onClick={()=>{
           navigate(`/userpage/${post.username}`);
-        }}>
+        }}
+       
+        >
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -219,6 +232,10 @@ const commentdelete=(id)=>{
                 
      </Profileview>
      {post.nickname}@{post.username}
+     {ishover?<><Simpleprofile
+      username={post.username} nickname={post.nickname} profileimg={post.userprofile}
+      mousexy={xy} 
+      /></>:""}
      </div>
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
           

@@ -10,12 +10,13 @@ import Loginpage from "../MemberPage/Loginpage";
 //import * as deletefiles from `./`
 
 const Wrapper=styled.div`
-position:relative;
-left:28.5%;
+position: fixed;
+left:28%;
 border:1px solid;
 width:43%;
+height:7%;
 top:3px;
-
+z-index: 10;
 `
 
 
@@ -84,7 +85,7 @@ if(window.location.pathname===`/manyimage`) return null
         <Wrapper>
             
           {}
-        <h1 onClick={()=>{navigate("/notice")}}>메인페이지</h1>
+        <h1 onClick={()=>{navigate("/notice/twitform")}}>메인페이지</h1>
         
         
         
