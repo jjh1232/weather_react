@@ -16,6 +16,7 @@ function LeftSideBar(){
     if(window.location.pathname===`/userprofile`) return null
     
     if(window.location.pathname===`/manyimage`) return null
+    if(window.location.pathname.includes("/admin")) return null
     return (
         <Wrapper>
             <Userweather/>

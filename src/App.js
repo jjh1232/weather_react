@@ -37,7 +37,12 @@ import FavoriteNotice from "./List/noticeformlist/Favoritenotice";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import UserDetail from "./MemberPage/Memberupdata/UserDetail";
-
+import Adminmain from "./admin/Adminmain";
+import Chatroommanage from "./admin/managepage/Chatroommanage";
+import Commentmanage from "./admin/managepage/Commentmanage";
+import Membermanage from "./admin/managepage/Membermanage";
+import Noticemanage from "./admin/managepage/Noticemanage";
+import AdminLeft from "./admin/AdminLeft";
 
 const MainTitleText = styled.p`
     font-size: 24px;
@@ -71,7 +76,7 @@ const queryClient=new QueryClient()
     <BrowserRouter>
     
     <Header/>
-    
+    <AdminLeft/>
     <LeftSideBar/>
     <RightSideBar/>
    
@@ -106,6 +111,12 @@ const queryClient=new QueryClient()
       <Route path="userviewtest" element={<Userviewtest/>}/>
       <Route path="/userpage/:username" element={<UserDetail/>}/>
       
+
+      <Route path="/admin/main" element={<Adminmain/>}/>
+      <Route path="/admin/chatroom" element={<Chatroommanage/>}/>
+      <Route path="/admin/comment" element={<Commentmanage/>}/>
+      <Route path="/admin/member" element={<Membermanage/>}/>
+      <Route path="/admin/notice" element={<Noticemanage/>}/>
     </Routes>
     
     </BrowserRouter>

@@ -12,6 +12,7 @@ transform : translateY(0%);
 `
 function Footer(){
     if(window.location.pathname===`/manyimage`) return null
+    if(window.location.pathname.includes("/admin")) return null
     return (
         <Wrapper>
          

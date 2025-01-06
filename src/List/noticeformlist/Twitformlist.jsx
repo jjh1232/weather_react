@@ -37,7 +37,7 @@ export default function Twitformlist(props){
     const [likenum,setLikenum]=useState(post.likes)
 
      const [ishover,setIshover]=useState(false);
-
+    const [onprepage,setOnprepage]=useState(false);
 
     useEffect(()=>{
         if(isreple){
@@ -212,18 +212,36 @@ const commentdelete=(id)=>{
   
 }
   */
+const simpleprofile =(e)=>{
+  if(ishover){
+    
+    
+  }else{
+    setXY({x:e.clientX,y:e.clientY})
+    setIshover(true)
+    setOnprepage(true)
+  }
+}
+
 //==========================렌더링==============================
     return (
+      <div>
+    
         <Wrapper>
+        {
+        //유저프로필=============================================
+        }
         <div className={ishover?"profileover":"profile"}
-        onMouseOver={(e)=>{
-          setXY({x:e.clientX,y:e.clientY}) ,setIshover(true)}}
+        onMouseEnter={(e)=>simpleprofile(e)
+        
+         }
         onMouseOut={()=>{setIshover(false)}}
         onClick={()=>{
           navigate(`/userpage/${post.username}`);
         }}
        
-        >
+        > {onprepage?"트루":"false"}
+
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -232,11 +250,16 @@ const commentdelete=(id)=>{
                 
      </Profileview>
      {post.nickname}@{post.username}
-     {ishover?<><Simpleprofile
+
+     {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
-      mousexy={xy} 
+      mousexy={xy} setprepage={setOnprepage}
       /></>:""}
      </div>
+     
+     {
+     //===============================유저프로필종료================
+     }
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
           
             <br/>
@@ -292,5 +315,6 @@ const commentdelete=(id)=>{
 
 
         </Wrapper>
+        </div>
     )
 }

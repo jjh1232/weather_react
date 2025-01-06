@@ -23,7 +23,8 @@ z-index: 10;
 function Header(){
 
     if(window.location.pathname===`/userprofile`) return null
-    
+    if(window.location.pathname.includes("/admin")) return null
+
     const axiosinstance=CreateAxios();
     const [searchdata,setSearchdata]=useState();
   
