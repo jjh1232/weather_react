@@ -26,7 +26,7 @@ export default function Pagenation(props){
         }else{
             navigate(url+`?page=${page}&option=${querydata.option}&searchtext=${querydata.keyword}`)
         }
-       
+       //
     }
    
 
