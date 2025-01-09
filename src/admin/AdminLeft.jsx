@@ -10,13 +10,13 @@ export default function AdminLeft(){
    
     return (
         <div>
-            <td>
-                <tr onClick={()=>{navigate("/admin/member")}}>회원관리</tr>
-                <tr onClick={()=>{navigate("/admin/notice")}}>게시글관리</tr>
-                <tr onClick={()=>{navigate("/admin/comment")}}>유저댓글관리</tr>
-                <tr onClick={()=>{navigate("/admin/chatroom")}}>채팅방관리</tr>
+       
+                <div onClick={()=>{navigate("/admin/member")}}>회원관리</div>
+                <div onClick={()=>{navigate("/admin/notice")}}>게시글관리</div>
+                <div onClick={()=>{navigate("/admin/comment")}}>유저댓글관리</div>
+                <div onClick={()=>{navigate("/admin/chatroom")}}>채팅방관리</div>
 
-            </td>
+            
            
         </div>
     )

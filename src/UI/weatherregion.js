@@ -22,6 +22,7 @@ function weatherregion(props){
     const [page,setPage]=useState(1)
  
     const {title,onGetdata}=props;
+
     const [regiondata,Setregiondata]=useState([])
 
     const [selectlegion,Setselectlegion]=useState();
@@ -29,29 +30,8 @@ function weatherregion(props){
     const [totalpage,setTotalPage]=useState();
 
     const [activeTab,setActiveTab]=useState(-1)
-    /*
-    const search=(e)=>{
-        console.log("검색")
-        axios.all(
-        [axios.get("/open/regionsearch",{
-            params:{
-                keyword:keyword,
-                page:page
-            }
-        }),axios.get("/open/regioncount",{
-            params:{
-                keyword:keyword
-            }
-        })
     
-        ]).then(axios.spread((res1,res2)=>{
-            Setregiondata(res1.data)
-            setTotalPage((res2.data/10)+1)
-
-        }))
-    }
-*/
-//첫실행안하는편
+  
 useDidMounteffect(()=>{
     console.log("페이지변경")
     weathersearch();
@@ -92,8 +72,15 @@ useDidMounteffect(()=>{
 
     return (
         <>
-      <button onClick={()=> setModalIsOpen(true)}>{title}</button>
-	  <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+      <button onClick={(e)=> {
+        e.preventDefault()
+        setModalIsOpen(true)
+      }
+      }>{title}</button>
+	  <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}
+        ariaHideApp={false}
+        > 
+
 
       	지역 입력 <br/>
         <input type="text" value={keyword} onChange={(e)=>{setKeyword(e.target.value)}} />

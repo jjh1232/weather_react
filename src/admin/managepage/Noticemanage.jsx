@@ -5,6 +5,7 @@ import { useState } from "react";
 import Pagenation from "../../customhook/Pagenation";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
+import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
     text-align: center;
@@ -17,7 +18,14 @@ export default function noticemanage(){
     const [notice,setNotice]=useState();
     const [totalpage,setTotalpage]=useState();
     const [totalelement,setTotalelement]=useState();
-    const [currentpage,setCurrentpage]=useState(1);
+    const [loginuser,setloginuser,removeloginuser]=useCookies();
+    const options = [
+        {value:"title",name:"제목"}, 
+        {value:"text",name:"내용"}, 
+        {value:"titletext",name:"제목+내용"}, 
+        {value:"name",name:"글쓴이"} 
+      ]
+    
 
     const [query,setQuery]=useSearchParams();
     const navigate=useNavigate();
@@ -61,15 +69,17 @@ export default function noticemanage(){
         }
     return (<> 
         <Wrapper><br/>
+    
         <button onClick={()=>{navigate("/admin/notice")}}>게시판메인</button>
         <AdminSearchtools
+        options={options}
         searchdatas={querydata}
         url={"/admin/notice"}
         />
         <br/>
         쿼리{querydata.page}
             게시판관리
-           현재페이지:{currentpage} 토탈페이지:{totalpage}/총게시글:{totalelement}
+            토탈페이지:{totalpage}/총게시글:{totalelement}
          
 
             <table style={{width:"80vw",height:"20vh"}}>
@@ -105,7 +115,7 @@ export default function noticemanage(){
             })}
             </table>
             <Pagenation  totalpage={totalpage}
-            setCurrentpage={setCurrentpage} url={"/admin/notice"}
+          url={"/admin/notice"}
             querydata={querydata}
           />
         </Wrapper>

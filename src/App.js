@@ -43,7 +43,8 @@ import Commentmanage from "./admin/managepage/Commentmanage";
 import Membermanage from "./admin/managepage/Membermanage";
 import Noticemanage from "./admin/managepage/Noticemanage";
 import AdminLeft from "./admin/AdminLeft";
-
+import { PrivateRoute } from "./customhook/Admintools/PrivateRoute";
+import NoAccess from "./customhook/Admintools/NoAccess";
 const MainTitleText = styled.p`
     font-size: 24px;
     font-weight: bold;
@@ -81,6 +82,14 @@ const queryClient=new QueryClient()
     <RightSideBar/>
    
     <Routes>
+      <Route element={<PrivateRoute/>}>
+      <Route path="/admin" element={<Adminmain/>}/>
+      <Route path="/admin/chatroom" element={<Chatroommanage/>}/>
+      <Route path="/admin/comment" element={<Commentmanage/>}/>
+      <Route path="/admin/member" element={<Membermanage/>}/>
+      <Route path="/admin/notice" element={<Noticemanage/>}/>
+    </Route>
+    
     <Route path="/favoritenotice" element={<FavoriteNotice/>}/>
     <Route path="manyimage" element={<Manyimage/>}/>
     <Route path="test1" element={<Statetest/>}/>
@@ -110,13 +119,9 @@ const queryClient=new QueryClient()
      <Route path="chatui" element={<ChatUi/>}/>
       <Route path="userviewtest" element={<Userviewtest/>}/>
       <Route path="/userpage/:username" element={<UserDetail/>}/>
-      
+      <Route path="/noaccess" element={<NoAccess/>}/>
 
-      <Route path="/admin/main" element={<Adminmain/>}/>
-      <Route path="/admin/chatroom" element={<Chatroommanage/>}/>
-      <Route path="/admin/comment" element={<Commentmanage/>}/>
-      <Route path="/admin/member" element={<Membermanage/>}/>
-      <Route path="/admin/notice" element={<Noticemanage/>}/>
+     
     </Routes>
     
     </BrowserRouter>

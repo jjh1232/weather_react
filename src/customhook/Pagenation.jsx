@@ -40,10 +40,10 @@ export default function Pagenation(props){
             {querydata.page==1?""
             :<button onClick={()=>{setcurrentpa(querydata.page-1)}}>이전</button>}
            
-            {pagearray.map((d)=>{
+            {pagearray.map((d,key)=>{
                 
                 return(
-                    <>
+                    <div key={key}>
                    
                     {d===querydata.page?
                         <Button onClick={()=>{setcurrentpa(d)}} color="blue">
@@ -53,7 +53,7 @@ export default function Pagenation(props){
                         {d}
                     </Button>
                     }
-                 </> 
+                 </div> 
                 )
             })}
 

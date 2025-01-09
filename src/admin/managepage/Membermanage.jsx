@@ -4,6 +4,12 @@ import CreateAxios from "../../customhook/CreateAxios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagenation from "../../customhook/Pagenation";
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AdminSearchtools from "../../customhook/AdminSearchtools";
+import AdminMembercreate from "../../customhook/Admintools/AdminMembercreate";
+
+
 const Wrapper=styled.div`
     text-align: center;
 
@@ -15,43 +21,35 @@ export default function Membermanage(){
     const [memberlist,setMemberlist]=useState();
        const [totalpage,setTotalpage]=useState();
         const [totalelement,setTotalelement]=useState();
-        const [currentpage,setCurrentpage]=useState(1);    
+    const [iscreate,setIscreate]=useState(false);
+//유저검색
+const options = [
+    {value:"email",name:"이메일"}, 
+    {value:"nickname",name:"닉네임"}, 
+    
+  ]
 
-    //쿼리사용해보자
-    /*
-    const getmember=async()=>{
-        const data=await axiosinstance.get("/admin/membermanage").then((res)=>{
-          
-            
-            return res
-           
-        })
-        console.log("연결성공"+data)
-       return data
-      
-    }
-    const {isPending,iserror,memberlist}=useQuery({
-        queryKey:["memberdata"],
-        queryFn:()=>{getmember()},
-        staleTime:1000*10,
-    
-            
+        const [query,setQuery]=useSearchParams();
+            const navigate=useNavigate();
+            const querydata={
+                page:parseInt(query.get("page")) || 1,
+                option:query.get("option") ,
+                keyword:query.get("keyword") 
         
-    })
-    
+            }
 
  
-    if(isPending) return "loading...."
-    if(iserror) return "error"
-*/
 useEffect(()=>{
     getmember()
-},[])
+},[querydata.page,querydata.option,querydata.keyword])
 
 
    const getmember=()=>{
     axiosinstance.get("/admin/membermanage",{
-        params:{page:currentpage}
+        params:{page:querydata.page,
+            option:querydata.option,
+            searchtext:querydata.keyword
+        }
     }).then((res)=>{
         setMemberlist(res.data.content)
         setTotalpage(res.data.totalPages)
@@ -76,11 +74,21 @@ useEffect(()=>{
 
     return (
         <Wrapper>
+
+            {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}
+               <AdminSearchtools
+                    searchdatas={querydata}
+                    options={options}
+                    url={"/admin/member"}
+                    />
             멤버관리페이지 {memberlist?"tre":"fals"}
             <br/>
-            
+            <button onClick={()=>{
+                setIscreate(true)
+            }}>회원추가</button>
+               
             <table >
-            <button>회원추가</button>
+            <thead>
                 <tr>
                     <th>회원번호</th>
                     <th>회원이메일</th>
@@ -90,10 +98,12 @@ useEffect(()=>{
                     <th>회원권한</th>
                     <th>가입날자</th>
                 </tr>
+                </thead>
+                
             {memberlist&&memberlist.map((data,key)=>{
                 return(
-                    
-                        <tr>
+                    <tbody key={key}>
+                        <tr >
                             <td>{data.id} </td>
                             <td>{data.username} </td>
                             <td>{data.nickname} </td>
@@ -101,20 +111,24 @@ useEffect(()=>{
                             <td>{data.provider}</td>
                             <td>{data.role}</td>
                             <td>{data.red} </td>
-
+                            
+                            <td>
                             <button>회원정보수정</button> &nbsp;
                             <button onClick={()=>{deletemember(data.id)}}>회원삭제</button>
-                        </tr>
-                       
+                            </td>
+                            </tr>
+                            </tbody>
                         
                    
                 )
                 
             })}
+           
             </table>
-            <Pagenation currentpage={currentpage} totalpage={totalpage}
-                        setCurrentpage={setCurrentpage}
-                        />
+             <Pagenation  totalpage={totalpage}
+                      url={"/admin/member"}
+                        querydata={querydata}
+                      />
         </Wrapper>
     )
 }
