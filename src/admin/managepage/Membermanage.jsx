@@ -8,6 +8,8 @@ import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import AdminMembercreate from "../../customhook/Admintools/AdminMembercreate";
+import AdminUpdateform from "../../customhook/Admintools/AdminUpdateform";
+import Membermanagelist from "./list/Membermanagelist";
 
 
 const Wrapper=styled.div`
@@ -22,6 +24,7 @@ export default function Membermanage(){
        const [totalpage,setTotalpage]=useState();
         const [totalelement,setTotalelement]=useState();
     const [iscreate,setIscreate]=useState(false);
+    
 //유저검색
 const options = [
     {value:"email",name:"이메일"}, 
@@ -72,9 +75,12 @@ useEffect(()=>{
         }
     }
 
+  
+    
+
     return (
         <Wrapper>
-
+          
             {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}
                <AdminSearchtools
                     searchdatas={querydata}
@@ -87,6 +93,7 @@ useEffect(()=>{
                 setIscreate(true)
             }}>회원추가</button>
                
+               
             <table >
             <thead>
                 <tr>
@@ -96,30 +103,19 @@ useEffect(()=>{
                     
                     <th>회원가입사이트</th>
                     <th>회원권한</th>
+                    <th>회원주소</th>
                     <th>가입날자</th>
                 </tr>
                 </thead>
                 
             {memberlist&&memberlist.map((data,key)=>{
                 return(
-                    <tbody key={key}>
-                        <tr >
-                            <td>{data.id} </td>
-                            <td>{data.username} </td>
-                            <td>{data.nickname} </td>
-                            
-                            <td>{data.provider}</td>
-                            <td>{data.role}</td>
-                            <td>{data.red} </td>
-                            
-                            <td>
-                            <button>회원정보수정</button> &nbsp;
-                            <button onClick={()=>{deletemember(data.id)}}>회원삭제</button>
-                            </td>
-                            </tr>
-                            </tbody>
+                   <>
+                    <Membermanagelist data={data} key={key}
+                    deletemember={deletemember}
+                    />
                         
-                   
+                   </>
                 )
                 
             })}
