@@ -57,6 +57,7 @@ export default function noticemanage(){
             })
         }
 
+        
         const deletenotice=(noticeid)=>{
             console.log("삭제요청"+noticeid)
             axiosintance.delete(`/admin/notice/${noticeid}/delete`)
@@ -93,6 +94,8 @@ export default function noticemanage(){
                     <th>내용</th>
                     <th>작성일</th>
                     <th>좋아요수</th>
+                    <th>댓글수</th>
+                    <th>이미지수</th>
 
                 </tr>
             {notice&&notice.map((data)=>{
@@ -110,6 +113,8 @@ export default function noticemanage(){
                             <td>{data.text>300?<>{data.text.slice(0,235)}</>:<>{data.text}</>}</td>
                             <td>{data.red}</td>
                             <td>{data.likes} </td>
+                            <td>{data.comments.length}</td>
+                            <td>{data.detachfiles.length}</td>
                             <button onClick={()=>{deletenotice(data.num)}}>삭제하기</button>
                 </tr>)
             })}

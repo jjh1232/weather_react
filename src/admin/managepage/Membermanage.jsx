@@ -104,6 +104,9 @@ useEffect(()=>{
                     <th>회원가입사이트</th>
                     <th>회원권한</th>
                     <th>회원주소</th>
+                    <th>작성게시글</th>
+                    <th>작성코멘트</th>
+                    <th>참여채팅방</th>
                     <th>가입날자</th>
                 </tr>
                 </thead>
