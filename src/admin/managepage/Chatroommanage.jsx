@@ -29,7 +29,7 @@ export default function Chatroommanage(){
     const options=[
         {value:"roomname",name:"채팅방이름"}, 
         {value:"partilist",name:"참가리스트"},
-        {value:"chattext", name:"채팅내용"} 
+        {value:"email", name:"이메일검색"} 
     ]
      
       useEffect(()=>{

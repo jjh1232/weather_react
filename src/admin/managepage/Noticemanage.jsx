@@ -6,6 +6,7 @@ import Pagenation from "../../customhook/Pagenation";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useCookies } from "react-cookie";
+import AdNoticeList from "./list/AdNoticeList";
 
 const Wrapper=styled.div`
     text-align: center;
@@ -23,7 +24,8 @@ export default function noticemanage(){
         {value:"title",name:"제목"}, 
         {value:"text",name:"내용"}, 
         {value:"titletext",name:"제목+내용"}, 
-        {value:"name",name:"글쓴이"} 
+        {value:"name",name:"닉네임검색"} ,
+        {value:"email",name:"이메일검색"}
       ]
     
 
@@ -98,25 +100,10 @@ export default function noticemanage(){
                     <th>이미지수</th>
 
                 </tr>
-            {notice&&notice.map((data)=>{
-                return (<tr>
-                            <td>{data.num} </td>
-                            <td style={{width:"10%"}}>
-                                 <img   src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}
-   style={{objectFit:"fill",width:"50%",height:"10%"}}
-  
-                /></td>
-                            <td>{data.username} </td>
-                            <td>{data.nickname} </td>
-                            
-                            <td>{data.title}</td>
-                            <td>{data.text>300?<>{data.text.slice(0,235)}</>:<>{data.text}</>}</td>
-                            <td>{data.red}</td>
-                            <td>{data.likes} </td>
-                            <td>{data.comments.length}</td>
-                            <td>{data.detachfiles.length}</td>
-                            <button onClick={()=>{deletenotice(data.num)}}>삭제하기</button>
-                </tr>)
+            {notice&&notice.map((data,key)=>{
+                return (<>
+                    <AdNoticeList data={data} key={key} deletemethod={deletenotice}/>
+                </>)
             })}
             </table>
             <Pagenation  totalpage={totalpage}
