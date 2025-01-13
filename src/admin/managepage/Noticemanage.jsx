@@ -7,7 +7,7 @@ import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useCookies } from "react-cookie";
 import AdNoticeList from "./list/AdNoticeList";
-
+import AdminNoticecreate from "../../customhook/Admintools/AdminNoticecreate";
 const Wrapper=styled.div`
     text-align: center;
 
@@ -19,6 +19,7 @@ export default function noticemanage(){
     const [notice,setNotice]=useState();
     const [totalpage,setTotalpage]=useState();
     const [totalelement,setTotalelement]=useState();
+    const [iscreate,setIscreate]=useState(false);
     const [loginuser,setloginuser,removeloginuser]=useCookies();
     const options = [
         {value:"title",name:"제목"}, 
@@ -70,9 +71,11 @@ export default function noticemanage(){
                 console.log("삭제실패")
             })
         }
+
     return (<> 
         <Wrapper><br/>
-    
+        {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
+        <button onClick={()=>{setIscreate(true)}}>게시글작성</button>
         <button onClick={()=>{navigate("/admin/notice")}}>게시판메인</button>
         <AdminSearchtools
         options={options}

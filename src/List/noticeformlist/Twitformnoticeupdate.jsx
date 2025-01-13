@@ -106,7 +106,7 @@ const imagehandler=()=>{
 
             }])
             console.log("파일리스트저장종료")
-            fileindex.current++;
+            fileindex.current+=1;
         }
         catch(error){
             console.log("에러")

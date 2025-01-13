@@ -24,7 +24,7 @@ export default function Twitnoticecreate(props){
     const [content,setContent]=useState();
 
     const quillref=useRef();
-  
+    
     const axiosinstance=CreateAxios();
     const navigate=useNavigate();
     //그냥 이미지로쓰는거와 첨부는 따로 쓰자
@@ -84,7 +84,7 @@ const imagehandler=()=>{
 
             }])
             console.log("파일리스트저장종료")
-            fileindex.current++;
+            fileindex.current+=1;
         }
         catch(error){
             console.log("에러")
