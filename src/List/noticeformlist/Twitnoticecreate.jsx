@@ -29,7 +29,10 @@ export default function Twitnoticecreate(props){
     const navigate=useNavigate();
     //그냥 이미지로쓰는거와 첨부는 따로 쓰자
     const [filelist,setFilelist]=useState([{
-                
+        id:0,
+        index:0,
+        filename:'',
+        url:''
     }])
     let temp=cookie.weather.t1H
     let rain=cookie.weather.rn1
@@ -75,7 +78,7 @@ const imagehandler=()=>{
             //파일리스트에저장
             console.log("파일리스트저장시작")
             setFilelist((filelist)=>[...filelist,{
-                id:fileindex.current,
+                idx:fileindex.current,
                 index:range.index,
                 filename:file.name,
                 url:imgurl

@@ -136,7 +136,7 @@ const filedelete=(id,range)=>{
     
     setNewfilelist(newfilelist.filter((prev)=>prev.id !==id))
     //이거 너무마음에안들어서 아마 에디터를 새로만들어야할듯?
-    quillref.current.getEditor().deleteText(range,1)
+    //quillref.current.getEditor().deleteText(range,1)
 }
 
 //제출
@@ -148,7 +148,7 @@ const twitnoticecreate=()=>{
         nickname:cookie.userinfo["nickname"],
         title:newtitle,
         text:newcontent,
-        files:newfilelist
+        detach:newfilelist
     }).then((res)=>{
         alert("글작성성공")
         //사실어차피리로드해야해서리..
