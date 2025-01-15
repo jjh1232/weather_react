@@ -51,6 +51,17 @@ const commentget=()=>{
     })
 }
 
+    const deletecomment=(commentid)=>{
+        console.log("코멘트아이디"+commentid)
+        axiosinstance.delete(`/admin/commentdelete/${commentid}`)
+        .then((res)=>{
+            alert("삭제완료되었습니다")
+            commentget()
+        }).catch((err)=>{
+            alert(err)
+        })
+    }
+
     return (
         <Wrapper>
             <AdminSearchtools
@@ -72,7 +83,7 @@ const commentget=()=>{
                 </tr>
                 {comments&&comments.map((data,key)=>{
                     return (
-                        <CommentList data={data} key={key}/>
+                        <CommentList data={data} key={key} deletemethod={deletecomment}/>
                     )
                 })}
 

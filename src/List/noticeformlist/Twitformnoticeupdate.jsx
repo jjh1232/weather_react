@@ -46,7 +46,7 @@ export default function Twitformnoticeupdate(props){
     }])
     //모듈 설정
     
-    const fileindex=useRef(1)
+    const fileindex=useRef(0)
 
 
     const prevdataget=()=>{
@@ -56,7 +56,7 @@ export default function Twitformnoticeupdate(props){
             setNewtitle(res.data.title)
             setNewcontent(res.data.text)
             setNewfilelist(res.data.detachfiles)
-            
+            fileindex.current=res.data.detachfiles[res.data.detachfiles.length-1].idx
         }).catch((err)=>{
             console.log("수정데이터가져오기오류")
         })
@@ -98,10 +98,10 @@ const imagehandler=()=>{
             //파일리스트에저장
             console.log("파일리스트저장시작")
             setNewfilelist((filelist)=>[...filelist,{
-                id:fileindex.current,
-                range:range.index,
+                idx:fileindex.current,
+                rangeindex:range.index,
                 filename:file.name,
-                url:imgurl
+                path:imgurl
 
 
             }])
@@ -156,6 +156,8 @@ const twitnoticecreate=()=>{
         window.location.reload();
         
         
+    }).catch((err)=>{
+        alert("에러"+err)
     })
 
 }
@@ -167,6 +169,7 @@ useEffect(()=>{
     return (
         <Modalouter>
             <Modaliner>
+
         이메일:{cookie.userinfo["username"]}
         <br/>
         닉네임:{cookie.userinfo["nickname"]}
@@ -185,21 +188,24 @@ useEffect(()=>{
         <br/>
         
         첨부목록:{newfilelist&&newfilelist.map((list,index)=>{
-            console.log("첨부파일:"+list)
+             if(list.path===``){
+
+             }else{
                 
             return (
                 <>
                 <span key={index}>
                     {index}
                     {list.filename}
-                    <button onClick={()=>{filedelete(list.id,list.range)}}>제거</button>
+                    <button onClick={()=>{filedelete(list.id,list.rangeindex)}}>제거</button>
+                <br/>아이디값:{list.idx}
                 </span>
                 <br/>
                 </>
                 
             )
                 }
-        )}
+ } )}
     
         <br/>
         
