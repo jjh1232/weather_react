@@ -46,6 +46,7 @@ import AdminLeft from "./admin/AdminLeft";
 import { PrivateRoute } from "./customhook/Admintools/PrivateRoute";
 import NoAccess from "./customhook/Admintools/NoAccess";
 import ChatroomDetail from "./admin/managepage/list/ChatroomDetail";
+import Adminnoticedetail from "./admin/managepage/list/Adminnoticedetail";
 
 const MainTitleText = styled.p`
     font-size: 24px;
@@ -91,6 +92,7 @@ const queryClient=new QueryClient()
       <Route path="/admin/member" element={<Membermanage/>}/>
       <Route path="/admin/notice" element={<Noticemanage/>}/>
       <Route path="/admin/room/:roomid" element={<ChatroomDetail/>}/>
+      <Route path="/admin/notice/detail/:noticeid" element={<Adminnoticedetail/>}/>
     </Route>
     
     <Route path="/favoritenotice" element={<FavoriteNotice/>}/>
