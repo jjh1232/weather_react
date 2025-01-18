@@ -40,7 +40,7 @@ export default  function AdNoticeList(props) {
                             <td>{data.red}</td>
                             <td>{data.likes} </td>
                             <td onClick={()=>{commentsearch(data.num)}}
-                            >{data.comments.length}</td>
+                            >{data.commentcount}</td>
                             <td>{data.detachfiles.length}</td>
                             <td>
                             <button onClick={()=>{setIsupdate(true)}}>게시글수정</button>

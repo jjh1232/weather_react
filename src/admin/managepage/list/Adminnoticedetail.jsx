@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CreateAxios from "../../../customhook/CreateAxios";
 import Adminnoticeupdatedetail from "./noticedetail/Adminnoticeupdatedetail";
 import Adminnoticecomment from "./noticedetail/Adminnoticecomment";
@@ -12,6 +12,7 @@ export default function Adminnoticedetail(props){
     const {noticeid}=useParams();
     const axiosinstance=CreateAxios();
     const [isupdate,setIsupdate]=useState(false);
+    const navigate=useNavigate();
 //이거 then은안되나봄
     const noticeget=()=>{
         axiosinstance.get(`/admin/notice/detail/${noticeid}`)
@@ -27,9 +28,17 @@ export default function Adminnoticedetail(props){
     }
 //여기까지 연습용
 //삭제용 뮤태이션인데이게 위로안가면 에러남;삭제이후처리가안됌
+const queryClient=useQueryClient();//데이터수정후 다시요청을위해 쿼리클라이언트가져오기
 const mutation=useMutation({
     mutationFn:(data)=>{
         return axiosinstance.delete(`/admin/notice/${data.id}/delete`)
+    },
+    onSuccess(data){
+        console.log("석세스")
+        navigate("/admin/notice")
+        
+        
+
     }
 })
 
@@ -38,13 +47,39 @@ const deletenotice=(noticeid)=>{
         mutation.mutate({id:noticeid})
     }
 }
+//댓글작성
+const commentcreate=useMutation({
+    mutationFn:(data)=>{
+        return axiosinstance.post(`/commentcreate`,
+         data
+        )
+    },
+    onSuccess(data){
+        console.log("석세스")
+        queryClient.invalidateQueries({queryKey:[`noticeData`]})
 
+    }
+})
+
+const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
+    const data={
+        noticeid:noticenum,
+        depth:depth,
+        cnum:cnum,
+        username:username,
+        nickname:usernickname,
+        text:comment
+    }
+    commentcreate.mutate(data)
+}
+//댓글작성
 
 //데이터가져오기
     const {isLoading,error,data}=useQuery({
         queryKey:[`noticeData`],
         queryFn:async ()=>{
           const data= await axiosinstance.get(`/admin/notice/detail/${noticeid}`)
+         
             return data.data;
         }
     })
@@ -60,7 +95,7 @@ const deletenotice=(noticeid)=>{
     return (
         <>
         {isupdate?<>
-            <Adminnoticeupdatedetail data={data}/>
+            <Adminnoticeupdatedetail data={data} setisupdate={setIsupdate}/>
         </>
         :<>
            <div>
@@ -90,18 +125,15 @@ const deletenotice=(noticeid)=>{
        
 
         <div>댓글목록:
-                 <Commentform 
-                    noticenum={data.num}
-                    depth="0"
-                    cnum=""
-                    //commentsubmit={commentsubmit}
-                    />
+                 
             {data.comments&&data.comments.map((co)=>{
                 return (
                     <div>
                       {co.depth===0&&
                         <>
-                       <Adminnoticecomment comment={co} comments={data.comments}/>
+                       <Adminnoticecomment comment={co} comments={data.comments} noticeid={data.num}
+                       commentcreate={crcomment}
+                       />
                        </>
             }
                             
@@ -110,6 +142,12 @@ const deletenotice=(noticeid)=>{
                         </div>
                 )
             })}
+            <Commentform 
+                    noticenum={data.num}
+                    depth="0"
+                    cnum=""
+                    commentsubmit={crcomment}
+                    />
 
         </div>
         </>

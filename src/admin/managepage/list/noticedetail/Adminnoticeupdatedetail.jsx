@@ -5,7 +5,7 @@ import { useState,useEffect,useRef ,useMemo} from "react";
 import CreateAxios from "../../../../customhook/CreateAxios";
 import ReactQuill from "react-quill";
 import { Sky,Pty } from "../../../../customhook/Admintools/Weathersetting";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 
@@ -14,7 +14,7 @@ export default function Adminnoticeupdatedetail(props){
     const {data,setisupdate}=props;
     const axiosinstance=CreateAxios();
     const quillref=useRef();
-    const imagekey=useRef(data.detachfiles[data.detachfiles.length-1].idx);
+    const imagekey=useRef(data.detachfiles[data.detachfiles.length-1]?.idx||0);
     
 const navigate=useNavigate();
      //게시글정보
@@ -35,6 +35,7 @@ const navigate=useNavigate();
     )
     const [sky,setSky]=useState(data.sky);
     const [pty,setPty]=useState(data.pty);
+    const queryclient=useQueryClient();
     //파일정보
       const [filelist,setFilelist]=useState(data.detachfiles)      
         
@@ -45,6 +46,10 @@ const navigate=useNavigate();
             
              
             
+        },
+        onSuccess:()=>{
+            setisupdate(false)
+            queryclient.invalidateQueries([`noticeData`])
         }
       })
       const onupdate=()=>{
@@ -133,7 +138,7 @@ const filedelete=(id,range)=>{
 
     return (
         <>
-        <button onClick={()=>{setisupdate(false)}}>창닫기</button>
+       
         
             <div>
                 기온:<input type="number" defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
@@ -177,7 +182,7 @@ const filedelete=(id,range)=>{
         })}
 
             <button onClick={()=>{onupdate()}}>수정완료</button>
-        
+            <button onClick={()=>{setisupdate(false)}}>수정취소</button>
         </>
     )
 }

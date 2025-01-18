@@ -11,7 +11,7 @@ export default function ChatroomDetail(props){
     const {roomid}=useParams();
      
     const axiosintance=CreateAxios();
-
+    console.log("챗룸디테일")
     useEffect(()=>{
         roomdetailget()
     },[])
@@ -26,6 +26,7 @@ export default function ChatroomDetail(props){
 
     return (
         <div>
+            {roomdata&&<>
            채팅방제목:{roomdata.roomname}
             채팅방개설일:{roomdata.time}
             <br/>
@@ -40,7 +41,7 @@ export default function ChatroomDetail(props){
                     )
                 })}
             </div>
-
+</>}
         </div>
     )
 }
