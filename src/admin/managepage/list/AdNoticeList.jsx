@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminNoticeupdate from "../../../customhook/Admintools/AdminNoticeupdate";
+import Imagebook from "../../../customhook/Imagebook";
 
 
 export default  function AdNoticeList(props) {
@@ -8,7 +9,7 @@ export default  function AdNoticeList(props) {
     const {data,key,deletemethod}=props;
     const navigate=useNavigate();
     const [isupdate,setIsupdate]=useState();
-
+    const [isimagebook,setIsimagebook]=useState(false);
     const commentsearch=(noticenum)=>{
         navigate(`/admin/comment?page=1&option=noticenum&keyword=${noticenum}`)
     }
@@ -22,6 +23,10 @@ export default  function AdNoticeList(props) {
         navigate(`/admin/notice/detail/${noticeid}`)
     }
     
+    const imagebookon=()=>{
+      
+        setIsimagebook(!isimagebook)
+    }
         return (<>
         {isupdate?<><AdminNoticeupdate noticeid={data.num} setisupdate={setIsupdate}/></>:""}
         <tr>
@@ -41,12 +46,17 @@ export default  function AdNoticeList(props) {
                             <td>{data.likes} </td>
                             <td onClick={()=>{commentsearch(data.num)}}
                             >{data.commentcount}</td>
-                            <td>{data.detachfiles.length}</td>
+                            <td>{data.detachfiles.length}
+                                {!data.detachfiles.length==0&&<button 
+                                onClick={()=>{imagebookon()}}>이미지북</button>}
+                                
+
+                            </td>
                             <td>
                             <button onClick={()=>{setIsupdate(true)}}>게시글수정</button>
                             <button onClick={()=>{deletes(data.num)}}>게시글삭제</button>
                             </td>
                 </tr>
-        
+                                    {isimagebook&&<Imagebook images={data.detachfiles}/>}
                 </> )
 }

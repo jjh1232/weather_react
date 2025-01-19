@@ -72,6 +72,9 @@ export default function noticemanage(){
             })
         }
 
+        const imagebookon=()=>{
+
+        }
     return (<> 
         <Wrapper><br/>
         {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
@@ -101,7 +104,9 @@ export default function noticemanage(){
                     <th>작성일</th>
                     <th>좋아요수</th>
                     <th>댓글수</th>
-                    <th>이미지수</th>
+                    <th>이미지수
+                       
+                    </th>
 
                 </tr>
             {notice&&notice.map((data,key)=>{
