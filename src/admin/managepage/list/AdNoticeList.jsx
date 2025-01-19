@@ -57,6 +57,11 @@ export default  function AdNoticeList(props) {
                             <button onClick={()=>{deletes(data.num)}}>게시글삭제</button>
                             </td>
                 </tr>
-                                    {isimagebook&&<Imagebook images={data.detachfiles}/>}
+                                    {isimagebook&&
+                                    <Imagebook images={data.detachfiles} 
+                                    setisimage={setIsimagebook}
+                                    userdata={{username:data.username,nickname:data.nickname,profileimg:data.userprofile}}
+                                    noticedata={{title:data.title,likes:data.likes,red:data.red}}
+                                    />}
                 </> )
 }
