@@ -61,6 +61,7 @@ position: absolute;
 
 
 
+
     
 `
 const Container=styled.div`
@@ -68,7 +69,7 @@ const Container=styled.div`
     width: 32%;
     height:15%;
     float: left;
-    border: 1px solid green;
+    border: 1px solid ${(props)=>props.selectcolor?"yellow":"black"}
 `
 export default function Imagebook(props){
 const {images,setisimage,userdata,noticedata}=props;
@@ -199,16 +200,27 @@ return (
             
             {images.map((data,key)=>{
                 return (
-                     <Container> 
+                    <>
+                        
+                      {activeindex===key?
+                        <Container   selectcolor={true}> 
+                         <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
+                          
+                         /> 
+                         </Container> 
+                      :
+                      <Container   selectcolor={false}> 
+                      <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
+                      selectcolor={false}
+                      /> 
+                      </Container> 
+                      }
+                    
+                        </>
+                        
                         
                       
-                        <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
-                        /> 
                         
-                        
-                        
-                      
-                        </Container> 
                 )
             })}
             
