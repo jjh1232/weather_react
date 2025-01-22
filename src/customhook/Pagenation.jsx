@@ -9,6 +9,15 @@ const Button=styled.button`
     
 `
 const Wrapper=styled.div`
+    position: relative;
+    left:50%;
+    float: left;
+    border: 1px solid black;
+`
+const Pagenumcss=styled.div`
+    position: relative;
+    
+    float: left;
     
 `
 export default function Pagenation(props){
@@ -46,7 +55,7 @@ export default function Pagenation(props){
             {pagearray.map((d,key)=>{
                 
                 return(
-                    <div key={key}>
+                    <Pagenumcss key={key}>
                    
                     {d===querydata.page?
                         <Button onClick={()=>{setcurrentpa(d)}} color="blue">
@@ -56,11 +65,13 @@ export default function Pagenation(props){
                         {d}
                     </Button>
                     }
-                 </div> 
+                 </Pagenumcss> 
                 )
             })}
 
-            {querydata.page<totalpage?<button onClick={()=>{setcurrentpa(querydata.page+1)}}>다음</button>:""}
+            {querydata.page<totalpage?
+            <button onClick={()=>{setcurrentpa(querydata.page+1)}}>다음</button>
+            :""}
             
         </Wrapper>
     )
