@@ -9,8 +9,41 @@ import { useCookies } from "react-cookie";
 import AdNoticeList from "./list/AdNoticeList";
 import AdminNoticecreate from "../../customhook/Admintools/AdminNoticecreate";
 const Wrapper=styled.div`
+    position: absolute;
+    top: 0%;
+    left:18%;
+    width: 80%;
+    height: 99%;
+    border: 1px solid black;
     text-align: center;
 
+`
+
+const Header=styled.div`
+    
+`
+const Noticecrbutton=styled.button`
+    position: relative;
+    float:left;
+    border: 1px solid black;
+`
+const Noticesearch=styled.div`
+    position: relative;
+    float: right;
+    right: 0%;
+   
+`
+const Maintable=styled.table`
+width:100%;
+height: 80%;
+border: 1px solid black;
+float   :left ;
+`
+const TableHeader=styled.thead`
+    background-color:rgb(44,44,44);
+`
+const Thcss=styled.th`
+    color: white;
 `
 
 export default function noticemanage(){
@@ -72,49 +105,57 @@ export default function noticemanage(){
             })
         }
 
-        const imagebookon=()=>{
-
-        }
+      
     return (<> 
-        <Wrapper><br/>
+        <Wrapper>
         {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
-        <button onClick={()=>{setIscreate(true)}}>게시글작성</button>
-        <button onClick={()=>{navigate("/admin/notice")}}>게시판메인</button>
+            <Header>
+                <h3 onClick={()=>{navigate("/admin/notice")}}>게시글관리</h3>
+               
+        
+
+        <Noticecrbutton onClick={()=>{setIscreate(true)}}>게시글작성</Noticecrbutton>
+        
+        <Noticesearch>
         <AdminSearchtools
         options={options}
         searchdatas={querydata}
         url={"/admin/notice"}
         />
+        </Noticesearch>
         <br/>
-        쿼리{querydata.page}
-            게시판관리
+            <h3>
             토탈페이지:{totalpage}/총게시글:{totalelement}
-         
+            </h3>
+            </Header>
 
-            <table style={{width:"80vw",height:"20vh"}}>
+
+            <Maintable>
+                <TableHeader>
                 <tr>
-                    <th>글번호</th>
-                    <th>작성자프로필</th>
-                    <th>작성자이메일</th>
-                    <th>작성자닉네임</th>
-                    
-                    <th>제목</th>
-                    <th>내용</th>
+                    < Thcss>글번호</ Thcss>
+                    <Thcss>작성자프로필</Thcss>
+                    <Thcss>작성자이메일</Thcss>
+                    <Thcss>작성자닉네임</Thcss>
                    
-                    <th>작성일</th>
-                    <th>좋아요수</th>
-                    <th>댓글수</th>
-                    <th>이미지수
-                       
-                    </th>
+                    <Thcss>제목</Thcss>
+                    <Thcss>내용</Thcss>
+                   
+                    <Thcss>작성일</Thcss>
+                    <Thcss>좋아요수</Thcss>
+                    <Thcss>댓글수</Thcss>
+                    <Thcss>이미지수</Thcss>
+                    <Thcss>게시글관리</Thcss>
+                    
 
                 </tr>
+                </TableHeader>
             {notice&&notice.map((data,key)=>{
                 return (<>
                     <AdNoticeList data={data} key={key} deletemethod={deletenotice}/>
                 </>)
             })}
-            </table>
+            </Maintable>
             <Pagenation  totalpage={totalpage}
           url={"/admin/notice"}
             querydata={querydata}

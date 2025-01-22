@@ -12,11 +12,43 @@ import AdminUpdateform from "../../customhook/Admintools/AdminUpdateform";
 import Membermanagelist from "./list/Membermanagelist";
 
 
+
 const Wrapper=styled.div`
+    position: absolute;
+    top: 0%;
+    left:18%;
+    width: 80%;
+    height: 99%;
+    border: 1px solid black;
     text-align: center;
 
 `
-
+const Header=styled.div`
+    
+`
+const Memcrbutton=styled.button`
+    position: relative;
+    float:left;
+    border: 1px solid black;
+`
+const Usersearch=styled.div`
+    position: relative;
+    float: right;
+    right: 0%;
+   
+`
+const Maintable=styled.table`
+width:100%;
+height: 80%;
+ border: 1px solid black;
+float   :left ;
+`
+const TableHeader=styled.thead`
+    background-color:rgb(44,44,44);
+`
+const Thcss=styled.th`
+    color: white;
+`
 export default function Membermanage(){
 
     const axiosinstance=CreateAxios();
@@ -79,37 +111,45 @@ useEffect(()=>{
     
 
     return (
+
         <Wrapper>
-          
-            {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}
-               <AdminSearchtools
+          <Header>
+            <h2>회원정보관리</h2>
+            <Usersearch>
+            <AdminSearchtools
                     searchdatas={querydata}
                     options={options}
                     url={"/admin/member"}
                     />
-            멤버관리페이지 {memberlist?"tre":"fals"}
-            <br/>
-            <button onClick={()=>{
+            </Usersearch>
+
+                      <Memcrbutton onClick={()=>{
                 setIscreate(true)
-            }}>회원추가</button>
-               
-               
-            <table >
-            <thead>
+            }}>회원추가</Memcrbutton>
+                    </Header>
+
+
+            {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}
+                          
+            <br/>
+                                        
+            <Maintable>
+            <TableHeader>
                 <tr>
-                    <th>회원번호</th>
-                    <th>회원이메일</th>
-                    <th>회원닉네임</th>
+                    <Thcss>회원번호</Thcss>
+                    <Thcss>회원이메일</Thcss>
+                    <Thcss>회원닉네임</Thcss>
                     
-                    <th>회원가입사이트</th>
-                    <th>회원권한</th>
-                    <th>회원주소</th>
-                    <th>작성게시글</th>
-                    <th>작성코멘트</th>
-                    <th>참여채팅방</th>
-                    <th>가입날자</th>
+                    <Thcss>회원가입사이트</Thcss>
+                    <Thcss>회원권한</Thcss>
+                    <Thcss>회원주소</Thcss>
+                    <Thcss>작성게시글</Thcss>
+                    <Thcss>작성코멘트</Thcss>
+                    <Thcss>참여채팅방</Thcss>
+                    <Thcss>가입날자</Thcss>
+                    <Thcss>회원정보관리</Thcss>
                 </tr>
-                </thead>
+                </TableHeader>
                 
             {memberlist&&memberlist.map((data,key)=>{
                 return(
@@ -123,7 +163,7 @@ useEffect(()=>{
                 
             })}
            
-            </table>
+            </Maintable>
              <Pagenation  totalpage={totalpage}
                       url={"/admin/member"}
                         querydata={querydata}

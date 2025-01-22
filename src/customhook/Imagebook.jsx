@@ -69,7 +69,7 @@ const Container=styled.div`
     width: 32%;
     height:15%;
     float: left;
-    border: 1px solid ${(props)=>props.selectcolor?"yellow":"black"}
+    border: 1px solid ${(props)=>props.checked?"yellow":"black"}
 `
 export default function Imagebook(props){
 const {images,setisimage,userdata,noticedata}=props;
@@ -107,22 +107,22 @@ const manyimageban=useMutation({
         },
         onSuccess:()=>{
             alert("성공")
+            setIsupdate(false)
+            setCheckboxdata(``)
         }
 })
 
 const manyimagebanhandler=(data)=>{
     if(confirm("정말로차단하시겠습니까")){
-        console.log(data)
-        manyimageban.mutate(data
-
-        )
+        console.log(data[0].id)
+        manyimageban.mutate(data)
     }
 }
 const imagebanhandler=(detachid)=>{
     if(confirm("정말로차단하시겠습니까")){
-    imageban.mutate({
-        detachid:detachid
-    })
+    imageban.mutate(
+        detachid
+)
 }
 }
 
@@ -130,7 +130,7 @@ const Checkhandler=(checked,id)=>{
     if(checked){
         setCheckboxdata([...checkboxdata,id])
     }else{
-        setCheckboxdata(checkboxdata.filter(item=>item !==id));
+        setCheckboxdata(checkboxdata.filter(item=>item.id !==id));
     }
 }
 return (
@@ -167,27 +167,32 @@ return (
         <span style={{color:"black"}}>{noticedata.likes}</span><br/>
         <span style={{color:"black"}}>{noticedata.red}</span><br/>
         ======================게시글정보===========================
-        <span style={{color:"black"}}>이미지리스트</span> {checkboxdata}
+        <span style={{color:"black"}}>이미지리스트</span> 
         {isupdate?
         <>
         <button onClick={()=>{manyimagebanhandler(checkboxdata)}}>선택이미지차단</button>
-        <button onClick={()=>{setIsupdate(false)}}>수정취소</button>
+        <button onClick={()=>{setIsupdate(false), setCheckboxdata(``)}}>수정취소</button>
         <Wrapper>
             
             {images.map((data,key)=>{
                 return (
-                     <Container> 
-                        
+                    <>
+                    
+                        <Container > 
+                     
                         <Checkbox type="checkbox" id={`check${key}`} value={data.id}
-                         onChange={(e)=>{Checkhandler(e.target.checked,e.target.value)}}/>
+                         onChange={(e)=>{Checkhandler(e.target.checked,e.target.value)}}
+                        
+                         />
                         <label for={`check${key}`} >
                         <Miri src={process.env.PUBLIC_URL+data.path}  
                         /> 
                         </label>
                         
-                        
+                    
                       
                         </Container> 
+                        </>
                 )
             })}
             
@@ -203,13 +208,13 @@ return (
                     <>
                         
                       {activeindex===key?
-                        <Container   selectcolor={true}> 
+                        <Container   checked={true}> 
                          <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
                           
                          /> 
                          </Container> 
                       :
-                      <Container   selectcolor={false}> 
+                      <Container   checked={false}> 
                       <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
                       selectcolor={false}
                       /> 

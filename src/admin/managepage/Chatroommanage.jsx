@@ -9,8 +9,40 @@ import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
+    position: absolute;
+    top: 0%;
+    left:18%;
+    width: 80%;
+    height: 99%;
+    border: 1px solid black;
     text-align: center;
 
+`
+const Header=styled.div`
+    
+`
+const Chatcrbutton=styled.button`
+    position: relative;
+    float:left;
+    border: 1px solid black;
+`
+const Chatsearch=styled.div`
+    position: relative;
+    float: right;
+    right: 0%;
+   
+`
+const Maintable=styled.table`
+width:100%;
+height: 80%;
+border: 1px solid black;
+float   :left ;
+`
+const TableHeader=styled.thead`
+    background-color:rgb(44,44,44);
+`
+const Thcss=styled.th`
+    color: white;
 `
 export default function Chatroommanage(){
     const axiosintance=CreateAxios();
@@ -51,25 +83,32 @@ export default function Chatroommanage(){
 
     return (
         <Wrapper>
+            <Header>
+            <h3>채팅방관리</h3>
+            <Chatsearch>
             <AdminSearchtools 
             searchdatas={querydata}
             options={options}
             url={"/admin/chatroom"}
             />
-            채티방관리
-            <table >
+            </Chatsearch>
+            </Header>
+            <Maintable >
+                <TableHeader>
                 <tr>
-                    <th>채팅방id</th>
-                    <th>채팅방이름</th>
-                    <th>채팅방참가리스트</th>
-                    <th>마지막채팅</th>
-                    <th>총채팅수</th>
-                    <th>마지막채팅날짜</th>
-                    <th>채팅방생성날짜</th>
+                    <Thcss>채팅방id</Thcss>
+                    <Thcss>채팅방이름</Thcss>
+                    <Thcss>채팅방참가리스트</Thcss>
+                    <Thcss>마지막채팅</Thcss>
+                    <Thcss>총채팅수</Thcss>
+                    <Thcss>마지막채팅날짜</Thcss>
+                    <Thcss>채팅방생성날짜</Thcss>
+                    <Thcss>채팅방관리</Thcss>
                     
                     
 
                 </tr>
+                </TableHeader>
             {chatroom&&chatroom.map((data,key)=>{
                 return ( <>
                                     <Chatroomlist data={data} key={key}
@@ -78,7 +117,8 @@ export default function Chatroommanage(){
                                         
                                    </>)
             })}
-            </table>
+            </Maintable>
+            <br/>
          <Pagenation  totalpage={totalpage}
                               url={"/admin/chatroom"}
                                 querydata={querydata}

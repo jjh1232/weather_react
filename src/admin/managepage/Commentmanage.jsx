@@ -7,8 +7,36 @@ import CommentList from "./list/CommentList";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import Pagenation from "../../customhook/Pagenation";
 const Wrapper=styled.div`
+    position: absolute;
+    top: 0%;
+    left:18%;
+    width: 80%;
+    height: 99%;
+    border: 1px solid black;
     text-align: center;
 
+`
+const Header=styled.div`
+    
+`
+
+const Commentsearch=styled.div`
+    position: relative;
+    float: right;
+    right: 0%;
+   
+`
+const Maintable=styled.table`
+width:100%;
+height: 80%;
+border: 1px solid black;
+float   :left ;
+`
+const TableHeader=styled.thead`
+    background-color:rgb(44,44,44);
+`
+const Thcss=styled.th`
+    color: white;
 `
 
 export default function Commentmanage(){
@@ -64,30 +92,41 @@ const commentget=()=>{
 
     return (
         <Wrapper>
+            <Header>
+                <h3>회원댓글관리</h3>
+                
+            <Commentsearch>
             <AdminSearchtools
                                 searchdatas={querydata}
                                 options={options}
                                 url={"/admin/comment"}
                                 />
-                 <table >
+            </Commentsearch>
+            </Header>
+
+                 <Maintable>
+                    <TableHeader>
                 <tr>
-                    <th>댓글id</th>
-                    <th>댓글작성자이메일</th>
-                    <th>댓글작성자닉네임</th>
-                    <th>댓글작성내용</th>
-                    <th>작성한게시글</th>
-                    <th>댓글작성날짜</th>
+                    <Thcss>댓글id</Thcss>
+                    <Thcss>댓글작성자이메일</Thcss>
+                    <Thcss>댓글작성자닉네임</Thcss>
+                    <Thcss>댓글작성내용</Thcss>
+                    <Thcss>작성한게시글</Thcss>
+                    <Thcss>댓글작성날짜</Thcss>
+                    <Thcss>회원댓글관리</Thcss>
                     
                     
 
                 </tr>
+                </TableHeader>
                 {comments&&comments.map((data,key)=>{
                     return (
                         <CommentList data={data} key={key} deletemethod={deletecomment}/>
                     )
                 })}
 
-                </table>
+                </Maintable>
+                <br/>
                 <Pagenation  totalpage={totalpage}
                                       url={"/admin/comment"}
                                         querydata={querydata}

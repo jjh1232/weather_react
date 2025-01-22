@@ -1,7 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Loginpage from "../MemberPage/Loginpage"
 
+const Wrapper=styled.div`
+    background-color:rgb(78,80,82);
+    margin-top:-1%;
+    width: 18%;
+    height: 100%;
+    
+`
+const Menu=styled.h3`
+    color: white;
+`
 export default function AdminLeft(){
+
 
     if(!window.location.pathname.includes("/admin")) return null
     const navigate=useNavigate();
@@ -9,15 +22,18 @@ export default function AdminLeft(){
 
    
     return (
-        <div>
-       
-                <div onClick={()=>{navigate("/admin/member")}}>회원관리</div>
-                <div onClick={()=>{navigate("/admin/notice")}}>게시글관리</div>
-                <div onClick={()=>{navigate("/admin/comment")}}>유저댓글관리</div>
-                <div onClick={()=>{navigate("/admin/chatroom")}}>채팅방관리</div>
+        <Wrapper>
+             
+                <div onClick={()=>{navigate("/admin")}}>
+                    <Menu>홈</Menu>
+                    </div>
+                <div onClick={()=>{navigate("/admin/member")}}><Menu>회원관리</Menu></div>
+                <div onClick={()=>{navigate("/admin/notice")}}><Menu>게시글관리</Menu></div>
+                <div onClick={()=>{navigate("/admin/comment")}}><Menu>댓글관리</Menu></div>
+                <div onClick={()=>{navigate("/admin/chatroom")}}><Menu>채팅방관리</Menu></div>
 
             
            
-        </div>
+        </Wrapper>
     )
 }

@@ -8,6 +8,9 @@ const Button=styled.button`
     background-color: ${(props)=>props.color};
     
 `
+const Wrapper=styled.div`
+    
+`
 export default function Pagenation(props){
 
     const {totalpage,setCurrentpage,url,querydata}=props;
@@ -36,7 +39,7 @@ export default function Pagenation(props){
 
     
     return (
-        <div>
+        <Wrapper>
             {querydata.page==1?""
             :<button onClick={()=>{setcurrentpa(querydata.page-1)}}>이전</button>}
            
@@ -59,6 +62,6 @@ export default function Pagenation(props){
 
             {querydata.page<totalpage?<button onClick={()=>{setcurrentpa(querydata.page+1)}}>다음</button>:""}
             
-        </div>
+        </Wrapper>
     )
 }
