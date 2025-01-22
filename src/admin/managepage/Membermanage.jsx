@@ -49,6 +49,10 @@ const TableHeader=styled.thead`
 const Thcss=styled.th`
     color: white;
 `
+const Button=styled.button`
+position: relative;
+display: inline-block;
+`
 export default function Membermanage(){
 
     const axiosinstance=CreateAxios();

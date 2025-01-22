@@ -6,7 +6,20 @@ const Tbody=styled.tbody`
     background-color:${(props)=>props.depth==1?"yellow": "skyblue"} ;
 
 `
+const Button=styled.button`
+position: relative;
+display: inline-block;
 
+font-size: 15px;
+padding: 20px 25px;
+color: white;
+margin: 1px 1px 1px;//위옆아래 마진
+border-radius: 20px; //모서리
+text-align: center;
+transition: top .04s linear;
+text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+background-color: ${(props)=>props.backcolor};
+`
 export default function CommentList(props){
     const {data,key,deletemethod}=props
 
@@ -33,8 +46,8 @@ export default function CommentList(props){
                 <td>{data.redtime}</td>
                 
                 <td>
-                            <button onClick={()=>{setIsupdate(true)}}>댓글수정</button>
-                            <button onClick={()=>{deletecom(data.id)}}>댓글삭제</button>
+                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>댓글수정</Button>
+                            <Button backcolor="red" onClick={()=>{deletecom(data.id)}}>댓글삭제</Button>
                             </td>
              
                 </tr>

@@ -2,7 +2,22 @@
 import React from "react";
 import CreateAxios from "../../../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
+const Button=styled.button`
+position: relative;
+display: inline-block;
+
+font-size: 15px;
+padding: 20px 25px;
+color: white;
+margin: 1px 1px 1px;//위옆아래 마진
+border-radius: 20px; //모서리
+text-align: center;
+transition: top .04s linear;
+text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+background-color: ${(props)=>props.backcolor};
+`
 
 export default function Chatroomlist(props){
 
@@ -35,7 +50,8 @@ export default function Chatroomlist(props){
         <td>{data.red}</td>
         <td>
                             
-                            <button onClick={()=>{deletechatroom(data.roomid)}}>채팅방삭제</button>
+                            <Button backcolor="red"
+                            onClick={()=>{deletechatroom(data.roomid)}}>채팅방삭제</Button>
                             </td>
     </tr>)
 }
