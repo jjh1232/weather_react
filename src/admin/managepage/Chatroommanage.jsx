@@ -37,6 +37,8 @@ width:100%;
 height: 80%;
 border: 1px solid black;
 float   :left ;
+background-color: white;
+border-spacing: 0px;
 `
 const TableHeader=styled.thead`
     background-color:rgb(44,44,44);

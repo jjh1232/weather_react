@@ -17,6 +17,8 @@ export default function AdminLeft(){
 
 
     if(!window.location.pathname.includes("/admin")) return null
+
+    if(window.location.pathname.includes("/admin/loginhistory")) return null
     const navigate=useNavigate();
 
 

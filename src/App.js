@@ -47,6 +47,7 @@ import { PrivateRoute } from "./customhook/Admintools/PrivateRoute";
 import NoAccess from "./customhook/Admintools/NoAccess";
 import ChatroomDetail from "./admin/managepage/list/ChatroomDetail";
 import Adminnoticedetail from "./admin/managepage/list/Adminnoticedetail";
+import Adminloginhistory from "./customhook/Admintools/Adminloginhistory";
 
 const MainTitleText = styled.p`
     font-size: 24px;
@@ -93,6 +94,7 @@ const queryClient=new QueryClient()
       <Route path="/admin/notice" element={<Noticemanage/>}/>
       <Route path="/admin/room/:roomid" element={<ChatroomDetail/>}/>
       <Route path="/admin/notice/detail/:noticeid" element={<Adminnoticedetail/>}/>
+      <Route path="/admin/loginhistory" element={<Adminloginhistory/>}/>
     </Route>
     
     <Route path="/favoritenotice" element={<FavoriteNotice/>}/>

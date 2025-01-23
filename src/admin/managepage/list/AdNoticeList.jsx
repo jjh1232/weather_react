@@ -9,16 +9,21 @@ position: relative;
 display: inline-block;
 
 font-size: 15px;
-padding: 20px 25px;
+padding: 5% 5%;
 color: white;
 margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 20px; //모서리
+border-radius: 10px; //모서리
 text-align: center;
 transition: top .04s linear;
 text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 background-color: ${(props)=>props.backcolor};
 `
-
+const Tr=styled.tr`
+  
+`
+const Td=styled.td`
+    border: 1px solid gray;
+`
 export default  function AdNoticeList(props) {
 
     const {data,key,deletemethod}=props;
@@ -44,34 +49,35 @@ export default  function AdNoticeList(props) {
     }
         return (<>
         {isupdate?<><AdminNoticeupdate noticeid={data.num} setisupdate={setIsupdate}/></>:""}
-        <tr>
-                            <td>{data.num} </td>
-                            <td style={{width:"10%"}}>
+        <Tr>
+                            <Td>{data.num} </Td>
+                            <Td style={{width:"10%"}}>
                                  <img   src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}
    style={{objectFit:"fill",width:"50%",height:"10%"}}
   
-                /></td>
-                            <td>{data.username} </td>
-                            <td>{data.nickname} </td>
+                /></Td>
+                            <Td>{data.username} </Td>
+                            <Td>{data.nickname} </Td>
                            
-                            <td onClick={()=>{noticedetail(data.num)}}>{data.title}</td>
-                            <td onClick={()=>{noticedetail(data.num)}}>{data.text.slice(0,200)}</td>
+                            <Td onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
+                            <Td onClick={()=>{noticedetail(data.num)}}>{data.text.slice(0,100)}</Td>
                             
-                            <td>{data.red}</td>
-                            <td>{data.likes} </td>
-                            <td onClick={()=>{commentsearch(data.num)}}
-                            >{data.commentcount}</td>
-                            <td>{data.detachfiles.length}
-                                {!data.detachfiles.length==0&&<Button backcolor="gray"
+                            <Td>{data.red}</Td>
+                            <Td>{data.likes} </Td>
+                            <Td onClick={()=>{commentsearch(data.num)}}
+                            >{data.commentcount}</Td>
+                            <Td>{data.detachfiles.length}
+                                {!data.detachfiles.length==0&&
+                                <Button backcolor="gray"
                                 onClick={()=>{imagebookon()}}>이미지북</Button>}
                                 
 
-                            </td>
-                            <td>
+                            </Td>
+                            <Td>
                             <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>게시글수정</Button>
                             <Button backcolor="red" onClick={()=>{deletes(data.num)}}>게시글삭제</Button>
-                            </td>
-                </tr>
+                            </Td>
+                </Tr>
                                     {isimagebook&&
                                     <Imagebook images={data.detachfiles} 
                                     setisimage={setIsimagebook}

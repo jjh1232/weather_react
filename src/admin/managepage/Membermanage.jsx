@@ -42,6 +42,8 @@ width:100%;
 height: 80%;
  border: 1px solid black;
 float   :left ;
+background-color: white;
+border-spacing: 0px;
 `
 const TableHeader=styled.thead`
     background-color:rgb(44,44,44);
@@ -49,10 +51,7 @@ const TableHeader=styled.thead`
 const Thcss=styled.th`
     color: white;
 `
-const Button=styled.button`
-position: relative;
-display: inline-block;
-`
+
 export default function Membermanage(){
 
     const axiosinstance=CreateAxios();

@@ -38,12 +38,17 @@ width:100%;
 height: 80%;
 border: 1px solid black;
 float   :left ;
+background-color: white;
+border-spacing: 0px;
+border-collapse: collapse;
 `
 const TableHeader=styled.thead`
     background-color:rgb(44,44,44);
 `
 const Thcss=styled.th`
     color: white;
+    
+    
 `
 
 export default function noticemanage(){
@@ -133,11 +138,13 @@ export default function noticemanage(){
             <Maintable>
                 <TableHeader>
                 <tr>
+                    
                     < Thcss>글번호</ Thcss>
                     <Thcss>작성자프로필</Thcss>
                     <Thcss>작성자이메일</Thcss>
+
                     <Thcss>작성자닉네임</Thcss>
-                   
+                    
                     <Thcss>제목</Thcss>
                     <Thcss>내용</Thcss>
                    

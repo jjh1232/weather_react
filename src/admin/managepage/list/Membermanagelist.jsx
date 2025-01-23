@@ -3,9 +3,6 @@ import AdminUpdateform from "../../../customhook/Admintools/AdminUpdateform";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const Wraper=styled.div`
-    
-`
 
 const Button=styled.button`
 position: relative;
@@ -47,11 +44,14 @@ export default function Membermanagelist(props){
         navigate(`/admin/chatroom?page=1&option=email&keyword=${username}`)
     }
 
+    const userhistoryon=(username)=>{
+        window.open(`/admin/loginhistory?username=${username}`,"_blank","noopener,noreferreor")
+    }
     return(<>
         {isupdate?<AdminUpdateform 
         setIsupdate={setIsupdate} currentdata={data}/>:""}
         <Tbody key={key}>
-            <Tr >
+            <Tr onClick={()=>{userhistoryon(data.username);}}>
                 
                 <Line>{data.id} </Line>
                 <Line>{data.username} </Line>
@@ -64,7 +64,7 @@ export default function Membermanagelist(props){
                 <Line onClick={()=>{commentsearch(data.username)}}>{data.usercomments}</Line>
                 <Line onClick={()=>{roomsearch(data.username)}}>{data.userchatroom}</Line>
                 <Line>{data.red} </Line>
-              
+               
                 <Line>
                 <Button backcolor="blue"
                 onClick={()=>{setIsupdate(true)}}>정보수정</Button> 
