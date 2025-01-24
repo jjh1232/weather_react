@@ -61,6 +61,7 @@ const Gibon=styled.div`
     left :25%;
     text-align:left;
     height: 42%;
+    bottom: 7%;
 `
 
 const H6=styled.h6`
@@ -78,7 +79,46 @@ const InputTap=styled.div`
     margin-left: 7%;
 
 `
-
+const H5=styled.h6`
+    position: relative;
+    bottom:3%;
+    left: 23%;
+    color: red;
+    
+`
+const Sub=styled.div`
+   
+    border: 1px solid black;
+    width: 50%;
+    position: relative;
+    left :25%;
+    bottom: 20%;
+`
+const Regi=styled.div`
+ border: 1px solid black;
+    width: 50%;
+    position: relative;
+    left :25%;
+    bottom: 31.5%;
+`
+const CreateButton=styled.button`
+    position: relative;
+    bottom: 20%;
+display: inline-block;
+width: 11%;
+height: 8%;
+font-size: 15px;
+//padding: 30px 4px;
+color: white;
+bottom:28%;
+left: 20%;
+margin: 1px 1px 1px;//위옆아래 마진
+border-radius: 10px; //모서리
+text-align: center;
+transition: top .04s linear;
+text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+background-color: royalblue;
+`
 export default function AdminMembercreate(props){
     
     const axiosinstance= CreateAxios();
@@ -174,6 +214,8 @@ export default function AdminMembercreate(props){
             <Form >
             <h2>회원가입</h2>
             <h3 style={{position:"relative", right:"20%", top:"3%"}}>기본정보</h3>
+            <H5>*필수입력</H5>
+
                 <Gibon>
                     <InputTap>
                 <H6>이메일</H6>
@@ -204,24 +246,35 @@ export default function AdminMembercreate(props){
                 <br/>
                 </InputTap>
                 </Gibon>
+
+                <h3 style={{position:"relative", right:"20%", bottom:"10%"}}>유저권한정보</h3>
+                <h6 style={{position:"relative", left:"23%", bottom:"16%", color:"red"}}>*필수입력</h6>
+                <Sub>
                 가입사이트:
                 <input type="radio"  name="provider" value="mypage" onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>마이페이지
                     <input type="radio" name="provider" value="Naver" onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>네이버 
                     <input type="radio" name="provider" value="Google"onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>구글
-              
-                
-               
+                                            
                 <br/>
+                
+                <br/>
+                <div style={{position:"relative", border:"1px solid black" }}>
                 회원권한:
                 <input type="radio" name="role" value="ROLE_User"  onChange={(e)=>{setCreateform({...createform,userrole:e.target.value})}}/> 일반 
                 <input type="radio" name="role" value="ROLE_Admin" onChange={(e)=>{setCreateform({...createform,userrole:e.target.value})}}/>운영자
-               
+                </div>
                 <br/>
+                </Sub>
+                <h3 style={{position:"relative", right:"20%", bottom:"22%"}}>회원주소</h3>
+                <h6 style={{position:"relative", left:"23%", bottom:"28%", color:"blue"}}>*선택입력</h6>
+                <Regi>
+
                 회원지역:<input type="text" value={createform.region} readOnly /> 
                 <Weatherregion title="지역찾기" onGetdata={ongetdata}
-
+                    
                 />
-                <button onClick={Oncreateuser}>제출</button>
+                </Regi>
+                <CreateButton onClick={Oncreateuser}>회원가입</CreateButton >
             </Form >
         </Modalin>
     </Modalout>
