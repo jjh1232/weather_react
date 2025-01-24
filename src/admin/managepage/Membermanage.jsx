@@ -14,6 +14,7 @@ import Membermanagelist from "./list/Membermanagelist";
 
 
 const Wrapper=styled.div`
+    
     position: absolute;
     top: 0%;
     left:18%;
@@ -38,8 +39,9 @@ const Usersearch=styled.div`
    
 `
 const Maintable=styled.table`
+//position: relative;
 width:100%;
-height: 80%;
+height: 10px;
  border: 1px solid black;
 float   :left ;
 background-color: white;

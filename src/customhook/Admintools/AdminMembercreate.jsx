@@ -6,20 +6,76 @@ import CreateAxios from "../CreateAxios";
 import * as Validation from "./UserValidation"
 
 const Modalout=styled.div`
-width:45% ;
-height:85% ;
+position: relative;
+top:0%;
+width:100% ;
+height:100% ;
 position: fixed;
 background:rgba(0,0,0,0.5);
 display:flex; //
 justify-content:center;//왼쪽에서중간
 align-items:center; //위로부터 중간
+z-index: 10;
 `
 
 const Modalin=styled.div`
+position: relative;
 padding: 15px;
-width:90%;
+right: 10%;
+width:40%;
 height:70%;
 background-color: #FFFFFF;
+
+
+`
+const Exitbutton=styled.button`
+position: absolute;
+top:3%;
+left:3%;
+
+    
+    
+`
+const Form=styled.form`
+    height: 100%;
+    padding: 10px;
+    border: 1px solid black;
+`
+const Input=styled.input`
+width: 70%;
+  height: 32px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+  border-bottom: 1px solid red;
+  margin: 1%;
+  
+`
+const Gibon=styled.div`
+    border: 1px solid black;
+    width: 50%;
+    position: relative;
+    left :25%;
+    text-align:left;
+    height: 42%;
+`
+
+const H6=styled.h6`
+    border: 1px solid black;
+    bottom:26%;
+    left:2%;
+    position: absolute;
+    color: blue;
+`
+const InputTap=styled.div`
+    top:2%;
+    position: relative;
+    margin-top:4%;
+    margin-bottom: 6%;
+    margin-left: 7%;
 
 `
 
@@ -109,28 +165,45 @@ export default function AdminMembercreate(props){
     return(<>
       
     <Modalout>
-    <button onClick={()=>{
+    <Exitbutton onClick={()=>{
         props.setIscreate(false)
-    }}>창닫기</button>
+    }}>창닫기</Exitbutton>
+
         <Modalin>
-            <form >
-                회원이메일:<input type="text" value={createform.username}
+            
+            <Form >
+            <h2>회원가입</h2>
+            <h3 style={{position:"relative", right:"20%", top:"3%"}}>기본정보</h3>
+                <Gibon>
+                    <InputTap>
+                <H6>이메일</H6>
+               <Input type="text" value={createform.username} placeholder="이메일"
                   onChange={(e)=>{setCreateform({...createform,username:e.target.value})}}
                 /> {valid.username?"true":"false"}
-                <br/>
-                회원닉네임:<input type="text" value={createform.nickname}
+                </InputTap>
+                <InputTap>
+                <H6>닉네임</H6>
+                <Input type="text" value={createform.nickname} placeholder="닉네임"
                  onChange={(e)=>{setCreateform({...createform,nickname:e.target.value})}}
                 />{valid.nickname?"true":"false"}
                 <br/>
-                비밀번호:<input type="text" value={createform.password}
+                </InputTap>
+                <InputTap>
+                <H6>비밀번호</H6>
+                <Input type="password" value={createform.password} placeholder="비밀번호"
                  onChange={(e)=>{setCreateform({...createform,password:e.target.value})}}
                 />
                 {valid.password?"true":"false"}
                 <br/>
-                비밀번호확인:<input type="text" value={createform.confirmpassword}
+                </InputTap>
+                <InputTap>
+                <H6>비밀번호확인</H6>
+                <Input type="password" value={createform.confirmpassword} placeholder="비밀번호확인"
                 onChange={(e)=>{setCreateform({...createform,confirmpassword:e.target.value})}}
                 />{valid.passwordconfirm?"true":"false"}
                 <br/>
+                </InputTap>
+                </Gibon>
                 가입사이트:
                 <input type="radio"  name="provider" value="mypage" onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>마이페이지
                     <input type="radio" name="provider" value="Naver" onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>네이버 
@@ -149,7 +222,7 @@ export default function AdminMembercreate(props){
 
                 />
                 <button onClick={Oncreateuser}>제출</button>
-            </form >
+            </Form >
         </Modalin>
     </Modalout>
     
