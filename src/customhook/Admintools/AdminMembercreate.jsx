@@ -93,6 +93,7 @@ const Sub=styled.div`
     position: relative;
     left :25%;
     bottom: 20%;
+    
 `
 const Regi=styled.div`
  border: 1px solid black;
@@ -205,11 +206,12 @@ export default function AdminMembercreate(props){
     return(<>
       
     <Modalout>
-    <Exitbutton onClick={()=>{
-        props.setIscreate(false)
-    }}>창닫기</Exitbutton>
+    
 
         <Modalin>
+        <Exitbutton onClick={()=>{
+        props.setIscreate(false)
+    }}>창닫기</Exitbutton>
             
             <Form >
             <h2>회원가입</h2>
@@ -255,14 +257,14 @@ export default function AdminMembercreate(props){
                     <input type="radio" name="provider" value="Naver" onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>네이버 
                     <input type="radio" name="provider" value="Google"onChange={(e)=>{setCreateform({...createform,provider:e.target.value})}}/>구글
                                             
-                <br/>
+                
                 
                 <br/>
-                <div style={{position:"relative", border:"1px solid black" }}>
+               
                 회원권한:
                 <input type="radio" name="role" value="ROLE_User"  onChange={(e)=>{setCreateform({...createform,userrole:e.target.value})}}/> 일반 
                 <input type="radio" name="role" value="ROLE_Admin" onChange={(e)=>{setCreateform({...createform,userrole:e.target.value})}}/>운영자
-                </div>
+               
                 <br/>
                 </Sub>
                 <h3 style={{position:"relative", right:"20%", bottom:"22%"}}>회원주소</h3>

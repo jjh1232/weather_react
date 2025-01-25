@@ -3,16 +3,19 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import CreateAxios from "./CreateAxios";
 
+
+//css 
 const Modalout=styled.div`
   position:fixed;
     width:100%;
     height: 100%;
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.9);
 //display:flex; //
 justify-content:center;//왼쪽에서중간
 align-items:center;
 top: 0;
 left: 0;
+z-index: 5;
 `
 
 const Imagein=styled.img`
@@ -20,17 +23,20 @@ position: relative;
 object-fit:cover;
  justify-content: center;
  align-items:center;
- max-width: 73%;
+ max-width: 80%;
  max-height: 99%;
+ top:14%;
+
  
 `
 
 const Sidebar=styled.div`
-   
+   position: relative;
     float: right;
     background-color: white;
     width: 20%;
     height: 100%;
+    z-index: 10;
 `
 //작은이미지모음
 const Wrapper=styled.div`
@@ -58,10 +64,6 @@ float: left;
 
 z-index: 10;
 position: absolute;
-
-
-
-
     
 `
 const Container=styled.div`
@@ -71,6 +73,45 @@ const Container=styled.div`
     float: left;
     border: 1px solid ${(props)=>props.checked?"yellow":"black"}
 `
+
+const Button=styled.button`
+    
+background-color: ${(props)=>props.color};
+
+
+`
+const Exitbutton  =styled.div`
+position: relative;
+width: 10%;
+height: 10%;
+border: 1px solid green;
+     
+  
+
+ &::before {
+    content: "";
+    width: 100px;
+    top: 28%;
+    left: 8%;
+    position: absolute;
+    border-bottom: 6px solid blue;
+    transform:  rotate(45deg);
+  }
+
+  &::after {
+    top: 30%;
+    content: "";
+    width: 100px;
+    left:10%;
+    position: absolute;
+    border-bottom: 6px solid blue;
+    transform:  rotate(-45deg);
+  }
+`
+
+
+//----------------------------------------css
+
 export default function Imagebook(props){
 const {images,setisimage,userdata,noticedata}=props;
 const [activeindex,setActiveindex]=useState(0);
@@ -133,12 +174,23 @@ const Checkhandler=(checked,id)=>{
         setCheckboxdata(checkboxdata.filter(item=>item.id !==id));
     }
 }
+
+
+//메소드 ==========================================================================
 return (
     <Modalout>
-    <button onClick={()=>{setisimage(false)}}>창닫기</button>
-    {activeindex>0&&
-        <button onClick={prevslide}>이전이미지</button>}
+    
+    
+    
 
+    <Exitbutton  
+    onClick={()=>{setisimage(false)}}/>
+    
+    {activeindex>0&&
+        <Button color="blue" 
+        onClick={prevslide}>이전이미지</Button>}
+
+        //이미지 맵 
     {images.map((data,key)=>{
         return(
            <>
@@ -153,10 +205,13 @@ return (
             </>
         )
     })}
+    //다음이미ㅣㅈ버튼
     {activeindex<images.length-1&&
-    <button onClick={nextslide}>다음이미지</button>
+    <Button color="blue" 
+    onClick={nextslide}>다음이미지</Button>
 
     }
+    //사이드바 
     <Sidebar>
         <div>
     <img  src={process.env.PUBLIC_URL+"/userprofileimg"+userdata.profileimg}
@@ -170,8 +225,8 @@ return (
         <span style={{color:"black"}}>이미지리스트</span> 
         {isupdate?
         <>
-        <button onClick={()=>{manyimagebanhandler(checkboxdata)}}>선택이미지차단</button>
-        <button onClick={()=>{setIsupdate(false), setCheckboxdata(``)}}>수정취소</button>
+        <Button onClick={()=>{manyimagebanhandler(checkboxdata)}}>선택이미지차단</Button>
+        <Button onClick={()=>{setIsupdate(false), setCheckboxdata(``)}}>수정취소</Button>
         <Wrapper>
             
             {images.map((data,key)=>{
@@ -197,23 +252,31 @@ return (
             })}
             
         </Wrapper>
+
         </>
-        : <> 
+        //업데이트안할시
+        : 
+        // 수정모드시
+        <> 
+        // 
         <button onClick={()=>{setIsupdate(true)}}>수정모드</button>
 
+        //
         <Wrapper>
-            
+            //이미지맵  
             {images.map((data,key)=>{
                 return (
                     <>
-                        
+                        //액티브인덱스 확인  
                       {activeindex===key?
                         <Container   checked={true}> 
                          <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
                           
                          /> 
+
                          </Container> 
                       :
+                      //
                       <Container   checked={false}> 
                       <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
                       selectcolor={false}
