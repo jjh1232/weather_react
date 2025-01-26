@@ -42,9 +42,15 @@ export default function AdminNoticecreate(props){
             //폼데이터로 파일 서버로보냄
             const file=input.files[0];
             //저장크기를 일정하게 해야할듯
+            console.log("파일:"+file.filename)
             const img=new Image();
+
             img.src=URL.createObjectURL(file);
-            img.onload=()=>{
+            console.log("이미지:"+img);
+            console.log("이미지src:"+img.src);
+            const formData=new FormData();
+
+           img.onload=async()=>{
                 const canvas=document.createElement(`canvas`)
                 const ctx=canvas.getContext(`2d`)
                 const scaleFactor=Math.min(1280/img.width,960/img.height);
@@ -52,19 +58,28 @@ export default function AdminNoticecreate(props){
                 canvas.height=img.height*scaleFactor;
                 ctx.drawImage(img,0,0,canvas.width,canvas.height);
 
-                return canvas.toDataURL("image/png")
-               
-            }
-          
+              const files=canvas.toDataURL("image/png")
+              let blobBin=atob(files.split(`,`)[1]); //base64데이터디코딩
+                   var array=[];
+                for(var i=0;i<blobBin.length;i++){
+                    array.push(blobBin.charCodeAt(i));
+                }
+                let profile=new Blob([new Uint8Array(array)],{type:`image/png`});
+                console.log(profile)
+                
+                formData.append("image",profile);
+            
+            
+                      
 
-            const formData=new FormData();
 
-
-        formData.append("image",file);
+       
 
         const result=await axiosinstance.post('/contentimage', formData)
         //서버에 미리저장후 이미지rul리턴받고 주소저장
+        
         const IMG_URL = process.env.PUBLIC_URL+"/noticeimages/"+result.data;
+        console.log("이미지유알엘"+IMG_URL)
             //에디터객체 가져오기
         const editor=quillref.current.getEditor();
            // 2. 현재 에디터 커서 위치값을 가져온다
@@ -78,7 +93,8 @@ export default function AdminNoticecreate(props){
             url:IMG_URL}])
             //이미지번호를위해
           imagekey.current+=1;
-        
+           //onload마무리괄호 
+           }
         })
     }
     const modules =useMemo(()=>{ //유스메모 사용안하면 매랜더링마다다시생성됨 
