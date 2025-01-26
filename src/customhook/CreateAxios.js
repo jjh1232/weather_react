@@ -113,10 +113,11 @@ instance.interceptors.response.use(
             }).catch((err)=>{
                 console.log("리프레쉬토큰도오류!")
                 alert("다시로그인해주세요!")
-                removeLoginuser("Refreshtoken");
-                removeLoginuser("Acesstoken");
-                removeLoginuser("userinfo");
-                removeLoginuser("weather");
+                //패스경로도 넣어줘야 삭제된다함
+                removeLoginuser("Refreshtoken",{path:`/`});
+                removeLoginuser("Acesstoken",{path:`/`});
+                removeLoginuser("userinfo",{path:`/`});
+                removeLoginuser("weather",{path:`/`});
                 //로그아웃
             })  
 

@@ -13,20 +13,20 @@ const Modalout=styled.div`
 //display:flex; //
 justify-content:center;//왼쪽에서중간
 align-items:center;
-top: 0;
-left: 0;
+top:0%;
+right:0%;
 z-index: 5;
 `
 
 const Imagein=styled.img`
-position: relative;
+position: fixed;
 object-fit:cover;
  justify-content: center;
  align-items:center;
  max-width: 80%;
  max-height: 99%;
- top:14%;
-
+ top:17%;
+right:40%;
  
 `
 
@@ -40,6 +40,7 @@ const Sidebar=styled.div`
 `
 //작은이미지모음
 const Wrapper=styled.div`
+   
     float: left;
     border: 1px solid black;
     width: 100%;
@@ -81,30 +82,33 @@ background-color: ${(props)=>props.color};
 
 `
 const Exitbutton  =styled.div`
-position: relative;
-width: 10%;
+position: fixed;
+
+left:1%;
+width: 5%;
 height: 10%;
-border: 1px solid green;
-     
-  
+
+display: inline-block;
+
 
  &::before {
     content: "";
-    width: 100px;
-    top: 28%;
-    left: 8%;
+    width: 80px;
+    top: 40%;
+    left: 0%;
     position: absolute;
-    border-bottom: 6px solid blue;
+    border-bottom: 5px solid white;
     transform:  rotate(45deg);
   }
 
   &::after {
-    top: 30%;
+    top: 40%;
+    
     content: "";
-    width: 100px;
-    left:10%;
+    width: 80px;
+    left:0%;
     position: absolute;
-    border-bottom: 6px solid blue;
+    border-bottom: 5px solid white;
     transform:  rotate(-45deg);
   }
 `
@@ -190,7 +194,7 @@ return (
         <Button color="blue" 
         onClick={prevslide}>이전이미지</Button>}
 
-        //이미지 맵 
+        
     {images.map((data,key)=>{
         return(
            <>
@@ -205,13 +209,13 @@ return (
             </>
         )
     })}
-    //다음이미ㅣㅈ버튼
+   
     {activeindex<images.length-1&&
     <Button color="blue" 
     onClick={nextslide}>다음이미지</Button>
 
     }
-    //사이드바 
+    
     <Sidebar>
         <div>
     <img  src={process.env.PUBLIC_URL+"/userprofileimg"+userdata.profileimg}
@@ -254,20 +258,20 @@ return (
         </Wrapper>
 
         </>
-        //업데이트안할시
+        
         : 
-        // 수정모드시
+       
         <> 
-        // 
+       
         <button onClick={()=>{setIsupdate(true)}}>수정모드</button>
 
-        //
+        
         <Wrapper>
-            //이미지맵  
+           
             {images.map((data,key)=>{
                 return (
                     <>
-                        //액티브인덱스 확인  
+                        
                       {activeindex===key?
                         <Container   checked={true}> 
                          <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
@@ -276,7 +280,7 @@ return (
 
                          </Container> 
                       :
-                      //
+                      
                       <Container   checked={false}> 
                       <Miri src={process.env.PUBLIC_URL+data.path} onClick={()=>{setActiveindex(key)}} 
                       selectcolor={false}

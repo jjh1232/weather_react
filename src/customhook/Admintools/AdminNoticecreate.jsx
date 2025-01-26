@@ -41,7 +41,25 @@ export default function AdminNoticecreate(props){
         input.addEventListener(`change`,async()=>{
             //폼데이터로 파일 서버로보냄
             const file=input.files[0];
+            //저장크기를 일정하게 해야할듯
+            const img=new Image();
+            img.src=URL.createObjectURL(file);
+            img.onload=()=>{
+                const canvas=document.createElement(`canvas`)
+                const ctx=canvas.getContext(`2d`)
+                const scaleFactor=Math.min(1280/img.width,960/img.height);
+                canvas.width=img.width*scaleFactor;
+                canvas.height=img.height*scaleFactor;
+                ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+                return canvas.toDataURL("image/png")
+               
+            }
+          
+
             const formData=new FormData();
+
+
         formData.append("image",file);
 
         const result=await axiosinstance.post('/contentimage', formData)

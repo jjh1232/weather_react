@@ -47,8 +47,17 @@ export default  function AdNoticeList(props) {
       
         setIsimagebook(!isimagebook)
     }
+
         return (<>
         {isupdate?<><AdminNoticeupdate noticeid={data.num} setisupdate={setIsupdate}/></>:""}
+        
+        {isimagebook&&
+                                    <Imagebook images={data.detachfiles} 
+                                    setisimage={setIsimagebook}
+                                    userdata={{username:data.username,nickname:data.nickname,profileimg:data.userprofile}}
+                                    noticedata={{title:data.title,likes:data.likes,red:data.red}}
+                                    />}
+
         <Tr>
                             <Td>{data.num} </Td>
                             <Td style={{width:"10%"}}>
@@ -78,11 +87,6 @@ export default  function AdNoticeList(props) {
                             <Button backcolor="red" onClick={()=>{deletes(data.num)}}>게시글삭제</Button>
                             </Td>
                 </Tr>
-                                    {isimagebook&&
-                                    <Imagebook images={data.detachfiles} 
-                                    setisimage={setIsimagebook}
-                                    userdata={{username:data.username,nickname:data.nickname,profileimg:data.userprofile}}
-                                    noticedata={{title:data.title,likes:data.likes,red:data.red}}
-                                    />}
+                                    
                 </> )
 }
