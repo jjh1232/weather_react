@@ -8,6 +8,7 @@ import { Sky,Pty } from "./Weathersetting";
 const Modalout=styled.div`
 width:100% ;
 height:100% ;
+
 top: 0%;
 left :0%;
 position: fixed;
@@ -18,18 +19,20 @@ z-index: 10;
 
 const Modalin=styled.div`
 padding: 15px;
-width:60%;
-height:80%;
-top: 10%;
-left:20%;
+width: 900px;
+height: 800px;
+//width:60%;
+//height:80%;
+top: 5%;
+left:31%;
 position: fixed;
 background-color: #FFFFFF;
 overflow: auto;
 `
 const Exitbutton  =styled.div`
 position: fixed;
-top: 9%;
-left:20%;
+top: 1%;
+left:29%;
 width: 5%;
 height: 10%;
 
@@ -42,7 +45,7 @@ display: inline-block;
     top: 40%;
     left: 0%;
     position: absolute;
-    border-bottom: 5px solid black;
+    border-bottom: 10px solid black;
     transform:  rotate(45deg);
   }
 
@@ -53,7 +56,7 @@ display: inline-block;
     width: 80px;
     left:0%;
     position: absolute;
-    border-bottom: 5px solid black;
+    border-bottom: 10px solid black;
     transform:  rotate(-45deg);
   }
 `
@@ -61,20 +64,37 @@ display: inline-block;
 const Weatherbox=styled.div`
     position: relative;
     float: right;
-    width: 40%;
+    width: 30%;
+    //width: 300px;
+    min-width: 100px;
     border: 1px solid black;
 `
 const UserDatabox=styled.div`
-    width: 30%;
+    width: 20%;
+    left: 10%;
     position: relative;
     border: 1px solid black;
 `
 const Noticebox=styled.div`
-    width: 80;
+    width: 100%;
     height: 70%;
     top:8%;
     position: relative;
     border: 1px solid black;
+`
+const DetachBox=styled.div`
+    border:1px solid gray;
+    position: absolute;
+    float: right;
+    top: 20%;
+    right: 0%;
+    width: 20%;
+    height: 70%;
+    z-index: 5;
+    
+`
+const UpdateButton=styled.button`
+    float: right;
 `
 export default function AdminNoticeupdate(props){
     const [cookie,Setcookie,removecookie]=useCookies();
@@ -302,8 +322,14 @@ const filedelete=(id,range)=>{
             onChange={texthandler}
             />
             <br/><br/>
-             
-        첨부목록:{imagekey.current}<br/>
+
+            </Noticebox>
+
+        
+
+        <DetachBox>
+        첨부목록:
+        <br/>
         {filelist&&filelist.map((list,key)=>{
             
             if(list.path===``){
@@ -311,11 +337,11 @@ const filedelete=(id,range)=>{
             }else{
             return (
                 <>
-                <span key={key}>
+                <span key={key} style={{float:"left"}}>
                     
                     {list.filename}
                     <button onClick={()=>{filedelete(list.id,list.rangeindex)}}>제거</button>
-                <br/>아이디값:{list.idx}
+                
                 </span>
                 <br/>
                 </>
@@ -323,8 +349,9 @@ const filedelete=(id,range)=>{
             )
                 }
         })}
-        </Noticebox>
-            <button onClick={createtwitnotice}>글작성하기</button>
+        </DetachBox>
+        
+            <UpdateButton onClick={createtwitnotice}>글작성하기</UpdateButton>
         </Modalin>
 
         </Modalout>
