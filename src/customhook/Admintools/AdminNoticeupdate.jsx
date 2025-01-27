@@ -20,7 +20,7 @@ z-index: 10;
 const Modalin=styled.div`
 padding: 15px;
 width: 900px;
-height: 800px;
+height: 760px;
 //width:60%;
 //height:80%;
 top: 5%;
@@ -77,8 +77,8 @@ const UserDatabox=styled.div`
 `
 const Noticebox=styled.div`
     width: 100%;
-    height: 70%;
-    top:8%;
+    height: 85%;
+    top:1%;
     position: relative;
     border: 1px solid black;
 `
@@ -86,15 +86,29 @@ const DetachBox=styled.div`
     border:1px solid gray;
     position: absolute;
     float: right;
-    top: 20%;
+    top: 17.3%;
     right: 0%;
     width: 20%;
-    height: 70%;
-    z-index: 5;
+    height: 74.4%;
+    z-index: 10;
+    background-color: white;
     
 `
 const UpdateButton=styled.button`
+    width: 80px;
+    height: 50px;
+    position: relative;
+    top:1%;
     float: right;
+    font-size: 15px;
+padding: 1% 0%;
+color: black;
+//margin: px 1px 1px;//위옆아래 마진
+border-radius: 10px; //모서리
+text-align: center;
+transition: top .04s linear;
+text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+background-color: green;
 `
 export default function AdminNoticeupdate(props){
     const [cookie,Setcookie,removecookie]=useCookies();
@@ -316,7 +330,7 @@ const filedelete=(id,range)=>{
         
         <ReactQuill
             ref={quillref}
-            style={{width:"90%",height:"70%",left:"10%"}}//스타일
+            style={{width:"100%",height:"85%",left:"10%"}}//스타일
             modules={modules}
             value={crnotice.text}
             onChange={texthandler}
