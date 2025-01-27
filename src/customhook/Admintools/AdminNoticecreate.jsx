@@ -42,23 +42,40 @@ export default function AdminNoticecreate(props){
             //폼데이터로 파일 서버로보냄
             const file=input.files[0];
             //저장크기를 일정하게 해야할듯
-            console.log("파일:"+file.filename)
+          
             const img=new Image();
 
             img.src=URL.createObjectURL(file);
-            console.log("이미지:"+img);
-            console.log("이미지src:"+img.src);
+          
             const formData=new FormData();
 
            img.onload=async()=>{
                 const canvas=document.createElement(`canvas`)
                 const ctx=canvas.getContext(`2d`)
-                const scaleFactor=Math.min(1280/img.width,960/img.height);
-                canvas.width=img.width*scaleFactor;
-                canvas.height=img.height*scaleFactor;
+                //이미지 저장식인데 너무큰듯?
+               // const scaleFactor=Math.min(1280/img.width,960/img.height);
+               //일단 목적은 고정이라 고정해씀
+               const maxsize=720;
+               let width=img.width;
+               let height=img.height;
+               if(width>height){
+                    if(width>maxsize){
+                        height *=maxsize/width;
+                        width=maxsize;
+                    }
+               }else{
+                    if(height>maxsize){
+                        width *=maxsize/height;
+                        height=maxsize;
+                    }
+               }
+                canvas.width=width //img.width*scaleFactor;
+                canvas.height=height//img.height*scaleFactor;
+                
                 ctx.drawImage(img,0,0,canvas.width,canvas.height);
-
+                //캔버스를 데이터로 나타내고 이후 다시 파일로 변경
               const files=canvas.toDataURL("image/png")
+              
               let blobBin=atob(files.split(`,`)[1]); //base64데이터디코딩
                    var array=[];
                 for(var i=0;i<blobBin.length;i++){
@@ -66,15 +83,14 @@ export default function AdminNoticecreate(props){
                 }
                 let profile=new Blob([new Uint8Array(array)],{type:`image/png`});
                 console.log(profile)
-                
+                //폼에 새이미지파일추가
                 formData.append("image",profile);
             
-            
-                      
-
+         
+                     
 
        
-
+                //온로드에 비동기를 줘서 받아야할듯 blob으로저장되는데 잘모루겟다 
         const result=await axiosinstance.post('/contentimage', formData)
         //서버에 미리저장후 이미지rul리턴받고 주소저장
         

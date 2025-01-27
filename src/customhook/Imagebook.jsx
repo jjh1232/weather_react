@@ -21,12 +21,15 @@ z-index: 5;
 const Imagein=styled.img`
 position: fixed;
 object-fit:cover;
- justify-content: center;
- align-items:center;
- max-width: 80%;
- max-height: 99%;
- top:17%;
-right:40%;
+//justify-content: center;
+ //align-items:center;
+ width: 1280px;
+ height: 780px;
+ //max-width: 70%;
+ //max-height: 70%;
+ top:10%;
+right:30%;
+border: 10px solid green;
  
 `
 
@@ -53,7 +56,7 @@ const Wrapper=styled.div`
 const Miri=styled.img`
 object-fit: fill;
 width: 100%;
-    height:100%;
+height:100%;
 
 //border: 1px solid black;
 //float: left;
@@ -138,11 +141,14 @@ const prevslide=()=>{
 //단일이미지벤
 const imageban=useMutation({
     mutationFn:(data)=>{
-        return axiosinstance.put(`/admin/imageban/${data.detachid}`)
+        return axiosinstance.put(`/admin/imageban/${data}`)
     },
     onSuccess:(res)=>{
         alert("차단되었습니다"+res.data)
         queryclient.invalidateQueries([`noticeData`])
+    }
+    ,onError:()=>{
+        alert("오류가났습니다")
     }
 })
 //이미지벤다수 

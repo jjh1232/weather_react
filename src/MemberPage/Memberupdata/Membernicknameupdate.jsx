@@ -114,6 +114,7 @@ const userupdate=(e)=>{
   })
   
 }
+
 //크롭한이미지변환
 const profilesave=(newsrc)=>{
   let blobBin=atob(newsrc.split(`,`)[1]); //base64데이터디코딩

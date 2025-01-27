@@ -74,12 +74,54 @@ const imagehandler=()=>{
     input.onchange=async ()=>{
         console.log("이미지핸들러온채인지")
         const file=input.files[0];
-        const formdata=new FormData();
-        formdata.append("image",file)
+        const formData=new FormData();
+        const img=new Image();
+
+            img.src=URL.createObjectURL(file);
+          
+           
+
+           img.onload=async()=>{
+                const canvas=document.createElement(`canvas`)
+                const ctx=canvas.getContext(`2d`)
+                //이미지 저장식인데 너무큰듯?
+               // const scaleFactor=Math.min(1280/img.width,960/img.height);
+               //일단 목적은 고정이라 고정해씀
+               const maxsize=720;
+               let width=img.width;
+               let height=img.height;
+               if(width>height){
+                    if(width>maxsize){
+                        height *=maxsize/width;
+                        width=maxsize;
+                    }
+               }else{
+                    if(height>maxsize){
+                        width *=maxsize/height;
+                        height=maxsize;
+                    }
+               }
+                canvas.width=width //img.width*scaleFactor;
+                canvas.height=height//img.height*scaleFactor;
+
+                ctx.drawImage(img,0,0,canvas.width,canvas.height);
+                //캔버스를 데이터로 나타내고 이후 다시 파일로 변경
+              const files=canvas.toDataURL("image/png")
+              
+              let blobBin=atob(files.split(`,`)[1]); //base64데이터디코딩
+                   var array=[];
+                for(var i=0;i<blobBin.length;i++){
+                    array.push(blobBin.charCodeAt(i));
+                }
+                let profile=new Blob([new Uint8Array(array)],{type:`image/png`});
+                console.log(profile)
+                //폼에 새이미지파일추가
+                formData.append("image",profile);
+        
 
         try{
             console.log("포스트리설트")
-            const result = await axiosinstance.post('/contentimage', formdata)
+            const result = await axiosinstance.post('/contentimage', formData)
             
             console.log('성공 시, 백엔드가 보내주는 데이터', result);
             const imgurl = process.env.PUBLIC_URL+"/noticeimages/"+result.data;
@@ -111,7 +153,7 @@ const imagehandler=()=>{
         catch(error){
             console.log("에러")
         }
-
+    }
     }
 }
 const modules=useMemo(()=>{
