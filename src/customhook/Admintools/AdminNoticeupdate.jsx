@@ -21,11 +21,9 @@ z-index: 10;
 `
 
 const Modalin=styled.div`
-padding: 15px;
+padding: 10px;
 width: 900px;
-height: 760px;
-//width:60%;
-//height:80%;
+height: 780px;
 top: 5%;
 left:31%;
 position: fixed;
@@ -67,14 +65,15 @@ display: inline-block;
 const Weatherbox=styled.div`
     position: relative;
     float: right;
-    width: 30%;
+    width: 40%;
     //width: 300px;
     min-width: 100px;
     border: 1px solid black;
 `
 const UserDatabox=styled.div`
-    width: 20%;
-    left: 10%;
+
+    width: 30%;
+    left: 4%;
     position: relative;
     border: 1px solid black;
 `
@@ -83,7 +82,7 @@ const Noticebox=styled.div`
     height: 85%;
     top:1%;
     position: relative;
-    border: 1px solid black;
+    //border: 1px solid black;
 `
 const DetachBox=styled.div`
     border:1px solid gray;
@@ -98,10 +97,11 @@ const DetachBox=styled.div`
     
 `
 const UpdateButton=styled.button`
-    width: 80px;
+    width: 85px;
     height: 50px;
     position: relative;
-    top:1%;
+    right: 3%;
+    top:-3%;
     float: right;
     font-size: 15px;
 padding: 1% 0%;
@@ -112,6 +112,7 @@ text-align: center;
 transition: top .04s linear;
 text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 background-color: green;
+
 `
 export default function AdminNoticeupdate(props){
     const [cookie,Setcookie,removecookie]=useCookies();
@@ -317,15 +318,27 @@ const filedelete=(id,range)=>{
         <Exitbutton onClick={()=>{setisupdate(false)}}/>
             
             <Weatherbox>
-            
-                기온:<input type="number" defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
-                하늘상태:<Sky setskyvalue={setSky} devalue={crnotice.sky}/>   {sky}
-                강수형태:<Pty setptyvalue={setPty} devalue={crnotice.pty}/>   {pty}
-                강수량:<input type="text" defaultValue={crnotice.rain} onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}/> 
+                <div style={{float:"left",textAlign:"left" ,border:"1px solid black",width:"100%"}}>
+                기온:<input type="number" 
+                defaultValue={crnotice.temp} 
+                onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}
+                style={{width:"40px"}}
+                /> 
+                하늘상태:<Sky setskyvalue={setSky} devalue={sky}/>   
+                </div>
+                <div style={{float:"left",textAlign:"left" ,border:"1px solid black",width:"100%"}}>
+                강수형태:<Pty setptyvalue={setPty} devalue={pty}/> 
+
+                강수량:<input type="text" 
+                defaultValue={crnotice.rain} 
+                onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}
+                style={{width:"30px"}}
+                /> 
                 mm 미만
+                </div>
             </Weatherbox>
            < UserDatabox>
-            이메s일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
+            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
             닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
           
            </UserDatabox>
@@ -362,7 +375,7 @@ const filedelete=(id,range)=>{
         
        
         
-            <UpdateButton onClick={createtwitnotice}>글작성하기</UpdateButton>
+            <UpdateButton onClick={createtwitnotice}>글수정하기</UpdateButton>
         </Modalin>
 
         </Modalout>

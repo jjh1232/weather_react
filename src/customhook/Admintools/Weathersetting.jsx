@@ -9,12 +9,26 @@ export const Sky=(props)=>{
         {value:"4",name:"흐림"} 
         
       ]
+      let defaultvalue=``
+   switch(devalue){
+        case "맑음":
+            defaultvalue= "1"
+            break;
+        case "구름맑음":
+            defaultvalue= "3"
+            break;
+        case "흐림":
+            console.log("흐림임!")
+            defaultvalue= "4"
+            break;
+    }
+    console.log("디폴트:"+defaultvalue)
      // const value=useState()
       const onHandler=(e)=>{
         setskyvalue(e.currentTarget.value)
       }
     return (
-        <select onChange={onHandler} defaultValue={devalue}>
+        <select onChange={onHandler} value={defaultvalue}>
          {options.map((option)=>{
             return (
                 <option key={option.value}
@@ -40,12 +54,38 @@ export const Pty=(props)=>{
         {value:"7",name:"눈날림"} 
         
       ]
+      let defaultvalue=``
+
+      switch(devalue){
+        case "맑음":
+            defaultvalue="0"
+            break;
+        case "비":
+            defaultvalue="1"
+            break;
+        case "비/눈":
+            defaultvalue="2"
+            break;
+        case "눈":
+            defaultvalue="3"
+            break;
+        case "빗방울":
+            defaultvalue="5"
+            break;
+        case "빗방울/눈날림":
+            defaultvalue="6"
+            break;
+        case "눈날림":
+            defaultvalue="7"
+            break;
+      }
+
 
       const onHandler=(e)=>{
         setptyvalue(e.currentTarget.value)
       }
     return (
-        <select onChange={onHandler} defaultValue={devalue}>
+        <select onChange={onHandler} value={defaultvalue}>
              {options.map((option)=>{
             return (
                 <option key={option.value}
