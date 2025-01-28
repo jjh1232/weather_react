@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Admincommentupdate from "../../../customhook/Admintools/Admincommentupdate";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 const Tbody=styled.tbody`
     background-color:${(props)=>props.depth==1?"yellow": "skyblue"} ;
 
@@ -24,7 +26,7 @@ export default function CommentList(props){
     const {data,key,deletemethod}=props
 
     const [isupdate,setIsupdate]=useState(false);
-
+    const navigate=useNavigate();
 
     const deletecom=(commentid)=>{
         if(confirm("정말로삭제하겠습니까?")){
@@ -42,7 +44,15 @@ export default function CommentList(props){
                 <td>{data.nickname} </td>
                 
                 <td>{data.text}</td>
-                <td>{data.noticenum}</td>
+                <td>{data.noticenum}번글
+                    <br/>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} onClick={()=>{
+                        navigate(`/admin/notice/detail/${data.noticenum}`);
+                    }}
+                    style={{cursor:"pointer"}}
+                    />
+
+                </td>
                 <td>{data.redtime}</td>
                 
                 <td>

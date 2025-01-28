@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import AdminUpdateform from "../../../customhook/Admintools/AdminUpdateform";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faImages} from "@fortawesome/free-solid-svg-icons"
+import {faComment} from "@fortawesome/free-regular-svg-icons"
+import {faComments} from "@fortawesome/free-regular-svg-icons"
+import {faSheetPlastic} from "@fortawesome/free-solid-svg-icons"
 
 
 const Button=styled.button`
@@ -63,9 +68,23 @@ export default function Membermanagelist(props){
                 <Line>{data.provider}</Line>
                 <Line>{data.role}</Line>
                 <Line>{data.homeaddress.juso}</Line>
-                <Line onClick={()=>{noticesearch(data.username)}}>{data.usernotice}</Line>
-                <Line onClick={()=>{commentsearch(data.username)}}>{data.usercomments}</Line>
-                <Line onClick={()=>{roomsearch(data.username)}}>{data.userchatroom}</Line>
+                <Line>{data.usernotice}
+                    <br/>
+                    <FontAwesomeIcon icon={faSheetPlastic} onClick={()=>{noticesearch(data.username)}}
+                                                               style={{cursor:"pointer"}} />
+                                                           
+                </Line>
+                <Line>{data.usercomments}
+                <br/>
+                    <FontAwesomeIcon icon={faComment} onClick={()=>{commentsearch(data.username)}}
+                                                               style={{cursor:"pointer"}} />
+                                                          
+                </Line>
+                <Line>{data.userchatroom}
+                <br/>
+                    <FontAwesomeIcon icon={faComments} onClick={()=>{roomsearch(data.username)}}
+                                                               style={{cursor:"pointer"}}/>
+                </Line>
                 <Line>{data.red} </Line>
                
                 <Line style={{width:"15%"}}>

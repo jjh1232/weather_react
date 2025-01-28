@@ -5,6 +5,9 @@ import { useState,useEffect,useRef ,useMemo} from "react";
 import CreateAxios from "../CreateAxios";
 import ReactQuill from "react-quill";
 import { Sky,Pty } from "./Weathersetting";
+import NoticeDetach from "../NoticeDetach";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faImages} from '@fortawesome/free-regular-svg-icons'
 const Modalout=styled.div`
 width:100% ;
 height:100% ;
@@ -116,7 +119,7 @@ export default function AdminNoticeupdate(props){
     const axiosinstance=CreateAxios();
     const quillref=useRef();
     const imagekey=useRef(0);
-    
+    const [islibe,setIslibe]=useState(false)    
 
      //게시글정보
     //강수량때매 정규식추가
@@ -307,13 +310,14 @@ const filedelete=(id,range)=>{
 
     return (
         <>
-        
+       
         <Modalout>
        
         <Modalin>
         <Exitbutton onClick={()=>{setisupdate(false)}}/>
-
+            
             <Weatherbox>
+            
                 기온:<input type="number" defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
                 하늘상태:<Sky setskyvalue={setSky} devalue={crnotice.sky}/>   {sky}
                 강수형태:<Pty setptyvalue={setPty} devalue={crnotice.pty}/>   {pty}
@@ -321,13 +325,20 @@ const filedelete=(id,range)=>{
                 mm 미만
             </Weatherbox>
            < UserDatabox>
-            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
+            이메s일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
             닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
-           
+          
            </UserDatabox>
+           
            <Noticebox>
-            제목:<input type="text" defaultValue={crnotice.title} onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/><br/>
-        
+            제목:<input type="text" defaultValue={crnotice.title} onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/>
+           {
+            //폰트받아온거사용
+           }
+            <FontAwesomeIcon icon={faImages} onClick={()=>{setIslibe(!islibe)}}
+            style={{cursor:"pointer"}}
+        />
+           
         <ReactQuill
             ref={quillref}
             style={{width:"100%",height:"85%",left:"10%"}}//스타일
@@ -341,29 +352,15 @@ const filedelete=(id,range)=>{
 
         
 
-        <DetachBox>
-        첨부목록:
-        <br/>
-        {filelist&&filelist.map((list,key)=>{
-            
-            if(list.path===``){
+        
 
-            }else{
-            return (
-                <>
-                <span key={key} style={{float:"left"}}>
-                    
-                    {list.filename}
-                    <button onClick={()=>{filedelete(list.id,list.rangeindex)}}>제거</button>
-                
-                </span>
-                <br/>
-                </>
-                
-            )
-                }
-        })}
+        {islibe?
+        <DetachBox>
+        <NoticeDetach detachs={filelist} deletemethod={filedelete} setislibe={setIslibe}/>
         </DetachBox>
+        :""} 
+        
+       
         
             <UpdateButton onClick={createtwitnotice}>글작성하기</UpdateButton>
         </Modalin>

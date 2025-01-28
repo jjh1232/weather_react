@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import AdminNoticeupdate from "../../../customhook/Admintools/AdminNoticeupdate";
 import Imagebook from "../../../customhook/Imagebook";
 import styled from "styled-components";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faImages} from "@fortawesome/free-solid-svg-icons"
+import {faComment} from "@fortawesome/free-regular-svg-icons"
 const Button=styled.button`
 position: relative;
 display: inline-block;
@@ -73,14 +75,20 @@ export default  function AdNoticeList(props) {
                             
                             <Td>{data.red}</Td>
                             <Td>{data.likes} </Td>
-                            <Td onClick={()=>{commentsearch(data.num)}}
-                            >{data.commentcount}</Td>
+                            <Td>{data.commentcount}
+                            <br/>
+                            <FontAwesomeIcon icon={faComment} onClick={()=>{commentsearch(data.num)}}
+                                            style={{cursor:"pointer"}}
+                                        />
+                            </Td>
                             <Td>{data.detachfiles.length}
+                                <br/>
                                 {!data.detachfiles.length==0&&
-                                <Button backcolor="gray"
-                                onClick={()=>{imagebookon()}}>이미지북</Button>}
-                                
-
+                            
+                                <FontAwesomeIcon icon={faImages} onClick={()=>{imagebookon()}}
+                                            style={{cursor:"pointer"}}
+                                        />
+                                }
                             </Td>
                             <Td>
                             <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>게시글수정</Button>
