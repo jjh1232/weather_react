@@ -23,17 +23,17 @@ z-index: 10;
 const Modalin=styled.div`
 padding: 10px;
 width: 900px;
-height: 780px;
+height: 700px;
 top: 5%;
 left:31%;
 position: fixed;
 background-color: #FFFFFF;
-overflow: auto;
+//overflow: auto;
 `
 const Exitbutton  =styled.div`
 position: fixed;
-top: 1%;
-left:29%;
+top: 0%;
+left:27.5%;
 width: 5%;
 height: 10%;
 
@@ -65,6 +65,8 @@ display: inline-block;
 const Weatherbox=styled.div`
     position: relative;
     float: right;
+    right: 10%;
+    bottom:0%;
     width: 40%;
     //width: 300px;
     min-width: 100px;
@@ -72,14 +74,19 @@ const Weatherbox=styled.div`
 `
 const UserDatabox=styled.div`
 
-    width: 30%;
-    left: 4%;
+    width: 50%;
+    left: -0.7%;
     position: relative;
-    border: 1px solid black;
+    
+`
+const Title=styled.div`
+    position: relative;
+    float: left;
+    left:0%;
 `
 const Noticebox=styled.div`
     width: 100%;
-    height: 85%;
+    height: 100%;
     top:1%;
     position: relative;
     //border: 1px solid black;
@@ -100,8 +107,8 @@ const UpdateButton=styled.button`
     width: 85px;
     height: 50px;
     position: relative;
-    right: 3%;
-    top:-3%;
+    left:40%;
+    top:-3.2%;
     float: right;
     font-size: 15px;
 padding: 1% 0%;
@@ -114,6 +121,7 @@ text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 background-color: green;
 
 `
+
 export default function AdminNoticeupdate(props){
     const [cookie,Setcookie,removecookie]=useCookies();
     const {noticeid,setisupdate}=props;
@@ -338,14 +346,21 @@ const filedelete=(id,range)=>{
                 </div>
             </Weatherbox>
            < UserDatabox>
-            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
+            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/>
             닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
           
            </UserDatabox>
            
+           <UpdateButton onClick={createtwitnotice}>글수정하기</UpdateButton>
            <Noticebox>
-            제목:<input type="text" defaultValue={crnotice.title} onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/>
-           {
+            <Title>
+            제목:<input type="text" 
+            defaultValue={crnotice.title} 
+            onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}
+            style={{width:"300px"}}
+            />
+            </Title>
+              {
             //폰트받아온거사용
            }
             <FontAwesomeIcon icon={faImages} onClick={()=>{setIslibe(!islibe)}}
@@ -375,7 +390,7 @@ const filedelete=(id,range)=>{
         
        
         
-            <UpdateButton onClick={createtwitnotice}>글수정하기</UpdateButton>
+            
         </Modalin>
 
         </Modalout>

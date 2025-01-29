@@ -42,18 +42,21 @@ const Noticesearch=styled.div`
 const Maintable=styled.table`
 position: relative;
 width:100%;
-height: 80%;
+top:-1.3%;
+vertical-align: top;
 float   :left ;
 background-color: white;
 border-spacing: 0px;
 border-collapse: collapse;
+font-size: 15px;
+
 `
 const TableHeader=styled.thead`
     background-color:rgb(44,44,44);
 `
 const Thcss=styled.th`
     color: white;
-    height: 7px;
+    height: 5px;
     
 `
 
@@ -121,8 +124,8 @@ export default function noticemanage(){
         <Wrapper>
         {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
             <Header>
-            <h3 style={{border:"1px solid blue" , width:"10%", position:"absolute",left:"50%"}} 
-            onClick={()=>{navigate("/admin/notice")}}>게시글관리</h3>
+            <h2 style={{border:"1px solid blue" , width:"10%", position:"absolute",left:"45%"}} 
+            onClick={()=>{navigate("/admin/notice")}}>게시글관리</h2>
              
         
 
