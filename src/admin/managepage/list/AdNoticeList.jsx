@@ -9,11 +9,12 @@ import {faComment} from "@fortawesome/free-regular-svg-icons"
 const Button=styled.button`
 position: relative;
 display: inline-block;
-
-font-size: 15px;
-padding: 5% 5%;
+width: 49%;
+height:100%;
+font-size: 14px;
+padding: 2% 2%;
 color: white;
-margin: 1px 1px 1px;//위옆아래 마진
+//margin: 1px 1px 1px;//위옆아래 마진
 border-radius: 10px; //모서리
 text-align: center;
 transition: top .04s linear;
@@ -24,7 +25,11 @@ const Tr=styled.tr`
   
 `
 const Td=styled.td`
+    width: 20px;
+    height: 50px;
     border: 1px solid gray;
+    border-collapse: collapse;
+    text-align: left;
 `
 export default  function AdNoticeList(props) {
 
@@ -61,27 +66,27 @@ export default  function AdNoticeList(props) {
                                     />}
 
         <Tr>
-                            <Td>{data.num} </Td>
-                            <Td style={{width:"10%"}}>
+                            <Td style={{width:"3%"}}>{data.num} </Td>
+                            <Td style={{width:"4%"}}>
                                  <img   src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}
-   style={{objectFit:"fill",width:"50%",height:"10%"}}
+   style={{objectFit:"fill",width:"100%",height:"100%"}}
   
                 /></Td>
-                            <Td>{data.username} </Td>
-                            <Td>{data.nickname} </Td>
+                            <Td style={{width:"13%"}}>{data.username} </Td>
+                            <Td style={{width:"5%"}}>{data.nickname} </Td>
                            
-                            <Td onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
-                            <Td onClick={()=>{noticedetail(data.num)}}>{data.text.slice(0,100)}</Td>
+                            <Td style={{width:"50%"}} onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
+                           
                             
-                            <Td>{data.red}</Td>
-                            <Td>{data.likes} </Td>
-                            <Td>{data.commentcount}
+                            <Td style={{width:"10%"}}>{data.red}</Td>
+                            <Td style={{width:"3%"}}>{data.likes} </Td>
+                            <Td style={{width:"3%"}}>{data.commentcount}
                             <br/>
                             <FontAwesomeIcon icon={faComment} onClick={()=>{commentsearch(data.num)}}
                                             style={{cursor:"pointer"}}
                                         />
                             </Td>
-                            <Td>{data.detachfiles.length}
+                            <Td style={{width:"3%"}}>{data.detachfiles.length}
                                 <br/>
                                 {!data.detachfiles.length==0&&
                             
@@ -90,9 +95,10 @@ export default  function AdNoticeList(props) {
                                         />
                                 }
                             </Td>
-                            <Td>
-                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>게시글수정</Button>
-                            <Button backcolor="red" onClick={()=>{deletes(data.num)}}>게시글삭제</Button>
+
+                            <Td style={{float:"left", height:"95%" ,width:"100%"}}>
+                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>수정</Button>
+                            <Button backcolor="red" onClick={()=>{deletes(data.num)}}>삭제</Button>
                             </Td>
                 </Tr>
                                     

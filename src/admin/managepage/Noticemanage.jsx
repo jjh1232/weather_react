@@ -20,23 +20,29 @@ const Wrapper=styled.div`
 `
 
 const Header=styled.div`
-    
+    width:100%;
+    height: 8%;
+    position: relative;
+    border:3px solid green
 `
 const Noticecrbutton=styled.button`
     position: relative;
     float:left;
-    border: 1px solid black;
+    
+    top:70%;
+    
 `
 const Noticesearch=styled.div`
-    position: relative;
+    position: absolute;
     float: right;
     right: 0%;
+    bottom: 0%;
    
 `
 const Maintable=styled.table`
+position: relative;
 width:100%;
 height: 80%;
-border: 1px solid black;
 float   :left ;
 background-color: white;
 border-spacing: 0px;
@@ -47,7 +53,7 @@ const TableHeader=styled.thead`
 `
 const Thcss=styled.th`
     color: white;
-    
+    height: 7px;
     
 `
 
@@ -115,23 +121,27 @@ export default function noticemanage(){
         <Wrapper>
         {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
             <Header>
-                <h3 onClick={()=>{navigate("/admin/notice")}}>게시글관리</h3>
-               
+            <h3 style={{border:"1px solid blue" , width:"10%", position:"absolute",left:"50%"}} 
+            onClick={()=>{navigate("/admin/notice")}}>게시글관리</h3>
+             
         
 
         <Noticecrbutton onClick={()=>{setIscreate(true)}}>게시글작성</Noticecrbutton>
-        
+        <h5 style={{border:"1px solid black",width:"10%",float:"right",
+                    
+                }} >
+                총페이지:{totalpage}/게시글수:{totalelement}
+                </h5>   
         <Noticesearch>
+        
         <AdminSearchtools
         options={options}
         searchdatas={querydata}
         url={"/admin/notice"}
         />
         </Noticesearch>
-        <br/>
-            <h3>
-            토탈페이지:{totalpage}/총게시글:{totalelement}
-            </h3>
+    
+            
             </Header>
 
 
@@ -139,19 +149,27 @@ export default function noticemanage(){
                 <TableHeader>
                 <tr>
                     
-                    < Thcss>글번호</ Thcss>
-                    <Thcss>작성자프로필</Thcss>
-                    <Thcss>작성자이메일</Thcss>
+                <Thcss>글번호</ Thcss>
+                    <Thcss>
+                    작성자프로필</Thcss>
+                    <Thcss>
+                    작성자이메일</Thcss>
 
-                    <Thcss>작성자닉네임</Thcss>
+                    <Thcss>
+                    작성자닉네임</Thcss>
                     
-                    <Thcss>제목</Thcss>
-                    <Thcss>내용</Thcss>
+                    <Thcss>
+                    제목</Thcss>
+                    
                    
-                    <Thcss>작성일</Thcss>
-                    <Thcss>좋아요수</Thcss>
-                    <Thcss>댓글수</Thcss>
-                    <Thcss>이미지수</Thcss>
+                    <Thcss>
+                    작성일</Thcss>
+                    <Thcss>
+                    좋아요수</Thcss>
+                    <Thcss>
+                    댓글수</Thcss>
+                    <Thcss>
+                    이미지수</Thcss>
                     <Thcss>게시글관리</Thcss>
                     
 
