@@ -6,28 +6,129 @@ import { useMemo,useState } from "react"
 import CreateAxios from "../CreateAxios"
 import { Sky,Pty } from "./Weathersetting"
 import { useCookies } from "react-cookie"
+import NoticeDetach from "../NoticeDetach"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faImages} from '@fortawesome/free-regular-svg-icons'
 const Modalout=styled.div`
-width:45% ;
-height:85% ;
+width:100% ;
+height:100% ;
+
+top: 0%;
+left :0%;
 position: fixed;
 background:rgba(0,0,0,0.5);
-display:flex; //
-justify-content:center;//왼쪽에서중간
-align-items:center; //위로부터 중간
+z-index: 10;
+
 `
 
 const Modalin=styled.div`
-padding: 15px;
-width:90%;
-height:70%;
+padding: 10px;
+width: 900px;
+height: 700px;
+top: 5%;
+left:31%;
+position: fixed;
 background-color: #FFFFFF;
-overflow: auto;
+//overflow: auto;
+`
+const Exitbutton  =styled.div`
+position: fixed;
+top: 0%;
+left:27.5%;
+width: 5%;
+height: 10%;
+z-index: 10;
+
+display: inline-block;
+
+
+ &::before {
+    content: "";
+    width: 80px;
+    top: 40%;
+    left: 0%;
+    position: absolute;
+    border-bottom: 10px solid black;
+    transform:  rotate(45deg);
+  }
+
+  &::after {
+    top: 40%;
+    
+    content: "";
+    width: 80px;
+    left:0%;
+    position: absolute;
+    border-bottom: 10px solid black;
+    transform:  rotate(-45deg);
+  }
+`
+
+const Weatherbox=styled.div`
+    position: relative;
+    float: right;
+    right: 10%;
+    bottom:0%;
+    width: 40%;
+    //width: 300px;
+    min-width: 100px;
+    border: 1px solid black;
+`
+const UserDatabox=styled.div`
+    border: 1px solid black;
+    width: 50%;
+    left: -0.7%;
+    position: relative;
+    
+`
+const Title=styled.div`
+    position: relative;
+    float: left;
+    left:0%;
+`
+const Noticebox=styled.div`
+    width: 100%;
+    height: 100%;
+    top:1%;
+    position: relative;
+    //border: 1px solid black;
+`
+const DetachBox=styled.div`
+    border:1px solid gray;
+    position: absolute;
+    float: right;
+    top: 17.3%;
+    right: 0%;
+    width: 20%;
+    height: 74.4%;
+    z-index: 10;
+    background-color: white;
+    
+`
+const UpdateButton=styled.button`
+    width: 85px;
+    height: 50px;
+    position: relative;
+    left:40%;
+    top:-3.2%;
+    float: right;
+    font-size: 15px;
+padding: 1% 0%;
+color: black;
+//margin: px 1px 1px;//위옆아래 마진
+border-radius: 10px; //모서리
+text-align: center;
+transition: top .04s linear;
+text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+background-color: green;
+
 `
 
 export default function AdminNoticecreate(props){
     //quill관련
      const [cookie,Setcookie,removecookie]=useCookies();
     const axiosinstance=CreateAxios();
+    const [islibe,setIslibe]=useState(false)
     const quillref=useRef();
     const imagekey=useRef(0);
     const url=`/noticecreate`;
@@ -198,50 +299,63 @@ const filedelete=(id,range)=>{
 
     return (
         <>
-        <button onClick={()=>{props.setiscreate(false)}}>창닫기</button>
+      
         <Modalout>
+        <Exitbutton onClick={()=>{props.setiscreate(false)}}/>
         <Modalin>
-            <div>
-                기온:<input type="number" defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
-                하늘상태:<Sky setskyvalue={setSky} devalue={crnotice.sky}/>   {sky}
-                강수형태:<Pty setptyvalue={setPty} devalue={crnotice.pty}/>   {pty}
-                강수량:<input type="text" defaultValue={crnotice.rain} onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}/> 
+            <Weatherbox>
+            <div style={{float:"left",textAlign:"left" ,border:"1px solid black",width:"100%"}}>
+                기온:<input type="number" defaultValue={crnotice.temp}
+                 onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}
+                 style={{width:"40px"}}
+                 /> 
+                하늘상태:<Sky setskyvalue={setSky} devalue={sky}/>   
+                </div>
+                <div style={{float:"left",textAlign:"left" ,border:"1px solid black",width:"100%"}}>
+                강수형태:<Pty setptyvalue={setPty} devalue={pty}/>   
+                강수량:<input type="text" defaultValue={crnotice.rain} 
+                onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}
+                style={{width:"30px"}}
+                /> 
                 mm 미만
-            </div>
-            
-            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
-            닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
-            제목:<input type="text" onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/><br/>
-            내용:<ReactQuill
+                </div>
+            </Weatherbox>
+            <UserDatabox>
+            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/>
+            닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/>
+            </UserDatabox>
+            <UpdateButton onClick={createtwitnotice}>글작성하기</UpdateButton>
+            <Noticebox>
+            <Title>
+            제목:<input type="text" onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}
+            style={{width:"300px"}}
+            />
+            </Title>
+                  {
+                        //폰트받아온거사용
+                       }
+                    
+                          <FontAwesomeIcon icon={faImages} onClick={()=>{setIslibe(!islibe)}}
+                                   style={{cursor:"pointer"}}
+                               />
+
+            <ReactQuill
             ref={quillref}
-            style={{width:"90%",height:"70%"}}//스타일
+            style={{width:"100%",height:"85%",left:"10%"}}//스타일
             modules={modules}
             onChange={texthandler}
             />
-            <br/><br/><br/>
+            <br/><br/>
+            </Noticebox>
             
              
-        첨부목록:{filelist&&filelist.map((list,key)=>{
-            
-                if(list.url===``){
+        {islibe?
+                <DetachBox>
+                <NoticeDetach detachs={filelist} deletemethod={filedelete} setislibe={setIslibe}/>
+                </DetachBox>
+                :""} 
 
-                }else{
-            return (
-                <>
-                <span key={key}>
-                    
-                    {list.filename}
-                    <button onClick={()=>{filedelete(list.id,list.index)}}>제거</button>
-                <br/>아이디값:{list.idx}
-                </span>
-                <br/>
-                </>
-                
-            )
-                }
-        })}
-
-            <button onClick={createtwitnotice}>글작성하기</button>
+           
         </Modalin>
 
         </Modalout>

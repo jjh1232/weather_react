@@ -73,8 +73,8 @@ const Weatherbox=styled.div`
     border: 1px solid black;
 `
 const UserDatabox=styled.div`
-
-    width: 50%;
+    
+    width:50%;
     left: -0.7%;
     position: relative;
     
@@ -346,8 +346,10 @@ const filedelete=(id,range)=>{
                 </div>
             </Weatherbox>
            < UserDatabox>
-            이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/>
-            닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
+            이메일:<input type="text" defaultValue={crnotice.username} 
+            onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/>
+            닉네임:<input type="text" defaultValue={crnotice.nickname}
+             onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
           
            </UserDatabox>
            

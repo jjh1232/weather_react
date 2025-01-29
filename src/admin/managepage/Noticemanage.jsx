@@ -42,7 +42,7 @@ const Noticesearch=styled.div`
 const Maintable=styled.table`
 position: relative;
 width:100%;
-top:-1.3%;
+top:0.5%;
 vertical-align: top;
 float   :left ;
 background-color: white;
@@ -130,11 +130,12 @@ export default function noticemanage(){
         
 
         <Noticecrbutton onClick={()=>{setIscreate(true)}}>게시글작성</Noticecrbutton>
-        <h5 style={{border:"1px solid black",width:"10%",float:"right",
+        <h6 style={{border:"1px solid black",width:"10%",float:"right",position:"relative"
+                ,textAlign:"right",right:"0.3%"
                     
                 }} >
                 총페이지:{totalpage}/게시글수:{totalelement}
-                </h5>   
+                </h6>   
         <Noticesearch>
         
         <AdminSearchtools
