@@ -53,7 +53,10 @@ export default function Membermanagelist(props){
     }
 
     const userhistoryon=(username)=>{
-        window.open(`/admin/loginhistory?username=${username}`,"_blank","noopener,noreferreor")
+   
+
+        window.open(`/admin/loginhistory?username=${username}`,"로그인기록",
+            "noopener,noreferreor,location=no,menubar=no,toolbar=no,scrollbars=no,width=600px,height=500px")
     }
     return(<>
         {isupdate?<AdminUpdateform 
