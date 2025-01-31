@@ -6,8 +6,30 @@ import Adminnoticeupdatedetail from "./noticedetail/Adminnoticeupdatedetail";
 import Adminnoticecomment from "./noticedetail/Adminnoticecomment";
 import Commentform from "../../../Noticepage/Commentform";
 import Adminnoticereply from "./noticedetail/Adminnoticereply";
+import styled from "styled-components";
 
-
+const Wrapper=styled.div`
+    position: absolute;
+    width: 1550px;
+    top: 0%;
+    left:18.5%;
+    border: 1px solid black;
+`
+const Main=styled.div`
+    
+`
+const NoticeData=styled.div`
+    
+`
+const MainData=styled.div`
+    
+`
+const ImageList=styled.div`
+    
+`
+const CommentCss=styled.div`
+    
+`
 export default function Adminnoticedetail(props){
     const {noticeid}=useParams();
     const axiosinstance=CreateAxios();
@@ -93,11 +115,13 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
    
     //========
     return (
-        <>
+        <Wrapper>
         {isupdate?<>
             <Adminnoticeupdatedetail data={data} setisupdate={setIsupdate}/>
         </>
         :<>
+        <Main>
+        <NoticeData>
            <div>
         {data.num}번글
         작성자:{data.nickname}@{data.username}
@@ -105,10 +129,15 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
         <div>
             하늘:{data.sky},1시간강수량:{data.rain},구름상태:{data.pty},기온:{data.temp}
         </div>
-        <div>제목:{data.title}</div>
+        </NoticeData>
+        <MainData>
+        <div>제목:{data.title}이미지북 첨부목록 댓글</div>
         <div dangerouslySetInnerHTML={{__html:data.text}}></div>
 
-        <div>첨부이미지목록:
+        </MainData>
+        </Main>  
+        <ImageList>
+            첨부이미지목록:
             {data.detachfiles&&data.detachfiles.map((m)=>{
                 return (
                     <>
@@ -117,7 +146,8 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
                     </>
                 )
             })}
-          </div>      
+          </ImageList>
+
             <button onClick={()=>{setIsupdate(true)}}>수정하기</button>
             <button onClick={()=>{deletenotice(data.num)}}>삭제하기</button>
       </>
@@ -150,6 +180,6 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
                     />
 
         </div>
-        </>
+        </Wrapper>
     )
 }
