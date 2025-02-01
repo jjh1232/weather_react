@@ -8,6 +8,72 @@ import { Sky,Pty } from "../../../../customhook/Admintools/Weathersetting";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
+const Wrapper=styled.div`
+    position: absolute;
+    width: 1530px;
+    top: 0%;
+    left:0%;
+    border: 1px solid black;
+`
+const Header=styled.div`
+background-color: black;
+text-align: center;
+border: 2px solid green;
+height: 50px;
+`
+const Main=styled.div`
+    position: relative;
+    width: 1000px;
+    border:1px solid blue;
+`
+const NoticeData=styled.div`
+position: relative;
+border:3px solid black;
+
+height: 45px;
+`
+const Profile=styled.img`
+    position: relative;
+    width: 40px;
+    bottom:147%;
+    border: 1px solid black;
+    object-fit: fill;
+    height: 40px;
+   // display: inline-block;
+`
+const UserName=styled.div`
+    height: 40px;
+    left: -0.5%;
+    width: fit-content;
+   
+    position: relative;
+    display: inline-block;
+    
+`
+const MainData=styled.div`
+    
+    border:1px solid black;
+`
+const Weatherdata=styled.div`
+    position: relative;
+    top:40%;
+    left:14.5%;
+    float: right;
+    border: 1px solid yellow;
+`
+const ImageList=styled.div`
+      position: fixed;
+    border: 1px solid green;
+    width: 325px;
+    height: 75%;
+    left:71%;
+    top: 8%;
+    z-index: 100;
+    float: right;
+`
+const CommentCss=styled.div`
+  
+`
 
 export default function Adminnoticeupdatedetail(props){
     const [cookie,Setcookie,removecookie]=useCookies();
@@ -29,7 +95,7 @@ const navigate=useNavigate();
             title:data.title,
             text:data.text,
             temp:data.temp,
-            rain:data.rain
+            rain:data.rain.replace(/[^0-9]/g,"")
 
         }
     )
@@ -137,29 +203,48 @@ const filedelete=(id,range)=>{
 }
 
     return (
-        <>
-       
-        
-            <div>
-                기온:<input type="number" defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
-                하늘상태:<Sky setskyvalue={setSky} devalue={crnotice.sky}/>   {sky}
-                강수형태:<Pty setptyvalue={setPty} devalue={crnotice.pty}/>   {pty}
-                강수량:<input type="text" defaultValue={crnotice.rain} onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}/> 
-                mm 미만
-            </div>
-            {crnotice.title}
+        <Wrapper>
+            <Main>
+            <Header>
+            <h3 style={{color:"white"}}>게시글수정</h3>
+            <span style={{float:"right",position:"relative",bottom:"20%"}}>
+            {data.red}
+        </span>
+            </Header>
+
+            제목:<input type="text" defaultValue={crnotice.title} onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/><br/>
+            <span style={{float:"right"}}>
+            {crnotice.red}
+        </span>
+           <NoticeData>
+
+            <UserName>
             이메일:<input type="text" defaultValue={crnotice.username} onChange={(e)=>{setCrnotice({...crnotice,username:e.target.value})}}/><br/>
             닉네임:<input type="text" defaultValue={crnotice.nickname} onChange={(e)=>{setCrnotice({...crnotice,nickname:e.target.value})}}/><br/>
-            제목:<input type="text" defaultValue={crnotice.title} onChange={(e)=>{setCrnotice({...crnotice,title:e.target.value})}}/><br/>
-            내용:<ReactQuill
+            </UserName>
+          
+            <Weatherdata>
+                기온:<input type="number" style={{width:"35px"}}
+                defaultValue={crnotice.temp} onChange={(e)=>{setCrnotice({...crnotice,sky:e.target.value})}}/> 
+                하늘상태:<Sky setskyvalue={setSky} devalue={sky}/>   
+                강수형태:<Pty setptyvalue={setPty} devalue={pty}/>   
+                강수량:<input type="text" style={{width:"50px"}}
+                 defaultValue={crnotice.rain} 
+                 onChange={(e)=>{setCrnotice({...crnotice,pty:e.target.value})}}/> 
+                mm 미만
+            </Weatherdata>
+            </NoticeData>
+            <MainData>
+            <ReactQuill
             ref={quillref}
-            style={{width:"90%",height:"70%"}}//스타일
+            style={{width:"1000px",height:"70%"}}//스타일
             modules={modules}
             value={crnotice.text}
             onChange={texthandler}
             />
             <br/><br/>
-             
+            </MainData>
+        <ImageList>
         첨부목록:{filelist.length}<br/>
         {filelist&&filelist.map((list,key)=>{
             
@@ -180,9 +265,10 @@ const filedelete=(id,range)=>{
             )
                 }
         })}
-
+            </ImageList>
             <button onClick={()=>{onupdate()}}>수정완료</button>
             <button onClick={()=>{setisupdate(false)}}>수정취소</button>
-        </>
+            </Main>
+        </Wrapper>
     )
 }

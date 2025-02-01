@@ -10,25 +10,74 @@ import styled from "styled-components";
 
 const Wrapper=styled.div`
     position: absolute;
-    width: 1550px;
+    width: 1530px;
     top: 0%;
     left:18.5%;
     border: 1px solid black;
 `
+const Header=styled.div`
+background-color: black;
+text-align: center;
+border: 2px solid green;
+height: 50px;
+`
 const Main=styled.div`
-    
+    position: relative;
+    width: 1000px;
+    border:1px solid blue;
 `
 const NoticeData=styled.div`
+position: relative;
+border:3px solid black;
+
+height: 45px;
+`
+const Profile=styled.img`
+    position: relative;
+    width: 40px;
+    bottom:125%;
+    border: 1px solid black;
+    object-fit: fill;
+    height: 40px;
+   // display: inline-block;
+`
+const UserName=styled.div`
+    height: 40px;
+    left: -0.5%;
+    width: fit-content;
+   
+    position: relative;
+    display: inline-block;
     
+`
+const Titlediv=styled.div`
+    border: 1px solid yellow;
+    height: 30px;
 `
 const MainData=styled.div`
     
+    border:1px solid black;
+`
+const Weatherdata=styled.div`
+    position: relative;
+    float: right;
+    top:40%;
+    
+    float: right;
+    border: 1px solid yellow;
 `
 const ImageList=styled.div`
-    
+      position: fixed;
+    border: 1px solid green;
+    width: 325px;
+    height: 75%;
+    left:71%;
+    top: 8%;
+    z-index: 100;
+    float: right;
 `
 const CommentCss=styled.div`
-    
+  
 `
 export default function Adminnoticedetail(props){
     const {noticeid}=useParams();
@@ -113,7 +162,7 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
     //삭제
   
    
-    //========
+    //==========================View========================================
     return (
         <Wrapper>
         {isupdate?<>
@@ -121,23 +170,56 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
         </>
         :<>
         <Main>
-        <NoticeData>
-           <div>
+        <Header>
+            
+            <h3 style={{color:"white"}}>게시글관리</h3>
+        </Header>
+        <Titlediv>
         {data.num}번글
-        작성자:{data.nickname}@{data.username}
-        </div>
-        <div>
+        제목:{data.title}
+        <span style={{float:"right"}}>
+            {data.red}
+        </span>
+        </Titlediv>
+        <NoticeData>
+        
+        <Profile src={"/userprofileimg"+data.userprofile}  />
+        <UserName>
+        <h4 style={{display:"inline-block",
+            width:"fit-content" ,position:"relative",left:"10px",bottom:"50%"}}>
+        {data.nickname}
+        
+        </h4>
+        <br/>
+        <h5 style={{display:"inline-block",
+            width:"fit-content" ,position:"relative",left:"10px",bottom:"160%"}}>
+        {data.username}
+        </h5>
+        </UserName>
+        <Weatherdata>
             하늘:{data.sky},1시간강수량:{data.rain},구름상태:{data.pty},기온:{data.temp}
-        </div>
+        </Weatherdata>
         </NoticeData>
+            
         <MainData>
-        <div>제목:{data.title}이미지북 첨부목록 댓글</div>
+        <div>
+        
+            
+         
+            <span>
+            이미지북
+            </span>
+        </div>
         <div dangerouslySetInnerHTML={{__html:data.text}}></div>
 
         </MainData>
         </Main>  
         <ImageList>
-            첨부이미지목록:
+            <div>
+            
+            첨부이미지목록
+            </div>
+            
             {data.detachfiles&&data.detachfiles.map((m)=>{
                 return (
                     <>
@@ -150,11 +232,13 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
 
             <button onClick={()=>{setIsupdate(true)}}>수정하기</button>
             <button onClick={()=>{deletenotice(data.num)}}>삭제하기</button>
-      </>
-        }
-       
-
-        <div>댓글목록:
+            <CommentCss>
+        <Commentform 
+                    noticenum={data.num}
+                    depth="0"
+                    cnum=""
+                    commentsubmit={crcomment}
+                    />
                  
             {data.comments&&data.comments.map((co)=>{
                 return (
@@ -172,14 +256,14 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
                         </div>
                 )
             })}
-            <Commentform 
-                    noticenum={data.num}
-                    depth="0"
-                    cnum=""
-                    commentsubmit={crcomment}
-                    />
+         
 
-        </div>
+        </CommentCss>
+      </>
+        }
+       
+
+  
         </Wrapper>
     )
 }

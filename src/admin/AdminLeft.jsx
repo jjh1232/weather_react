@@ -4,10 +4,11 @@ import styled from "styled-components";
 import Loginpage from "../MemberPage/Loginpage"
 
 const Wrapper=styled.div`
+    position: fixed;
     background-color:rgb(78,80,82);
     margin-top:-1%;
     width: 18%;
-    height: 100%;
+    height: 105%;
     
 `
 const Menu=styled.h3`
