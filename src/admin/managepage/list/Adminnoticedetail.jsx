@@ -66,6 +66,10 @@ const Weatherdata=styled.div`
     float: right;
     border: 1px solid yellow;
 `
+
+const CommentCss=styled.div`
+  
+`
 const ImageList=styled.div`
       position: fixed;
     border: 1px solid green;
@@ -76,8 +80,18 @@ const ImageList=styled.div`
     z-index: 100;
     float: right;
 `
-const CommentCss=styled.div`
-  
+const Detachdiv=styled.div`
+float: left;
+    width: 105px;
+    height: 150px;
+    border: 1px solid blue;
+    text-overflow: ellipsis;
+`
+
+const Detachimg=styled.img`
+    width: 100px;
+    height: 100px;
+    object-fit: fill;
 `
 export default function Adminnoticedetail(props){
     const {noticeid}=useParams();
@@ -222,10 +236,12 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
             
             {data.detachfiles&&data.detachfiles.map((m)=>{
                 return (
-                    <>
+                    <Detachdiv>
+                    <Detachimg src={process.env.PUBLIC_URL+m.path}/>
+                    <br/>
                     idx:{m.idx}번 {m.filename}
                     <br/>
-                    </>
+                    </Detachdiv>
                 )
             })}
           </ImageList>
