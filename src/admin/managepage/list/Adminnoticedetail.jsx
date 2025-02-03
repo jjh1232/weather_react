@@ -71,7 +71,7 @@ const ImageList=styled.div`
     border: 1px solid green;
     width: 325px;
     height: 75%;
-    left:71%;
+    left:1360px;
     top: 8%;
     z-index: 100;
     float: right;
@@ -232,7 +232,9 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
 
             <button onClick={()=>{setIsupdate(true)}}>수정하기</button>
             <button onClick={()=>{deletenotice(data.num)}}>삭제하기</button>
-            <CommentCss>
+
+
+            
         <Commentform 
                     noticenum={data.num}
                     depth="0"
@@ -240,9 +242,10 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
                     commentsubmit={crcomment}
                     />
                  
+
             {data.comments&&data.comments.map((co)=>{
                 return (
-                    <div>
+                    <CommentCss>
                       {co.depth===0&&
                         <>
                        <Adminnoticecomment comment={co} comments={data.comments} noticeid={data.num}
@@ -253,12 +256,12 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
                             
             
             
-                        </div>
+                    </CommentCss>
                 )
             })}
          
 
-        </CommentCss>
+       
       </>
         }
        

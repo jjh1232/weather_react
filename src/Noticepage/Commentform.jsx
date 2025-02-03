@@ -11,49 +11,48 @@ import styled from "styled-components";
 const Wrapper=styled.div`
   position: relative;
   width: 1000px;
-  height: 60px;
+  min-height: 60px;
+  max-height: fit-content;
   border: 1px solid black;
+  word-break: break-all;
+  overflow: hidden;
 `
 const Img=styled.img`
   position: absolute;
-  top:2%;
+  top:2px;
   left:0%;
-  width: 50px;
-  height: 56px;
+  width: 60px;
+  height: 57px;
   display:inline-block;
   border: 1px solid black;
 `
 const Username=styled.span`
   position: absolute;
-  left: 55px;
+   left: 64px;
   font-size: 15px;
-  
-  
+   
   
 `
-const Coform=styled.div`
-position: relative;
-display:inline-block;
-width: fit-content;
-top: 20px;
-left:55px;
 
 
-`
 
 const Commentinput=styled.textarea`
 position: relative;
 display: inline-block;
 width: 800px;
+font-size: 20px;
+top: 25px;
+left:64px;
 
-border: 1px solid yellow;
+
 `
 const CreateButton=styled.button`
 
 position: absolute;
-left: 85%;
-top:30%;
-
+left: 87.2%;
+top:28%;
+width: 45px;
+height: 40px;
 `
 
 function Commentform(props){
@@ -69,10 +68,12 @@ function Commentform(props){
   const url="/commentcreate";
 const navigate=useNavigate();
 
+
 const textref=useRef()
 const resize=()=>{
   textref.current.style.height=`auto`;
   textref.current.style.height=textref.current.scrollHeight+`px`;
+
 }
 
   return (
@@ -84,9 +85,10 @@ const resize=()=>{
     <Username>
     {loginuser.userinfo["nickname"]}님
     </Username>
-        <Coform>
+        
         <Commentinput type="text" name="text" value={comments.text} 
         onInput={resize}
+        rows={1}
         ref={textref}
         onChange={(e)=>{
           setComment({...comments,text:e.target.value})
@@ -94,9 +96,9 @@ const resize=()=>{
         />
        
 
-</Coform>
+
 <CreateButton type="submit" onClick={()=>{
-          console.log("폼에서코멘트"+comments)
+          
           commentsubmit(loginuser.userinfo["username"],
             loginuser.userinfo["nickname"],
             comments.text,
@@ -107,6 +109,8 @@ const resize=()=>{
 
           )
             setComment({text:""})
+            textref.current.style.height="30px"
+
         }
       }>댓글작성</CreateButton>
     </Wrapper>
