@@ -234,6 +234,8 @@ const filedelete=(id,range)=>{
                 mm 미만
             </Weatherdata>
             </NoticeData>
+
+            
             <MainData>
             <ReactQuill
             ref={quillref}

@@ -11,16 +11,29 @@ const Tbody=styled.tbody`
 const Button=styled.button`
 position: relative;
 display: inline-block;
-
+width: 48%;
+height: 100%;
 font-size: 15px;
-padding: 20px 25px;
+
 color: white;
 margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 20px; //모서리
+border-radius: 50px; //모서리
 text-align: center;
 transition: top .04s linear;
 text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 background-color: ${(props)=>props.backcolor};
+`
+
+const Wrapper=styled.div`
+    
+
+`
+const Td=styled.td`
+    
+    height: 50px;
+    border: 1px solid gray;
+    
+    text-align: left;
 `
 export default function CommentList(props){
     const {data,key,deletemethod}=props
@@ -39,12 +52,12 @@ export default function CommentList(props){
         <Tbody key={key} depth={data.depth}>
             <tr >
                 
-                <td>{data.id} </td>
-                <td>{data.username} </td>
-                <td>{data.nickname} </td>
+                <Td>{data.id} </Td>
+                <Td>{data.username} </Td>
+                <Td>{data.nickname} </Td>
                 
-                <td>{data.text}</td>
-                <td>{data.noticenum}번글
+                <Td>{data.text}</Td>
+                <Td>{data.noticenum}번글
                     <br/>
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} onClick={()=>{
                         navigate(`/admin/notice/detail/${data.noticenum}`);
@@ -52,13 +65,13 @@ export default function CommentList(props){
                     style={{cursor:"pointer"}}
                     />
 
-                </td>
-                <td>{data.redtime}</td>
+                </Td>
+                <Td>{data.redtime}</Td>
                 
-                <td>
-                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>댓글수정</Button>
-                            <Button backcolor="red" onClick={()=>{deletecom(data.id)}}>댓글삭제</Button>
-                            </td>
+                <Td>
+                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>수정</Button>
+                            <Button backcolor="red" onClick={()=>{deletecom(data.id)}}>삭제</Button>
+                            </Td>
              
                 </tr>
               

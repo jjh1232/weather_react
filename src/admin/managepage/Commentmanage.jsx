@@ -7,7 +7,7 @@ import CommentList from "./list/CommentList";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import Pagenation from "../../customhook/Pagenation";
 const Wrapper=styled.div`
-    position: absolute;
+  position: absolute;
     top: 0%;
     left:18%;
     width: 80%;
@@ -27,18 +27,22 @@ const Commentsearch=styled.div`
    
 `
 const Maintable=styled.table`
+position: relative;
 width:100%;
-height: 80%;
-border: 1px solid black;
+top:0.5%;
+vertical-align: top;
 float   :left ;
 background-color: white;
 border-spacing: 0px;
+border-collapse: collapse;
+font-size: 15px;
 `
 const TableHeader=styled.thead`
     background-color:rgb(44,44,44);
 `
 const Thcss=styled.th`
     color: white;
+    height: 5px;
 `
 
 export default function Commentmanage(){
@@ -109,13 +113,13 @@ const commentget=()=>{
                  <Maintable>
                     <TableHeader>
                 <tr>
-                    <Thcss>댓글id</Thcss>
-                    <Thcss>댓글작성자이메일</Thcss>
-                    <Thcss>댓글작성자닉네임</Thcss>
-                    <Thcss>댓글작성내용</Thcss>
-                    <Thcss>작성한게시글</Thcss>
-                    <Thcss>댓글작성날짜</Thcss>
-                    <Thcss>회원댓글관리</Thcss>
+                    <Thcss style={{width:"3%"}}>번호</Thcss>
+                    <Thcss style={{width:"5%"}}>댓글작성자이메일</Thcss>
+                    <Thcss style={{width:"4%"}}>댓글작성자닉네임</Thcss>
+                    <Thcss style={{width:"20%"}}>댓글작성내용</Thcss>
+                    <Thcss style={{width:"3%"}}>작성한게시글</Thcss>
+                    <Thcss style={{width:"2%"}}>댓글작성날짜</Thcss>
+                    <Thcss style={{width:"3%"}}>회원댓글관리</Thcss>
                     
                     
 

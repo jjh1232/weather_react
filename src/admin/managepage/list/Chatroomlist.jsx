@@ -7,18 +7,26 @@ import styled from "styled-components";
 const Button=styled.button`
 position: relative;
 display: inline-block;
-
+width: 65px;
+height: 45px;
 font-size: 15px;
-padding: 20px 25px;
+
 color: white;
 margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 20px; //모서리
+border-radius: 5px; //모서리
 text-align: center;
 transition: top .04s linear;
 text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 background-color: ${(props)=>props.backcolor};
 `
-
+const Tr=styled.tr`
+    border: 1px solid gray;
+`
+const Td=styled.td`
+    border: 1px solid gray;
+   
+    height: 45px;
+`
 export default function Chatroomlist(props){
 
     const {data,key}=props;
@@ -38,20 +46,21 @@ export default function Chatroomlist(props){
     }
     }
 
-    return (<tr>
-        <td>{data.roomid}</td>
-        <td>{data.roomname}</td>
-        <td>{data.namelist.map((name)=>{return(<div>{name.membernickname}</div>)})}</td>
-        <td on onClick={()=>{
+    return (<Tr>
+        <Td style={{textAlign:"center"}}>{data.roomid}</Td>
+        <Td style={{verticalAlign:"top"}}>{data.roomname}</Td>
+        <Td style={{verticalAlign:"top"}}>{data.namelist.map((name)=>{return(<>{name.membernickname},</>)})}</Td>
+        <Td style={{verticalAlign:"top"}} 
+        onClick={()=>{
             navigate(`/admin/room/${data.roomid}`)
-        }}>{data.latelychat}</td>
-        <td>{data.chatnum}</td>
-        <td>{data.lastchatred}</td>
-        <td>{data.red}</td>
-        <td>
+        }}>{data.latelychat}</Td>
+        <Td style={{textAlign:"center"}}>{data.chatnum}</Td>
+        <Td style={{textAlign:"center"}}>{data.lastchatred}</Td>
+        <Td style={{textAlign:"center"}}>{data.red}</Td>
+        <Td>
                             
                             <Button backcolor="red"
                             onClick={()=>{deletechatroom(data.roomid)}}>채팅방삭제</Button>
-                            </td>
-    </tr>)
+                            </Td>
+    </Tr>)
 }

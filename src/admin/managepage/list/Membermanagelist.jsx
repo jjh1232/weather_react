@@ -33,7 +33,7 @@ const Tr=styled.tr`
     
 `
 const Line=styled.td`
-    height: 10%;
+    height: 50px;
     border: 1px solid gray;
 `
 export default function Membermanagelist(props){

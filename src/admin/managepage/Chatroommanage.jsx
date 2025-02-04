@@ -15,11 +15,11 @@ const Wrapper=styled.div`
     width: 80%;
     height: 99%;
     border: 1px solid black;
-    text-align: center;
+    text-align: left;
 
 `
 const Header=styled.div`
-    
+    border: 1px solid gray;
 `
 const Chatcrbutton=styled.button`
     position: relative;
@@ -34,16 +34,18 @@ const Chatsearch=styled.div`
 `
 const Maintable=styled.table`
 width:100%;
-height: 80%;
+height: 10px;
 border: 1px solid black;
 float   :left ;
 background-color: white;
 border-spacing: 0px;
 `
 const TableHeader=styled.thead`
+    border: 1px solid gray;
     background-color:rgb(44,44,44);
 `
 const Thcss=styled.th`
+ border: 1px solid gray;
     color: white;
 `
 export default function Chatroommanage(){
@@ -97,15 +99,15 @@ export default function Chatroommanage(){
             </Header>
             <Maintable >
                 <TableHeader>
-                <tr>
-                    <Thcss>채팅방id</Thcss>
-                    <Thcss>채팅방이름</Thcss>
-                    <Thcss>채팅방참가리스트</Thcss>
-                    <Thcss>마지막채팅</Thcss>
-                    <Thcss>총채팅수</Thcss>
-                    <Thcss>마지막채팅날짜</Thcss>
-                    <Thcss>채팅방생성날짜</Thcss>
-                    <Thcss>채팅방관리</Thcss>
+                <tr >
+                    <Thcss style={{width:"30px"}}>방번호</Thcss>
+                    <Thcss style={{width:"150px"}}>채팅방이름</Thcss>
+                    <Thcss style={{width:"250px"}}>채팅방참가리스트</Thcss>
+                    <Thcss style={{width:"275px"}}>마지막채팅</Thcss>
+                    <Thcss style={{width:"30px"}}>채팅수</Thcss>
+                    <Thcss style={{width:"55px"}}>최근채팅날짜</Thcss>
+                    <Thcss style={{width:"55px"}}>방생성날짜</Thcss>
+                    <Thcss style={{width:"4.5%" ,textAlign:"center"}}>방관리</Thcss>
                     
                     
 
