@@ -50,7 +50,15 @@ export default function Pagenation(props){
     return (
         <Wrapper>
             {querydata.page==1?""
-            :<button onClick={()=>{setcurrentpa(querydata.page-1)}}>이전</button>}
+            :<>
+            {querydata.page-5>startpage&&
+            <>
+            <button onClick={()=>{setcurrentpa(querydata.page-5)}}>&#60;</button>
+            
+            <button onClick={()=>{setcurrentpa(1)}}>...1</button>
+            </>
+            }</>
+            }
            
             {pagearray.map((d,key)=>{
                 
@@ -70,7 +78,13 @@ export default function Pagenation(props){
             })}
 
             {querydata.page<totalpage?
-            <button onClick={()=>{setcurrentpa(querydata.page+1)}}>다음</button>
+            <>{querydata.page+5<totalpage&&
+                <>
+            <button onClick={()=>{setcurrentpa(querydata.page+5)}}>다음</button>
+
+            <button onClick={()=>{setcurrentpa(totalpage)}}>...{totalpage}</button>
+            </>
+            }</>
             :""}
             
         </Wrapper>

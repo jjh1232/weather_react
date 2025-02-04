@@ -22,10 +22,12 @@ text-align: center;
 border: 2px solid green;
 height: 50px;
 `
+
 const Main=styled.div`
     position: relative;
+    //bottom: 20px;
     width: 1000px;
-    border:1px solid blue;
+    border:1px solid red;
 `
 const NoticeData=styled.div`
 position: relative;
@@ -180,16 +182,16 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
     //==========================View========================================
     return (
         <Wrapper>
-              <AdminHeader>
-            
-            <h3 style={{color:"black"}}>게시글관리</h3>
-        </AdminHeader>
+              
         {isupdate?<>
             <Adminnoticeupdatedetail data={data} setisupdate={setIsupdate}/>
         </>
         :<>
         <Main>
-      
+        <Header>
+            
+            <h3 style={{color:"white"}}>게시글관리</h3>
+        </Header>
         <Titlediv>
         {data.num}번글
         제목:{data.title}

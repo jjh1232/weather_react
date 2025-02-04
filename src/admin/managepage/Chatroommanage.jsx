@@ -34,6 +34,8 @@ const Chatsearch=styled.div`
    
 `
 const Maintable=styled.table`
+position: relative;
+bottom:21px;
 width:100%;
 height: 10px;
 border: 1px solid black;
@@ -89,7 +91,7 @@ export default function Chatroommanage(){
     return (
         <Wrapper>
             <AdminHeader>
-            <h3>채팅방관리</h3>
+            <h3 style={{textAlign:"center"}}>채팅방관리</h3>
             <Chatsearch>
             <AdminSearchtools 
             searchdatas={querydata}

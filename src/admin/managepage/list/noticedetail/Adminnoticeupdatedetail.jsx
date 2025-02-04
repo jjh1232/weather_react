@@ -7,6 +7,7 @@ import ReactQuill from "react-quill";
 import { Sky,Pty } from "../../../../customhook/Admintools/Weathersetting";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../../../../customhook/Admintools/AdminCss/AdminHeader";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -23,8 +24,9 @@ height: 50px;
 `
 const Main=styled.div`
     position: relative;
+    
     width: 1000px;
-    border:1px solid blue;
+    border:1px solid red;
 `
 const NoticeData=styled.div`
 position: relative;
@@ -67,7 +69,7 @@ const ImageList=styled.div`
     width: 325px;
     height: 75%;
     left:71%;
-    top: 8%;
+    top: 14%;
     z-index: 100;
     float: right;
 `

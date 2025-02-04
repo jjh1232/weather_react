@@ -38,7 +38,8 @@ const Usersearch=styled.div`
    
 `
 const Maintable=styled.table`
-//position: relative;
+position: relative;
+bottom: 42px;
 width:100%;
 height: 10px;
  border: 1px solid black;

@@ -15,7 +15,7 @@ const Wrapper=styled.div`
     height: 99%;
     border: 1px solid black;
     text-align: center;
-
+    
 `
 const Header=styled.div`
     background-color: black;
@@ -31,7 +31,7 @@ const Commentsearch=styled.div`
 const Maintable=styled.table`
 position: relative;
 width:100%;
-top:0.5%;
+bottom: 21px;
 vertical-align: top;
 float   :left ;
 background-color: white;

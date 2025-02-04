@@ -43,7 +43,7 @@ const Noticesearch=styled.div`
 const Maintable=styled.table`
 position: relative;
 width:100%;
-top:0.5%;
+bottom:22px;
 vertical-align: top;
 float   :left ;
 background-color: white;
