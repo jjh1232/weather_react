@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import Chatroomlist from "./list/Chatroomlist";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useNavigate } from "react-router-dom";
+import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -87,7 +88,7 @@ export default function Chatroommanage(){
 
     return (
         <Wrapper>
-            <Header>
+            <AdminHeader>
             <h3>채팅방관리</h3>
             <Chatsearch>
             <AdminSearchtools 
@@ -96,7 +97,7 @@ export default function Chatroommanage(){
             url={"/admin/chatroom"}
             />
             </Chatsearch>
-            </Header>
+            </AdminHeader>
             <Maintable >
                 <TableHeader>
                 <tr >

@@ -7,6 +7,7 @@ import Adminnoticecomment from "./noticedetail/Adminnoticecomment";
 import Commentform from "../../../Noticepage/Commentform";
 import Adminnoticereply from "./noticedetail/Adminnoticereply";
 import styled from "styled-components";
+import AdminHeader from "../../../customhook/Admintools/AdminCss/AdminHeader";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -76,7 +77,7 @@ const ImageList=styled.div`
     width: 325px;
     height: 75%;
     left:1360px;
-    top: 8%;
+    top: 15%;
     z-index: 100;
     float: right;
 `
@@ -179,15 +180,16 @@ const crcomment=(username,usernickname,comment,noticenum,depth,cnum)=>{
     //==========================View========================================
     return (
         <Wrapper>
+              <AdminHeader>
+            
+            <h3 style={{color:"black"}}>게시글관리</h3>
+        </AdminHeader>
         {isupdate?<>
             <Adminnoticeupdatedetail data={data} setisupdate={setIsupdate}/>
         </>
         :<>
         <Main>
-        <Header>
-            
-            <h3 style={{color:"white"}}>게시글관리</h3>
-        </Header>
+      
         <Titlediv>
         {data.num}번글
         제목:{data.title}

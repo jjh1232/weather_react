@@ -10,6 +10,7 @@ import AdminSearchtools from "../../customhook/AdminSearchtools";
 import AdminMembercreate from "../../customhook/Admintools/AdminMembercreate";
 import AdminUpdateform from "../../customhook/Admintools/AdminUpdateform";
 import Membermanagelist from "./list/Membermanagelist";
+import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
 
 
 
@@ -24,9 +25,7 @@ const Wrapper=styled.div`
     text-align: center;
 
 `
-const Header=styled.div`
-    
-`
+
 const Memcrbutton=styled.button`
     position: relative;
     float:left;
@@ -118,8 +117,9 @@ useEffect(()=>{
     return (
 
         <Wrapper>
-          <Header>
-            <h2>회원정보관리</h2>
+          <AdminHeader>
+            
+            <h2 style={{color:"white"}}>회원정보관리</h2>
             <Usersearch>
             <AdminSearchtools
                     searchdatas={querydata}
@@ -131,7 +131,8 @@ useEffect(()=>{
                       <Memcrbutton onClick={()=>{
                 setIscreate(true)
             }}>회원추가</Memcrbutton>
-                    </Header>
+
+                    </AdminHeader>
 
 
             {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}

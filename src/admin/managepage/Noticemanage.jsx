@@ -8,6 +8,7 @@ import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useCookies } from "react-cookie";
 import AdNoticeList from "./list/AdNoticeList";
 import AdminNoticecreate from "../../customhook/Admintools/AdminNoticecreate";
+import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
 const Wrapper=styled.div`
     position: absolute;
     top: 0%;
@@ -123,7 +124,7 @@ export default function noticemanage(){
     return (<> 
         <Wrapper>
         {iscreate?<AdminNoticecreate setiscreate={setIscreate}/>:""}
-            <Header>
+            <AdminHeader>
             <h2 style={{border:"1px solid blue" , width:"10%", position:"absolute",left:"45%"}} 
             onClick={()=>{navigate("/admin/notice")}}>게시글관리</h2>
              
@@ -146,7 +147,7 @@ export default function noticemanage(){
         </Noticesearch>
     
             
-            </Header>
+            </AdminHeader>
 
 
             <Maintable>

@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import CommentList from "./list/CommentList";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import Pagenation from "../../customhook/Pagenation";
+import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
 const Wrapper=styled.div`
   position: absolute;
     top: 0%;
@@ -17,7 +18,8 @@ const Wrapper=styled.div`
 
 `
 const Header=styled.div`
-    
+    background-color: black;
+    color: white;
 `
 
 const Commentsearch=styled.div`
@@ -98,7 +100,7 @@ const commentget=()=>{
 
     return (
         <Wrapper>
-            <Header>
+            <AdminHeader>
                 <h3>회원댓글관리</h3>
                 
             <Commentsearch>
@@ -108,7 +110,7 @@ const commentget=()=>{
                                 url={"/admin/comment"}
                                 />
             </Commentsearch>
-            </Header>
+            </AdminHeader>
 
                  <Maintable>
                     <TableHeader>
