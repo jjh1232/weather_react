@@ -29,12 +29,15 @@ const Wrapper=styled.div`
 const Memcrbutton=styled.button`
     position: relative;
     float:left;
+    top: 25%;
     border: 1px solid black;
 `
 const Usersearch=styled.div`
     position: relative;
     float: right;
     right: 0%;
+    top: 21%;
+    border: 1px solid red;
    
 `
 const Maintable=styled.table`
@@ -120,7 +123,7 @@ useEffect(()=>{
         <Wrapper>
           <AdminHeader>
             
-            <h2 style={{color:"white"}}>회원정보관리</h2>
+            <h2 style={{color:"white", position:"relative",top:"30%",right:"5%"}}>회원정보관리</h2>
             <Usersearch>
             <AdminSearchtools
                     searchdatas={querydata}

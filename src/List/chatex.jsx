@@ -18,7 +18,7 @@ function Chatex(props){
     const {roomid,setcontent}=props;
     const [message,Setmessage]=useState();
     const [loginuser,setLoginuser,removeLoginuser]=useCookies();
-    const [chatdata,setChatdata]=useState([]);
+    const [chatdata,setChatdata]=useState();
 
     const axiosinstance=CreateAxios();
     const navigate=useNavigate();
@@ -28,6 +28,8 @@ function Chatex(props){
     const scrollref=useRef();
     const menuref=useRef();
 
+    //채팅 나누기관리
+    const [monthchat,setMonthchat]=useState();
     const client=useRef(null);
     
 
@@ -90,7 +92,7 @@ function Chatex(props){
     console.log("디스코넥트")
     if(client.current){
         client.current.deactivate();
-        alert("연결이종료되었습니다 로그인을확인해주세요")
+        
     }
    }
    useEffect(()=>{
@@ -139,14 +141,31 @@ function Chatex(props){
         console.log("챗데이터불러오기1")
         axiosinstance.get("/chatroomdataget?roomid="+roomid)//2
         .then((data)=>{
-                console.log(data.data)
+              
                 setChatroomdata(data.data.roomdata)
-                setChatdata(data.data.beforechat)
-            
-            scrollcontroller();
+                setChatdata(makeSection(data.data.beforechat))
+                console.log("실행완료")
+             scrollcontroller();
         }).catch((err)=>{
-            console.log("에러")
+            console.log("에러"+err)
         })
+    }
+      //섹션으로 날짜나누기
+      const makeSection=(chatdata)=>{
+        let chatmonth={}
+        console.log("챗데이터"+chatdata)
+        chatdata.map((chat)=>{
+            
+            let monthDate=chat.createdDate.substr(0,10)
+            console.log("날짜"+monthDate)
+            if(Array.isArray(chatmonth[monthDate])){
+                chatmonth[monthDate].push(chat)
+            }else{
+                chatmonth[monthDate]=[chat]
+            }
+            
+        })
+        return chatmonth;
     }
 
     //메뉴선택 닫기 
@@ -224,12 +243,17 @@ function Chatex(props){
            
             {/* 챗데이터 내용 div */}
             <div style={{width:"100%",height:"500px", overflow:"auto"}}>
-                {chatdata.map((data)=>{
+                {chatdata&&
+                Object.entries(chatdata).map(([date,chats])=>{
                     
                     return(
                          
-                        <div>
-                        {loginuser.userinfo["nickname"]===data.writer
+                        <div key={date}>
+                            {console.log("렌더링데이터"+date)}
+                        <>{date}</>
+                        {chats.map((data)=>{
+                            <>
+                              {loginuser.userinfo["nickname"]===data.writer
                         ?
                          <p style={{textAlign:"right"}}> 
                         {data.writer}:{data.message}<br/>
@@ -240,8 +264,12 @@ function Chatex(props){
                         {data.writer}:{data.message}<br/>
                         {data.time}
                         </p>
-                        }   
+                        }  
+                            </>
+
+                        })
                        
+                    }
                         </div>
                     )
 
