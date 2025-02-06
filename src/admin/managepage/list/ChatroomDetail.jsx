@@ -57,7 +57,7 @@ export default function ChatroomDetail(props){
         console.log("챗데이터"+chatdata)
         chatdata.map((chat)=>{
             
-            let monthDate=chat.createdDate.substr(0,10)
+            let monthDate=chat.red.substr(0,10)
             console.log("날짜"+monthDate)
             if(Array.isArray(chatmonth[monthDate])){
                 chatmonth[monthDate].push(chat)
@@ -100,7 +100,7 @@ export default function ChatroomDetail(props){
                                 return (
                                     <Chatdiv>
                         
-                            
+                            {chat.userprofile}
                         {chat.sender}:{chat.message}<br/>
 
                         {

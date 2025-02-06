@@ -11,6 +11,10 @@ const Wrapper=styled.div`
 
 `
 
+const ChatCss=styled.div`
+    
+`
+
 //채팅보내기시 리렌더링시 아래로안내려가는문제가..
 function Chatex(props){
     
@@ -124,6 +128,7 @@ function Chatex(props){
             client.current.publish({
                 destination:`/pub/channel/${chatroomdata.roomid}`,//1
                 body:JSON.stringify({
+                    username:loginuser.userinfo["username"],
                     sender:loginuser.userinfo["nickname"],
                     messageType:"chat",
                     message:message
@@ -156,7 +161,7 @@ function Chatex(props){
         console.log("챗데이터"+chatdata)
         chatdata.map((chat)=>{
             
-            let monthDate=chat.createdDate.substr(0,10)
+            let monthDate=chat.red.substr(0,10)
             console.log("날짜"+monthDate)
             if(Array.isArray(chatmonth[monthDate])){
                 chatmonth[monthDate].push(chat)
@@ -242,35 +247,44 @@ function Chatex(props){
             invite={userinvite} /> }
            
             {/* 챗데이터 내용 div */}
-            <div style={{width:"100%",height:"500px", overflow:"auto"}}>
+            <div style={{width:"100%",height:"500px", overflow:"auto",border:"1px solid yellow"}}>
                 {chatdata&&
                 Object.entries(chatdata).map(([date,chats])=>{
                     
                     return(
                          
-                        <div key={date}>
-                            {console.log("렌더링데이터"+date)}
+                        <div key={date} >
+                            
                         <>{date}</>
+
                         {chats.map((data)=>{
-                            <>
+                            return (
+                            <div >
+                                {console.log("렌더링데이터z"+data)}
                               {loginuser.userinfo["nickname"]===data.writer
                         ?
                          <p style={{textAlign:"right"}}> 
+                        
+                         {data.userprofile}
                         {data.writer}:{data.message}<br/>
                         {data.time}
                          </p>
                         :
-                        <p> 
+                        <> 
+                            {data.userprofile}
                         {data.writer}:{data.message}<br/>
                         {data.time}
-                        </p>
+                        </>
                         }  
-                            </>
+                        
+                            </div>
+                            )
 
                         })
                        
                     }
                         </div>
+                
                     )
 
                 })}
