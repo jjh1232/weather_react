@@ -11,8 +11,35 @@ const Wrapper=styled.div`
 
 `
 
-const ChatCss=styled.div`
-    
+const Chatdiv=styled.div`
+   display: flex;
+    border:1px solid red;
+`
+const Profile=styled.img`
+    position: relative;
+    border:1px solid blue;
+    width: 50px;
+    height: 50px;
+`
+const ChatContainer=styled.div`
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    border:1px solid blue;
+`
+const ChatTop=styled.div`
+    border:1px solid green;
+    width: 100%;
+`
+const ChatMain=styled.div`
+     border:1px solid yellow;
+     width:100%;
+`
+const Chatbottom=styled.div`
+    border:1px solid black;
+    text-align: right;
+    width:100%;
 `
 
 //채팅보내기시 리렌더링시 아래로안내려가는문제가..
@@ -259,25 +286,32 @@ function Chatex(props){
 
                         {chats.map((data)=>{
                             return (
-                            <div >
+                            <Chatdiv >
                                 {console.log("렌더링데이터z"+data)}
                               {loginuser.userinfo["nickname"]===data.writer
                         ?
-                         <p style={{textAlign:"right"}}> 
+                         <> 
                         
-                         {data.userprofile}
-                        {data.writer}:{data.message}<br/>
-                        {data.time}
-                         </p>
+                        <Profile src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}/>
+                        <ChatContainer>
+                            <ChatTop>{data.writer}</ChatTop>
+                            <ChatMain>{data.message}</ChatMain>
+                            <Chatbottom> {data.red.substr(11,5)}</Chatbottom>
+                            
+                        </ChatContainer>
+                         </>
                         :
                         <> 
-                            {data.userprofile}
-                        {data.writer}:{data.message}<br/>
-                        {data.time}
+                        <Profile src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}/>
+                        <ChatContainer>
+                        <ChatTop>{data.writer}</ChatTop>
+                            <ChatMain>{data.message}</ChatMain>
+                            <Chatbottom> {data.red.substr(11,5)}</Chatbottom>
+                        </ChatContainer>
                         </>
                         }  
                         
-                            </div>
+                            </Chatdiv>
                             )
 
                         })

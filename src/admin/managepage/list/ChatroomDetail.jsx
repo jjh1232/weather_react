@@ -26,9 +26,35 @@ const Main=styled.div`
     overflow: auto;
 `
 const Chatdiv=styled.div`
-    
+   display: flex;
+    border:1px solid red;
 `
-
+const Profile=styled.img`
+    position: relative;
+    border:1px solid blue;
+    width: 50px;
+    height: 50px;
+`
+const ChatContainer=styled.div`
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    border:1px solid blue;
+`
+const ChatTop=styled.div`
+    border:1px solid green;
+    width: 100%;
+`
+const ChatMain=styled.div`
+     border:1px solid yellow;
+     width:100%;
+`
+const Chatbottom=styled.div`
+    border:1px solid black;
+    text-align: right;
+    width:100%;
+`
 export default function ChatroomDetail(props){
 
     const [roomdata,setRoomdata]=useState();
@@ -100,9 +126,18 @@ export default function ChatroomDetail(props){
                                 return (
                                     <Chatdiv>
                         
-                            {chat.userprofile}
-                        {chat.sender}:{chat.message}<br/>
-
+                            <Profile src={process.env.PUBLIC_URL+"/userprofileimg"+chat.userprofile}/>
+                                    <ChatContainer>
+                        <ChatTop>
+                        {chat.writer}
+                        </ChatTop>
+                        <ChatMain>
+                        {chat.message}
+                        </ChatMain>
+                        <Chatbottom>
+                            {chat.red.substr(11,5)}
+                        </Chatbottom>
+                        </ChatContainer>
                         {
                         //chat.createdDate
                         }
