@@ -63,7 +63,7 @@ const Chatbottom=styled.div`
 `
 const Callendercss=styled.div`
     border: 1px solid yellow;
-    width: 300px;
+    width: 350px;
     height: 500px;
     left: 1400px;
     bottom: 100px;
