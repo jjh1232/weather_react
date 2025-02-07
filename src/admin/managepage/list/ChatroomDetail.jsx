@@ -18,11 +18,14 @@ const Wrapper=styled.div`
 const ChatSetting=styled.div`
     position: relative;
 `
+const ChatDatecss=styled.div`
+   
+`
 const Main=styled.div`
     position: relative;
     width: 1000px;
     height: 700px;
-    border:1px solid blue;
+    border:1px solid red;
     overflow: auto;
 `
 const Chatdiv=styled.div`
@@ -38,9 +41,10 @@ const Profile=styled.img`
 const ChatContainer=styled.div`
     position: relative;
     flex-direction: column;
-    width: 100%;
+    width: fit-content;
     display: flex;
     border:1px solid blue;
+
 `
 const ChatTop=styled.div`
     border:1px solid green;
@@ -53,8 +57,10 @@ const ChatMain=styled.div`
 const Chatbottom=styled.div`
     border:1px solid black;
     text-align: right;
+    min-width: 65px;
     width:100%;
 `
+
 export default function ChatroomDetail(props){
 
     const [roomdata,setRoomdata]=useState();
@@ -71,7 +77,7 @@ export default function ChatroomDetail(props){
             console.log("데이터"+res.data)
             setRoomdata(res.data)
             setMonthchat(makeSection(res.data.beforechat))
-           console.log(monthchat)
+           
 
         }).catch((err)=>{
             alert(err)
@@ -99,6 +105,7 @@ export default function ChatroomDetail(props){
 
     return (
         <Wrapper>
+            
             <AdminHeader>
                <h2 style={{position:"relative",top:"30%"}} >채팅방관리</h2> 
                            </AdminHeader>
@@ -107,6 +114,7 @@ export default function ChatroomDetail(props){
             <>
 
             <ChatSetting>
+                <a href="#2025-02-07">페이지이동</a>
             <h3> 방이름:{roomdata.roomname}</h3>
           
                 <h3>   채팅방개설일:{roomdata.time}</h3>
@@ -120,8 +128,8 @@ export default function ChatroomDetail(props){
                   
                 {Object.entries(monthchat).map(([date,chats])=>{
                     return(
-                        <div key={date}>
-                            <>{date}</>
+                        <ChatDatecss key={date} id={date}>
+                            <div style={{textAlign:"center"}}>{date}</div>
                             {chats.map((chat)=>{
                                 return (
                                     <Chatdiv>
@@ -146,7 +154,7 @@ export default function ChatroomDetail(props){
                                 )
                             })}
                         
-                        </div>
+                        </ChatDatecss >
                     )
                 })
             }

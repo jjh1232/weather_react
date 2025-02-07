@@ -106,7 +106,15 @@ function Chatex(props){
           
            const res=JSON.parse(response.body)
            console.log("json파싱"+res) //json으로오기떄문에  자바스크립트로 변환해줘야한다!
-            setChatdata((chatdata)=>[...chatdata,res])
+           //이거날자구분떄매변경
+          //const test=makeSection(res);
+          console.log("챗데이터구조:"+JSON.stringify(chatdata))
+         
+            const newchat=liveSection(res);
+            setChatdata(newchat);
+            
+         
+            scrollcontroller();
         },
         { //유효성검증헤더넣을수있다네?
                                 
@@ -132,6 +140,7 @@ function Chatex(props){
     chatroomdataget()
     return ()=>disconect();
 },[])
+
 //따로 이펙트만들어줬음..
    useEffect(()=>{
     scrollcontroller();
@@ -163,7 +172,7 @@ function Chatex(props){
         })
         
         //보내고 챗리셋해야할듯?
-                
+           
         Setmessage("")
         
     }
@@ -198,6 +207,27 @@ function Chatex(props){
             
         })
         return chatmonth;
+    }
+    //받는챗은또다르게 세팅해야할듯
+    const liveSection=(chat)=>{
+        const beforchat=chatdata;
+        let monthDate=chat.red.substr(0,10).replaceAll(".","-")
+        //왠진몰라도.으로들어옴;
+               
+            if(Array.isArray(beforchat[monthDate])){
+                console.log("해당날짜의객체 임")
+                beforchat[monthDate].push(chat)
+                
+            }else{
+                console.log("해당날짜의객체가 없습니다")
+                beforchat[monthDate]=[chat]
+            }
+        return beforchat;
+        
+      
+       // Object.entries(chatdata).map(([date,chats])=>{}
+        
+        
     }
 
     //메뉴선택 닫기 
