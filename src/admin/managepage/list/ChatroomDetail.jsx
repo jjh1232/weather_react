@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import CreateAxios from "../../../customhook/CreateAxios";
 import styled from "styled-components";
 import AdminHeader from "../../../customhook/Admintools/AdminCss/AdminHeader";
+import AdminCalander from "../../../customhook/Admintools/AdminCss/AdminCalander";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -60,6 +61,17 @@ const Chatbottom=styled.div`
     min-width: 65px;
     width:100%;
 `
+const Callendercss=styled.div`
+    border: 1px solid yellow;
+    width: 300px;
+    height: 500px;
+    left: 1400px;
+    bottom: 100px;
+    z-index: 100;
+    background-color: yellow;
+    position: fixed;
+    
+`
 
 export default function ChatroomDetail(props){
 
@@ -101,20 +113,21 @@ export default function ChatroomDetail(props){
         return chatmonth;
     }
 
-    
+    let dat=new Date();
 
     return (
         <Wrapper>
             
             <AdminHeader>
+           
                <h2 style={{position:"relative",top:"30%"}} >채팅방관리</h2> 
                            </AdminHeader>
             {roomdata&&
             
             <>
-
+     
             <ChatSetting>
-                <a href="#2025-02-07">페이지이동</a>
+                <a href="#2025-02-07">페이지이동</a> 
             <h3> 방이름:{roomdata.roomname}</h3>
           
                 <h3>   채팅방개설일:{roomdata.time}</h3>
@@ -160,9 +173,15 @@ export default function ChatroomDetail(props){
             }
                 </>
 }
+
             </Main>
-</>}
+</>}            
+< Callendercss>캘린더
+
+        <AdminCalander currentdate={dat}></AdminCalander>
+</ Callendercss>
                 <div style={{border:"1px solid blue" ,height:"100px"}}></div>
+              
         </Wrapper>
     )
 }
