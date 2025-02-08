@@ -18,41 +18,73 @@ export default function AdminCalander(props){
     const Months=[];
     const Years=[];
     //const weekstartdate=startOfWeek(new Date()); //시작데이트지정인듯?
-    const {currentdate}=props;
+    const {currentdate,movemethod}=props;
     const monthStart = startOfMonth(currentdate); //현재달의시작날짜
     const monthEnd = endOfMonth(monthStart); //현재달의 마지막날짜
     const startDate = startOfWeek(monthStart); //현재주의첫주날짜
     const endDate = endOfWeek(monthEnd);  //현재달의 마지막주의 끝날짜
 
+    const [current,setCurrent]=useState(
+        {
+            year:format(currentdate,'y'),
+            month:format(currentdate,'M'),
+            day:format(currentdate,'d')
+        }
+    );
+
     const days=eachDayOfInterval({start:startDate,end:endDate}); //현재달의첫주의마지막주의끝날짜
+    for (let year=0;year<3;year+=1){
+       
+        Years.push(format(currentdate,"y")-year)
+        console.log("년도"+format(currentdate,"y"))
+    }
 
     for(let day=0;day<7;day+=1){
+        console.log("데이배열")
         weekdays.push(format(addDays(startDate,day),`EEEEE`))
     }
     for (let month=1;month<13;month+=1){
        // Months.push(addMonths(monthStart,month));
+       console.log("달배열")
         Months.push(month)
         
     }
-    for (let year=3;year<1;year-=1){
-        Years.push(format(currentdate,"Y")-year)
-        console.log(year)
+
+   
+    const onClickday=(data)=>{
+        setCurrent((prev)=>({...prev,day:format(data,'d')}))
+        movemethod(current)
     }
 
-
-    const [current,setCurrent]=useState();
+   
 
     return (
         <>
         {console.log("달의시작날짜"+endDate)}
-        <Yearcss>{Years.map((data,key)=>{return(<>{console.log("년도"+data)}{data}년</>)})}</Yearcss>
+        현재시각:{current.year}년{current.month}월{current.day}일
+        <Yearcss 
+        >
+            {Years.reverse().map((data,key)=>{return(
+                <span onClick={()=>{
+                    setCurrent({...current,year:data})
+                }} key={key}>
+                    {data}년
+                </span>
+              )}
+              )}
+    
+            </Yearcss>
         
-        <Monthcss>{Months.map((data,key)=> <>{data}월</>)}</Monthcss>
+        <Monthcss>{Months.map((data,key)=> <span onClick={()=>{
+                    setCurrent({...current,month:data})
+                }} key={key}>{data}월</span>)}</Monthcss>
         <Container>
-        {days.map((day,index)=>{
+        {days.map((day,key)=>{
             return (
 
-                <Daycss>
+                <Daycss onClick={()=>{
+                    onClickday(day);
+                }} key={key}>
                 {format(day,'d')}
                 
                 </Daycss>

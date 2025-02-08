@@ -112,12 +112,23 @@ export default function ChatroomDetail(props){
         })
         return chatmonth;
     }
-
+    //캘린더로이동
     let dat=new Date();
+
+    const moveCurrent=(date)=>{
+        const daten=date.year+"-0"+date.month+"-0"+date.day
+        console.log("버튼:"+daten)
+        const move=document.createElement(`button`)
+        move.onclick=()=>{
+            document.getElementById(daten).scrollIntoView({behavior:"smooth"})
+        }
+        move.click();
+        
+    }
 
     return (
         <Wrapper>
-            
+              <a href="#2025-02-07">페이지이동</a> 
             <AdminHeader>
            
                <h2 style={{position:"relative",top:"30%"}} >채팅방관리</h2> 
@@ -127,7 +138,7 @@ export default function ChatroomDetail(props){
             <>
      
             <ChatSetting>
-                <a href="#2025-02-07">페이지이동</a> 
+                
             <h3> 방이름:{roomdata.roomname}</h3>
           
                 <h3>   채팅방개설일:{roomdata.time}</h3>
@@ -178,7 +189,7 @@ export default function ChatroomDetail(props){
 </>}            
 < Callendercss>캘린더
 
-        <AdminCalander currentdate={dat}></AdminCalander>
+        <AdminCalander currentdate={dat} movemethod={moveCurrent}></AdminCalander>
 </ Callendercss>
                 <div style={{border:"1px solid blue" ,height:"100px"}}></div>
               
