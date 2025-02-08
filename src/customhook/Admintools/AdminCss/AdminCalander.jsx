@@ -17,6 +17,7 @@ export default function AdminCalander(props){
     const weekdays=[]; //일토요일배열
     const Months=[];
     const Years=[];
+    const headers=["일","월","화","수","목","금","토"]
     //const weekstartdate=startOfWeek(new Date()); //시작데이트지정인듯?
     const {currentdate,movemethod}=props;
     const monthStart = startOfMonth(currentdate); //현재달의시작날짜
@@ -76,26 +77,37 @@ export default function AdminCalander(props){
         <Yearcss 
         >
             {Years.reverse().map((data,key)=>{return(
-                <span onClick={()=>{
+                <Yeartd onClick={()=>{
                     setCurrent({...current,year:data})
-                }} key={key}>
+                }} key={key} Selected={data===current.year?true:false}>
                     {data}년
-                </span>
+                </Yeartd>
               )}
               )}
     
             </Yearcss>
         
-        <Monthcss>{Months.map((data,key)=> <span onClick={()=>{
+        <Monthcss>{Months.map((data,key)=> <Monthtd onClick={()=>{
                     setCurrent({...current,month:data})
-                }} key={key}>{data}월</span>)}</Monthcss>
+                }} key={key} Selected={data===current.month?true:false}
+                >
+                    {data}월</Monthtd>)}</Monthcss>
         <Container>
-        {days.map((day,key)=>{
+                <DayHeader>{headers.map((data,key)=>{
+                    return (
+                        <Daytd key={key} >
+                            {data}
+                        </Daytd>
+                    )
+                })}</DayHeader>
+                {days.map((day,key)=>{
             return (
 
                 <Daycss onClick={()=>{
                     onClickday(day);
-                }} key={key}>
+                }} key={key} 
+                Selected={format(day,'d')===current.day?true:false}
+                >
                 {format(day,'d')}
                 
                 </Daycss>
@@ -108,10 +120,14 @@ export default function AdminCalander(props){
 
 }
 const Daycss=styled.div`
-    width:14.28%;
-    height: 30px;
-    
-    background-color: white;
+    width:13.7%;
+    height: 50px;
+    border:1px solid gray;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+    background-color:${(props)=>props.Selected?"blue":"white"};
 `
 const Container=styled.div`
     display: flex;
@@ -122,10 +138,34 @@ const Container=styled.div`
     height: 300px;
 `
 const Monthcss=styled.div`
-    
+    display: flex;
     
     border: 1px solid black;
 `
+const Monthtd=styled.div`
+   text-align: center;
+   border:1px solid black;
+    background-color:${(props)=>props.Selected?"blue":"white"};
+`
+const Yeartd=styled.div`
+   text-align: center;
+   border:1px solid black;
+     background-color:${(props)=>props.Selected?"blue":"white"};
+`
 const Yearcss=styled.div`
+   display: flex;
+`
+const DayHeader=styled.div`
+    display: flex;
+    flex-wrap:wrap;
+    width:100%;
+    height: 30px;
+    border:1px solid blue;
+`
+const Daytd=styled.div`
+    text-align: center;
+    border:1px solid green;
+    width:13.7%;
+    height: 100%;
     
 `

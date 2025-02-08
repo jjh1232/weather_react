@@ -122,7 +122,7 @@ export default function ChatroomDetail(props){
         console.log("버튼:"+daten)
         const move=document.createElement(`button`)
         move.onclick=()=>{
-            document.getElementById(daten).scrollIntoView({behavior:"smooth"})
+            document.getElementById(daten)?.scrollIntoView({behavior:"smooth"})
         }
         move.click();
         
