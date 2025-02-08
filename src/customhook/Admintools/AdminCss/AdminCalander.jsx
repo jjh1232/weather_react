@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     addDays,
     endOfMonth,
@@ -46,15 +46,26 @@ export default function AdminCalander(props){
     for (let month=1;month<13;month+=1){
        // Months.push(addMonths(monthStart,month));
        console.log("달배열")
-        Months.push(month)
+        Months.push(month.toString())
         
     }
 
-   
-    const onClickday=(data)=>{
-        setCurrent((prev)=>({...prev,day:format(data,'d')}))
+    
+    useEffect(()=>{
         movemethod(current)
+    },[current.day])
+   
+    const onClickday=async(data)=>{
+        //이거좀늦는데..usestate동기화문제가 useeffect말곤해결법몰루겟음
+      
+            setCurrent((prev)=>({...prev,day:format(data,'d')}))
+
+    
+    
+        
+        
     }
+   
 
    
 

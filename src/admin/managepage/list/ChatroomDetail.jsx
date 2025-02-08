@@ -116,7 +116,9 @@ export default function ChatroomDetail(props){
     let dat=new Date();
 
     const moveCurrent=(date)=>{
-        const daten=date.year+"-0"+date.month+"-0"+date.day
+        console.log(date)
+       
+        const daten=date.year+"-"+date.month.padStart(2,`0`)+"-"+date.day.padStart(2,`0`)
         console.log("버튼:"+daten)
         const move=document.createElement(`button`)
         move.onclick=()=>{
@@ -128,7 +130,7 @@ export default function ChatroomDetail(props){
 
     return (
         <Wrapper>
-              <a href="#2025-02-07">페이지이동</a> 
+             
             <AdminHeader>
            
                <h2 style={{position:"relative",top:"30%"}} >채팅방관리</h2> 
