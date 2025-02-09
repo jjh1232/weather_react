@@ -16,14 +16,11 @@ import {
 export default function AdminCalander(props){
     const weekdays=[]; //일토요일배열
     const Months=[];
-    const Years=[];
+    let Years=[];
     const headers=["일","월","화","수","목","금","토"]
     //const weekstartdate=startOfWeek(new Date()); //시작데이트지정인듯?
     const {currentdate,movemethod}=props;
-    const monthStart = startOfMonth(currentdate); //현재달의시작날짜
-    const monthEnd = endOfMonth(monthStart); //현재달의 마지막날짜
-    const startDate = startOfWeek(monthStart); //현재주의첫주날짜
-    const endDate = endOfWeek(monthEnd);  //현재달의 마지막주의 끝날짜
+    const [newcurrentdate,setNewcurrentdate]=useState(currentdate);
 
     const [current,setCurrent]=useState(
         {
@@ -33,23 +30,31 @@ export default function AdminCalander(props){
         }
     );
 
+
+    const monthStart = startOfMonth(newcurrentdate); //현재달의시작날짜
+    const monthEnd = endOfMonth(monthStart); //현재달의 마지막날짜
+    const startDate = startOfWeek(monthStart); //현재주의첫주날짜
+    const endDate = endOfWeek(monthEnd);  //현재달의 마지막주의 끝날짜
+
     const days=eachDayOfInterval({start:startDate,end:endDate}); //현재달의첫주의마지막주의끝날짜
+   
     for (let year=0;year<3;year+=1){
-       
+        //얘는 고정으로가야할거같아서 props로바로사용
         Years.push(format(currentdate,"y")-year)
-        console.log("년도"+format(currentdate,"y"))
+        
     }
+    for (let month=1;month<13;month+=1){
+        // Months.push(addMonths(monthStart,month));
+        console.log("달배열")
+         Months.push(month.toString())
+         
+     }
 
     for(let day=0;day<7;day+=1){
         console.log("데이배열")
         weekdays.push(format(addDays(startDate,day),`EEEEE`))
     }
-    for (let month=1;month<13;month+=1){
-       // Months.push(addMonths(monthStart,month));
-       console.log("달배열")
-        Months.push(month.toString())
-        
-    }
+   
 
     
     useEffect(()=>{
@@ -67,18 +72,28 @@ export default function AdminCalander(props){
         
     }
    
-
+    const onClickMonth=(month)=>{
+        const newd=new Date(current.year+"-"+month+"-"+current.day)
+        setNewcurrentdate(newd)
+    }
+    const onClickYear=(year)=>{
+        console.log("년도클릭"+year)
+        const newy=new Date(year+"-"+current.month+"-"+current.day)
+        console.log("클릭후변경값"+newy)
+        setNewcurrentdate(newy)
+    }
    
 
     return (
         <>
         {console.log("달의시작날짜"+endDate)}
-        현재시각:{current.year}년{current.month}월{current.day}일
+        현재시각:{current.year}년{current.month}월{current.day}일 ///{console.log("스탈트데이트"+startDate)}
         <Yearcss 
         >
             {Years.reverse().map((data,key)=>{return(
                 <Yeartd onClick={()=>{
                     setCurrent({...current,year:data})
+                    onClickYear(data)
                 }} key={key} Selected={data===current.year?true:false}>
                     {data}년
                 </Yeartd>
@@ -89,6 +104,7 @@ export default function AdminCalander(props){
         
         <Monthcss>{Months.map((data,key)=> <Monthtd onClick={()=>{
                     setCurrent({...current,month:data})
+                    onClickMonth(data)
                 }} key={key} Selected={data===current.month?true:false}
                 >
                     {data}월</Monthtd>)}</Monthcss>
@@ -168,4 +184,11 @@ const Daytd=styled.div`
     width:13.7%;
     height: 100%;
     
+`
+
+const DataCircle=styled.div`
+width : 100px;
+  height : 100px;
+  border-radius: 50%;
+  background-color: tomato;
 `
