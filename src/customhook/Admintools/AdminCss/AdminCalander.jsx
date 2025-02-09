@@ -36,6 +36,10 @@ export default function AdminCalander(props){
     const startDate = startOfWeek(monthStart); //현재주의첫주날짜
     const endDate = endOfWeek(monthEnd);  //현재달의 마지막주의 끝날짜
 
+    console.log("몬스스타트:"+monthStart)
+    console.log("몬스엔드:"+monthEnd)
+    console.log("스타트날짜:"+startDate)
+    console.log("엔드데이트:"+endDate)
     const days=eachDayOfInterval({start:startDate,end:endDate}); //현재달의첫주의마지막주의끝날짜
    
     for (let year=0;year<3;year+=1){
@@ -116,6 +120,7 @@ export default function AdminCalander(props){
                         </Daytd>
                     )
                 })}</DayHeader>
+
                 {days.map((day,key)=>{
             return (
 
@@ -123,8 +128,11 @@ export default function AdminCalander(props){
                     onClickday(day);
                 }} key={key} 
                 Selected={format(day,'d')===current.day?true:false}
+                IsSunday={day.getDay()===0?true:false}
+                IsCurrentmonth={monthStart<=day&&day<=monthEnd?true:false}
                 >
                 {format(day,'d')}
+                
                 
                 </Daycss>
             )
@@ -142,8 +150,9 @@ const Daycss=styled.div`
     display: flex;
   justify-content: center;
   align-items: center;
- 
+    color:${(props)=>props.IsSunday?"red":"black"};
     background-color:${(props)=>props.Selected?"blue":"white"};
+    opacity:${(props)=>props.IsCurrentmonth?1:0.6};
 `
 const Container=styled.div`
     display: flex;
@@ -183,6 +192,7 @@ const Daytd=styled.div`
     border:1px solid green;
     width:13.7%;
     height: 100%;
+    
     
 `
 
