@@ -63,12 +63,12 @@ const Chatbottom=styled.div`
 `
 const Callendercss=styled.div`
     border: 1px solid yellow;
-    width: 350px;
-    height: 500px;
+    width: 400px;
+    height: 480px;
     left: 1400px;
     bottom: 100px;
     z-index: 100;
-    background-color: yellow;
+    background-color: gray;
     position: fixed;
     
 `
@@ -98,7 +98,7 @@ export default function ChatroomDetail(props){
   //섹션으로 날짜나누기
     const makeSection=(chatdata)=>{
         let chatmonth={}
-        console.log("챗데이터"+chatdata)
+        
         chatdata.map((chat)=>{
             
             let monthDate=chat.red.substr(0,10)
@@ -189,9 +189,9 @@ export default function ChatroomDetail(props){
 
             </Main>
 </>}            
-< Callendercss>캘린더
+< Callendercss>
 
-        <AdminCalander currentdate={dat} movemethod={moveCurrent}></AdminCalander>
+        <AdminCalander currentdate={dat} movemethod={moveCurrent} chatdata={monthchat}></AdminCalander>
 </ Callendercss>
                 <div style={{border:"1px solid blue" ,height:"100px"}}></div>
               

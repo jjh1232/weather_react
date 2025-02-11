@@ -19,7 +19,7 @@ export default function AdminCalander(props){
     let Years=[];
     const headers=["일","월","화","수","목","금","토"]
     //const weekstartdate=startOfWeek(new Date()); //시작데이트지정인듯?
-    const {currentdate,movemethod}=props;
+    const {currentdate,movemethod,chatdata}=props;
     const [newcurrentdate,setNewcurrentdate]=useState(currentdate);
 
     const [current,setCurrent]=useState(
@@ -36,10 +36,7 @@ export default function AdminCalander(props){
     const startDate = startOfWeek(monthStart); //현재주의첫주날짜
     const endDate = endOfWeek(monthEnd);  //현재달의 마지막주의 끝날짜
 
-    console.log("몬스스타트:"+monthStart)
-    console.log("몬스엔드:"+monthEnd)
-    console.log("스타트날짜:"+startDate)
-    console.log("엔드데이트:"+endDate)
+    
     const days=eachDayOfInterval({start:startDate,end:endDate}); //현재달의첫주의마지막주의끝날짜
    
     for (let year=0;year<3;year+=1){
@@ -81,17 +78,20 @@ export default function AdminCalander(props){
         setNewcurrentdate(newd)
     }
     const onClickYear=(year)=>{
-        console.log("년도클릭"+year)
+        
         const newy=new Date(year+"-"+current.month+"-"+current.day)
-        console.log("클릭후변경값"+newy)
+        
         setNewcurrentdate(newy)
+
     }
    
-
+    //var chatdate=Object.keys(chatdata)
+    //console.log("채팅있느날짜"+chatdate)
     return (
         <>
-        {console.log("달의시작날짜"+endDate)}
-        현재시각:{current.year}년{current.month}월{current.day}일 ///{console.log("스탈트데이트"+startDate)}
+               <CalanderHeader>
+        Callander
+        </CalanderHeader>
         <Yearcss 
         >
             {Years.reverse().map((data,key)=>{return(
@@ -112,6 +112,9 @@ export default function AdminCalander(props){
                 }} key={key} Selected={data===current.month?true:false}
                 >
                     {data}월</Monthtd>)}</Monthcss>
+
+             
+
         <Container>
                 <DayHeader>{headers.map((data,key)=>{
                     return (
@@ -164,21 +167,34 @@ const Container=styled.div`
 `
 const Monthcss=styled.div`
     display: flex;
-    
+    margin-top: 10px;
+    width:100%;
+    height: 40px;
     border: 1px solid black;
 `
 const Monthtd=styled.div`
    text-align: center;
    border:1px solid black;
+   display: flex;
+  justify-content: center;
+  align-items: center;
+   width: 8.3%;
     background-color:${(props)=>props.Selected?"blue":"white"};
 `
 const Yeartd=styled.div`
-   text-align: center;
+   
    border:1px solid black;
+   width: 33%;
+   display: flex;
+  justify-content: center;
+  align-items: center;
      background-color:${(props)=>props.Selected?"blue":"white"};
 `
 const Yearcss=styled.div`
    display: flex;
+   height: 50px;
+   margin-top: 10px;
+   border: 1px solid black;
 `
 const DayHeader=styled.div`
     display: flex;
@@ -186,6 +202,7 @@ const DayHeader=styled.div`
     width:100%;
     height: 30px;
     border:1px solid blue;
+    margin-top: 15px;
 `
 const Daytd=styled.div`
     text-align: center;
@@ -195,7 +212,16 @@ const Daytd=styled.div`
     
     
 `
-
+const CalanderHeader=styled.div`
+    border: 1px solid black;
+    height: 30px;
+    margin-top:10px;
+    font-size: 20px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
 const DataCircle=styled.div`
 width : 100px;
   height : 100px;
