@@ -17,7 +17,10 @@ const Wrapper=styled.div`
 
 `
 const ChatSetting=styled.div`
-    position: relative;
+    display: relative;
+    width: 1000px;
+
+    border:1px solid black
 `
 const ChatDatecss=styled.div`
    
@@ -64,7 +67,7 @@ const Chatbottom=styled.div`
 const Callendercss=styled.div`
     border: 1px solid yellow;
     width: 400px;
-    height: 480px;
+    height: 530px;
     left: 1400px;
     bottom: 100px;
     z-index: 100;
@@ -141,9 +144,9 @@ export default function ChatroomDetail(props){
      
             <ChatSetting>
                 
-            <h3> 방이름:{roomdata.roomname}</h3>
+            <h3 style={{position:"relative",float:"left"}}> 방이름:{roomdata.roomname}</h3>
           
-                <h3>   채팅방개설일:{roomdata.time}</h3>
+            <h3 style={{float:"right",border:"1px solid blue"}}>  개설일:{roomdata.time}</h3>
             
             </ChatSetting>
             

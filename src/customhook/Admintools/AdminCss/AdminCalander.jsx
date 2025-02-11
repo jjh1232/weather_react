@@ -118,7 +118,7 @@ export default function AdminCalander(props){
         <Container>
                 <DayHeader>{headers.map((data,key)=>{
                     return (
-                        <Daytd key={key} >
+                        <Daytd key={key} IsSunday={data==="일"?true:false}>
                             {data}
                         </Daytd>
                     )
@@ -156,6 +156,7 @@ const Daycss=styled.div`
     color:${(props)=>props.IsSunday?"red":"black"};
     background-color:${(props)=>props.Selected?"blue":"white"};
     opacity:${(props)=>props.IsCurrentmonth?1:0.6};
+    font-size: 20px;
 `
 const Container=styled.div`
     display: flex;
@@ -197,19 +198,25 @@ const Yearcss=styled.div`
    border: 1px solid black;
 `
 const DayHeader=styled.div`
-    display: flex;
+    background-color: white;
     flex-wrap:wrap;
     width:100%;
     height: 30px;
-    border:1px solid blue;
+  
     margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
 `
 const Daytd=styled.div`
+    position: relative;
     text-align: center;
-    border:1px solid green;
+    
+    border: 1px solid gray;
     width:13.7%;
     height: 100%;
-    
+    color: ${(props)=>props.IsSunday?"red":"black"};
     
 `
 const CalanderHeader=styled.div`
@@ -217,6 +224,7 @@ const CalanderHeader=styled.div`
     height: 30px;
     margin-top:10px;
     font-size: 20px;
+    
     color: black;
     display: flex;
     justify-content: center;
