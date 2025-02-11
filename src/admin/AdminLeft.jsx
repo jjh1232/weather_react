@@ -11,8 +11,24 @@ const Wrapper=styled.div`
     height: 105%;
     
 `
-const Menu=styled.h3`
+
+const MenuMain=styled.div`
+position: relative;
+display: flex;
+flex-direction: column;
+height: 400px;
+top:200px;
+border: 1px solid blue;
+
+`
+const Menu=styled.div`
+    display: flex;
+    float: left;
+    font-size:25px;
     color: white;
+    align-items : center;
+border: 1px solid gray;
+flex-grow: 1;
 `
 export default function AdminLeft(){
 
@@ -27,15 +43,16 @@ export default function AdminLeft(){
     return (
         <Wrapper>
              
-                <div onClick={()=>{navigate("/admin")}}>
-                    <Menu>홈</Menu>
-                    </div>
-                <div onClick={()=>{navigate("/admin/member")}}><Menu>회원관리</Menu></div>
-                <div onClick={()=>{navigate("/admin/notice")}}><Menu>게시글관리</Menu></div>
-                <div onClick={()=>{navigate("/admin/comment")}}><Menu>댓글관리</Menu></div>
-                <div onClick={()=>{navigate("/admin/chatroom")}}><Menu>채팅방관리</Menu></div>
+             <MenuMain>
 
-            
+                    <Menu onClick={()=>{navigate("/admin")}}>홈</Menu>
+                    
+              <Menu onClick={()=>{navigate("/admin/member")}}>회원관리</Menu>
+               <Menu onClick={()=>{navigate("/admin/notice")}}>게시글관리</Menu>
+               <Menu onClick={()=>{navigate("/admin/comment")}}>댓글관리</Menu>
+                <Menu onClick={()=>{navigate("/admin/chatroom")}}>채팅방관리</Menu>
+
+                </MenuMain>
            
         </Wrapper>
     )
