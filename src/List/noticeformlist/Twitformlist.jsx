@@ -10,9 +10,10 @@ import Twitformnoticeupdate from "./Twitformnoticeupdate";
 import Noticelikes from "../../UI/Noticetools/Noticelikes";
 import { useNavigate } from "react-router-dom";
 import Simpleprofile from "../../MemberPage/Memberupdata/Simpleprofile";
+import Datefor from "./DateCom/Datefor";
 
 const Wrapper=styled.div`
-    border:1px solid
+    border:1px solid yellow;
 
 `
 const Weatherdata =styled.div`
@@ -22,6 +23,21 @@ const Profileview=styled.div`
     border:1px solid;
     width:45px;
     height:45px;
+`
+const Userdata=styled.div`
+  border: 1px solid red;
+`
+const NoticeHeader=styled.div`
+  
+`
+const Textarea=styled.div`
+border: 1px solid blue;
+  height:500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+const Noticefooter=styled.div`
+  
 `
 export default function Twitformlist(props){
 
@@ -231,7 +247,7 @@ const simpleprofile =(e)=>{
         {
         //유저프로필=============================================
         }
-        <div className={ishover?"profileover":"profile"}
+        <Userdata className={ishover?"profileover":"profile"}
         onMouseEnter={(e)=>simpleprofile(e)
         
          }
@@ -255,21 +271,25 @@ const simpleprofile =(e)=>{
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
       mousexy={xy} setprepage={setOnprepage}
       /></>:""}
-     </div>
+     </Userdata>
      
      {
      //===============================유저프로필종료================
      }
+      <NoticeHeader>
           <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
           
-            <br/>
-            {post.title}
-            <br/>
             
-            {<div dangerouslySetInnerHTML={{__html:post.text}}></div>}
+            {post.title}
+            
+            <Datefor inputdate={post.red}/>
+            
+            
+            </NoticeHeader>
+            {<Textarea dangerouslySetInnerHTML={{__html:post.text}}></Textarea>}
 
             
-            <br/>
+            <Noticefooter>
             <button onClick={()=>{
                 setIsreple(!isreple)
             }
@@ -282,9 +302,7 @@ const simpleprofile =(e)=>{
             
             {islike?"true":"false"}
             
-              <h5>
-            {post.red}
-            </h5>
+            
             {isreple&&<>
                 <Twitcomment comments={comments} noticeid={post.num} 
                 commentcreate={commentsubmit}
@@ -306,7 +324,7 @@ const simpleprofile =(e)=>{
               <Twitformnoticeupdate noticeid={post.num} setIsupdate={setIsupdate}/>
               </>}
              
-           
+              </Noticefooter>
             
            
 <br/>

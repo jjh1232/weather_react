@@ -18,7 +18,7 @@ display: flex;
 flex-direction: column;
 height: 400px;
 top:200px;
-border: 1px solid blue;
+border: 1px solid white;
 
 `
 const Menu=styled.div`
@@ -27,7 +27,7 @@ const Menu=styled.div`
     font-size:25px;
     color: white;
     align-items : center;
-border: 1px solid gray;
+border: 1px solid white;
 flex-grow: 1;
 `
 export default function AdminLeft(){
