@@ -14,21 +14,52 @@ import Datefor from "./DateCom/Datefor";
 
 const Wrapper=styled.div`
     border:1px solid yellow;
-
+    
 `
-const Weatherdata =styled.div`
-    text-align: right;
+
+const Noticedata=styled.div`
+  display: flex;
+  width: 100%;
+`
+const NoticeHeader=styled.div`
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  ;
 `
 const Profileview=styled.div`
-    border:1px solid;
+    border: 1px solid black;
+
     width:45px;
     height:45px;
 `
-const Userdata=styled.div`
-  border: 1px solid red;
+const Nameheader=styled.div`
+ border: 1px solid blue;
+ display: flex;
+ height: 40px;
+  width: 100%;
 `
-const NoticeHeader=styled.div`
+const Nickname=styled.h3`
   
+  color: white;
+`
+const Username=styled.h5`
+  color: gray;
+`
+
+const Timecss=styled.div`
+  
+`
+
+const TitleCss=styled.div`
+  display: flex;
+`
+const Title=styled.div`
+  float: left;
+`
+const Weatherdata =styled.div`
+    float: right;
 `
 const Textarea=styled.div`
 border: 1px solid blue;
@@ -241,23 +272,13 @@ const simpleprofile =(e)=>{
 
 //==========================렌더링==============================
     return (
-      <div>
+      
     
         <Wrapper>
         {
         //유저프로필=============================================
         }
-        <Userdata className={ishover?"profileover":"profile"}
-        onMouseEnter={(e)=>simpleprofile(e)
-        
-         }
-        onMouseOut={()=>{setIshover(false)}}
-        onClick={()=>{
-          navigate(`/userpage/${post.username}`);
-        }}
-       
-        > {onprepage?"트루":"false"}
-
+        <Noticedata>
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -265,30 +286,53 @@ const simpleprofile =(e)=>{
                 />
                 
      </Profileview>
-     {post.nickname}@{post.username}
+        <NoticeHeader className={ishover?"profileover":"profile"}
+        onMouseEnter={(e)=>simpleprofile(e)
+        
+         }
+        onMouseOut={()=>{setIshover(false)}}
+        onClick={()=>{
+          navigate(`/userpage/${post.username}`);
+        }}>    
+        
 
+        
+     <Nameheader>
+      <Nickname>{post.nickname}</Nickname>
+     <Username>{post.username}</Username>
+     <Timecss>
+     <Datefor inputdate={post.red}/>
+     </Timecss>
+     </Nameheader>
      {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
       mousexy={xy} setprepage={setOnprepage}
       /></>:""}
-     </Userdata>
+    
      
      {
      //===============================유저프로필종료================
      }
-      <NoticeHeader>
-          <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
+   
           
+          
+            <TitleCss>
+            <Title>{post.title}</Title> 
             
-            {post.title}
-            
-            <Datefor inputdate={post.red}/>
+            <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
+            </TitleCss>
             
             
             </NoticeHeader>
+            </Noticedata>
+            {
+        //게시글 헤더끝 메인시작=============================================
+        }
             {<Textarea dangerouslySetInnerHTML={{__html:post.text}}></Textarea>}
 
-            
+            {
+        //게시글메인끝 게시글푸터 =============================================
+        }
             <Noticefooter>
             <button onClick={()=>{
                 setIsreple(!isreple)
@@ -333,6 +377,6 @@ const simpleprofile =(e)=>{
 
 
         </Wrapper>
-        </div>
+       
     )
 }
