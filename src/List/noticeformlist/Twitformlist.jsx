@@ -11,6 +11,10 @@ import Noticelikes from "../../UI/Noticetools/Noticelikes";
 import { useNavigate } from "react-router-dom";
 import Simpleprofile from "../../MemberPage/Memberupdata/Simpleprofile";
 import Datefor from "./DateCom/Datefor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as full } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as empty}  from "@fortawesome/free-regular-svg-icons";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper=styled.div`
     border:1px solid yellow;
@@ -25,7 +29,7 @@ const NoticeHeader=styled.div`
   border: 1px solid red;
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   ;
 `
 const Profileview=styled.div`
@@ -40,26 +44,39 @@ const Nameheader=styled.div`
  height: 40px;
   width: 100%;
 `
-const Nickname=styled.h3`
+const Nickname=styled.div`
+ 
   
-  color: white;
+  
+  
+  border: 1px solid green;
 `
-const Username=styled.h5`
+const Username=styled.div`
+ position: relative;
   color: gray;
+  
+  border: 1px solid yellow;
 `
 
 const Timecss=styled.div`
-  
+   position: relative;
+   border: 1px solid black;
 `
-
+const Menucss=styled.div`
+ 
+  margin-left: auto;
+`
 const TitleCss=styled.div`
   display: flex;
 `
 const Title=styled.div`
   float: left;
+  border: 1px solid blue;
 `
 const Weatherdata =styled.div`
-    float: right;
+    position: relative;
+    right:0px;
+    border:1px solid yellow;
 `
 const Textarea=styled.div`
 border: 1px solid blue;
@@ -279,30 +296,60 @@ const simpleprofile =(e)=>{
         //유저프로필=============================================
         }
         <Noticedata>
-        <Profileview>
-    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}
-  
-                />
-                
-     </Profileview>
-        <NoticeHeader className={ishover?"profileover":"profile"}
+        <Profileview className={ishover?"profileover":"profile"}
         onMouseEnter={(e)=>simpleprofile(e)
         
          }
         onMouseOut={()=>{setIshover(false)}}
         onClick={()=>{
           navigate(`/userpage/${post.username}`);
-        }}>    
+        }}>
+    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
+   style={{objectFit:"fill",width:"100%",height:"100%"}}
+  
+                />
+                
+     </Profileview>
+        <NoticeHeader >    
         
 
         
-     <Nameheader>
-      <Nickname>{post.nickname}</Nickname>
-     <Username>{post.username}</Username>
+     <Nameheader >
+      <Nickname className={ishover?"profileover":"profile"}
+        onMouseEnter={(e)=>simpleprofile(e)
+        
+         }
+        onMouseOut={()=>{setIshover(false)}}
+        onClick={()=>{
+          navigate(`/userpage/${post.username}`);
+        }}>
+        
+          {post.nickname}
+          
+        </Nickname>
+     <Username className={ishover?"profileover":"profile"}
+        onMouseEnter={(e)=>simpleprofile(e)
+        
+         }
+        onMouseOut={()=>{setIshover(false)}}
+        onClick={()=>{
+          navigate(`/userpage/${post.username}`);
+        }}>{post.username}</Username>
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
+
+     {loginuser.userinfo&&                        
+                  post.username===loginuser.userinfo["username"]&&                    
+                    <Menucss>
+                    <FontAwesomeIcon style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
+                    <button onClick={postUpdate}>수정하기</button>
+                    <button onClick={postDelete}>삭제하기</button>
+                    
+                    </Menucss>      
+              
+                    
+            }
      </Nameheader>
      {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
@@ -340,7 +387,8 @@ const simpleprofile =(e)=>{
             }>
             showreply
             </button>
-
+            <FontAwesomeIcon icon={full} color="red" fontSize={"20px"}/>
+            <FontAwesomeIcon icon={empty} color="red" fontSize={"20px"}/>
             <button onClick={()=>{onlike(post.num)}}>좋아요</button>
             {likenum}
             
@@ -355,15 +403,7 @@ const simpleprofile =(e)=>{
                 />
                 </>}
             
-                {loginuser.userinfo&&                        
-                  post.username===loginuser.userinfo["username"]&&                    
-                    <>
-                    <button onClick={postUpdate}>수정하기</button>
-                    <button onClick={postDelete}>삭제하기</button>
-                    </>      
               
-                    
-            }
             {isupdate&&<>
               <Twitformnoticeupdate noticeid={post.num} setIsupdate={setIsupdate}/>
               </>}
