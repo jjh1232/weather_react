@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 const Wrapper=styled.div`
   position: relative;
-  width: 1000px;
+  width: 100%;
   min-height: 60px;
   max-height: fit-content;
   border: 1px solid black;
@@ -39,7 +39,7 @@ const Username=styled.span`
 const Commentinput=styled.textarea`
 position: relative;
 display: inline-block;
-width: 800px;
+width: 85%;
 font-size: 20px;
 top: 25px;
 left:64px;

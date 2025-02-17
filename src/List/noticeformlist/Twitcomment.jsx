@@ -46,7 +46,7 @@ export default function Twitcomment(props){
        
 }
 
-===========================================댓글작성
+===============================댓글작성==================
 <Commentform noticenum ={noticeid} depth="0" cnum=""
 commentsubmit={commentcreate}
 />

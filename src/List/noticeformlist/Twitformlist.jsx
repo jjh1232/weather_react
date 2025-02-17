@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import { useState } from "react";
@@ -100,7 +100,7 @@ export default function Twitformlist(props){
     const [isupdate,setIsupdate]=useState(false)
     const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
-
+    const menuref=useRef();
      const [ishover,setIshover]=useState(false);
     const [onprepage,setOnprepage]=useState(false);
 
@@ -120,7 +120,18 @@ export default function Twitformlist(props){
        // islikes(post.num);
       }
     },[])
-    
+    useEffect(()=>{
+      const noticemenuoutside=(e)=>{
+        console.log("마우스다운이벤트")
+        if(menuref.current && !menuref.current.contains(e.target)){
+          setIsmenu(false);
+        }
+      }
+      document.addEventListener('mousedown', noticemenuoutside);
+  return () => {
+    document.removeEventListener('mousedown', noticemenuoutside);
+  };
+    },[])
     const showreply=()=>{
         console.log("쇼리플")
         
@@ -340,7 +351,7 @@ const simpleprofile =(e)=>{
      <Datefor inputdate={post.red}/>
      </Timecss>
                     
-                    <Menucss>
+                    <Menucss ref={menuref}>
                     <FontAwesomeIcon 
                     onClick={()=>{
                         setIsmenu(true)
@@ -348,10 +359,11 @@ const simpleprofile =(e)=>{
                     style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
                    
                     {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
-                     isowner={post.username===loginuser.userinfo["username"]?true:false}
-                     username={loginuser.userinfo["username"]}
-                     nickname={loginuser.userinfo["nickname"]}
+                     isowner={loginuser.userinfo?post.username===loginuser.userinfo["username"]?true:false:false}
+                     username={loginuser.userinfo?loginuser.userinfo["username"]:"nologin"}
+                     nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:"nologin"}
                      noticeuser={post.username}
+                     
                      />}
                 
                     
@@ -396,12 +408,13 @@ const simpleprofile =(e)=>{
             }>
             showreply
             </button>
-            <FontAwesomeIcon icon={full} color="red" fontSize={"20px"}/>
-            <FontAwesomeIcon icon={empty} color="red" fontSize={"20px"}/>
-            <button onClick={()=>{onlike(post.num)}}>좋아요</button>
+            {islike?
+            <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" fontSize={"20px"}/>
+            :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red" fontSize={"20px"}/>
+            }
             {likenum}
             
-            {islike?"true":"false"}
+          
             
             
             {isreple&&<>
