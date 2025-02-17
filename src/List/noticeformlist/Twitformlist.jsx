@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as full } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as empty}  from "@fortawesome/free-regular-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import Noticemenu from "./DateCom/Noticemenu";
 
 const Wrapper=styled.div`
     border:1px solid yellow;
@@ -63,7 +64,7 @@ const Timecss=styled.div`
    border: 1px solid black;
 `
 const Menucss=styled.div`
- 
+ //내부요소 오른쪽정렬
   margin-left: auto;
 `
 const TitleCss=styled.div`
@@ -92,7 +93,7 @@ export default function Twitformlist(props){
     const {key,post}=props;
     const navigate=useNavigate();
     const [isreple,setIsreple]=useState(false);
-
+    const [ismenu,setIsmenu]=useState(false);
     const [comments,setComments]=useState();
     const axiosinstance=CreateAxios();
     const [loginuser,setloginuser,removeloginuser]=useCookies();
@@ -338,18 +339,26 @@ const simpleprofile =(e)=>{
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
-
-     {loginuser.userinfo&&                        
-                  post.username===loginuser.userinfo["username"]&&                    
+                    
                     <Menucss>
-                    <FontAwesomeIcon style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
-                    <button onClick={postUpdate}>수정하기</button>
-                    <button onClick={postDelete}>삭제하기</button>
+                    <FontAwesomeIcon 
+                    onClick={()=>{
+                        setIsmenu(true)
+                    }}
+                    style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
+                   
+                    {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
+                     isowner={post.username===loginuser.userinfo["username"]?true:false}
+                     username={loginuser.userinfo["username"]}
+                     nickname={loginuser.userinfo["nickname"]}
+                     noticeuser={post.username}
+                     />}
+                
                     
                     </Menucss>      
               
                     
-            }
+            
      </Nameheader>
      {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
