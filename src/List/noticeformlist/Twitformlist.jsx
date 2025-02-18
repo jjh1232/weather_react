@@ -354,7 +354,7 @@ const simpleprofile =(e)=>{
                     <Menucss ref={menuref}>
                     <FontAwesomeIcon 
                     onClick={()=>{
-                        setIsmenu(true)
+                        setIsmenu(!ismenu)
                     }}
                     style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
                    
