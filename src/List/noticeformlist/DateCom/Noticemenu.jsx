@@ -19,7 +19,16 @@ const Innerdiv=styled.div`
     border: 1px solid black;
     
 `
+const DeclairCss=styled.div`
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    left:50%;
+    top:50%;
+    margin-left: -600px;
+    background-color: blue;
 
+`
 export default function Noticemenu(props){
     const {updatemethod,deletemethod,isowner,username,nickname,noticeuser}=props;
     const navigate=useNavigate();
@@ -70,8 +79,27 @@ export default function Noticemenu(props){
     }
  
    
+    //게시글 차단
+    //테이블을만들어서 연관관계써야하나?
+    const noticeblock=useMutation({
+        mutationFn:()=>{
+            
+        }
+    })
+    const noticeblockhandler=()=>{
+        
+    }
+    //게시글 신고
+    //신고양식모달로 받는게맞는듯?
+    const [isdeclationform,setIsdeclationform]=useState(false);
+    const declation=useMutation({
+        mutationFn:()=>{
+            
+        }
+    })
+    const declationhandler=()=>{
 
-
+    }
     return (
         <Wrapper>
             {isowner&&<>
@@ -97,11 +125,18 @@ export default function Noticemenu(props){
                         팔로우@{nickname}
                         
                     </Innerdiv>}
-                    
                     <Innerdiv onClick={()=>{usermove()}}>
-                        게시글신고@{nickname}
+                        게시글차단
                         
                     </Innerdiv>
+                    <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
+                        게시글신고
+                        
+                    </Innerdiv>
+                    {isdeclationform&&<DeclairCss>
+                        게시글닫기
+                    게시글신고양식
+                    </DeclairCss>}
         </Wrapper>
     )
 }
