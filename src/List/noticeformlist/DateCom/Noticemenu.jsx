@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import CreateAxios from "../../../customhook/CreateAxios";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 const Wrapper=styled.div`
     position: absolute;
     right: 0px;
@@ -25,19 +26,27 @@ export default function Noticemenu(props){
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
     
-   
+   const [followcheck,setFollowcheck]=useState();
 
-
+    /*
     const {followcheck,isLoading,error}=useQuery({
         queryKey:["followcheck"],
-        queryFn: ()=>{
-            const res = axiosinstance.get(`/followcheck?friendname=${friendname}`)
+        queryFn:()=>{
+            let res = axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
            console.log("유즈쿼리실행중")
             return res.data;
         }
     } 
     )
+    */
+    const followchecks=()=>{
+        axiosinstance.get(`/followcheck?friendname=${noticeuser}`).then((res)=>{setFollowcheck(res.data)})
+       }
+       useEffect(()=>{
+        followchecks();
+       },[])
 
+  
     const userfollow= useMutation({
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
     })
@@ -51,9 +60,13 @@ export default function Noticemenu(props){
    
     const followhandler=()=>{
         userfollow.mutate();
+        setFollowcheck(true)
+        alert("유저를팔로우했습니다")
     }
     const unfollowhandler=()=>{
         deletefollow.mutate();
+        setFollowcheck(false)
+        alert("유저를팔로우해제했습니다")
     }
  
    
