@@ -35,20 +35,22 @@ export default function Noticemenu(props){
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
     
-   //const [followcheck,setFollowcheck]=useState();
+   const [followcheck,setFollowcheck]=useState();
 
-    
+     /*대체안되는이유를모르겠네...
     const {followcheck}=useQuery({
         queryKey:["followch"],
-        queryFn:()=>
-             axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
-           
-        
+        queryFn:()=>{
+            let res = axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
+           console.log("유즈쿼리실행중"+res.data)
+          
+           return res.data;
+        }
     } 
     )
-    
+     */
     console.log("스크립트코드에선"+followcheck)
-    /*
+    
     const followchecks=()=>{
         axiosinstance.get(`/followcheck?friendname=${noticeuser}`).then((res)=>{setFollowcheck(res.data)})
        }
@@ -57,7 +59,7 @@ export default function Noticemenu(props){
         followchecks();
        },[])
 
-  */
+  
     const userfollow= useMutation({
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
     })
@@ -119,7 +121,7 @@ export default function Noticemenu(props){
                         유저페이지이동@{nickname}
                         
                     </Innerdiv>
-                   
+                   {followcheck&&<>
                     {followcheck?<Innerdiv onClick={()=>{unfollowhandler()}}>
                         언팔로우@{nickname}
                         
@@ -128,7 +130,7 @@ export default function Noticemenu(props){
                         팔로우@{nickname}
                         
                     </Innerdiv>}
-
+                    </>}
                     <Innerdiv onClick={()=>{usermove()}}>
                         게시글차단
                         
