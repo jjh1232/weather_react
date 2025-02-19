@@ -35,27 +35,29 @@ export default function Noticemenu(props){
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
     
-   const [followcheck,setFollowcheck]=useState();
+   //const [followcheck,setFollowcheck]=useState();
 
-    /*
-    const {followcheck,isLoading,error}=useQuery({
-        queryKey:["followcheck"],
-        queryFn:()=>{
-            let res = axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
-           console.log("유즈쿼리실행중")
-            return res.data;
-        }
+    
+    const {followcheck}=useQuery({
+        queryKey:["followch"],
+        queryFn:()=>
+             axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
+           
+        
     } 
     )
-    */
+    
+    console.log("스크립트코드에선"+followcheck)
+    /*
     const followchecks=()=>{
         axiosinstance.get(`/followcheck?friendname=${noticeuser}`).then((res)=>{setFollowcheck(res.data)})
        }
+
        useEffect(()=>{
         followchecks();
        },[])
 
-  
+  */
     const userfollow= useMutation({
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
     })
@@ -87,7 +89,7 @@ export default function Noticemenu(props){
         }
     })
     const noticeblockhandler=()=>{
-        
+
     }
     //게시글 신고
     //신고양식모달로 받는게맞는듯?
@@ -117,6 +119,7 @@ export default function Noticemenu(props){
                         유저페이지이동@{nickname}
                         
                     </Innerdiv>
+                   
                     {followcheck?<Innerdiv onClick={()=>{unfollowhandler()}}>
                         언팔로우@{nickname}
                         
@@ -125,6 +128,7 @@ export default function Noticemenu(props){
                         팔로우@{nickname}
                         
                     </Innerdiv>}
+
                     <Innerdiv onClick={()=>{usermove()}}>
                         게시글차단
                         
