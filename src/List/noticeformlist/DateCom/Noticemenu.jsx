@@ -30,7 +30,7 @@ const DeclairCss=styled.div`
 
 `
 export default function Noticemenu(props){
-    const {updatemethod,deletemethod,isowner,username,nickname,noticeuser}=props;
+    const {updatemethod,deletemethod,isowner,username,nickname,noticeuser,noticeid}=props;
     const navigate=useNavigate();
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
@@ -86,12 +86,16 @@ export default function Noticemenu(props){
     //게시글 차단
     //테이블을만들어서 연관관계써야하나?
     const noticeblock=useMutation({
-        mutationFn:()=>{
-            
+        mutationFn:(id)=>{
+            axiosinstance.post(`/noticeblock`,{
+                noticeid:id
+            }).then((res)=>{
+                alert(`해당${id}번글을 차단했습니다`)
+            })
         }
     })
-    const noticeblockhandler=()=>{
-
+    const noticeblockhandler=(id)=>{
+        noticeblock.mutate(id)
     }
     //게시글 신고
     //신고양식모달로 받는게맞는듯?
@@ -118,7 +122,7 @@ export default function Noticemenu(props){
             </>
             }
                 <Innerdiv onClick={()=>{usermove()}}>
-                        유저페이지이동@{nickname}
+                        유저페이지이동@{nickname} 
                         
                     </Innerdiv>
                    {followcheck&&<>
@@ -131,7 +135,7 @@ export default function Noticemenu(props){
                         
                     </Innerdiv>}
                     </>}
-                    <Innerdiv onClick={()=>{usermove()}}>
+                    <Innerdiv onClick={()=>{noticeblockhandler(noticeid)}}>
                         게시글차단
                         
                     </Innerdiv>

@@ -363,7 +363,7 @@ const simpleprofile =(e)=>{
                      username={loginuser.userinfo?loginuser.userinfo["username"]:"nologin"}
                      nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:"nologin"}
                      noticeuser={post.username}
-                     
+                     noticeid={post.num}
                      />}
                 
                     
