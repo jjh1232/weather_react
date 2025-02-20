@@ -6,6 +6,8 @@ import { useMutation, useQueries } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import Noticeblockmodal from "./Menumodal/Noticeblockmodal";
+import Noticedeclmodal from "./Menumodal/Noticedeclmodal";
 const Wrapper=styled.div`
     position: absolute;
     right: 0px;
@@ -19,22 +21,14 @@ const Innerdiv=styled.div`
     border: 1px solid black;
     
 `
-const DeclairCss=styled.div`
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    left:50%;
-    top:50%;
-    margin-left: -600px;
-    background-color: blue;
 
-`
+
 export default function Noticemenu(props){
     const {updatemethod,deletemethod,isowner,username,nickname,noticeuser,noticeid}=props;
     const navigate=useNavigate();
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
-    
+    const [isnoticeblockform,setIsnoticeblockform]=useState(false)
    const [followcheck,setFollowcheck]=useState();
 
      /*대체안되는이유를모르겠네...
@@ -135,7 +129,7 @@ export default function Noticemenu(props){
                         
                     </Innerdiv>}
                     </>}
-                    <Innerdiv onClick={()=>{noticeblockhandler(noticeid)}}>
+                    <Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
                         게시글차단
                         
                     </Innerdiv>
@@ -143,10 +137,8 @@ export default function Noticemenu(props){
                         게시글신고
                         
                     </Innerdiv>
-                    {isdeclationform&&<DeclairCss>
-                        게시글닫기
-                    게시글신고양식
-                    </DeclairCss>}
+                    {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform}/> }
+                    {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform}/>}
         </Wrapper>
     )
 }
