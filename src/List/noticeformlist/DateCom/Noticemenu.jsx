@@ -137,8 +137,8 @@ export default function Noticemenu(props){
                         게시글신고
                         
                     </Innerdiv>
-                    {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform}/> }
-                    {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform}/>}
+                    {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid}/> }
+                    {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform} noticeid={noticeid}/>}
         </Wrapper>
     )
 }
