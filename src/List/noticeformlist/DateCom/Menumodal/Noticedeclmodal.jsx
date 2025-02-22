@@ -1,6 +1,8 @@
 
 import { useState } from "react";
 import styled from "styled-components";
+import CreateAxios from "../../../../customhook/CreateAxios";
+import { useMutation } from "@tanstack/react-query";
 
 
 const Modalout=styled.div`
@@ -95,8 +97,9 @@ top: 30px;
   
 `
 export default function Noticedeclmodal(props){
-    const {ismodal}=props;
+    const {ismodal,noticeid}=props;
     const [checklist,setChecklist]=useState([]);
+    const axiosinstance=CreateAxios();
     const blocklist={
         spam:"스팸및불법광고게시글",
         discomfort:"불쾌감을주는게시글",
@@ -108,6 +111,17 @@ export default function Noticedeclmodal(props){
     const checkhandler=(ischecked,key)=>{
 
         ischecked?setChecklist((prev)=>[...prev,key]) :setChecklist(checklist.filter((el)=>el !==key))
+    }
+    const submitmutation=useMutation({
+      mutationFn:()=>{
+        axiosinstance.post("/noticedecle",{
+          noticeid:noticeid,
+          reason:checklist
+        })
+      }
+    })
+    const submithandler=()=>{
+      submitmutation.mutate();
     }
     return (
         <Modalout>
@@ -126,7 +140,7 @@ export default function Noticedeclmodal(props){
                 )
                })}
             </CheckboxCss>
-          <Submitcss>신고하기</Submitcss>
+          <Submitcss onClick={submithandler}>신고하기</Submitcss>
             </Modalin>
         </Modalout>
     )
