@@ -175,6 +175,8 @@ export default function noticemanage(){
                     댓글수</Thcss>
                     <Thcss>
                     이미지수</Thcss>
+                    <Thcss>
+                    신고수</Thcss>
                     <Thcss>게시글관리</Thcss>
                     
 

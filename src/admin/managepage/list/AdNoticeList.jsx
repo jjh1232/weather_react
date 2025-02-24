@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faImages} from "@fortawesome/free-solid-svg-icons"
 import {faComment} from "@fortawesome/free-regular-svg-icons"
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import AdminDeclesdata from "../../../customhook/Admintools/AdminDeclesdata";
 const Button=styled.button`
 position: relative;
 display: inline-block;
@@ -37,6 +39,7 @@ export default  function AdNoticeList(props) {
     const navigate=useNavigate();
     const [isupdate,setIsupdate]=useState();
     const [isimagebook,setIsimagebook]=useState(false);
+    const [isdecledata,setIsdecledata]=useState(false);
     const commentsearch=(noticenum)=>{
         navigate(`/admin/comment?page=1&option=noticenum&keyword=${noticenum}`)
     }
@@ -53,6 +56,9 @@ export default  function AdNoticeList(props) {
     const imagebookon=()=>{
       
         setIsimagebook(!isimagebook)
+    }
+    const declehandler=()=>{
+        setIsdecledata(!isdecledata)
     }
 
         return (<>
@@ -75,7 +81,7 @@ export default  function AdNoticeList(props) {
                             <Td style={{width:"13%",wordBreak:"break-all"}}>{data.username} </Td>
                             <Td style={{width:"8%",wordBreak:"break-all"}}>{data.nickname} </Td>
                            
-                            <Td style={{width:"45%",textOverflow:"ellipsis"}} onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
+                            <Td style={{width:"40%",textOverflow:"ellipsis"}} onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
                            
                             
                             <Td style={{width:"11%"}}>{data.red}</Td>
@@ -95,12 +101,17 @@ export default  function AdNoticeList(props) {
                                         />
                                 }
                             </Td>
-
+                            <Td style={{width:"4%",textAlign:"center"}}>{data.declaircount}<br/>
+                            <FontAwesomeIcon icon={faMagnifyingGlass}  style={{cursor:"pointer"}} onClick={()=>{
+                                declehandler()
+                            }}/>
+                                 </Td>
+                           
                             <Td >
                             <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>수정</Button>
                             <Button backcolor="red" onClick={()=>{deletes(data.num)}}>삭제</Button>
                             </Td>
                 </Tr>
-                                    
+                                    {isdecledata&&<AdminDeclesdata noticeid={data.num}/>}
                 </> )
 }
