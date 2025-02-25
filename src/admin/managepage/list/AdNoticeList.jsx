@@ -112,6 +112,6 @@ export default  function AdNoticeList(props) {
                             <Button backcolor="red" onClick={()=>{deletes(data.num)}}>삭제</Button>
                             </Td>
                 </Tr>
-                                    {isdecledata&&<AdminDeclesdata noticeid={data.num}/>}
+                                    {isdecledata&&<AdminDeclesdata noticeid={data.num} isdecles={setIsdecledata}/>}
                 </> )
 }
