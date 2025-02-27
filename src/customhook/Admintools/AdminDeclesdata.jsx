@@ -64,7 +64,7 @@ display: inline-block;
 const DecleTable=styled.table`
     border: 1px solid black;
     width: 700px;
-    height:250px;
+    max-height:250px;
 `
 const Decleth=styled.thead`
     width: 100%;
@@ -79,6 +79,26 @@ const DecleList=styled.td`
    
     border:1px solid gray;
     height: 9.2%;
+`
+const Headers=styled.div`
+display: flex;
+border: 1px solid green;
+`
+const Title=styled.div`
+    
+    width: 60%;
+    text-align: right;
+    font-size:20px;
+    
+`
+const Count=styled.div`
+       
+       width: 40%;
+       text-align: right;
+       color: gray;
+       font-size: 15px;
+       padding-top: 10px;
+       padding-right: 5px;
 `
 export default function AdminDeclesdata(props){
 const {noticeid,isdecles}=props;
@@ -129,7 +149,12 @@ const {noticeid,isdecles}=props;
         <Modalout>
             <Exitbutton onClick={()=>{isdecles(false)}}/>
             <ModalIn>
-            엘리{data.totalElements}
+                {data.totalElements!==0?<> 
+                <Headers>
+                    <Title>  게시글신고사유  </Title>
+              
+              <Count> 총신고수:{data.totalElements}</Count> 
+                </Headers>
             {data&&<DecleTable>
                 <Decleth>
                     <Decletd>글번호</Decletd>
@@ -158,7 +183,12 @@ const {noticeid,isdecles}=props;
             })}
             </DecleTable>}
             {data.totalPages}
-            <SimplePagenation setcurrent={setCurrentpage} currentpage={currentpage} totalpage={data.totalPages}/>
+            <SimplePagenation setcurrent={setCurrentpage} currentpage={currentpage} totalpage={data.totalPages}/></>:
+                <>
+              데이터가없습니다!
+           
+            </>
+                }
             </ModalIn>
         </Modalout>
     )
