@@ -108,10 +108,20 @@ export default function Noticedeclmodal(props){
         baduser:"올바르지않은유저의게시글",
         etc:"기타"
     }
-    const checkhandler=(ischecked,key)=>{
-
+    const checkhandler=(e,ischecked,key)=>{
+      if(!ischecked){
+        setChecklist(checklist.filter((el)=>el !==key))
+      }
+      else{
+      if(checklist.length>2){
+        alert("최대3개까지만 선택가능합니다")
+        setChecklist(checklist.filter((el)=>el !==key))
+        e.target.checked=false
+      }else{
         ischecked?setChecklist((prev)=>[...prev,key]) :setChecklist(checklist.filter((el)=>el !==key))
+      }
     }
+      }
     const submitmutation=useMutation({
       mutationFn:()=>{
         axiosinstance.post("/noticedecle",{
@@ -127,13 +137,13 @@ export default function Noticedeclmodal(props){
         <Modalout>
             <Exitbutton onClick={()=>{ismodal(false)}}></Exitbutton>
             <Modalin>
-            게시글을 신고하는 사유를 입력해 주십시요
+            게시글을 신고하는 사유를 입력해 주십시요(최대3개까지 입력가능합니다)
             <CheckboxCss>
               
                {Object.entries(blocklist).map(([key,value],index)=>{
                 return (<Checkdiv>
                 <Checklabel key={index}>
-                    <Checklist type="checkbox" onChange={(e)=>{checkhandler(e.target.checked,key)}}/>
+                    <Checklist type="checkbox" onChange={(e)=>{checkhandler(e,e.target.checked,key)}}/>
                     {value}
                     </Checklabel>
                     </Checkdiv>

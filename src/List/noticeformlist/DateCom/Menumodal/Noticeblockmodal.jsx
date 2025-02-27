@@ -114,12 +114,23 @@ export default function Noticeblockmodal(props){
     }
     //맵이 더좋다는데 맵이생성이안됨...나왔댓는디
 
-    const checkedhandler=(key,isChecked)=>{
+    const checkedhandler=(e,key,isChecked)=>{
+        if(!isChecked){
+            setChecklist(checklist.filter((el)=>el !==key));
+          }
+          else{
+       if(checklist.length>2){
+            alert("최대3개까지만 선택가능합니다")
+            setChecklist(checklist.filter((el)=>el !==key))
+             e.target.checked=false
+              }else{     
         if(isChecked){
             setChecklist((prev)=>[...prev,key]);
         }else if(!isChecked){
             setChecklist(checklist.filter((el)=>el !==key));
         }
+    }
+    }
     }
     const submitmutation=useMutation({
         mutationFn:()=>{
@@ -136,14 +147,14 @@ export default function Noticeblockmodal(props){
         <Modalout>
             <Exitbutton onClick={()=>{ismodal(false)}}></Exitbutton>
             <Modalin>
-            게시글을 차단하는 이유를 작성해 주십시오(중복작성가능)
+            게시글을 차단하는 이유를 작성해 주십시오(최대3개입력가능)
             <CheckboxCss>
               
                {Object.entries(blocklist).map(([key,value],index)=>{
                 return (
                 <Checkdiv>
                 <Checklabel key={index}>
-                    <Checklist type="checkbox" onChange={(e)=>{checkedhandler(key,e.target.checked)}}/>
+                    <Checklist type="checkbox" onChange={(e)=>{checkedhandler(e,key,e.target.checked)}}/>
                     {value}
                     </Checklabel>
                     </Checkdiv>
