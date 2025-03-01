@@ -29,22 +29,45 @@ export default function Noticemenu(props){
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
     const [isnoticeblockform,setIsnoticeblockform]=useState(false)
-   const [followcheck,setFollowcheck]=useState();
+   //const [followcheck,setFollowcheck]=useState();
 
-     /*대체안되는이유를모르겠네...
-    const {followcheck}=useQuery({
+    //많이바뀔꺼같아서 따로하긴하는데 동시에하는거랑 뭐가더 비용적으로 좋은지 모르겠음
+    //한번에 데이터가져올경우 변경시 다른데이터까지 다시 가져옴
+    //따로할경우 백과 연결이 잦아져서 기본적으로 비효율적이지만 변경시 좀더효율적이라보임    
+    const {data : followcheck,isLoading,error}=useQuery({
         queryKey:["followch"],
-        queryFn:()=>{
-            let res = axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
+        queryFn:async ()=>{
+            let res = await axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
            console.log("유즈쿼리실행중"+res.data)
           
            return res.data;
         }
     } 
     )
-     */
+    //블록여부
+    const {data : blockcheck}=useQuery({
+        queryKey:["blockcheck"],
+        queryFn:async ()=>{
+            let res = await axiosinstance.get(`/noticeblockcheck?noticeid=${noticeid}`)
+           console.log("유즈쿼리실행중"+res.data)
+          
+           return res.data;
+        }
+    } 
+    )
+     //신고여부
+     const {data : declecheck}=useQuery({
+        queryKey:["declecheck"],
+        queryFn:async ()=>{
+            let res = await axiosinstance.get(`/noticedelclecheck?noticeid=${noticeid}`)
+           console.log("유즈쿼리실행중"+res.data)
+          
+           return res.data;
+        }
+    } 
+    )
     console.log("스크립트코드에선"+followcheck)
-    
+    /*
     const followchecks=()=>{
         axiosinstance.get(`/followcheck?friendname=${noticeuser}`).then((res)=>{setFollowcheck(res.data)})
        }
@@ -52,13 +75,23 @@ export default function Noticemenu(props){
        useEffect(()=>{
         followchecks();
        },[])
-
+*/
   
     const userfollow= useMutation({
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
+        ,onSuccess:()=>{
+            queryClient.invalidateQueries({queryKey:[`followch`]})
+        },onError:()=>{
+            alert("잠시후시도해주세요")
+        }
     })
     const deletefollow= useMutation({
         mutationFn:()=> axiosinstance.delete(`/followdelete/${noticeuser}`)
+        ,onSuccess:()=>{//캐시업데이트
+            queryClient.invalidateQueries({queryKey:[`followch`]})
+        },onError:()=>{
+            alert("잠시후시도해주세요")
+        }
     })
 
     const usermove=()=>{
@@ -67,12 +100,12 @@ export default function Noticemenu(props){
    
     const followhandler=()=>{
         userfollow.mutate();
-        setFollowcheck(true)
+      //  setFollowcheck(true)
         alert("유저를팔로우했습니다")
     }
     const unfollowhandler=()=>{
         deletefollow.mutate();
-        setFollowcheck(false)
+        //setFollowcheck(false)
         alert("유저를팔로우해제했습니다")
     }
  
@@ -94,14 +127,7 @@ export default function Noticemenu(props){
     //게시글 신고
     //신고양식모달로 받는게맞는듯?
     const [isdeclationform,setIsdeclationform]=useState(false);
-    const declation=useMutation({
-        mutationFn:()=>{
-            
-        }
-    })
-    const declationhandler=()=>{
-
-    }
+   
     return (
         <Wrapper>
             {isowner&&<>
@@ -116,10 +142,10 @@ export default function Noticemenu(props){
             </>
             }
                 <Innerdiv onClick={()=>{usermove()}}>
-                        유저페이지이동@{nickname} 
+                      
                         
                     </Innerdiv>
-                   {followcheck&&<>
+                  
                     {followcheck?<Innerdiv onClick={()=>{unfollowhandler()}}>
                         언팔로우@{nickname}
                         
@@ -128,13 +154,13 @@ export default function Noticemenu(props){
                         팔로우@{nickname}
                         
                     </Innerdiv>}
-                    </>}
+                   
                     <Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
-                        게시글차단
+                        게시글차단 {blockcheck}
                         
                     </Innerdiv>
                     <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
-                        게시글신고
+                        게시글신고{declecheck}
                         
                     </Innerdiv>
                     {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid}/> }
