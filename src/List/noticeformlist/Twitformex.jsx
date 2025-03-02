@@ -9,6 +9,8 @@ import { useInView } from "react-intersection-observer";
 import Noticeformbutton from "../../Noticepage/NoticePattern/Noticeformbutton";
 import Noticecreate from "../../Noticepage/Noticecreate"
 import Twitnoticecreate from "./Twitnoticecreate";
+import CreateAxios from "../../customhook/CreateAxios";
+import AuthCheck from "../../customhook/authCheck";
 
 
 const Wrapper=styled.div`
@@ -41,7 +43,7 @@ export default function Twitformex(props){
     //const {posts,onClickItem,noticecreate,querydatas
    
    
-   
+        const axiosinstance=CreateAxios();
 
         let [query,setQuery]=useSearchParams({
             form:"twitform",
@@ -86,16 +88,20 @@ export default function Twitformex(props){
 
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
+        if(AuthCheck){
+            loginnoticedata()
+            
+        }else{
+          
+           
         noticedata()
-        
+        }
     }
        ,[page,location])
 
        //인뷰를따로뺴야할거같은데 
        useEffect(()=>{
-        console.log("트윗폼유즈이펙트시작")
-        console.log(page)
-        console.log(totalpage)
+        
         
 
         if(page<=totalpage&&!isloading&&inView){
@@ -166,7 +172,59 @@ export default function Twitformex(props){
         
  
       }
-
+      //로그인시 일단따로
+      const loginnoticedata=()=>{
+        console.log(query.get("keywords"))
+       setIsloading(true)
+        axiosinstance.get(`/noticeget`,{
+          params:{
+          option:query.get("selectoptions"),
+          keyword:query.get("keywords"),
+          page:page
+          }
+        }).then((res)=>{
+          
+            console.log(res)
+           
+            
+            const newcontent=res.data.content;
+          
+            console.log("뉴");
+            if(res.data.content.length===0){
+                console.log("자료가없어요!")
+            }
+            else{
+                if(notice===""){
+                    console.log("기존자료없음")
+                    
+                    let arr=totalpageget(res.data.totalPages).length-1
+                    setTotalpage(arr);
+                    setNotice(res.data.content)
+                    if(page<=arr){
+                        
+                        console.log("토탈페이지11:"+arr)
+                        console.log("토탈페이지111:"+totalpage)
+                    }
+                 
+                }else{
+                    ///...은배열이개별원소가된다 .객체의경우나머지를의미하게됨
+                    console.log("포스트추가")
+                    //전개연산자로재활당을해야하는데어떻게하지..
+                setNotice([...notice,...res.data.content])
+                let arr=totalpageget(res.data.totalPages).length-1
+                
+                setTotalpage(arr);
+                
+                }
+            }
+           
+          
+            
+            setIsloading(false)
+        })
+        
+ 
+      }
       const totalpageget=(totalpage)=>{
 
         const arr=[]
@@ -176,16 +234,7 @@ export default function Twitformex(props){
   
         return arr;
       }
-      /*
-useEffect(()=>{
-        console.log("트윗폼유즈이펙트")
-        
-    observer.observe(scrollref.current)
-    
-   // setIsloading(true)
-    //프롭스가전달안되서 변경시 적용되야하는데어떤기준으로할지고민
-   },[location])
-*/
+
    
        //검색옵션 =========================================
        //서치툴로 다해결하고싶은데 props일일히 주고 옮기기도귀찮고 그냥여기서 검색메서드넘기자

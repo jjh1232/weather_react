@@ -154,15 +154,23 @@ export default function Noticemenu(props){
                         팔로우@{nickname}
                         
                     </Innerdiv>}
+                   {blockcheck? 
+                   <Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
+                   게시글차단해제 
                    
-                    <Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
-                        게시글차단 {blockcheck}
+               </Innerdiv>
+                   :<Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
+                        게시글차단 
                         
-                    </Innerdiv>
-                    <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
-                        게시글신고{declecheck}
+                    </Innerdiv>}
+                    {declecheck? <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
+                        게시글신고해제
                         
-                    </Innerdiv>
+                    </Innerdiv>: <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
+                        게시글신고
+                        
+                    </Innerdiv>}
+                   
                     {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid}/> }
                     {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform} noticeid={noticeid}/>}
         </Wrapper>

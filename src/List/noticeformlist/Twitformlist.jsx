@@ -349,7 +349,7 @@ const simpleprofile =(e)=>{
         }}>{post.username}</Username>
      <Timecss>
      <Datefor inputdate={post.red}/>
-     </Timecss>
+     </Timecss> {post.isblock?"true":"false"}
                     
                     <Menucss ref={menuref}>
                     <FontAwesomeIcon 
@@ -360,8 +360,8 @@ const simpleprofile =(e)=>{
                    
                     {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
                      isowner={loginuser.userinfo?post.username===loginuser.userinfo["username"]?true:false:false}
-                     username={loginuser.userinfo?loginuser.userinfo["username"]:"nologin"}
-                     nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:"nologin"}
+                     username={loginuser.userinfo?loginuser.userinfo["username"]:""}
+                     nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:""}
                      noticeuser={post.username}
                      noticeid={post.num}
                      />}
