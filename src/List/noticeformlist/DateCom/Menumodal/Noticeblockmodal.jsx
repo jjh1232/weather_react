@@ -98,7 +98,7 @@ top: 30px;
 
 
 export default function Noticeblockmodal(props){
-    const {ismodal,noticeid}=props
+    const {ismodal,noticeid,setisblock}=props
     const [checklist,setChecklist]=useState([]);
     const axiosinstance=CreateAxios();
     const queryclient=useQueryClient();
@@ -142,6 +142,7 @@ export default function Noticeblockmodal(props){
             queryclient.invalidateQueries({queryKey:["blockcheck"]})
             alert("게시글을차단하였습니다!")
             ismodal(false)
+            setisblock(true)
           }
     })
     const submithandler=()=>{

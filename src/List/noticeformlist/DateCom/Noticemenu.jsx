@@ -24,7 +24,7 @@ const Innerdiv=styled.div`
 
 
 export default function Noticemenu(props){
-    const {updatemethod,deletemethod,isowner,username,nickname,noticeuser,noticeid}=props;
+    const {updatemethod,deletemethod,isowner,username,nickname,noticeuser,noticeid,setisblock}=props;
     const navigate=useNavigate();
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
@@ -137,6 +137,7 @@ export default function Noticemenu(props){
         ,onSuccess:()=>{//캐시업데이트
             queryClient.invalidateQueries({queryKey:[`blockcheck`]})
             alert("게시글차단을취소했습니다")
+            setisblock(false)
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
@@ -205,7 +206,7 @@ export default function Noticemenu(props){
                         
                     </Innerdiv>}
                    
-                    {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid}/> }
+                    {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid} setisblock={setisblock}/> }
                     {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform} noticeid={noticeid}/>}
         </Wrapper>
     )

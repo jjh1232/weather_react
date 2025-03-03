@@ -106,11 +106,13 @@ export default function Twitformlist(props){
     const [isupdate,setIsupdate]=useState(false)
     const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
+    const [isblock,setIsblock]=useState(post.isblock)
     const menuref=useRef();
      const [ishover,setIshover]=useState(false);
     const [onprepage,setOnprepage]=useState(false);
 
-    useEffect(()=>{
+      
+
         if(isreple){
             console.log("트루")
             showreply();
@@ -119,7 +121,7 @@ export default function Twitformlist(props){
 
         }
 
-    },[isreple])
+    
 
     useEffect(()=>{
       if(loginuser.userinfo){
@@ -370,6 +372,7 @@ const simpleprofile =(e)=>{
                      nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:""}
                      noticeuser={post.username}
                      noticeid={post.num}
+                     setisblock={setIsblock}
                      />}
                 
                     
@@ -402,7 +405,7 @@ const simpleprofile =(e)=>{
             {
         //게시글 헤더끝 메인시작=============================================
         }
-         {post.isblock?
+         {isblock?
             <Blockcss>
             <img src={process.env.PUBLIC_URL+"/front/Subimages/noticeblock.png"}
               style={{objectFit:"cover", width:"100%",height:"100%"}}
