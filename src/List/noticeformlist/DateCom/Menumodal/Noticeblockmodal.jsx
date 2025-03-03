@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import CreateAxios from "../../../../customhook/CreateAxios";
@@ -101,7 +101,7 @@ export default function Noticeblockmodal(props){
     const {ismodal,noticeid}=props
     const [checklist,setChecklist]=useState([]);
     const axiosinstance=CreateAxios();
-
+    const queryclient=useQueryClient();
     const blocklist={
         spam:"스팸및광고게시글",
         discomfort:"불쾌감을주는게시글",
@@ -138,7 +138,11 @@ export default function Noticeblockmodal(props){
                 noticeid:noticeid,
                 reason:checklist
             })
-        }
+        },onSuccess:()=>{
+            queryclient.invalidateQueries({queryKey:["blockcheck"]})
+            alert("게시글을차단하였습니다!")
+            ismodal(false)
+          }
     })
     const submithandler=()=>{
         submitmutation.mutate();

@@ -128,6 +128,40 @@ export default function Noticemenu(props){
     //신고양식모달로 받는게맞는듯?
     const [isdeclationform,setIsdeclationform]=useState(false);
    
+    //게시글 블록취소 
+    const cancelblock=useMutation({
+        mutationFn:(noticeid)=>{
+            axiosinstance.delete(`/noticeblock/delete/${noticeid}`)
+          
+        }
+        ,onSuccess:()=>{//캐시업데이트
+            queryClient.invalidateQueries({queryKey:[`blockcheck`]})
+            alert("게시글차단을취소했습니다")
+        },onError:()=>{
+            alert("잠시후시도해주세요")
+        }
+    })
+    const blockcancel=(noticeid)=>{
+        if(confirm("정말로차단을취소하시겠습니까?")){
+            cancelblock.mutate(noticeid)
+        }
+    }
+    //게시글신고취소
+    const decleblock=useMutation({
+        mutationFn:(noticeid)=>{
+            axiosinstance.delete(`/noticedecle/delete/${noticeid}`)
+        }  ,onSuccess:()=>{//캐시업데이트
+            queryClient.invalidateQueries({queryKey:[`declecheck`]})
+            alert("게시글신고를취소했습니다")
+        },onError:()=>{
+            alert("잠시후시도해주세요")
+        }
+    })
+    const declecancel=(noticeid)=>{
+        if(confirm("정말로신고를취소하시겠습니까?")){
+            decleblock.mutate(noticeid)
+        }
+    }
     return (
         <Wrapper>
             {isowner&&<>
@@ -155,7 +189,7 @@ export default function Noticemenu(props){
                         
                     </Innerdiv>}
                    {blockcheck? 
-                   <Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
+                   <Innerdiv onClick={()=>{blockcancel(noticeid)}}>
                    게시글차단해제 
                    
                </Innerdiv>
@@ -163,7 +197,7 @@ export default function Noticemenu(props){
                         게시글차단 
                         
                     </Innerdiv>}
-                    {declecheck? <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
+                    {declecheck? <Innerdiv onClick={()=>{declecancel(noticeid)}}>
                         게시글신고해제
                         
                     </Innerdiv>: <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>

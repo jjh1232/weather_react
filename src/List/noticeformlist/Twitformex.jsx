@@ -85,14 +85,15 @@ export default function Twitformex(props){
        
 
        const [iscreate,setIscreate]=useState(false)
-
+       let islogin=AuthCheck();
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
-        if(AuthCheck){
+        if(islogin){
+            console.log("로그인상태")
             loginnoticedata()
             
         }else{
-          
+            console.log("비로그인상태")
            
         noticedata()
         }

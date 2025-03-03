@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import CreateAxios from "../../../../customhook/CreateAxios";
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 
 
 const Modalout=styled.div`
@@ -100,6 +100,7 @@ export default function Noticedeclmodal(props){
     const {ismodal,noticeid}=props;
     const [checklist,setChecklist]=useState([]);
     const axiosinstance=CreateAxios();
+    const queryclient=useQueryClient();
     const blocklist={
         spam:"스팸및불법광고게시글",
         discomfort:"불쾌감을주는게시글",
@@ -128,6 +129,11 @@ export default function Noticedeclmodal(props){
           noticeid:noticeid,
           reason:checklist
         })
+      }
+      ,onSuccess:()=>{
+        queryclient.invalidateQueries({queryKey:["declecheck"]})
+        alert("게시글을신고하였습니다!")
+        ismodal(false)
       }
     })
     const submithandler=()=>{
