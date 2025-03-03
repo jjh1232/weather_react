@@ -85,6 +85,12 @@ border: 1px solid blue;
   text-overflow: ellipsis;
   overflow: hidden;
 `
+const Blockcss=styled.div`
+  border: 1px solid blue;
+  height:500px;
+ 
+  overflow: hidden;
+`
 const Noticefooter=styled.div`
   
 `
@@ -349,7 +355,7 @@ const simpleprofile =(e)=>{
         }}>{post.username}</Username>
      <Timecss>
      <Datefor inputdate={post.red}/>
-     </Timecss> {post.isblock?"true":"false"}
+     </Timecss>
                     
                     <Menucss ref={menuref}>
                     <FontAwesomeIcon 
@@ -372,6 +378,7 @@ const simpleprofile =(e)=>{
                     
             
      </Nameheader>
+
      {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
       mousexy={xy} setprepage={setOnprepage}
@@ -382,8 +389,7 @@ const simpleprofile =(e)=>{
      //===============================유저프로필종료================
      }
    
-          
-          
+         
             <TitleCss>
             <Title>{post.title}</Title> 
             
@@ -396,11 +402,22 @@ const simpleprofile =(e)=>{
             {
         //게시글 헤더끝 메인시작=============================================
         }
+         {post.isblock?
+            <Blockcss>
+            <img src={process.env.PUBLIC_URL+"/front/Subimages/noticeblock.png"}
+              style={{objectFit:"cover", width:"100%",height:"100%"}}
+            ></img>
+            </Blockcss>
+          
+          
+            :<>
             {<Textarea dangerouslySetInnerHTML={{__html:post.text}}></Textarea>}
 
             {
         //게시글메인끝 게시글푸터 =============================================
         }
+
+        </>}
             <Noticefooter>
             <button onClick={()=>{
                 setIsreple(!isreple)
