@@ -81,6 +81,7 @@ export default function Noticemenu(props){
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
         ,onSuccess:()=>{
             queryClient.invalidateQueries({queryKey:[`followch`]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`]})
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
@@ -89,6 +90,7 @@ export default function Noticemenu(props){
         mutationFn:()=> axiosinstance.delete(`/followdelete/${noticeuser}`)
         ,onSuccess:()=>{//캐시업데이트
             queryClient.invalidateQueries({queryKey:[`followch`]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`]})
         },onError:()=>{
             alert("잠시후시도해주세요")
         }

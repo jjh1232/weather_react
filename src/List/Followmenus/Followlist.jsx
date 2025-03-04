@@ -5,18 +5,19 @@ import Usermodal from "../../UI/Modals/Usermodal";
 import { useRef } from "react";
 import { defaultProps } from "react-quill";
 import AuthCheck from "../../customhook/authCheck";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function Followlist(props){
 
     const axiosinstance=CreateAxios();
 
-    const [followlist,setFollowlist]=useState([]);
+  //  const [followlist,setFollowlist]=useState([]);
     
     //로그인안할시 요청안보내게
     const islogin=AuthCheck();
     const [searchkeyword,Setsearchkeyword]=useState("");
 
-    
+    const queryclient=useQueryClient();
      //회원정보 모달 누르기 
      const [ismodal,setIsmodal]=useState(false)
      const modalref=useRef();
@@ -50,43 +51,54 @@ function Followlist(props){
 
 
 
-    useEffect(()=>{
-        if(!islogin){
-            console.log("로그인후이용할수있습니다")
-        }else{
-                    
-      listget();
-                }
-    },[])
-  
-    const listget=()=>{
+       const {data:followlist,isLoading,error}=useQuery({
+        queryKey:["followlistdata"],
+        queryFn: async()=>{
+            const res= await axiosinstance.get("/followlist")
+            return res.data
+        },
+        
+        enabled:islogin
+        
+        
+       })
+       
+       const favoritemutation=useMutation({
+        mutationFn:(friendname)=>{
+            axiosinstance.get(`/favoritefollow/${friendname}`)
+        },onSuccess:()=>{
+            alert("성공적으로 즐겨찾기에추가했습니다")
+            queryclient.invalidateQueries("followlistdata")
 
-        axiosinstance.get("/followlist").then((res)=>{
-            console.log(res.data)
-            setFollowlist(res.data)
-        })
-    }
+        }
+       })
     const favoritefollow=(friendname)=>{
-        console.log("즐겨찾기실행")
-        axiosinstance.get(`/favoritefollow/${friendname}`)
-        .then((res)=>{
-            console.log("즐겨찾기성공")
-            listget();
-        }).catch((err)=>{
-            console.log("즐겨찾기해제")
-            
-        })
+       favoritemutation.mutate(friendname)
 
     }
+    const unfavoriteunfollow=useMutation({
+        mutationFn:(friendname)=>{
+            axiosinstance.get(`/favoriteunfollow/${friendname}`)
+        },onSuccess:()=>{
+          const olddata= queryclient.getQueriesData(["followlistdata"])
+            console.log("올드데이터"+olddata)
+          Object.entries(olddata[0][1]).map(([key,data])=>{
+            console.log("엔트리키"+key)
+            console.log("엔트리맵"+data)
+          })
+          const newdata=olddata.map((data,key)=>{
+            //id값은 안쓰고 유저네임으로하니까
+            
+            data.username===friendname?{...data,favorite:false} :data
+          })
+          console.log("새로운데이터:"+newdata)
+          queryclient.setQueriesData(["followlistdata"],newdata)
+            alert("즐겨찾기를해제하였습니다")
+            
+        }
+    })
     const favoriteunfollow=(friendname)=>{
-        console.log("즐겨찾기해제")
-        axiosinstance.get(`/favoriteunfollow/${friendname}`)
-        .then((res)=>{
-            console.log("즐겨찾기해제성공")
-            listget();
-        }).catch((err)=>{
-            console.log("즐겨찾기해제실패")
-        })
+       unfavoriteunfollow.mutate(friendname)
     }
 
     const unfollow =(username)=>{
@@ -111,7 +123,7 @@ function Followlist(props){
     return (
         <>
         <div style={{width:"100%",height:"100%", overflow:"auto"}}>
-        목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/>
+        목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> {islogin?"true":"fase"}
                     <br/>
         {followlist&&followlist.filter((val,index)=>{
             //필터로 키워드에 알맞은값을 리턴한다 여러개값일때테스트필요한듯
