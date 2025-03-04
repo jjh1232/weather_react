@@ -114,10 +114,10 @@ export default function Twitformlist(props){
       
 
         if(isreple){
-            console.log("트루")
+            
             showreply();
         }else{
-            console.log("폴스")
+           
 
         }
 
@@ -130,7 +130,7 @@ export default function Twitformlist(props){
     },[])
     useEffect(()=>{
       const noticemenuoutside=(e)=>{
-        console.log("마우스다운이벤트")
+       
         if(menuref.current && !menuref.current.contains(e.target)){
           setIsmenu(false);
         }

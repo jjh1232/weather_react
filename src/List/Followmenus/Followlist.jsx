@@ -38,8 +38,7 @@ function Followlist(props){
  
      const modalclose=(e)=>{
  
-        console.log("실행감지1"+modalref.current)
-        console.log("실행감지2"+e.target)
+       
         if(ismodal&&!modalref.current.contains(e.target)){
             console.log("모달열려있음")
             setIsmodal(false)
@@ -79,18 +78,21 @@ function Followlist(props){
     const unfavoriteunfollow=useMutation({
         mutationFn:(friendname)=>{
             axiosinstance.get(`/favoriteunfollow/${friendname}`)
-        },onSuccess:()=>{
+        },onSuccess:(data,friendname)=>{
           const olddata= queryclient.getQueriesData(["followlistdata"])
-            console.log("올드데이터"+olddata)
-          Object.entries(olddata[0][1]).map(([key,data])=>{
-            console.log("엔트리키"+key)
-            console.log("엔트리맵"+data)
-          })
-          const newdata=olddata.map((data,key)=>{
+         
+          
             //id값은 안쓰고 유저네임으로하니까
+         const newdata= olddata[0][1].map((data)=>{
+            console.log(data.username)
+            console.log(friendname)
+            //data.username===friendname?{...data,favorite:false} :data
+            if(data.username===friendname){
+                data.favorite=false
+            }
+           })
             
-            data.username===friendname?{...data,favorite:false} :data
-          })
+        
           console.log("새로운데이터:"+newdata)
           queryclient.setQueriesData(["followlistdata"],newdata)
             alert("즐겨찾기를해제하였습니다")
@@ -136,7 +138,7 @@ function Followlist(props){
                 return val
             }
         }) .map((data,key)=>{          
-          console.log(data)
+          
             return(
                 <div key={key}>
                 <div onClick={(e)=>{
