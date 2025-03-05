@@ -65,10 +65,18 @@ function Followlist(props){
        const favoritemutation=useMutation({
         mutationFn:(friendname)=>{
             axiosinstance.get(`/favoritefollow/${friendname}`)
-        },onSuccess:()=>{
-            alert("성공적으로 즐겨찾기에추가했습니다")
-            queryclient.invalidateQueries("followlistdata")
+        },onSuccess:(data,friendname)=>{
+            
+           //이건비효율 queryclient.invalidateQueries("followlistdata")
 
+           const olddata=queryclient.getQueriesData(["followlistdata"])
+           const newdata=olddata[0][1].map((data)=>{
+
+            return data.username===friendname?{...data,favorite:true}:data
+           })
+
+           queryclient.setQueriesData(["followlistdata"],newdata)
+           alert("성공적으로 즐겨찾기에추가했습니다")
         }
        })
     const favoritefollow=(friendname)=>{
@@ -84,16 +92,13 @@ function Followlist(props){
           
             //id값은 안쓰고 유저네임으로하니까
          const newdata= olddata[0][1].map((data)=>{
-            console.log(data.username)
-            console.log(friendname)
-            //data.username===friendname?{...data,favorite:false} :data
-            if(data.username===friendname){
-                data.favorite=false
-            }
-           })
+         
             
-        
-          console.log("새로운데이터:"+newdata)
+          return  data.username===friendname?{...data,favorite:false} :data
+         
+           })
+                  
+          
           queryclient.setQueriesData(["followlistdata"],newdata)
             alert("즐겨찾기를해제하였습니다")
             
@@ -103,17 +108,34 @@ function Followlist(props){
        unfavoriteunfollow.mutate(friendname)
     }
 
-    const unfollow =(username)=>{
-        console.log("언팔로우!실행")
-    
-        axiosinstance.delete(`/followdelete/${username}`)
-        .then((res)=>{
-            alert("팔로우삭제성공!")
-            listget();
+    //언팔로우뮤테이션
+    const unfollowmutation=useMutation({
+        mutationFn:(username)=>{
+            axiosinstance.delete(`/followdelete/${username}`)
+        },
+        onSuccess:(data,friendname)=>{
+
+            const olddata=queryclient.getQueriesData(["followlistdata"])
+            //삭제라 필터
+            const newdata= olddata[0][1].filter((data)=>{
+         
+            
+                return  data.username!==friendname
+
+                 })
+                      
+                 queryclient.setQueriesData(["followlistdata"],newdata)
+                  alert("팔로우를해제하였습니다")
+
+        },onError:()=>{
+            alert("잠시후실행해주세요")
+        }
+
         
-        }).catch((err)=>{
-            alert("팔로우삭제실패!")
-        })
+    })
+
+    const unfollow =(username)=>{
+       unfollowmutation.mutate(username)
     }
         //채팅방만들기 데이터전달
         const chatroomdata=(roomid)=>{
@@ -125,7 +147,7 @@ function Followlist(props){
     return (
         <>
         <div style={{width:"100%",height:"100%", overflow:"auto"}}>
-        목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> {islogin?"true":"fase"}
+        목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> 
                     <br/>
         {followlist&&followlist.filter((val,index)=>{
             //필터로 키워드에 알맞은값을 리턴한다 여러개값일때테스트필요한듯

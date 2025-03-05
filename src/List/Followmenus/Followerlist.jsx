@@ -3,6 +3,7 @@ import CreateAxios from "../../customhook/CreateAxios";
 import  {unfollow,following}  from "../../customhook/Followtools";
 import Usermodal from "../../UI/Modals/Usermodal";
 import { useRef } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function Followerlist(props){
 
@@ -10,8 +11,8 @@ function Followerlist(props){
 
 
     const axiosinstance=CreateAxios();
-
-    const [followerlist,setFollowerlist]=useState();
+    const queryclient=useQueryClient();
+    
     const [searchkeyword,Setsearchkeyword]=useState("");
 
      //회원정보 모달 누르기 
@@ -37,8 +38,7 @@ function Followerlist(props){
  
      const modalclose=(e)=>{
         e.preventDefault();
-        console.log("실행감지1"+modalref.current)
-        console.log("실행감지2"+e.target)
+       
         if(ismodal&&!modalref.current.contains(e.target)){
            console.log("모달열려있음")
            setIsmodal(false)
@@ -48,44 +48,60 @@ function Followerlist(props){
      }
  
 
-    useEffect(()=>{
-        followerget()
+   
+     const {data:followerlist,isLoading,error}=useQuery({
+        queryKey:["followerlist"],
+        queryFn:async ()=>{
+            const res=await axiosinstance.get("/followerlist")
+            
+            return res.data
+        },
+        
+     })
   
-    },[])
-    const followerget=()=>{
-        axiosinstance.get("/followerlist").then((res)=>{
-            console.log(res)
-            setFollowerlist(res.data)
-        }).catch((err)=>{
-            console.log("에러")
+     const onfollowmutation=useMutation({
+       
+        mutationFn:(username)=>{
+            axiosinstance.get("/follow?friendname="+username)
+        },onSuccess:(res,username)=>{
+            const olddata=queryclient.getQueryData(["followerlist"])
+            console.log("이전데이터"+olddata[0])
+            const newdata=olddata.map((data)=>{
+
+                return data.username===username?{...data,followcheck:true}:data
         })
-    }
+            queryclient.setQueriesData(["followerlist"],newdata)
+            alert("팔로우하였습니다")
+        },onError:()=>{
+            alert("에러!")
+        }
+     })
 
     const onfollow=(username)=>{
+      
+        onfollowmutation.mutate(username)
         
-        console.log("팔로잉실행!")
-       
-        axiosinstance.get("/follow?friendname="+username)
-        .then((res)=>{
-            alert("팔로우성공!")
-            followerget()
-        }).catch((err)=>{
-            alert("팔로우실패!")
-        })
-   
     }
 
-    const unfollow =(username)=>{
-        console.log("언팔로우!실행")
-    
-        axiosinstance.delete(`/followdelete/${username}`)
-        .then((res)=>{
-            alert("팔로우삭제성공!")
-            followerget()
-        
-        }).catch((err)=>{
-            alert("팔로우삭제실패!")
+    const unfollowmutation=useMutation({
+       
+        mutationFn:(username)=>{
+            axiosinstance.delete(`/followdelete/${username}`)
+        },onSuccess:(res,username)=>{
+            const olddata=queryclient.getQueryData(["followerlist"])
+            console.log("이전데이터"+olddata[0])
+            const newdata=olddata.map((data)=>{
+
+                return data.username===username?{...data,followcheck:false}:data
         })
+            queryclient.setQueriesData(["followerlist"],newdata)
+            alert("팔로우하였습니다")
+        },onError:()=>{
+            alert("에러!")
+        }
+     })
+    const unfollow =(username)=>{
+       unfollowmutation.mutate(username)
     }
 
      //채팅방만들기 데이터전달
@@ -142,7 +158,7 @@ function Followerlist(props){
                         
                         unfollow(data.username);
                     //unfoll(data.username)
-                }}>팔로우해제z</button>
+                }}>팔로우해제</button>
                     
                 :<button onClick={()=>{
                     //follow(data.username)

@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import CreateAxios from "../../customhook/CreateAxios";
 import Userdata from "../../UI/Modals/Userdata";
 import Usermodal from "../../UI/Modals/Usermodal";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function Favoritelist(props){
 
     const axiosinstance=CreateAxios();
-    const [favoritefollow,setFavoritefollow]=useState();
+    const queryclient=useQueryClient()
     const [searchkeyword,Setsearchkeyword]=useState("");
 
     //회원정보 모달 누르기 
@@ -23,7 +24,7 @@ function Favoritelist(props){
     
      useEffect(()=>{
         if(ismodal){
-        console.log("실행감지")
+      
         document.addEventListener("mousedown",modalclose)
          //리턴으로 이벤트 안지우면 계속실행됨
         return ()=>document.removeEventListener('mousedown',modalclose);
@@ -32,10 +33,9 @@ function Favoritelist(props){
  
      const modalclose=(e)=>{
         e.preventDefault();
-         console.log("실행감지1"+modalref.current)
-             console.log("실행감지2"+e.target)
+       
              if(ismodal&&!modalref.current.contains(e.target)){
-                console.log("모달열려있음")
+               
                 setIsmodal(false)
             }
  
@@ -44,31 +44,40 @@ function Favoritelist(props){
  
 
 
-    useEffect(()=>{
-        favoritefind()
+    
+     const {data:favoritefollow,isLoading,error}=useQuery({
+        queryKey:["favoritelistdata"],
+        queryFn:async ()=>{
+            const res = await axiosinstance.get("/favoritelist")
 
-    },[])
+            return res.data
+        }
+        
+     })
 
-    const favoritefind=()=>{
-        axiosinstance.get("/favoritelist")
-        .then((res)=>{
-            console.log(res)
-            setFavoritefollow(res.data)
-        })
-        .catch((err)=>{
-            console.log("에러")
-        })
-    }
+     const unfavoritemutation=useMutation({
+        mutationFn:(friendname)=>{
+            axiosinstance.get(`/favoriteunfollow/${friendname}`)
+        }
+        ,onSuccess:(res,friendname)=>{
+            const olddata=queryclient.getQueryData(["favoritelistdata"])
+            const newdata=olddata.filter((data)=>{
 
-     const unfavorite=(friendname)=>{
-        console.log("즐겨찾기해제")
-        axiosinstance.get(`/favoriteunfollow/${friendname}`)
-        .then((res)=>{
-            console.log("즐겨찾기해제성공")
-            favoritefind();
-        }).catch((err)=>{
-            console.log("즐겨찾기해제실패")
-        })
+                return data.username!==friendname
+            })
+           
+
+            queryclient.setQueriesData(["favoritelistdata"],newdata)
+            alert ("즐겨찾기에서제거하였습니다")
+
+        },onError:()=>{
+            alert ("잠시후다시실행해주세요")
+        }
+     })
+  
+
+     const unfavorite=(username)=>{
+        unfavoritemutation.mutate(username)
      }
 
       //채팅방만들기 데이터전달
