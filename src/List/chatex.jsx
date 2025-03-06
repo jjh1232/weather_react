@@ -113,7 +113,8 @@ function Chatex(props) {
                     console.log("챗데이터구조:" + JSON.stringify(chatdata))
 
                     const newchat = liveSection(res);
-                    //console.log("뉴챗:"+newchat)
+                    console.log("뉴챗:"+newchat)
+
                     setChatdata(newchat);
 
 
@@ -228,19 +229,27 @@ function Chatex(props) {
     }
     //받는챗은또다르게 세팅해야할듯
     const liveSection = (chat) => {
-        const beforchat = chatdata;
+       
+        console.log("단일채팅:"+chat.red)
         let monthDate = chat.red.substr(0, 10).replaceAll(".", "-")
         //왠진몰라도.으로들어옴;
-
-        if (Array.isArray(beforchat[monthDate])) {
-            console.log("해당날짜의객체 임")
-            beforchat[monthDate].push(chat)
-
-        } else {
-            console.log("해당날짜의객체가 없습니다")
-            beforchat[monthDate] = [chat]
-        }
-        return beforchat;
+       
+        console.log("수정후날짜:"+monthDate)
+        setChatdata(prev=>{
+            
+            const newMessagesdate={...prev}
+            console.log("이전:"+JSON.stringify(newMessagesdate))
+            if (!Array.isArray(prev[monthDate])) {
+                console.log("없는날짜라배열생성날짜이다")
+                
+                newMessagesdate[monthDate]=[];
+                
+             } 
+             newMessagesdate[monthDate]=[...newMessagesdate[monthDate],message] 
+             return newMessagesdate
+        })
+       
+       
 
 
         // Object.entries(chatdata).map(([date,chats])=>{}
