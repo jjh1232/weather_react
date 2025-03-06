@@ -37,12 +37,15 @@ function Chatroomlistitem(props){
     return (
         <div>
         <div onClick={()=>{movechatroom(chatroomdata)}}>
+        룸아이디:{chatroomdata.roomid}
+        <br/>
         이름:{chatroomdata.roomname} 
         <br/>
         유저목록:{chatroomdata.namelist.map((data,key)=>{
             
             return(
                 <>
+
                 {chatroomdata.namelist.length-1===key
                 ?<>{data.membernickname} </>
                 :<>{data.membernickname},</>}     

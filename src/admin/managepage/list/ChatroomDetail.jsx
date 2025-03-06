@@ -20,8 +20,9 @@ const ChatSetting=styled.div`
     display: relative;
     width: 1000px;
 
-    border:1px solid black
-`
+    border:1px solid black;
+    `
+    
 const ChatDatecss=styled.div`
    
 `
@@ -78,6 +79,8 @@ const Callendercss=styled.div`
 
 export default function ChatroomDetail(props){
 
+
+
     const [roomdata,setRoomdata]=useState();
     const {roomid}=useParams();
     let monthch;
@@ -133,7 +136,7 @@ export default function ChatroomDetail(props){
 
     return (
         <Wrapper>
-             
+            
             <AdminHeader>
            
                <h2 style={{position:"relative",top:"30%"}} >채팅방관리</h2> 
