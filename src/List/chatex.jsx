@@ -12,18 +12,54 @@ const Wrapper = styled.div`
 
 `
 
+const Header=styled.div`
+    
+`
+const Main=styled.div`
+    
+`
+
+const Datediv=styled.div`
+    
+`
+const Datecss=styled.div`
+    text-align: center;
+`
+ 
 const Chatdiv = styled.div`
    display: flex;
+   
     border:1px solid red;
+`
+
+const Mychat=styled.div`
+    display: flex;
+   flex-direction: row-reverse ;//오른쪽으로 시작하게
+    border: 5px solid blue;
+    margin-left:auto;//이것만오른쪽이되네
+    max-width: 60%;
+    
+`
+const Anotherchat=styled.div`
+      border: 5px solid red;
+      display: flex;
+    
+      max-width: 60%;
+`
+const Systemchat=styled.div`
+text-align: center;
 `
 const Profile = styled.img`
     position: relative;
     border:1px solid blue;
     width: 50px;
     height: 50px;
+    display: ${props=>props.isprev?"none":""};
+    
 `
 const ChatContainer = styled.div`
     position: relative;
+   
     flex-direction: column;
     width: 100%;
     display: flex;
@@ -32,15 +68,19 @@ const ChatContainer = styled.div`
 const ChatTop = styled.div`
     border:1px solid green;
     width: 100%;
+    text-align: ${props=>props.isme?"right":"left"};
+    display: ${props=>props.isprev?"none":""};
 `
 const ChatMain = styled.div`
      border:1px solid yellow;
      width:100%;
+     text-align: ${props=>props.isme?"right":"left"};
 `
 const Chatbottom = styled.div`
     border:1px solid black;
-    text-align: right;
+    text-align: ${props=>props.isme?"left":"right"};
     width:100%;
+
 `
 
 //채팅보내기시 리렌더링시 아래로안내려가는문제가..
@@ -305,16 +345,21 @@ function Chatex(props) {
         setcontent("chatroomlist")
     }
 
+    //이전처리용
+    let prevname=null;
+    const prevhandler=(writer)=>{
+        prevname=writer
+    }
     return (
         <>
-            <div>
+            <Wrapper>
 
 
 
                 {/*상단의 메뉴버튼 */}
 
 
-                <div style={{ height: "30px", border: "1px solid", top: "5px", position: "relative" }}>
+                <Header style={{ height: "30px", border: "1px solid blue", top: "5px", position: "relative" }}>
                     <button onClick={backpage}>뒤로가기</button>
 
 
@@ -329,57 +374,76 @@ function Chatex(props) {
 
 
 
-                </div>
+                </Header>
                 {/*메뉴누르고난다음 */}
 
                 {menuopen && <Chatmenumoda ref={menuref} roomdata={roomdata}
                     invite={userinvite} />}
 
                 {/* 챗데이터 내용 div */}
-                <div style={{ width: "100%", height: "500px", overflow: "auto", border: "1px solid yellow" }}>
+                
+                <Main style={{ width: "100%", height: "500px", overflow: "auto", border: "1px solid yellow" }}>
                     {chatdata &&
                         Object.entries(chatdata).map(([date, chats]) => {
 
                             return (
 
-                                <div key={date} >
+                                <Datediv key={date} >
 
-                                    <>{date}</>
+                                    <Datecss>{date}</Datecss>
 
                                     {chats.map((data) => {
+
                                         return (
                                             <Chatdiv >
-                                                {console.log("렌더링데이터z" + data)}
+                                                
+                                                {data.messageType==="Message"?<Systemchat>
+                                                    {data.message}
+                                                    
+                                                </Systemchat>:
+                                                <>
+                                                
                                                 {loginuser.userinfo["nickname"] === data.writer
                                                     ?
-                                                    <>
-
-                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile} />
+                                                    <Mychat>
+                                                        
+                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile}
+                                                                isprev={prevname===data.writer?true:false}
+                                                        />
                                                         <ChatContainer>
-                                                            <ChatTop>{data.writer}</ChatTop>
-                                                            <ChatMain>{data.message}</ChatMain>
-                                                            <Chatbottom> {data.red.substr(11, 5)}</Chatbottom>
+                                                            <ChatTop isme 
+                                                            isprev={prevname===data.writer?true:false}>{data.writer}</ChatTop>
+                                                            <ChatMain isme >{data.message}</ChatMain>
+                                                            <Chatbottom isme> {data.red.substr(11, 5)}</Chatbottom>
 
                                                         </ChatContainer>
-                                                    </>
+                                                    </Mychat>
                                                     :
-                                                    <>
-                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile} />
+                                                    <Anotherchat>
+                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile} 
+                                                        isprev={prevname===data.writer?true:false}/>
                                                         <ChatContainer>
-                                                            <ChatTop>{data.writer}</ChatTop>
+                                                            <ChatTop
+                                                            isprev={prevname===data.writer?true:false}
+                                                            >{data.writer}</ChatTop>
                                                             <ChatMain>{data.message}</ChatMain>
                                                             <Chatbottom> {data.red.substr(11, 5)}</Chatbottom>
                                                         </ChatContainer>
-                                                    </>
+                                                    </Anotherchat>
+                                                
                                                 }
-
+                                                     {prevhandler(data.writer)}    
+                                            </>
+                                            }
                                             </Chatdiv>
+                                       
                                         )
 
                                     })
 
                                     }
-                                </div>
+                                    
+                                </Datediv>
 
                             )
 
@@ -393,7 +457,7 @@ function Chatex(props) {
 
                     {/*내용div */}
 
-                </div>
+                </Main>
                 <div style={{ background: "green", position: "sticky" }}>
                     <input type="text" style={{ width: "75%" }} value={message} onChange={(e) => { Setmessage(e.target.value) }} />
                     <button onClick={() => { sendmessage() }}>보내기</button>
@@ -404,7 +468,7 @@ function Chatex(props) {
                 <br />
 
 
-            </div>
+            </Wrapper>
 
         </>
     )
