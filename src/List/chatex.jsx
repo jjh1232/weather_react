@@ -112,10 +112,12 @@ function Chatex(props) {
                     //const test=makeSection(res);
                     console.log("챗데이터구조:" + JSON.stringify(chatdata))
 
-                    const newchat = liveSection(res);
-                    console.log("뉴챗:"+newchat)
+                    //여기서다셋도하기때문에 필요없다
+                    liveSection(res);
 
-                    setChatdata(newchat);
+                    
+
+                  
 
 
                     scrollcontroller();
@@ -245,7 +247,8 @@ function Chatex(props) {
                 newMessagesdate[monthDate]=[];
                 
              } 
-             newMessagesdate[monthDate]=[...newMessagesdate[monthDate],message] 
+             newMessagesdate[monthDate]=[...newMessagesdate[monthDate],chat] 
+             
              return newMessagesdate
         })
        
