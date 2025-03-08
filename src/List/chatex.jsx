@@ -37,21 +37,21 @@ const Mychat=styled.div`
    flex-direction: row-reverse ;//오른쪽으로 시작하게
    border: 2px solid red;
     margin-left:auto;//이것만오른쪽이되네
-    max-width: 65%;
+    max-width: 70%;
     
 `
 const Anotherchat=styled.div`
       
       display: flex;
     border: 2px solid red;
-      max-width: 65%;
+      max-width: 70%;
 `
 const Systemchat=styled.div`
 text-align: center;
 `
 const Profilecss=styled.div`
     
-    width: 85px;
+    width: 50px;
 `
 const Profile = styled.img`
     position: relative;
@@ -66,27 +66,28 @@ const ChatContainer = styled.div`
     position: relative;
    
     flex-direction: column;
-    width: 100%;
+    max-width: 100%;
     display: flex;
     
 `
 const ChatTop = styled.div`
     border: 1px solid green;
-    width: 100%;
+    width: 97%;
     text-align: ${props=>props.isme?"right":"left"};
     display: ${props=>props.isprev?"none":""};
 `
 const ChatMain = styled.div`
     
-     width:90%;
+        width: 97%;
      text-align: ${props=>props.isme?"right":"left"};
      border:1px solid blue;
 `
 const Chatbottom = styled.div`
-    
+    display: flex;
     border: 1px solid yellow;
     text-align: ${props=>props.isme?"left":"right"};
-    width:5%;
+    align-items: flex-end;
+    width:20%;
 
 `
 
@@ -422,14 +423,15 @@ function Chatex(props) {
                                                             <ChatTop isme 
                                                             isprev={prevname===data.writer?true:false}>{data.writer}</ChatTop>
                                                             <ChatMain isme >
-                                                            <Chatbottom>
-                                                            {data.red.substr(11, 5)}
-                                                            </Chatbottom>
+                                                            
                                                                 {data.message}
                                                              </ChatMain>
                                                            
 
                                                         </ChatContainer>
+                                                        <Chatbottom>
+                                                            {data.red.substr(11, 5)}
+                                                            </Chatbottom>
                                                     </Mychat>
                                                     :
                                                     <Anotherchat>
@@ -443,13 +445,14 @@ function Chatex(props) {
                                                             >{data.writer}</ChatTop>
                                                             <ChatMain>{data.message}
 
-                                                            <Chatbottom>
-                                                            {data.red.substr(11, 5)}
-                                                            </Chatbottom>
+                                                            
 
                                                             </ChatMain>
                                                             
                                                         </ChatContainer>
+                                                        <Chatbottom>
+                                                            {data.red.substr(11, 5)}
+                                                            </Chatbottom>
                                                     </Anotherchat>
                                                 
                                                 }
