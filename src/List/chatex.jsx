@@ -29,32 +29,37 @@ const Datecss=styled.div`
 const Chatdiv = styled.div`
    display: flex;
    
-    border:1px solid red;
+    
 `
 
 const Mychat=styled.div`
     display: flex;
    flex-direction: row-reverse ;//오른쪽으로 시작하게
-    border: 5px solid blue;
+   border: 2px solid red;
     margin-left:auto;//이것만오른쪽이되네
-    max-width: 60%;
+    max-width: 65%;
     
 `
 const Anotherchat=styled.div`
-      border: 5px solid red;
+      
       display: flex;
-    
-      max-width: 60%;
+    border: 2px solid red;
+      max-width: 65%;
 `
 const Systemchat=styled.div`
 text-align: center;
 `
+const Profilecss=styled.div`
+    
+    width: 85px;
+`
 const Profile = styled.img`
     position: relative;
-    border:1px solid blue;
-    width: 50px;
+    border:1px solid black;
+    width: 100%;
     height: 50px;
     display: ${props=>props.isprev?"none":""};
+
     
 `
 const ChatContainer = styled.div`
@@ -63,23 +68,25 @@ const ChatContainer = styled.div`
     flex-direction: column;
     width: 100%;
     display: flex;
-    border:1px solid blue;
+    
 `
 const ChatTop = styled.div`
-    border:1px solid green;
+    border: 1px solid green;
     width: 100%;
     text-align: ${props=>props.isme?"right":"left"};
     display: ${props=>props.isprev?"none":""};
 `
 const ChatMain = styled.div`
-     border:1px solid yellow;
-     width:100%;
+    
+     width:90%;
      text-align: ${props=>props.isme?"right":"left"};
+     border:1px solid blue;
 `
 const Chatbottom = styled.div`
-    border:1px solid black;
+    
+    border: 1px solid yellow;
     text-align: ${props=>props.isme?"left":"right"};
-    width:100%;
+    width:5%;
 
 `
 
@@ -406,28 +413,42 @@ function Chatex(props) {
                                                 {loginuser.userinfo["nickname"] === data.writer
                                                     ?
                                                     <Mychat>
-                                                        
+                                                        <Profilecss>
                                                         <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile}
                                                                 isprev={prevname===data.writer?true:false}
                                                         />
+                                                        </Profilecss>
                                                         <ChatContainer>
                                                             <ChatTop isme 
                                                             isprev={prevname===data.writer?true:false}>{data.writer}</ChatTop>
-                                                            <ChatMain isme >{data.message}</ChatMain>
-                                                            <Chatbottom isme> {data.red.substr(11, 5)}</Chatbottom>
+                                                            <ChatMain isme >
+                                                            <Chatbottom>
+                                                            {data.red.substr(11, 5)}
+                                                            </Chatbottom>
+                                                                {data.message}
+                                                             </ChatMain>
+                                                           
 
                                                         </ChatContainer>
                                                     </Mychat>
                                                     :
                                                     <Anotherchat>
+                                                         <Profilecss>
                                                         <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile} 
                                                         isprev={prevname===data.writer?true:false}/>
+                                                        </Profilecss>
                                                         <ChatContainer>
                                                             <ChatTop
                                                             isprev={prevname===data.writer?true:false}
                                                             >{data.writer}</ChatTop>
-                                                            <ChatMain>{data.message}</ChatMain>
-                                                            <Chatbottom> {data.red.substr(11, 5)}</Chatbottom>
+                                                            <ChatMain>{data.message}
+
+                                                            <Chatbottom>
+                                                            {data.red.substr(11, 5)}
+                                                            </Chatbottom>
+
+                                                            </ChatMain>
+                                                            
                                                         </ChatContainer>
                                                     </Anotherchat>
                                                 
