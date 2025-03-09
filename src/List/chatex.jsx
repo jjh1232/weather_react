@@ -9,7 +9,7 @@ import Chatmenumoda from "../UI/Modals/Chatmenumoda";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Wrapper = styled.div`
-
+    background-color: skyblue;
 `
 
 const Header=styled.div`
@@ -20,12 +20,32 @@ const Main=styled.div`
 `
 
 const Datediv=styled.div`
-    
+ 
+
 `
 const Datecss=styled.div`
+    
+    display: flex;
+    align-items: center; /* 세로 가운데 정렬 */
     text-align: center;
+    &::before{
+        content: "";
+        margin-right: 0.5em;
+        width: 30%;
+        border-bottom: 1px solid gray;
+    }
+    &::after{
+        content: "";
+        
+        border-bottom: 1px solid gray;
+       width: 30%;
+      
+    }
 `
- 
+ const Datetext=styled.div`
+    max-width: 50%;
+    
+ `
 const Chatdiv = styled.div`
    display: flex;
    
@@ -47,7 +67,33 @@ const Anotherchat=styled.div`
       max-width: 85%;
 `
 const Systemchat=styled.div`
-text-align: center;
+display: flex;
+align-items: center; /* 세로 가운데 정렬 */
+  text-align: center;
+width: 100%;
+font-size:10px;
+
+
+
+&::before{
+        content: "";
+        margin-right: 0.5em;
+        
+        width: 20%;
+        border-bottom: 1px solid gray;
+    }
+    &::after{
+        content: "";
+        
+        border-bottom: 1px solid gray;
+        width: 20%;
+        
+        margin-left:0.5em;
+    }
+`
+const Systemtext=styled.div`
+ 
+ max-width: 85%;
 `
 const Profilecss=styled.div`
        border:3px solid black;
@@ -404,7 +450,9 @@ function Chatex(props) {
 
                                 <Datediv key={date} >
 
-                                    <Datecss>{date}</Datecss>
+                                    <Datecss>
+                                        <Datetext>{date}</Datetext>
+                                        </Datecss>
 
                                     {chats.map((data) => {
 
@@ -412,7 +460,7 @@ function Chatex(props) {
                                             <Chatdiv >
                                                 
                                                 {data.messageType==="Message"?<Systemchat>
-                                                    {data.message}
+                                                    <Systemtext>{data.message}</Systemtext>
                                                     
                                                 </Systemchat>:
                                                 <>
