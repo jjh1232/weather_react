@@ -37,57 +37,63 @@ const Mychat=styled.div`
    flex-direction: row-reverse ;//오른쪽으로 시작하게
    border: 2px solid red;
     margin-left:auto;//이것만오른쪽이되네
-    max-width: 70%;
+    max-width: 85%;
     
 `
 const Anotherchat=styled.div`
       
       display: flex;
     border: 2px solid red;
-      max-width: 70%;
+      max-width: 85%;
 `
 const Systemchat=styled.div`
 text-align: center;
 `
 const Profilecss=styled.div`
-    
-    width: 50px;
+       border:3px solid black;
+    width: 40px;
+    height: 40px;
 `
 const Profile = styled.img`
     position: relative;
     border:1px solid black;
-    width: 100%;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: ${props=>props.isprev?"none":""};
 
     
 `
 const ChatContainer = styled.div`
     position: relative;
-   
+    
     flex-direction: column;
-    max-width: 100%;
+    max-width: 130px;
     display: flex;
     
 `
 const ChatTop = styled.div`
     border: 1px solid green;
-    width: 97%;
+    max-width: 130px;
     text-align: ${props=>props.isme?"right":"left"};
     display: ${props=>props.isprev?"none":""};
 `
 const ChatMain = styled.div`
     
-        width: 97%;
+    max-width: 130px;
      text-align: ${props=>props.isme?"right":"left"};
-     border:1px solid blue;
+     border: 1px solid black;
+     background-color: ${props=>props.isme?"yellow":"white"};
+     border-radius: 10px;
+     padding: 3px 6px;//y축 x축순
+     //margin-bottom: 10px; 아래쪽마진
 `
 const Chatbottom = styled.div`
     display: flex;
     border: 1px solid yellow;
     text-align: ${props=>props.isme?"left":"right"};
     align-items: flex-end;
-    width:20%;
+    font-size:12px;
+    width:30px;
 
 `
 
