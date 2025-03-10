@@ -43,8 +43,12 @@ const Datecss=styled.div`
     }
 `
  const Datetext=styled.div`
-    max-width: 50%;
-    
+    max-width: 60%;
+    background-color: gray;
+    border-radius: 10px;
+    padding: 1px 5px;
+    margin-top:5px;
+    margin-bottom: 5px;
  `
 const Chatdiv = styled.div`
    display: flex;
@@ -92,7 +96,11 @@ font-size:10px;
     }
 `
 const Systemtext=styled.div`
- 
+     background-color: gray;
+    border-radius: 10px;
+    padding: 1px 5px;
+    margin-top:5px;
+    margin-bottom: 5px;
  max-width: 85%;
 `
 const Profilecss=styled.div`
@@ -135,6 +143,7 @@ const ChatMain = styled.div`
 `
 const Chatbottom = styled.div`
     display: flex;
+    flex-direction: column-reverse;
     border: 1px solid yellow;
     text-align: ${props=>props.isme?"left":"right"};
     align-items: flex-end;
@@ -484,7 +493,10 @@ function Chatex(props) {
 
                                                         </ChatContainer>
                                                         <Chatbottom>
-                                                            {data.red.substr(11, 5)}
+                                                       
+                                                        
+                                                        <div style={{width:"100%"}}>  {data.red.substr(11, 5)}</div>
+                                                            {12<data.red.substr(11, 2)?<div style={{textAlign:"center",width:"100%"}}>pm</div>:<div style={{textAlign:"center",width:"100%"}}>am</div>}
                                                             </Chatbottom>
                                                     </Mychat>
                                                     :
@@ -505,7 +517,10 @@ function Chatex(props) {
                                                             
                                                         </ChatContainer>
                                                         <Chatbottom>
-                                                            {data.red.substr(11, 5)}
+                                                        
+                                                            
+                                                            <div style={{width:"100%"}}>  {data.red.substr(11, 5)}</div>
+                                                            {12<data.red.substr(11, 2)?<div style={{textAlign:"center",width:"100%"}}>pm</div>:<div style={{textAlign:"center",width:"100%"}}>am</div>}
                                                             </Chatbottom>
                                                     </Anotherchat>
                                                 
