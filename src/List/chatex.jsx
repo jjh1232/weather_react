@@ -7,16 +7,27 @@ import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import Chatmenumoda from "../UI/Modals/Chatmenumoda";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 const Wrapper = styled.div`
     background-color: skyblue;
 `
 
 const Header=styled.div`
-    
+    display: flex;
 `
 const Main=styled.div`
-    
+   
+
+`
+const Roomnamecss=styled.div`
+     border:1px solid blue;
+     text-align: center;
+     max-width:200px;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    overflow: hidden;
 `
 
 const Datediv=styled.div`
@@ -429,17 +440,21 @@ function Chatex(props) {
 
 
                 <Header style={{ height: "30px", border: "1px solid blue", top: "5px", position: "relative" }}>
-                    <button onClick={backpage}>뒤로가기</button>
+                    
+                    <FontAwesomeIcon icon={faArrowLeft} size="xl" onClick={backpage}
+                    style={{paddingLeft:"3px",paddingRight:"3px", marginRight:"auto"}}
+                    ></FontAwesomeIcon>
+                    <Roomnamecss>
+                    {roomdata && roomdata.roomname}zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+                    </Roomnamecss>
+                    ({roomdata && roomdata.namelist.length})
 
-
-                    {roomdata && roomdata.roomname}
-                    {roomdata && roomdata.namelist.length}
-
-                    <button style={{ float: "right" }}
+                    
+                    <FontAwesomeIcon icon={faBars} size="xl" style={{ float: "right", 
+                    paddingRight:"3px", marginLeft:"auto"}}
                         onClick={() => {
                             setMenuopen(true)
-                        }}
-                    >메뉴버튼</button>
+                        }}/>
 
 
 
