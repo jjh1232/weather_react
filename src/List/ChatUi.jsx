@@ -10,17 +10,6 @@ import styled from "styled-components";
 import Chatex from "./chatex";
 import AuthCheck from "../customhook/authCheck";
 
-
-const Wrapper=styled.div`
-position:relative;
-border:1px solid;
-top:30%;
-left:1.5%;
-width:96%;
-height:74%;
-border: 3px solid blue;
-border-radius: 4%;
-`
 const Modalout=styled.div`
 width:14.5% ;
 height:63% ;
@@ -42,31 +31,52 @@ position: relative;
 background-color: #FFFFFF;
 justify-content:center;//왼쪽에서중간
 `
+
+
+const Wrapper=styled.div`
+display: flex;
+flex-direction: column;
+position:relative;
+border:1px solid;
+top:8%;
+
+width:100%;
+height:74%;
+border: 3px solid white;
+border-radius: 4%;
+
+
+
+`
+
 const MainBox=styled.div`
 display:flex;
 position: relative;
 //justify-content:space-around;
-border:1px solid;
+border:1px solid red;
 height: 10%;
 width: 100%;
-bottom:27%;
+bottom:0%;
 
 `
 
 const Boxlist=styled.button`
 
-background:${(props)=>{props.tapcolor===props.data?"blue":"white"}};
+color:${(props)=>{props.tapcolor===props.data?"blue":"white"}};
 width: 100%;
+
 margin: 1%;
+border: 1px solid black;
 
 `
 const Mainscreen=styled.div`
-background-color:skyblue     ;
+background-color:bisque ;
+border: 1px solid black;
 position: relative;
 width: 99.9%;
 height:89%;
 border-radius: 2.1%;
-bottom:27%;
+bottom:0%;
 
 `
 

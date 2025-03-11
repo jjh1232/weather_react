@@ -11,7 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 const Wrapper = styled.div`
-    background-color: skyblue;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  
+    height: 100%;
+    width:100%;
+   
 `
 
 const Header=styled.div`
@@ -22,7 +28,7 @@ const Main=styled.div`
 
 `
 const Roomnamecss=styled.div`
-     border:1px solid blue;
+     
      text-align: center;
      max-width:200px;
     text-overflow: ellipsis;
@@ -63,23 +69,24 @@ const Datecss=styled.div`
  `
 const Chatdiv = styled.div`
    display: flex;
-   
-    
+   overflow-x:hidden;
+  
 `
 
 const Mychat=styled.div`
     display: flex;
    flex-direction: row-reverse ;//오른쪽으로 시작하게
-   border: 2px solid red;
+   margin-top:5px;
     margin-left:auto;//이것만오른쪽이되네
     max-width: 85%;
-    
+   
 `
 const Anotherchat=styled.div`
       
       display: flex;
-    border: 2px solid red;
+      margin-top:5px;
       max-width: 85%;
+    
 `
 const Systemchat=styled.div`
 display: flex;
@@ -115,13 +122,17 @@ const Systemtext=styled.div`
  max-width: 85%;
 `
 const Profilecss=styled.div`
-       border:3px solid black;
+    position  :relative ;
     width: 40px;
-    height: 40px;
+    min-height: 20px;
+    margin: 3px;
+
+
 `
 const Profile = styled.img`
     position: relative;
     border:1px solid black;
+    background-color: white;
     width: 40px;
     height: 40px;
     display: ${props=>props.isprev?"none":""};
@@ -137,7 +148,7 @@ const ChatContainer = styled.div`
     
 `
 const ChatTop = styled.div`
-    border: 1px solid green;
+   
     max-width: 130px;
     text-align: ${props=>props.isme?"right":"left"};
     display: ${props=>props.isprev?"none":""};
@@ -146,16 +157,17 @@ const ChatMain = styled.div`
     
     max-width: 130px;
      text-align: ${props=>props.isme?"right":"left"};
-     border: 1px solid black;
+     
      background-color: ${props=>props.isme?"yellow":"white"};
      border-radius: 10px;
      padding: 3px 6px;//y축 x축순
+     justify-content: center;
      //margin-bottom: 10px; 아래쪽마진
 `
 const Chatbottom = styled.div`
     display: flex;
     flex-direction: column-reverse;
-    border: 1px solid yellow;
+    
     text-align: ${props=>props.isme?"left":"right"};
     align-items: flex-end;
     font-size:12px;
@@ -163,6 +175,18 @@ const Chatbottom = styled.div`
 
 `
 
+const Senddiv=styled.div`
+    border: 1px solid blue;
+    background-color: black;
+     
+`
+const Sendinput=styled.input`
+     width: 75% ;
+     margin: 2px;
+`
+const SendButton=styled.button`
+    
+`
 //채팅보내기시 리렌더링시 아래로안내려가는문제가..
 function Chatex(props) {
 
@@ -445,7 +469,7 @@ function Chatex(props) {
                     style={{paddingLeft:"3px",paddingRight:"3px", marginRight:"auto"}}
                     ></FontAwesomeIcon>
                     <Roomnamecss>
-                    {roomdata && roomdata.roomname}zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+                    {roomdata && roomdata.roomname}
                     </Roomnamecss>
                     ({roomdata && roomdata.namelist.length})
 
@@ -476,6 +500,7 @@ function Chatex(props) {
 
                                     <Datecss>
                                         <Datetext>{date}</Datetext>
+                                        {prevhandler("")}
                                         </Datecss>
 
                                     {chats.map((data) => {
@@ -484,8 +509,10 @@ function Chatex(props) {
                                             <Chatdiv >
                                                 
                                                 {data.messageType==="Message"?<Systemchat>
-                                                    <Systemtext>{data.message}</Systemtext>
                                                     
+                                                    <Systemtext>{data.message}</Systemtext>
+                                                    {prevhandler(data.writer)}
+
                                                 </Systemchat>:
                                                 <>
                                                 
@@ -566,14 +593,14 @@ function Chatex(props) {
                     {/*내용div */}
 
                 </Main>
-                <div style={{ background: "green", position: "sticky" }}>
-                    <input type="text" style={{ width: "75%" }} value={message} onChange={(e) => { Setmessage(e.target.value) }} />
-                    <button onClick={() => { sendmessage() }}>보내기</button>
-                </div>
+                <Senddiv>
+                    <Sendinput type="text"  value={message} onChange={(e) => { Setmessage(e.target.value) }} />
+                    <SendButton onClick={() => { sendmessage() }}>보내기</SendButton>
+                </Senddiv>
 
 
 
-                <br />
+               
 
 
             </Wrapper>

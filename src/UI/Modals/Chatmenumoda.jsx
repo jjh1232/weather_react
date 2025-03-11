@@ -4,23 +4,38 @@ import ChatFollowlistmodal from "./ChatFollowlistmodal";
 
 const Modal=styled.div`
 position:absolute;
-height:102%;
-width:100%;
+height:101%;
+width:101%;
+
 z-index: 2;
 background:rgba(0,0,0,0.4);
-top:9%;
+
 
 
 `
 const Modalbody=styled.div`
 position:relative;
+display: flex;
+flex-direction: column;
 float:right;
 width:70%;
 height:100%;
 
-background:blue;
+background-color: white;
+`
+const Headercss=styled.div`
+    border: 1px solid red;
+`
+const InviteButton=styled.button`
+    border: 1px solid green;
 `
 
+const UserDiv=styled.div`
+    border: 1px solid blue;
+`
+const Userlistcss=styled.div`
+    
+`
 const Outbox=styled.div`
     text-align: center;
     background-color: white;
@@ -28,6 +43,7 @@ const Outbox=styled.div`
     transform: translate(50%,100%);
     width: 50%;
     height:12%;
+    
 
 `
 //컴포넌트에 ref를 주기위해선 forwardref로 생성해야함!
@@ -38,7 +54,8 @@ const Chatmenumoda=forwardRef((props,ref)=>{
 const {roomdata,invite}=props;
 const [ischatroomout,setIschatroomout]=useState(false);
 
-const isinvite=()=>{
+const isinvite=(e)=>{
+    e.preventDefault()
     setInvitelist(true)
 }
 
@@ -47,7 +64,8 @@ const followmodalclose=()=>{
     setInvitelist(false)
 }
 
-const isinvitehandler=()=>{
+const isinvitehandler=(e)=>{
+    e.preventDefault()
     setInvitelist(!isinvite)
 }
 //채팅방나가기 
@@ -73,27 +91,27 @@ return (
 
     <Modal  >
     <Modalbody ref={ref} className="chatroommenu">
-        <div>
+        <Headercss className="chatroommenu">
         {roomdata.roomname} 
         ({roomdata.namelist.length})
-    </div>
-        <br/>
-        <button onClick={isinvite}>초대하기</button> 
-        
-        <br/>
+
+        <InviteButton  className="chatroommenu" onClick={(e)=>isinvite(e)}>초대하기</InviteButton>           
+    </Headercss>
+ 
+    <UserDiv className="chatroommenu">
     {roomdata.namelist.map((data)=>{
         return (
-            <div className="chatroommenu">
+            <Userlistcss className="chatroommenu">
                 
                 {data.membernickname}
 
-            </div>
+            </Userlistcss>
 
         )
 
     })}
    
-   
+   </UserDiv>
 <div style={{display:"flex",justifyContent:"flex-start"
                     ,position:"absolute",width:"100%", bottom:"1px",background:"yellow"}}
                     className="chatroommenu"
