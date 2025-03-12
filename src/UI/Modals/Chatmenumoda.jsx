@@ -13,7 +13,7 @@ background:rgba(0,0,0,0.4);
 
 
 `
-const Modalbody=styled.div`
+const Modalbody=styled.div.attrs({className:"chatroommenu"})`
 position:relative;
 display: flex;
 flex-direction: column;
@@ -23,18 +23,22 @@ height:100%;
 
 background-color: white;
 `
-const Headercss=styled.div`
+const Headercss=styled.div.attrs({className:"chatroommenu"})`
     border: 1px solid red;
+    text-align: center;
 `
 const InviteButton=styled.button`
     border: 1px solid green;
 `
-
+const Menubar=styled.div`
+`
 const UserDiv=styled.div`
     border: 1px solid blue;
+    width:60%
+
 `
 const Userlistcss=styled.div`
-    
+    border: 1px solid black;
 `
 const Outbox=styled.div`
     text-align: center;
@@ -95,10 +99,13 @@ return (
         {roomdata.roomname} 
         ({roomdata.namelist.length})
 
-        <InviteButton  className="chatroommenu" onClick={(e)=>isinvite(e)}>초대하기</InviteButton>           
+                  
     </Headercss>
  
+    <Menubar>임시</Menubar>
+    유저목록
     <UserDiv className="chatroommenu">
+    <InviteButton  className="chatroommenu" onClick={(e)=>isinvite(e)}>초대하기</InviteButton> 
     {roomdata.namelist.map((data)=>{
         return (
             <Userlistcss className="chatroommenu">

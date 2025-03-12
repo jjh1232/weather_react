@@ -183,6 +183,7 @@ const Senddiv=styled.div`
 const Sendinput=styled.input`
      width: 75% ;
      margin: 2px;
+     
 `
 const SendButton=styled.button`
     
@@ -419,14 +420,15 @@ function Chatex(props) {
     const menuclose = (e) => {
         console.log("클릭이벤트:" + e.target.className)
 
-        if (menuopen && !(menuref.current.className.includes(e.target.className))) {
-            console.log("ref지정" + menuref.current.className)
+        const String="chatroommenu"
+        //menuref.current.className
+        if (menuopen && !(e.target.className.includes("chatroommenu"))) {
+            console.log("ref지정" + e.target.className)
             console.log("다른곳클릭")
             setMenuopen(false)
         }
-        else {
-
-        }
+            
+       
     }
     //넘길함수 
     const userinvite = (roomid, checklist) => {

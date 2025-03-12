@@ -1,41 +1,69 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
+import { useQuery } from "@tanstack/react-query";
+import Profilediv from "./Profilediv";
 
-const Modal=styled.div`
+const Modal=styled.div.attrs({className:"chatroommenu"})`
  position:absolute;
+ display: flex;
+ flex-direction:column;
 height:100%;
 width:100%;
-background:green;
+background:greenyellow;
 
-
+animation: modaldown 0.5s linear;
 `
 
+const Headers=styled.div.attrs({className:"chatroommenu"})`
+    display: flex;
+    border:1px solid blue;
+`
+const ExitButton=styled.div.attrs({className:"chatroommenu"})`
+    
+    border:1px solid blue;
+`
+const Invitebutton=styled.button.attrs({className:"chatroommenu"})`
+margin-left: auto;
+
+border: 1px solid yellow;
+`
+const Searchinput=styled.input.attrs({className:"chatroommenu"})`
+
+`
+const Userlist=styled.div.attrs({className:"chatroommenu"})`
+    border:1px solid red;
+`
+const Userli=styled.div.attrs({className:"chatroommenu"})`
+    border: 1px solid yellow;
+    display: flex;
+`
+const Usercheck=styled.input.attrs({className:"chatroommenu"})`
+    margin-left: auto;
+    width: 20px;
+    margin-right:10px;
+`
+const Username=styled.div.attrs({className:"chatroommenu"})`
+
+`
 const ChatFollowlistmodal=(props)=>{
     const {close,roomid,roomusers,invite,isinvitelist}=props;
     const axiosinstance=CreateAxios();
-    const [followlist,setFollowlist]=useState();
+    
     const [checklist,setChecklist]=useState([])
     const [selectlist,setSelectlist]=useState([]);
     const [ischeck,setIscheck]=useState(false)
     const [search,setSearch]=useState(" ");
 
+    
+    const {data:followlist,isLoading,error}=useQuery({
+        queryKey:['invitelist'],
+        queryFn:async ()=>{
+            const res= await axiosinstance.get("/followlist")
+            return res.data;
+        }
 
-    useEffect(()=>{
-        followlistget();
-
-    },[])
-
-    const followlistget=()=>{
-        axiosinstance.get("/followlist")
-        .then((res)=>{
-            console.log(res.data)
-            setFollowlist(res.data)
-        }).catch((err)=>{
-            console.log("에러")
-        })
-    }
-
+    })
 
     const clossmodal=()=>{
         console.log("클릭")
@@ -83,8 +111,7 @@ const ChatFollowlistmodal=(props)=>{
             for(var i =0;i<roomusers.length;i++){
                 console.log("유저데이터:"+roomusers[i].membernickname)
                 if(usernickname===roomusers[i].membernickname){
-                    console.log("채팅창유저비교"+usernickname)
-                    console.log("같은유저"+roomusers[i].membernickname)
+                   
                  
                     value=true;
                     return value;
@@ -100,32 +127,31 @@ const ChatFollowlistmodal=(props)=>{
 
 
     return (
-        <Modal>
-            <div style={{display:"flex"}}>
-                <button onClick={clossmodal}>닫기</button>
+        <Modal className="chatroommenu">
+            <Headers>
+                <ExitButton onClick={clossmodal}>닫기</ExitButton>
 
-                <button style={{marginLeft:"auto"} } onClick={()=>
+                <Invitebutton onClick={()=>
                     {invite(roomid,checklist)
                         isinvitelist();
                     }} >
                     
-                    초대하기</button>
+                    초대하기</Invitebutton>
                 
-            </div>
+            </Headers>
             {/*여기에 초대누른목록 추가 */}
             {/*검색 */}
-            <br/>
-            <div>
-                <input type="text" style={{position:"relative", width:"80%"}}
+            
+           
+                <Searchinput type="text" style={{position:"relative", width:"80%"}}
                     onChange={(e)=>{
 
                         setSearch(e.target.value);
                     }}
                 /> 
                 
-            </div>
-            <br/>
-            <div>
+            
+            <Userlist>
                 {/*친구목록 */}
                 {followlist&&followlist.filter((filter)=>{
                     //하나씩 조건통과하면 리턴 아니면 리턴안함 ㅇ
@@ -146,12 +172,14 @@ const ChatFollowlistmodal=(props)=>{
                     if(existinguser(data.nickname)){
                         console.log("기존에있는경우!")
                         return(
-                            <div>
+                            <Userli>
+                          <Profilediv url={data.profileurl}/>
+
                         {data.nickname}기존있음
                         <br/>
-                        @{data.username} 
+                        {data.username} 
                         
-                        </div>
+                        </Userli>
                         )    
                 }   
                     else{                 
@@ -159,20 +187,24 @@ const ChatFollowlistmodal=(props)=>{
                     return(
                         
                         <label for={data.username} >
-                            <div>
+                            <Userli>
+                            <Profilediv url={data.profileurl}/>
+                            <Username>
                             {data.nickname}
-                        <input id={data.username} type="checkbox" 
+                            <br/>
+                            {data.username}
+                            </Username>
+                        <Usercheck id={data.username} type="checkbox" 
                         //checked={checked}
                         onChange={(e)=>{
                             console.log("온채인지")
                             checkhandler(e.target.checked,e.target.id)
                         }}
                         style={{ float:"right",borderRadius:"10px"}} />
-                        <br/>
-                        @{data.username}
+                      
                         
                         <br/>
-                        </div>
+                        </Userli>
                         </label>
                        
                         
@@ -182,7 +214,7 @@ const ChatFollowlistmodal=(props)=>{
                 }
                     
                 })}
-            </div>
+            </Userlist>
         </Modal>
 
 
