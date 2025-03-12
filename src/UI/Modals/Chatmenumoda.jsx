@@ -69,7 +69,7 @@ const followmodalclose=()=>{
 }
 
 const isinvitehandler=(e)=>{
-    e.preventDefault()
+    
     setInvitelist(!isinvite)
 }
 //채팅방나가기 

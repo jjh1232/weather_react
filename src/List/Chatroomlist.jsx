@@ -52,7 +52,7 @@ function Chatroomlist(props){
     return (
 
         <div style={{width:"100%",height:"100%", overflow:"auto"}}>
-        {chatroomlistdata &&chatroomlistdata.map((data)=>{
+        {chatroomlistdata&&chatroomlistdata.length>0?chatroomlistdata.map((data)=>{
             return(
                 
                 <Chatroomlistitem chatroomdata={data} onclick={exit} inroom={intotheroom}
@@ -62,7 +62,9 @@ function Chatroomlist(props){
                 />
             
             )
-        })}
+        })
+    :<>친구와채팅을 이용해보세요!</>
+    }
        
         </div>
     

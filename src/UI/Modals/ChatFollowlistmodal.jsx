@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
-import { useQuery } from "@tanstack/react-query";
+import { Mutation, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Profilediv from "./Profilediv";
 
 const Modal=styled.div.attrs({className:"chatroommenu"})`
@@ -55,6 +55,7 @@ const ChatFollowlistmodal=(props)=>{
     const [ischeck,setIscheck]=useState(false)
     const [search,setSearch]=useState(" ");
 
+    const queryclient=useQueryClient();
     
     const {data:followlist,isLoading,error}=useQuery({
         queryKey:['invitelist'],
@@ -89,17 +90,28 @@ const ChatFollowlistmodal=(props)=>{
         return
     }
 
-    /*
-    const userinvite=()=>{
+  const Userinvite=useMutation({
+    mutationFn:({roomid,checklist})=>{
+      
         axiosinstance.post("/chatroominvite",{
-            roomid: roomid,
+            roomid:roomid,
             userlist:checklist
-        }).then((res)=>{
-            
         })
-        
+    },
+    onSuccess:(res)=>{
+        alert("성공적으로초대하였습니다")
+        //다른컴포넌트라그냥새로
+        queryclient.invalidateQueries("chatdata")
+    },
+    onError:(err)=>{
+        alert(err)
     }
-        */
+  })
+
+  const Invite=(roomid,checklist)=>{
+
+    Userinvite.mutate({roomid,checklist})
+  }
     //채팅창 유저비교 
 
     const existinguser=(usernickname)=>{
@@ -132,8 +144,8 @@ const ChatFollowlistmodal=(props)=>{
                 <ExitButton onClick={clossmodal}>닫기</ExitButton>
 
                 <Invitebutton onClick={()=>
-                    {invite(roomid,checklist)
-                        isinvitelist();
+                    {Invite(roomid,checklist)
+                      
                     }} >
                     
                     초대하기</Invitebutton>
@@ -204,6 +216,7 @@ const ChatFollowlistmodal=(props)=>{
                       
                         
                         <br/>
+                       
                         </Userli>
                         </label>
                        
@@ -215,6 +228,10 @@ const ChatFollowlistmodal=(props)=>{
                     
                 })}
             </Userlist>
+            {checklist.map((data)=>{
+                            return (<>
+                            {data}</>)
+                        })}
         </Modal>
 
 

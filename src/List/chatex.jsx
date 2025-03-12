@@ -430,20 +430,7 @@ function Chatex(props) {
             
        
     }
-    //넘길함수 
-    const userinvite = (roomid, checklist) => {
-        axiosinstance.post("/chatroominvite", {
-            roomid: roomid,
-            userlist: checklist
-        }).then((res) => {
-            console.log(res.data)
-            setChatroomdata(res.data)
-
-        }).catch((err) => {
-            console.log("에러")
-        })
-
-    }
+  
 
     //뒤로가기
     const backpage = () => {
