@@ -246,7 +246,7 @@ function Followlist(props){
                     />
                     
                 
-                :<FontAwesomeIcon icon={unfavorite} onClick={()=>{favoriteunfollow(data.username)}}
+                :<FontAwesomeIcon icon={unfavorite} onClick={()=>{favoritefollow(data.username)}}
                 style={{color:"black"}}
                 />
                 }

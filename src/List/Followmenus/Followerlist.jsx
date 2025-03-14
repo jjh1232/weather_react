@@ -18,19 +18,37 @@ const Searchdiv=styled.div`
 `
 const Userlistdiv=styled.div`
     display: flex;
+  
     flex-direction: column;
 `
 const Userlist=styled.div`
+   
     display: flex;
+    border: 1px solid gray;
 `
 const Profilecss=styled.div`
-    border: 1px solid red;
+
+
 `
 const Usernamediv=styled.div`
-     border: 1px solid blue;
+    
+     width: 80%;
 `
 const Followdiv=styled.div`
-     border: 1px solid green;
+    
+     display: flex;
+     justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+`
+const FollowButton=styled.button`
+    border-radius: 15%;
+    height: 30px;
+    background-color: skyblue;
+    color: black;
+
+    :hover{
+        background-color: red;
+    }
 `
 function Followerlist(props){
 
@@ -186,16 +204,16 @@ function Followerlist(props){
                 {data.followcheck
                     ?
                        
-                    <button onClick={()=>{
+                    <FollowButton onClick={()=>{
                         
                         unfollow(data.username);
                     //unfoll(data.username)
-                }}>팔로우해제</button>
+                }}>unfollow</FollowButton>
                     
-                :<button onClick={()=>{
+                :<FollowButton onClick={()=>{
                     //follow(data.username)
                     onfollow(data.username);
-                }}>팔로우</button>}
+                }}>follow</FollowButton>}
                 </Followdiv>
                 </Userlist>
                 

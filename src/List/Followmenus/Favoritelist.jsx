@@ -3,6 +3,54 @@ import CreateAxios from "../../customhook/CreateAxios";
 import Userdata from "../../UI/Modals/Userdata";
 import Usermodal from "../../UI/Modals/Usermodal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import styled from "styled-components";
+import Profilediv from "../../UI/Modals/Profilediv";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as favoriteicon} from "@fortawesome/free-solid-svg-icons";
+import { faStar as unfavoriteicon } from "@fortawesome/free-regular-svg-icons";
+
+const Wrapper=styled.div`
+
+display: flex;
+flex-direction: column;
+`
+const Searchdiv=styled.div`
+    
+`
+const Userlistdiv=styled.div`
+    display: flex;
+  
+    flex-direction: column;
+`
+const Userlist=styled.div`
+   
+    display: flex;
+    border: 1px solid gray;
+`
+const Profilecss=styled.div`
+
+
+`
+const Usernamediv=styled.div`
+    
+     width: 80%;
+`
+const Followdiv=styled.div`
+    
+     display: flex;
+     justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+`
+const FollowButton=styled.button`
+    border-radius: 15%;
+    height: 30px;
+    background-color: skyblue;
+    color: black;
+
+    :hover{
+        background-color: red;
+    }
+`
 
 function Favoritelist(props){
 
@@ -22,25 +70,7 @@ function Favoritelist(props){
 
 
     
-     useEffect(()=>{
-        if(ismodal){
-      
-        document.addEventListener("mousedown",modalclose)
-         //리턴으로 이벤트 안지우면 계속실행됨
-        return ()=>document.removeEventListener('mousedown',modalclose);
-        }
-    },[ismodal])
- 
-     const modalclose=(e)=>{
-        e.preventDefault();
-       
-             if(ismodal&&!modalref.current.contains(e.target)){
-               
-                setIsmodal(false)
-            }
- 
-         
-     }
+
  
 
 
@@ -89,10 +119,11 @@ function Favoritelist(props){
 
 
         return (
-        <>
-        <div style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Wrapper>
+        <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
         목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/>
-        <br/>
+        </Searchdiv>
+        <Userlistdiv>
         {favoritefollow && 
             favoritefollow.filter((list)=>{
                 if(searchkeyword==""){
@@ -108,8 +139,8 @@ function Favoritelist(props){
                 
                 .map((data)=>{
                 return(
-                    <>
-                    <div
+                    
+                    <Userlist
                     onClick={(e)=>{
                         console.log("클릭")
                         e.preventDefault();
@@ -119,24 +150,35 @@ function Favoritelist(props){
                     }}
                     ref={modalref} 
                     >
-                     
+                        <Profilecss>
+                            <Profilediv url={data.profileurl}/>
+                        </Profilecss>
+                     <Usernamediv>
                      {data.nickname} 
                         <br/>
-                        @{data.username}
-                        
-                        </div>
-                        <button onClick={()=>{unfavorite(data.username)}}>즐겨찾기해제</button>
+                        {data.username}
+                        </Usernamediv>
+                        <Followdiv>
+
+                        <FontAwesomeIcon  icon={favoriteicon} onClick={()=>{unfavorite(data.username)}}
+                            color="black" 
+                            />
+
+                    
+                        </Followdiv>
                         {ismodal&&<Usermodal 
                         username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
                         />}
-                    </>
+                        </Userlist>
+                    
+                    
                 )
             })
             }
-            </div>
-        </>
+           </Userlistdiv>
+        </Wrapper>
     )
 }
 export default Favoritelist;
