@@ -475,7 +475,7 @@ function Chatex(props) {
                 {/*메뉴누르고난다음 */}
 
                 {menuopen && <Chatmenumoda ref={menuref} roomdata={roomdata}
-                    invite={userinvite} />}
+                     />}
 
                 {/* 챗데이터 내용 div */}
                 

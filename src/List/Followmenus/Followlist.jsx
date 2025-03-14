@@ -6,6 +6,59 @@ import { useRef } from "react";
 import { defaultProps } from "react-quill";
 import AuthCheck from "../../customhook/authCheck";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as favorite} from "@fortawesome/free-solid-svg-icons";
+import { faStar as unfavorite } from "@fortawesome/free-regular-svg-icons";
+import styled from "styled-components";
+import Profilediv from "../../UI/Modals/Profilediv";
+
+const Wrapper=styled.div`
+ border   : 1px solid yellow ;
+`
+
+const Searchdiv=styled.div`
+    border: 1px solid green;
+`
+const Userlistdiv=styled.div`
+    border: 1px solid blue;
+    display: flex;
+    flex-direction:column;
+`
+
+const Userlist=styled.div`
+    display: flex;
+    border :1px solid gray;
+    margin: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`
+const Userprofilediv=styled.div`
+    margin-right: auto;
+    width: 80%;
+  
+`
+const Userprofileimage=styled.div`
+
+
+    margin-right: auto;
+`
+const FollowButton=styled.button`
+    border-radius: 15%;
+    background-color: skyblue;
+    color: black;
+
+    :hover{
+        background-color: red;
+    }
+`
+const Favoritediv=styled.div`
+    margin-left: auto;
+    display: flex;
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    width: 10%;
+    
+`
 
 function Followlist(props){
 
@@ -145,10 +198,11 @@ function Followlist(props){
         }
 
     return (
-        <>
-        <div style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Wrapper>
+        <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
         목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> 
-                    <br/>
+        </Searchdiv>
+        <Userlistdiv>
         {followlist&&followlist.filter((val,index)=>{
             //필터로 키워드에 알맞은값을 리턴한다 여러개값일때테스트필요한듯
             if(searchkeyword==""){
@@ -162,36 +216,48 @@ function Followlist(props){
         }) .map((data,key)=>{          
           
             return(
-                <div key={key}>
-                <div onClick={(e)=>{
+                
+                <Userlist  onClick={(e)=>{
                     setIsmodal(true)
                     setModalcss({x:e.clientX,y:e.clientY})
                }}
                ref={modalref}
                key={key}
                >
-                    
-                    {data.nickname}
+                
+                    <Userprofileimage>
+                    <Profilediv url={data.profileurl}/>
+                    </Userprofileimage>
+                    <Userprofilediv>
+                    {data.nickname} <FollowButton onClick={()=>{unfollow(data.username)}}>unfollow</FollowButton>
                
                 <br/> 
-                    @{data.username}
-                    <br/>
+                    {data.username}
+                    </Userprofilediv>    
                     {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
                         />}
 
-                 </div>
-                 {data.favorite?<button onClick={()=>{favoriteunfollow(data.username)}}>즐겨찾기해제</button>
-                :<button onClick={()=>{favoritefollow(data.username)}}>즐겨찾기</button>
+              
+                <Favoritediv>
+                 {data.favorite?<FontAwesomeIcon icon={favorite} onClick={()=>{favoriteunfollow(data.username)}}
+                     style={{color:"black", }}
+                    />
+                    
+                
+                :<FontAwesomeIcon icon={unfavorite} onClick={()=>{favoriteunfollow(data.username)}}
+                style={{color:"black"}}
+                />
                 }
-                <button onClick={()=>{unfollow(data.username)}}>팔로우해제</button>
-                 </div>
+                </Favoritediv>
+
+                </Userlist>
             )
         })}
         
-        </div>
-        </>
+        </Userlistdiv>
+        </Wrapper>
     )
 }
 export default  Followlist;

@@ -42,9 +42,9 @@ top:8%;
 
 width:100%;
 height:74%;
-border: 3px solid white;
+border: 8px solid black;
 border-radius: 4%;
-
+overflow: hidden;
 
 
 `
@@ -54,10 +54,12 @@ display:flex;
 position: relative;
 //justify-content:space-around;
 border:1px solid red;
-height: 10%;
-width: 100%;
-bottom:0%;
 
+height: 5%;
+width: 100%;
+//border-top-right-radius:20%;
+//border-top-left-radius: 20%%;
+overflow: hidden;
 `
 
 const Boxlist=styled.button`
@@ -65,18 +67,24 @@ const Boxlist=styled.button`
 color:${(props)=>{props.tapcolor===props.data?"blue":"white"}};
 width: 100%;
 
-margin: 1%;
+
 border: 1px solid black;
 
+ :hover{
+    background-color: blue;
+}
 `
+
 const Mainscreen=styled.div`
 background-color:bisque ;
-border: 1px solid black;
+
 position: relative;
 width: 99.9%;
-height:89%;
-border-radius: 2.1%;
-bottom:0%;
+height:600px;
+//border-bottom-left-radius: 4%;
+//border-end-end-radius: 4%;
+
+
 
 `
 
@@ -185,7 +193,7 @@ function ChatUi(props){
             <Boxlist data={"followerlist"} tapcolor={content} onClick={()=>{handlerClickButton("followerlist")}} name={"followerlist"}>팔로워</Boxlist>
             <Boxlist data={"favorite"} tapcolor={content} onClick={()=>{handlerClickButton("favorite")}} name={"favorite"}>즐겨찾기</Boxlist>
             <Boxlist data={"chatroomlist"} tapcolor={content} onClick={()=>{handlerClickButton("chatroomlist")}} name={"chatroomlist"}>채팅방</Boxlist>
-            <div onClick={makerooms}>채팅방</div>
+            
             </MainBox>     
         
        
