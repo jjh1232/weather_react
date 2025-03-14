@@ -4,7 +4,34 @@ import  {unfollow,following}  from "../../customhook/Followtools";
 import Usermodal from "../../UI/Modals/Usermodal";
 import { useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import styled from "styled-components";
+import Profilediv from "../../UI/Modals/Profilediv";
 
+
+const Wrapper=styled.div`
+
+display: flex;
+flex-direction: column;
+`
+const Searchdiv=styled.div`
+    
+`
+const Userlistdiv=styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const Userlist=styled.div`
+    display: flex;
+`
+const Profilecss=styled.div`
+    border: 1px solid red;
+`
+const Usernamediv=styled.div`
+     border: 1px solid blue;
+`
+const Followdiv=styled.div`
+     border: 1px solid green;
+`
 function Followerlist(props){
 
     const {Onfollow,Onunfollow}=props;
@@ -112,13 +139,14 @@ function Followerlist(props){
     }
         
     return (
-        <>
-        <div style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Wrapper>
+        <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
         목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}
         
         
         />
-        <br/>
+         </Searchdiv>
+         <Userlistdiv>
         {followerlist&&followerlist.filter((list)=>{
             if(searchkeyword==""){
                 return list;
@@ -133,24 +161,28 @@ function Followerlist(props){
         })
           .map((data)=>{
             return(
-                <>
-                <div onClick={(e)=>{
+                
+                <Userlist onClick={(e)=>{
                     setIsmodal(true)
                     setModalcss({x:e.clientX,y:e.clientY})
                }}
                ref={modalref}
                 >
+                    <Profilecss>
+                        <Profilediv url={data.profileurl}/>
+                    </Profilecss>
+                    <Usernamediv>
                     {data.nickname}  
-                    
+                    <br/>
                   
-                @{data.username}
-                
+                {data.username}
+                </Usernamediv>
                 {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
                         />}
 
-                </div>
+                <Followdiv>
                 {data.followcheck
                     ?
                        
@@ -164,11 +196,14 @@ function Followerlist(props){
                     //follow(data.username)
                     onfollow(data.username);
                 }}>팔로우</button>}
-            </>
+                </Followdiv>
+                </Userlist>
+                
+         
             )
         })}
-        </div>
-        </>
+       </Userlistdiv>
+        </Wrapper>
     )
 }
 export default Followerlist;
