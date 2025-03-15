@@ -10,6 +10,7 @@ import styled from "styled-components";
 import Chatex from "./chatex";
 import AuthCheck from "../customhook/authCheck";
 
+
 const Modalout=styled.div`
 width:14.5% ;
 height:63% ;
@@ -64,11 +65,15 @@ overflow: hidden;
 
 const Boxlist=styled.button`
 
-color:${(props)=>{props.tapcolor===props.data?"blue":"white"}};
+background-color:${(props)=>props.tapcolor===props.data?"blue":"black"};
+
+color: white;
+border: 1px solid white;
 width: 100%;
 
+border-top-left-radius: 15%;
+border-top-right-radius: 15%;
 
-border: 1px solid black;
 
  :hover{
     background-color: blue;

@@ -11,8 +11,18 @@ const Wrapper=styled.div`
     height: 70px;
 `
 const Imagediv=styled.div`
+    display: flex;
     border: 1px solid red;
     width: 20%;
+    flex-wrap: wrap;
+   
+`
+const Profilelist=styled.div`
+    width: 45%;
+    height: 47%;
+    margin-left: 0.5px;
+    text-overflow: hidden;
+    border:1px solid gray;
 `
 const MainContainer=styled.div`
     display: flex;
@@ -20,6 +30,7 @@ const MainContainer=styled.div`
     border: 1px solid blue;
     width: 65%;
 `
+
 
 const MainTop=styled.div`
       display: flex;
@@ -48,6 +59,17 @@ const Menudiv=styled.div`
     overflow: hidden;
     text-overflow:ellipsis;
     font-size: 11px;
+    display:flex;
+    flex-direction: column;
+`
+const Timediv=styled.div`
+    height: 50%;
+    text-align: center;
+    vertical-align: middle;
+`
+const Readdiv=styled.div`
+    text-align: center;
+     height: 50%;
 `
 
 function Chatroomlistitem(props){
@@ -74,7 +96,14 @@ function Chatroomlistitem(props){
             {/* 구지 사용자는알필요없는듯룸아이디
             룸아이디:{chatroomdata.roomid}
                 */}
-                이미지
+                {chatroomdata.namelist.map((item,index)=>{
+                  if(index<4){
+                    return <Profilelist>
+               1
+                    </Profilelist>
+                  }
+                })}
+               
             </Imagediv>
 
             <MainContainer>
@@ -107,9 +136,14 @@ function Chatroomlistitem(props){
        
        
         </MainContainer>
+
         <Menudiv>
+            <Timediv>
         <Datefor inputdate={chatroomdata.time}/> 
-        
+        </Timediv>
+        <Readdiv>
+            3
+        </Readdiv>
         </Menudiv>
      
         </Wrapper>
