@@ -2,6 +2,11 @@ import React from "react";
 import Chatroomlistitem from "./Chatroomlistitem" 
 import { useState,useEffect } from "react";
 import CreateAxios from "../customhook/CreateAxios";
+import styled from "styled-components";
+
+const Wrapper=styled.div`
+    
+`
 
 function Chatroomlist(props){
     const [chatroomlistdata,setChatroomlistdata]=useState();
@@ -51,7 +56,7 @@ function Chatroomlist(props){
         
     return (
 
-        <div style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Wrapper style={{width:"100%",height:"100%", overflow:"auto"}}>
         {chatroomlistdata&&chatroomlistdata.length>0?chatroomlistdata.map((data)=>{
             return(
                 
@@ -66,7 +71,7 @@ function Chatroomlist(props){
     :<>친구와채팅을 이용해보세요!</>
     }
        
-        </div>
+        </Wrapper>
     
 
     )

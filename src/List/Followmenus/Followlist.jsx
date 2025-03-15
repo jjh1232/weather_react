@@ -89,6 +89,7 @@ function Followlist(props){
          return ()=>document.removeEventListener('mousedown',modalclose);
      },[ismodal])
  
+     
      const modalclose=(e)=>{
  
        

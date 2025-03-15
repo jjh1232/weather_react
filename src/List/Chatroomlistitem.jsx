@@ -2,6 +2,53 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as useChatroomexit from "../customhook/useChatroomservice";
 import CreateAxios from "../customhook/CreateAxios";
+import styled from "styled-components";
+import Datefor from "./noticeformlist/DateCom/Datefor";
+
+const Wrapper=styled.div`
+    display: flex;
+    border: 1px solid gray;
+    height: 70px;
+`
+const Imagediv=styled.div`
+    border: 1px solid red;
+    width: 20%;
+`
+const MainContainer=styled.div`
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+    width: 65%;
+`
+
+const MainTop=styled.div`
+      display: flex;
+      border: 1px solid yellow;
+      height: 33%;
+`
+const Roomnamecss=styled.div`
+    overflow: hidden;
+    text-overflow:ellipsis;
+`
+const Roomlength=styled.div`
+    
+`
+/*
+const MainMiddle=styled.div`
+      border: 1px solid rosybrown;
+`
+*/
+const MainBottom=styled.div`
+      border: 1px solid pink;
+      height: 66%;
+`
+const Menudiv=styled.div`
+    border: 1px solid green;
+    width: 15%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    font-size: 11px;
+`
 
 function Chatroomlistitem(props){
 
@@ -19,28 +66,25 @@ function Chatroomlistitem(props){
         
     }
 
-    /*
-    const exit=(roomid)=>{
-    axiosinstance.post("/chatroomexit",{
-
-        roomid:roomid
-
-    }).then((res)=>{
-        console.log("성공적")
-        
-    })
-    .catch((err)=>{
-        console.log("에러")
-    })
-    }
-*/
+    
     return (
-        <div>
-        <div onClick={()=>{movechatroom(chatroomdata)}}>
-        룸아이디:{chatroomdata.roomid}
-        <br/>
-        이름:{chatroomdata.roomname} 
-        <br/>
+        <Wrapper onClick={()=>{movechatroom(chatroomdata)}}>
+            
+            <Imagediv>
+            {/* 구지 사용자는알필요없는듯룸아이디
+            룸아이디:{chatroomdata.roomid}
+                */}
+                이미지
+            </Imagediv>
+
+            <MainContainer>
+                <MainTop>
+                
+                <Roomnamecss>{chatroomdata.roomname}</Roomnamecss>
+                <Roomlength>  {chatroomdata.namelist.length}</Roomlength>
+        </MainTop>
+        {/* 유저목록구지필요한가싶어서
+        <MainMiddle>
         유저목록:{chatroomdata.namelist.map((data,key)=>{
             
             return(
@@ -53,19 +97,22 @@ function Chatroomlistitem(props){
                 </>
             )
         })}
+       </MainMiddle>
+       */}
        
-        <br/>
-       
+       <MainBottom>
         {chatroomdata.latelychat}
-
+        </MainBottom>
         
-        </div>
-        시간:{chatroomdata.time} 
-        <button onClick={()=>{
-            onclick(chatroomdata.roomid)
-        }}>나가기</button>
-        <br/>
-        </div>
+       
+       
+        </MainContainer>
+        <Menudiv>
+        <Datefor inputdate={chatroomdata.time}/> 
+        
+        </Menudiv>
+     
+        </Wrapper>
     )
 }
 export default Chatroomlistitem;
