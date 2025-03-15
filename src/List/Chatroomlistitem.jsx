@@ -18,10 +18,16 @@ const Imagediv=styled.div`
    
 `
 const Profilelist=styled.div`
-    width: 45%;
-    height: 47%;
-    margin-left: 0.5px;
-    text-overflow: hidden;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: ${props => {
+    if (props.itemCount === 1) return '100%';
+    if (props.itemCount === 2) return '45%';
+    if (props.itemCount === 3 || props.itemCount === 4) return '45%';
+    return '25%'; // 4개 초과일 경우
+  }};
+
+    height: ${props => (props.itemCount === 2 ? '60%' : 'auto')};
     border:1px solid gray;
 `
 const MainContainer=styled.div`
@@ -98,7 +104,7 @@ function Chatroomlistitem(props){
                 */}
                 {chatroomdata.namelist.map((item,index)=>{
                   if(index<4){
-                    return <Profilelist>
+                    return <Profilelist itemCount={chatroomdata.namelist.length}>
                1
                     </Profilelist>
                   }
