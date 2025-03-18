@@ -38,9 +38,10 @@ const Userprofilediv=styled.div`
   
 `
 const Userprofileimage=styled.div`
-
-
-    margin-right: auto;
+ width: 40px;
+    height:40px;
+    margin-right: 4px;
+ 
 `
 const FollowButton=styled.button`
     border-radius: 15%;

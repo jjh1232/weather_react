@@ -4,7 +4,7 @@ import * as useChatroomexit from "../customhook/useChatroomservice";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import Datefor from "./noticeformlist/DateCom/Datefor";
-
+import Profilediv from "../UI/Modals/Profilediv";
 const Wrapper=styled.div`
     display: flex;
     border: 1px solid gray;
@@ -15,11 +15,15 @@ const Imagediv=styled.div`
     border: 1px solid red;
     width: 20%;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
    
 `
 const Profilelist=styled.div`
     flex-grow: 0;
     flex-shrink: 0;
+   
+   
     flex-basis: ${props => {
     if (props.itemCount === 1) return '100%';
     if (props.itemCount === 2) return '45%';
@@ -27,7 +31,8 @@ const Profilelist=styled.div`
     return '25%'; // 4개 초과일 경우
   }};
 
-    height: ${props => (props.itemCount === 2 ? '60%' : 'auto')};
+    height: ${props => (props.itemCount === 2 ? '55%' : '45%')};
+    
     border:1px solid gray;
 `
 const MainContainer=styled.div`
@@ -102,10 +107,14 @@ function Chatroomlistitem(props){
             {/* 구지 사용자는알필요없는듯룸아이디
             룸아이디:{chatroomdata.roomid}
                 */}
-                {chatroomdata.namelist.map((item,index)=>{
+                {chatroomdata.memberlist.map((item,index)=>{
                   if(index<4){
-                    return <Profilelist itemCount={chatroomdata.namelist.length}>
-               1
+                    return <Profilelist itemCount={chatroomdata.memberlist.length}
+                        
+                    >
+                         <Profilediv url={item.profileimg} />
+                         
+                
                     </Profilelist>
                   }
                 })}
@@ -116,7 +125,7 @@ function Chatroomlistitem(props){
                 <MainTop>
                 
                 <Roomnamecss>{chatroomdata.roomname}</Roomnamecss>
-                <Roomlength>  {chatroomdata.namelist.length}</Roomlength>
+                <Roomlength>  {chatroomdata.memberlist.length}</Roomlength>
         </MainTop>
         {/* 유저목록구지필요한가싶어서
         <MainMiddle>

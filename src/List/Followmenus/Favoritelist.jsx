@@ -28,7 +28,9 @@ const Userlist=styled.div`
     border: 1px solid gray;
 `
 const Profilecss=styled.div`
-
+    width: 40px;
+    height:40px;
+    margin-right: 4px;
 
 `
 const Usernamediv=styled.div`

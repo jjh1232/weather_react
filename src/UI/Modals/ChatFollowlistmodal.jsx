@@ -53,6 +53,10 @@ background: radial-gradient(circle, rgba(247,150,192,1) 0%, rgba(118,174,241,1) 
   border: none;
 
 `
+const Userprofilecss=styled.div`
+    width:40px;
+    height:40px;
+`
 const HeaderText = styled.div`
     text-align:center;
    
@@ -221,8 +225,10 @@ const ChatFollowlistmodal = (props) => {
                             console.log("기존에있는경우!")
                             return (
                                 <Userli>
-                                    <Profilediv url={data.profileurl} />
-
+                                    
+                                    <Userprofilecss>
+                                        <Profilediv url={data.profileurl} />
+                                     </Userprofilecss>
                                     {data.nickname}
                                     <br />
                                     {data.username}
@@ -236,7 +242,9 @@ const ChatFollowlistmodal = (props) => {
 
                                 <label for={data.username} >
                                     <Userli>
+                                        <Userprofilecss>
                                         <Profilediv url={data.profileurl} />
+                                        </Userprofilecss>
                                         <Username>
                                             {data.nickname}
                                             <br />
