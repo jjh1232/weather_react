@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-  
+   
     height: 100%;
     width:100%;
    
@@ -22,9 +22,15 @@ const Wrapper = styled.div`
 
 const Header=styled.div`
     display: flex;
+    position: relative;
+    top: 1px;
+    border: 1px solid black;
 `
 const Main=styled.div`
-   
+  width: 100%;
+  height: 495px;
+  overflow: auto;
+ 
 
 `
 const Roomnamecss=styled.div`
@@ -332,8 +338,8 @@ function Chatex(props) {
         queryKey:["chatdata"],
         queryFn:async ()=>{
             const res=await axiosinstance.get("/chatroomdataget?roomid=" + roomid)
-            setChatdata(makeSection(res.data.beforechat))
-            return res.data.roomdata
+            setChatdata(makeSection(res.data.chatdata))
+            return res.data
         }
         
     })
@@ -452,7 +458,7 @@ function Chatex(props) {
                 {/*상단의 메뉴버튼 */}
 
 
-                <Header style={{ height: "30px", border: "1px solid blue", top: "5px", position: "relative" }}>
+                <Header >
                     
                     <FontAwesomeIcon icon={faArrowLeft} size="xl" onClick={backpage}
                     style={{paddingLeft:"3px",paddingRight:"3px", marginRight:"auto"}}
@@ -460,7 +466,7 @@ function Chatex(props) {
                     <Roomnamecss>
                     {roomdata && roomdata.roomname}
                     </Roomnamecss>
-                    ({roomdata && roomdata.namelist.length})
+                    ({roomdata && roomdata.memberlist.length})
 
                     
                     <FontAwesomeIcon icon={faBars} size="xl" style={{ float: "right", 
@@ -479,7 +485,7 @@ function Chatex(props) {
 
                 {/* 챗데이터 내용 div */}
                 
-                <Main style={{ width: "100%", height: "500px", overflow: "auto", border: "1px solid yellow" }}>
+                <Main >
                     {chatdata &&
                         Object.entries(chatdata).map(([date, chats]) => {
 
@@ -497,25 +503,25 @@ function Chatex(props) {
                                         return (
                                             <Chatdiv >
                                                 
-                                                {data.messageType==="Message"?<Systemchat>
+                                                {data.messagetype==="System"?<Systemchat>
                                                     
                                                     <Systemtext>{data.message}</Systemtext>
-                                                    {prevhandler(data.writer)}
+                                                    {prevhandler(data.sender.email)}
 
                                                 </Systemchat>:
                                                 <>
                                                 
-                                                {loginuser.userinfo["nickname"] === data.writer
+                                                {loginuser.userinfo["username"] === data.sender.email
                                                     ?
                                                     <Mychat>
                                                         <Profilecss>
-                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile}
-                                                                isprev={prevname===data.writer?true:false}
+                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.sender.profileurl}
+                                                                isprev={prevname===data.sender.email?true:false}
                                                         />
                                                         </Profilecss>
                                                         <ChatContainer>
                                                             <ChatTop isme 
-                                                            isprev={prevname===data.writer?true:false}>{data.writer}</ChatTop>
+                                                            isprev={prevname===data.sender.email?true:false}>{data.sender.nickname}</ChatTop>
                                                             <ChatMain isme >
                                                             
                                                                 {data.message}
@@ -533,13 +539,13 @@ function Chatex(props) {
                                                     :
                                                     <Anotherchat>
                                                          <Profilecss>
-                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.userprofile} 
-                                                        isprev={prevname===data.writer?true:false}/>
+                                                        <Profile src={process.env.PUBLIC_URL + "/userprofileimg" + data.sender.profileurl} 
+                                                        isprev={prevname===data.sender.email?true:false}/>
                                                         </Profilecss>
                                                         <ChatContainer>
                                                             <ChatTop
-                                                            isprev={prevname===data.writer?true:false}
-                                                            >{data.writer}</ChatTop>
+                                                            isprev={prevname===data.sender.email?true:false}
+                                                            >{data.sender.nickname}</ChatTop>
                                                             <ChatMain>{data.message}
 
                                                             
@@ -556,7 +562,7 @@ function Chatex(props) {
                                                     </Anotherchat>
                                                 
                                                 }
-                                                     {prevhandler(data.writer)}    
+                                                     {prevhandler(data.sender.email)}    
                                             </>
                                             }
                                             </Chatdiv>
