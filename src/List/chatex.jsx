@@ -314,14 +314,22 @@ function Chatex(props) {
     const sendmessage = () => {
 
         console.log("챗보내기")
+        //스톰프는 역직렬화 JSON.stringify 를 해야한다고함 근데문자열은생략가능하다는디
+        const data={
+            sender:{
+                 email:loginuser.userinfo["username"],
+                 nickname:loginuser.userinfo["nickname"],
+                 profileurl:loginuser.userinfo["profileimg"]
+                }
+            ,
+            message:message,
+            messageType:"chat"
+        }
         client.current.publish({
             destination: `/pub/channel/${roomid}`,//1
-            body: JSON.stringify({
-                username: loginuser.userinfo["username"],
-                sender: loginuser.userinfo["nickname"],
-                messageType: "chat",
-                message: message
-            })
+            body: JSON.stringify(
+                data
+            )
         })
 
         //보내고 챗리셋해야할듯?
@@ -334,15 +342,32 @@ function Chatex(props) {
 
     //챗룸기존데이터가져오기
     const [chatdata, setChatdata] = useState();
-    const {data:roomdata,isLoading,error}=useQuery({
+    const [roomdata,setRoomdata]=useState();
+    const {data,isLoading,error}=useQuery({
         queryKey:["chatdata"],
         queryFn:async ()=>{
+            console.log("쿼리실행")
             const res=await axiosinstance.get("/chatroomdataget?roomid=" + roomid)
-            setChatdata(makeSection(res.data.chatdata))
+           
             return res.data
-        }
+        },
+        select:(data)=>{
+            
+            const {chatdata,...roomdatawithoutchat}=data;
+           return {
+            chatdata:makeSection(chatdata),
+            roomdata:roomdatawithoutchat
+           }
+        }   
         
     })
+    //유즈이펙트쓰래 
+    useEffect(()=>{
+        if(data){ //데이터가 처음에없어서 에러난다 
+            setChatdata(data.chatdata)
+            setRoomdata(data.roomdata)
+        }
+    },[data])
    /*
     const chatroomdataget = () => {
         console.log("챗데이터불러오기1")

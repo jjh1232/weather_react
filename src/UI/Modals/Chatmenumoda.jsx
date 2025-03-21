@@ -97,7 +97,7 @@ return (
     <Modalbody ref={ref} className="chatroommenu">
         <Headercss className="chatroommenu">
         {roomdata.roomname} 
-        ({roomdata.namelist.length})
+        ({roomdata.memberlist.length})
 
                   
     </Headercss>
@@ -106,11 +106,11 @@ return (
     유저목록
     <UserDiv className="chatroommenu">
     <InviteButton  className="chatroommenu" onClick={(e)=>isinvite(e)}>초대하기</InviteButton> 
-    {roomdata.namelist.map((data)=>{
+    {roomdata.memberlist.map((data)=>{
         return (
             <Userlistcss className="chatroommenu">
                 
-                {data.membernickname}
+                {data.nickname}
 
             </Userlistcss>
 
