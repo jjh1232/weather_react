@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import styled from "styled-components";
 import ChatFollowlistmodal from "./ChatFollowlistmodal";
+import Profilediv from "./Profilediv";
 
 const Modal=styled.div`
 position:absolute;
@@ -34,11 +35,21 @@ const Menubar=styled.div`
 `
 const UserDiv=styled.div`
     border: 1px solid blue;
-    width:60%
+    width:80%
 
 `
 const Userlistcss=styled.div`
     border: 1px solid black;
+    display: flex;
+    height: 40px;
+`
+const Profilecss=styled.div`
+    width: 30px;
+    height: 30px;
+    border:1px solid red;
+`
+const Username=styled.div`
+    
 `
 const Outbox=styled.div`
     text-align: center;
@@ -109,9 +120,13 @@ return (
     {roomdata.memberlist.map((data)=>{
         return (
             <Userlistcss className="chatroommenu">
-                
+            <Profilecss>
+            <Profilediv url={data.profileurl}/>
+            </Profilecss>
+               <UserDiv>
                 {data.nickname}
-
+              
+                </UserDiv>
             </Userlistcss>
 
         )
