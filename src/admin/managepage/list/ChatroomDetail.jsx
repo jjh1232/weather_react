@@ -66,15 +66,46 @@ const Chatbottom=styled.div`
     min-width: 65px;
     width:100%;
 `
-const Callendercss=styled.div`
-    border: 1px solid yellow;
+const Sidebar=styled.div`
+display: flex;
+flex-direction: column;
+    position: fixed;
+    
     width: 400px;
-    height: 530px;
+    height: 700px;
     left: 1400px;
     bottom: 100px;
+`
+const Userlistcss=styled.div`
+
+    height: 30%;
+`
+const Userheader=styled.div`
+    border: 1px solid blue;
+`
+const Usermain=styled.div`
+    border: 1px solid yellow;
+    overflow: auto;
+`
+const Userlistdiv=styled.div`
+    display:flex;
+    border: 1px solid black;
+`
+const Listprofile=styled.div`
+    width: 30px;
+    height: 30px;
+`
+const Userdata=styled.div`
+    
+`
+const Callendercss=styled.div`
+    border: 1px solid yellow;
+    
+    height: 70%;
+    
     z-index: 100;
     background-color: gray;
-    position: fixed;
+    
     
 `
 
@@ -198,10 +229,33 @@ export default function ChatroomDetail(props){
 
             </Main>
 </>}            
+<Sidebar>
+    <Userlistcss>
+        <Userheader>
+            유저리스트 {roomdata.memberlist.length}
+        </Userheader>
+        <Usermain>
+            {roomdata.memberlist&&roomdata.memberlist.map((data)=>{
+                return (
+                    <Userlistdiv>
+                    <Listprofile>
+                    <Profilediv url={data.profileurl}/>
+                    </Listprofile>
+                    <Userdata>
+                    {data.nickname}
+                    <br/>
+                    {data.email}
+                    </Userdata>
+                    </Userlistdiv>
+                )
+            })}
+        </Usermain>
+    </Userlistcss>
 < Callendercss>
 
         <AdminCalander currentdate={dat} movemethod={moveCurrent} chatdata={monthchat}></AdminCalander>
 </ Callendercss>
+</Sidebar>
                 <div style={{border:"1px solid blue" ,height:"100px"}}></div>
               
         </Wrapper>
