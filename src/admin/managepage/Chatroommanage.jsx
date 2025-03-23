@@ -8,6 +8,7 @@ import Chatroomlist from "./list/Chatroomlist";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import { useNavigate } from "react-router-dom";
 import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
+import { useQuery } from "@tanstack/react-query";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -71,10 +72,34 @@ export default function Chatroommanage(){
         {value:"email", name:"이메일검색"} 
     ]
      
-      useEffect(()=>{
+
+    
+        const {data,isLoading,error}=useQuery({
+            queryKey:["adminchatroomlist", querydata.page, querydata.option, querydata.keyword],
+            queryFn:async ()=>{
+                let res=  await axiosintance.get("/admin/chatroommanage",{
+                    params:{page:querydata.page,
+                        option:querydata.option,
+                        searchtext:querydata.keyword}
+                })
+
+                return res.data;
+            },
+     
+            
+        })
+
+        useEffect(()=>{
+            if(data){
+                setChatroom(data.content)
+                setTotalpage(data.totalPages)
+            }
+            },[data])
+        /*
+              useEffect(()=>{
         getchatroomlist();
         },[querydata.page,querydata.option,querydata.keyword])
-    
+
         const getchatroomlist=()=>{
             axiosintance.get("/admin/chatroommanage",{
                 params:{page:querydata.page,
@@ -87,7 +112,7 @@ export default function Chatroommanage(){
                 setTotalpage(res.data.totalPages)
             })
         }
-
+*/
     return (
         <Wrapper>
             <AdminHeader>

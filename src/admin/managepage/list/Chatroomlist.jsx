@@ -4,6 +4,7 @@ import CreateAxios from "../../../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 
 const Button=styled.button`
@@ -31,6 +32,7 @@ const Td=styled.td`
 `
 export default function Chatroomlist(props){
 
+    const queryclient=useQueryClient();
     const {data,key}=props;
     const axiosinstance=CreateAxios();
     const navigate=useNavigate();
@@ -39,6 +41,7 @@ export default function Chatroomlist(props){
         axiosinstance.delete(`/admin/roomdelete/${roomid}`)
         .then((res)=>{
             alert(res.data)
+            queryclient.invalidateQueries(["adminchatroomlist"]);
         }).catch((err)=>{
             alert(err)
         })
