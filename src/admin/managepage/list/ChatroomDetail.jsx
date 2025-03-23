@@ -5,6 +5,7 @@ import CreateAxios from "../../../customhook/CreateAxios";
 import styled from "styled-components";
 import AdminHeader from "../../../customhook/Admintools/AdminCss/AdminHeader";
 import AdminCalander from "../../../customhook/Admintools/AdminCss/AdminCalander";
+import Profilediv from "../../../UI/Modals/Profilediv";
 
 const Wrapper=styled.div`
     position: absolute;
@@ -37,7 +38,7 @@ const Chatdiv=styled.div`
    display: flex;
     border:1px solid red;
 `
-const Profile=styled.img`
+const Profile=styled.div`
     position: relative;
     border:1px solid blue;
     width: 50px;
@@ -94,7 +95,7 @@ export default function ChatroomDetail(props){
         axiosintance.get(`/admin/room/${roomid}`).then((res)=>{
             console.log("데이터"+res.data)
             setRoomdata(res.data)
-            setMonthchat(makeSection(res.data.beforechat))
+            setMonthchat(makeSection(res.data.chatdata))
            
 
         }).catch((err)=>{
@@ -149,7 +150,7 @@ export default function ChatroomDetail(props){
                 
             <h3 style={{position:"relative",float:"left"}}> 방이름:{roomdata.roomname}</h3>
           
-            <h3 style={{float:"right",border:"1px solid blue"}}>  개설일:{roomdata.time}</h3>
+            <h3 style={{float:"right",border:"1px solid blue"}}>  개설일:{roomdata.createred}</h3>
             
             </ChatSetting>
             
@@ -166,10 +167,12 @@ export default function ChatroomDetail(props){
                                 return (
                                     <Chatdiv>
                         
-                            <Profile src={process.env.PUBLIC_URL+"/userprofileimg"+chat.userprofile}/>
+                                <Profile >
+                                <Profilediv url={chat.sender.profileurl}/>
+                                </Profile>
                                     <ChatContainer>
                         <ChatTop>
-                        {chat.writer}
+                        {chat.sender.nickname}
                         </ChatTop>
                         <ChatMain>
                         {chat.message}
