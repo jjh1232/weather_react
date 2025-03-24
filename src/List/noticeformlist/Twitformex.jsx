@@ -20,6 +20,7 @@ width:43%;
 height:100%;
  border: 1px solid;
  top: 8%;
+
 `
 const Modalout=styled.div`
 width:45% ;

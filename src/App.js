@@ -48,12 +48,9 @@ import NoAccess from "./customhook/Admintools/NoAccess";
 import ChatroomDetail from "./admin/managepage/list/ChatroomDetail";
 import Adminnoticedetail from "./admin/managepage/list/Adminnoticedetail";
 import Adminloginhistory from "./customhook/Admintools/Adminloginhistory";
+import MainLayout from "./MainPage/MainLayout";
 
-const MainTitleText = styled.p`
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-`;
+
 
 
 function App(props) {
@@ -61,32 +58,21 @@ function App(props) {
 const queryClient=new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>
-    <div className="background" style={{
-     // backgroundImage:'url(/front/background/rain.gif)',
-     backgroundColor:"skyblue",
-      backgroundRepeat:"no-repeat",
-      backgroundPosition:"top center",
-      backgroundSize:`cover`,
-      position:"fixed",
-      overflow:`auto`,
-      backgroundAttachment:`local`,
-      width:"100%",
-      height:"100vh"
-
-      //backgroundAttachment:"fixed",
-    
-     }}>
+      
       <CookiesProvider>
       
     <BrowserRouter>
     
+  
     <Header/>
     <AdminLeft/>
     <LeftSideBar/>
     <RightSideBar/>
-   
+    
     <Routes>
-      <Route element={<PrivateRoute/>}>
+    <Route path="/" element={<MainLayout />}>
+
+    <Route element={<PrivateRoute/>}>
       <Route path="/admin" element={<Adminmain/>}/>
       <Route path="/admin/chatroom" element={<Chatroommanage/>}/>
       <Route path="/admin/comment" element={<Commentmanage/>}/>
@@ -128,12 +114,13 @@ const queryClient=new QueryClient()
       <Route path="/userpage/:username" element={<UserDetail/>}/>
       <Route path="/noaccess" element={<NoAccess/>}/>
 
-     
+      </Route> 
     </Routes>
-    
+   
     </BrowserRouter>
     </CookiesProvider>
-    </div>
+
+    
      <ReactQueryDevtools/>
     </QueryClientProvider>
   )
