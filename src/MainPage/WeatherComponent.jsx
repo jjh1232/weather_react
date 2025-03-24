@@ -17,7 +17,7 @@ const WeatherBackground = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   
   border: 5px solid blue;
@@ -25,8 +25,8 @@ const WeatherBackground = styled.div`
 
 const RainDrop = styled.div`
   position: absolute;
-  width: 2px;
-  height: 20px;
+  width: 1px;
+  height: 10px;
   z-index: -10;
   background-color: #7EB2DD;
   animation: ${rainAnimation} 1s linear infinite;
@@ -46,7 +46,7 @@ export default function WeatherComponent(){
 
     
   const renderWeatherEffect = () => {
-    return Array.from({ length: 100 }).map((_, index) => (
+    return Array.from({ length: 40 }).map((_, index) => (
         <RainDrop
           key={index}
           style={{

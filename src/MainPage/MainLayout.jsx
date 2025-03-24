@@ -13,10 +13,11 @@ const Wrapper=styled.div`
     background-repeat: no-repeat;
     background-position: top center;
     background-size: cover;
-    position: fixed;
+    min-height: 100vh;
     overflow: auto;
     width: 100%;
-    height: 100vh;
+    
+    
 `
 export default function MainLayout(props){
     const {children}=props
@@ -31,6 +32,7 @@ export default function MainLayout(props){
         <RightSideBar/>  
 
         <Outlet/>
+        
         </Wrapper>
     )
 }

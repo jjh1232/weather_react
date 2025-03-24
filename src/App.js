@@ -64,10 +64,7 @@ const queryClient=new QueryClient()
     <BrowserRouter>
     
   
-    <Header/>
-    <AdminLeft/>
-    <LeftSideBar/>
-    <RightSideBar/>
+    
     
     <Routes>
     <Route path="/" element={<MainLayout />}>

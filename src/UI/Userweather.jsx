@@ -5,6 +5,10 @@ import CreateAxios from "../customhook/CreateAxios";
 import axios from "axios";
 import Userweatheritem from "./UserweatherItem";
 
+const Headers=styled.div`
+  
+`
+
 const Wrapper=styled.div`
 
   
@@ -57,10 +61,13 @@ function Userweather(props){
     
 
     return(
-        <div>
+        
         <Wrapper>
-       {loginuser.userinfo &&loginuser.userinfo.region.replaceAll("+"," ")
-       }
+        <Headers>
+        {loginuser.userinfo &&loginuser.userinfo.region.replaceAll("+"," ")
+       }    
+        </Headers>
+      
         {weatherdata && weatherdata.map((data,index)=>{
           return(
             <div key={index}>
@@ -72,7 +79,7 @@ function Userweather(props){
         })}
    
                 </Wrapper>
-    </div>
+   
     )
 
 }
