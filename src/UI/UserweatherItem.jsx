@@ -16,7 +16,7 @@ import { faWind as wind } from "@fortawesome/free-solid-svg-icons";
 import { faSun as sun } from "@fortawesome/free-regular-svg-icons";
 import { faSun as sunblur } from "@fortawesome/free-solid-svg-icons";
 import { faCloud as cloud } from "@fortawesome/free-solid-svg-icons";
-
+import { faDroplet as droplet } from "@fortawesome/free-solid-svg-icons";
 
 
 const WeatherContainer=styled.div`
@@ -33,16 +33,26 @@ const WeatherBody=styled.div`
     display: flex;
 `
 const Skyicon=styled.div`
-    width: 30%;
+    width: 20%;
     border: 1px solid blue;
 `
 const Tempcss=styled.div`
-    width: 20%;
+    width: 15%;
     border: 1px solid green;
 `
 const Etc=styled.div`
-    width: 50%;
+    display: flex;
+    width: 65%;
     border: 1px solid black;
+`
+const Humidity=styled.div`
+    width: 25%;
+`
+const Raindrop=styled.div`
+     width: 50%;
+`
+const Windblow=styled.div`
+     width: 25%;
 `
 function Userweatheritem(props){
 
@@ -121,19 +131,36 @@ function Userweatheritem(props){
     // 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7) 
     },{data.pty}<br/>
     {Weatherimo(data.sky,data.pty,data.time)}<br/>
-  
+    
     </Skyicon>
 
     <Tempcss>
-    온도:{data.t1h}
+    {data.t1h+"\u2103" }  
     </Tempcss>
     <Etc>
-    습도:{data.reh}
-    1시간강수량:{data.rn1}
- 
+    <Humidity>
+    습도 <br/>
+    <FontAwesomeIcon icon={droplet}/> <br/>
+    {data.reh}% <br/>
+  
+    </Humidity>
+    <Raindrop>
+    1시간강수량
+    <FontAwesomeIcon icon={umbrella}/> <br/>
+    {data.rn1}<br/>
+    
+
+    </Raindrop>
+   
+    <Windblow>
+    풍속
+    <FontAwesomeIcon icon={wind}/> <br/>
+    {data.wsd}m/s<br/>
+  
+    </Windblow>
     
    
-    풍속:{data.wsd}
+    
     </Etc>
    
     
