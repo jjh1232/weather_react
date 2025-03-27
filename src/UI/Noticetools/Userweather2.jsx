@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useCookies } from "react-cookie";
 import CreateAxios from "../../customhook/CreateAxios";
 import axios from "axios";
@@ -13,8 +13,30 @@ const Wrapper=styled.div`
 
   
 `
-
-
+//슬라이드애니메이션
+const SlideAnimation=keyframes`
+  from{
+    transform: translateX(100%);
+  }
+  to{
+    transform: translateX(0);
+  }
+`
+//컨테이너스타일
+const WeatherContainer=styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+`
+const Weatheritemwrapper=styled.div`
+  transition: all 0.3s ease;
+  opacity: ${props=>props.isCurrent?1:0.5};
+  transform: scale(${props => props.isCurrent ? 1 : 0.9});
+  animation: ${props => props.isNew ? css`${SlideAnimation} 0.3s ease` : 'none'};
+`
 function Userweather2(props){
     
     const [loginuser,Setloginuser,removeloginuser]=useCookies(['userinfo'])
@@ -27,7 +49,7 @@ function Userweather2(props){
       }}
     )
 
-    const [timeindex,setTimeindex]=useState(2);
+    const [timeindex,setTimeindex]=useState(0);
 
     useEffect(()=>{
         if(loginuser.userinfo){
@@ -41,7 +63,7 @@ function Userweather2(props){
             console.log(res)
             console.log(asd)
             setWeatherdata(res.data)
-            Setloginuser("weather",res.data[2])
+            Setloginuser("weather",res.data[0])
             
           }).catch((err)=>{
 
@@ -62,6 +84,9 @@ function Userweather2(props){
         
       },[])
     
+      useEffect(()=>{
+
+      },[timeindex])
 
       
     return(
@@ -74,23 +99,36 @@ function Userweather2(props){
       
         
           
-            <div>
+            <WeatherContainer>
             {weatherdata&&
               <>
-            <button onClick={()=>{setTimeindex(previndex=>previndex-1)}}>위로</button>
-            { /*키값주면 알아서 렌더링되긴함 useeffect안써도*/ }
-          <Userweatheritem2 key={timeindex-1} dates={weatherdata[timeindex-1]} />
-              
-            <Userweatheritem2 key={timeindex} dates={weatherdata[timeindex]} />
-
-            <Userweatheritem2 key={timeindex+1} dates={weatherdata[timeindex+1]} />
-
-            <button onClick={()=>{setTimeindex(previndex=>previndex+1)}}>앞으로</button>
+              {timeindex>0&&
+              <>
+           
+              <button onClick={()=>{setTimeindex(previndex=>previndex-1)}}>위로</button>
+            { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
+            <Weatheritemwrapper isCurrent={false}>
+          <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]} />
+          </Weatheritemwrapper>
+          </>
+              }
+               <Weatheritemwrapper isCurrent={true}>
+            <Userweatheritem2  key={timeindex}  dates={weatherdata[timeindex]} /> {timeindex}
+            </Weatheritemwrapper>
+        
+              {timeindex<weatherdata.length-1&&
+              <>
+               <Weatheritemwrapper  isCurrent={false}>
+              <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
+              </Weatheritemwrapper>
+                <button onClick={()=>{setTimeindex(previndex=>previndex+1)}}>앞으로</button>    
+              </>}
+          
             </>
 }
             <br/>
 
-            </div>
+            </WeatherContainer>
           
         
    
