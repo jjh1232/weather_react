@@ -17,24 +17,37 @@ const Wrapper=styled.div`
 //슬라이드애니메이션
 const Slideup=keyframes`
   from{
-    transform: translateY(0);
-    opacity: 1.0;
+    transform: translateY(0) scale(1);
+    
   }
   to{
-    transform: translateY(33%);
-    opacity: 0.0;
+    
+    transform: translateY(33%) scale(0.9);
+   
   }
 `
 const Slidedown=keyframes`
     from{
-    transform: translateY(0);
-    opacity: 1.0;
+    transform: translateY(0)  scale(1);;
+  
   }
   to{
-    transform: translateY(-33%);
-    opacity: 0.0;
+    transform: translateY(-33%)  scale(0.9);;
+   
   }
 `
+const fadeout=keyframes`
+  from{
+    opacity: 0.5;
+    
+  }
+  to{
+    
+    opacity: 0.0;
+   
+  }
+`
+
 //컨테이너스타일
 const WeatherContainer=styled.div`
   display: flex;
@@ -54,6 +67,9 @@ const Weatheritemwrapper=styled.div`
   ?css`${Slideup} 1s ease`
   :"none"
   };
+  ${({isindex})=>
+  isindex&&css`animation:${fadeout} 1s ease-in-out forwards;`
+  }
   
 `
 function Userweather2(props){
@@ -145,22 +161,24 @@ function Userweather2(props){
            
               <button onClick={()=>{handlerSlideup()}}>위로</button>
             { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
-            <Weatheritemwrapper isCurrent={false} isNew={true}  any={animationeff} >
+            <Weatheritemwrapper isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0} >
           <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
           </Weatheritemwrapper>
           </>
               }
                <Weatheritemwrapper isCurrent={true} isNew={true}  any={animationeff} >
             <Userweatheritem2  key={timeindex}  dates={weatherdata[timeindex]}/> 
+            {timeindex===weatherdata.length-1?"true":"false"}  
             </Weatheritemwrapper>
         
               {timeindex<weatherdata.length-1&&
               <>
-               <Weatheritemwrapper  isCurrent={false} isNew={true}  any={animationeff} >
+               <Weatheritemwrapper  isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
                 {animationeff}
-                <button onClick={()=>{handlerSlidedown()}}>앞으로</button>    
+                <button onClick={()=>{handlerSlidedown()}}>앞으로</button>  
+                
               </>}
           
             </>
