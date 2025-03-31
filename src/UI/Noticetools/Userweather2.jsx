@@ -20,7 +20,7 @@ const Slideup=keyframes`
     transform: translateY(0) scale(0.9);
     }
   to{
-    transform: translateY(-200px) scale(1);
+    transform: translateY(-100px) scale(1);
     }
 `
 const Slidedown=keyframes`
@@ -28,7 +28,7 @@ const Slidedown=keyframes`
     transform: translateY(0)  scale(0.9);
    }
   to{
-    transform: translateY(200px)  scale(1);;
+    transform: translateY(100px)  scale(1);;
     }
 `
 const mainSlideup=keyframes`
@@ -36,7 +36,7 @@ const mainSlideup=keyframes`
     transform: translateY(0) scale(1);
     }
   to{
-    transform: translateY(-200px) scale(0.9);
+    transform: translateY(-100px) scale(0.9);
     }
 `
 const mainSlidedown=keyframes`
@@ -44,38 +44,66 @@ const mainSlidedown=keyframes`
     transform: translateY(0)  scale(1);;
    }
   to{
-    transform: translateY(200px)  scale(0.9);;
+    transform: translateY(100px)  scale(0.9);;
     }
 `
 const turnup=keyframes`
     0%{
     transform: translateY(0)  scale(0.9);
   
-  }25%{
-    transform: translateY(50px)  scale(0.7);
+  }10%{
+    transform: translateY(17px)  scale(0.86);
+  }20%{
+    transform: translateY(34px)  scale(0.82);
+  }30%{
+    transform: translateY(51px)  scale(0.78);
+  }40%{
+    transform: translateY(68px)  scale(0.74);
   }50%{
-    transform: translateY(100px)  scale(0.5);
+    transform: translateY(85px)  scale(0.7);
+  }
+  
+  60%{
+    transform: translateY(102px)  scale(0.74);
   }70%{
-    transform: translateY(150px)  scale(0.7);
+    transform: translateY(119px)  scale(0.78);
+  }80%{
+    transform: translateY(136px)  scale(0.82);
+  }90%{
+    transform: translateY(153px)  scale(0.86);
   }
   100%{
-    transform: translateY(200px)  scale(0.9);
+    transform: translateY(170px)  scale(0.9);
    
   }
 `
 const turndown=keyframes`
-    0%{
+        0%{
     transform: translateY(0)  scale(0.9);
   
-  }25%{
-    transform: translateY(-50px)  scale(0.7);
+  }10%{
+    transform: translateY(-17px)  scale(0.86);
+  }20%{
+    transform: translateY(-34px)  scale(0.82);
+  }30%{
+    transform: translateY(-51px)  scale(0.78);
+  }40%{
+    transform: translateY(-68px)  scale(0.74);
   }50%{
-    transform: translateY(-100px)  scale(0.5);
+    transform: translateY(-85px)  scale(0.7);
+  }
+  
+  60%{
+    transform: translateY(-102px)  scale(0.74);
   }70%{
-    transform: translateY(-150px)  scale(0.7);
+    transform: translateY(-119px)  scale(0.78);
+  }80%{
+    transform: translateY(-136px)  scale(0.82);
+  }90%{
+    transform: translateY(-153px)  scale(0.86);
   }
   100%{
-    transform: translateY(-200px)  scale(0.9);
+    transform: translateY(-170px)  scale(0.9);
    
   }
 `
@@ -101,34 +129,34 @@ const WeatherContainer=styled.div`
   position: relative;
 `
 const Weatheritemwrapper=styled.div`
-  transition: all 0.3s ease;
+  //transition: all 0.3s ease;
   opacity: ${props=>props.isCurrent?1:0.5}; //투명도
   transform: scale(${props => props.isCurrent ? 1 : 0.9}); //크기
   ${({index,any})=>css`
     ${index===0 && any==='up'&&
-      css`animation:${turnup} 1s ease-in-out forwards` 
+      css`animation:${Slidedown} 1s ease-in-out forwards` 
     }
     ${index===0 && any==='down'&&
     css`
-      animation: ${Slidedown} 1s ease-in-out forwards;
+      animation: ${turnup} 1s ease-in-out forwards;
     `
     }  ${index===1 && any==='up'&&
-      css`animation:${mainSlideup} 1s ease-in-out forwards` 
+      css`animation:${mainSlidedown} 1s ease-in-out forwards` 
     }
     ${index===1 && any==='down'&&
     css`
-      animation: ${mainSlidedown} 1s ease-in-out forwards;
+      animation: ${mainSlideup} 1s ease-in-out forwards;
     `
     }
     ${index === 2 &&
      any === 'up' &&
     css`
-      animation: ${Slideup} 1s ease-in-out forwards;
+      animation: ${turndown} 1s ease-in-out forwards;
     `}
     ${index === 2 &&
      any === 'down' &&
     css`
-      animation: ${turndown} 1s ease-in-out forwards;
+      animation: ${Slideup} 1s ease-in-out forwards;
     `}
   
   
