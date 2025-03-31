@@ -17,22 +17,65 @@ const Wrapper=styled.div`
 //슬라이드애니메이션
 const Slideup=keyframes`
   from{
-    transform: translateY(0) scale(1);
-    
-  }
+    transform: translateY(0) scale(0.9);
+    }
   to{
-    
-    transform: translateY(33%) scale(0.9);
-   
-  }
+    transform: translateY(-200px) scale(1);
+    }
 `
 const Slidedown=keyframes`
     from{
-    transform: translateY(0)  scale(1);;
-  
-  }
+    transform: translateY(0)  scale(0.9);
+   }
   to{
-    transform: translateY(-33%)  scale(0.9);;
+    transform: translateY(200px)  scale(1);;
+    }
+`
+const mainSlideup=keyframes`
+  from{
+    transform: translateY(0) scale(1);
+    }
+  to{
+    transform: translateY(-200px) scale(0.9);
+    }
+`
+const mainSlidedown=keyframes`
+    from{
+    transform: translateY(0)  scale(1);;
+   }
+  to{
+    transform: translateY(200px)  scale(0.9);;
+    }
+`
+const turnup=keyframes`
+    0%{
+    transform: translateY(0)  scale(0.9);
+  
+  }25%{
+    transform: translateY(50px)  scale(0.7);
+  }50%{
+    transform: translateY(100px)  scale(0.5);
+  }70%{
+    transform: translateY(150px)  scale(0.7);
+  }
+  100%{
+    transform: translateY(200px)  scale(0.9);
+   
+  }
+`
+const turndown=keyframes`
+    0%{
+    transform: translateY(0)  scale(0.9);
+  
+  }25%{
+    transform: translateY(-50px)  scale(0.7);
+  }50%{
+    transform: translateY(-100px)  scale(0.5);
+  }70%{
+    transform: translateY(-150px)  scale(0.7);
+  }
+  100%{
+    transform: translateY(-200px)  scale(0.9);
    
   }
 `
@@ -61,12 +104,35 @@ const Weatheritemwrapper=styled.div`
   transition: all 0.3s ease;
   opacity: ${props=>props.isCurrent?1:0.5}; //투명도
   transform: scale(${props => props.isCurrent ? 1 : 0.9}); //크기
-  animation: ${props => props.any==="up" //애니메이션
-  ? css`${Slidedown} 1s ease` 
-  : props.any==="down"
-  ?css`${Slideup} 1s ease`
-  :"none"
-  };
+  ${({index,any})=>css`
+    ${index===0 && any==='up'&&
+      css`animation:${turnup} 1s ease-in-out forwards` 
+    }
+    ${index===0 && any==='down'&&
+    css`
+      animation: ${Slidedown} 1s ease-in-out forwards;
+    `
+    }  ${index===1 && any==='up'&&
+      css`animation:${mainSlideup} 1s ease-in-out forwards` 
+    }
+    ${index===1 && any==='down'&&
+    css`
+      animation: ${mainSlidedown} 1s ease-in-out forwards;
+    `
+    }
+    ${index === 2 &&
+     any === 'up' &&
+    css`
+      animation: ${Slideup} 1s ease-in-out forwards;
+    `}
+    ${index === 2 &&
+     any === 'down' &&
+    css`
+      animation: ${turndown} 1s ease-in-out forwards;
+    `}
+  
+  
+  `}
   ${({isindex})=>
   isindex&&css`animation:${fadeout} 1s ease-in-out forwards;`
   }
@@ -101,7 +167,7 @@ function Userweather2(props){
       setTimeout(()=>{
         setTimeindex(previndex=>previndex+1)
         setAnimation(null)//초기화
-      },300)//애니메이션지속시간
+      },1000)//애니메이션지속시간
   }
 
     //========================================
@@ -161,19 +227,19 @@ function Userweather2(props){
            
               <button onClick={()=>{handlerSlideup()}}>위로</button>
             { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
-            <Weatheritemwrapper isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0} >
+            <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0} >
           <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
           </Weatheritemwrapper>
           </>
               }
-               <Weatheritemwrapper isCurrent={true} isNew={true}  any={animationeff} >
+               <Weatheritemwrapper index={1}isCurrent={true} isNew={true}  any={animationeff} >
             <Userweatheritem2  key={timeindex}  dates={weatherdata[timeindex]}/> 
-            {timeindex===weatherdata.length-1?"true":"false"}  
+            
             </Weatheritemwrapper>
         
               {timeindex<weatherdata.length-1&&
               <>
-               <Weatheritemwrapper  isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1}>
+               <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
                 {animationeff}
