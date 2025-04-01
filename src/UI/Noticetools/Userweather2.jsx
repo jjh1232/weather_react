@@ -128,42 +128,62 @@ const WeatherContainer=styled.div`
   overflow: hidden;
   position: relative;
 `
+//애니메이션 효과
+const getAnimation=({index,any,isindex})=>{
+//첫번째 요소 조건
+if(index===0){
+ if(any==="down"){
+ 
+  if(isindex==="first"){
+    return fadeout;
+  }else{
+  return turnup;
+  }
+ }else if(any ==="up"){
+
+ 
+  return Slidedown;
+ }
+
+}
+//두번째요소
+else if (index===1){
+
+  if(any==="down"){
+
+    return mainSlideup;
+  }else if(any ==="up"){
+   
+    return mainSlidedown;
+  }
+}
+//세번째요소
+else if (index===2){
+
+  if(any==="down"){
+
+    return Slideup;
+   }else if(any ==="up"){
+  
+    if(isindex==="last"){
+      return fadeout;
+    }else{
+    return turndown;
+    }
+   }
+}
+
+return null;
+
+}
 const Weatheritemwrapper=styled.div`
   //transition: all 0.3s ease;
   opacity: ${props=>props.isCurrent?1:0.5}; //투명도
   transform: scale(${props => props.isCurrent ? 1 : 0.9}); //크기
-  ${({index,any})=>css`
-    ${index===0 && any==='up'&&
-      css`animation:${Slidedown} 1s ease-in-out forwards` 
-    }
-    ${index===0 && any==='down'&&
-    css`
-      animation: ${turnup} 1s ease-in-out forwards;
-    `
-    }  ${index===1 && any==='up'&&
-      css`animation:${mainSlidedown} 1s ease-in-out forwards` 
-    }
-    ${index===1 && any==='down'&&
-    css`
-      animation: ${mainSlideup} 1s ease-in-out forwards;
-    `
-    }
-    ${index === 2 &&
-     any === 'up' &&
-    css`
-      animation: ${turndown} 1s ease-in-out forwards;
-    `}
-    ${index === 2 &&
-     any === 'down' &&
-    css`
-      animation: ${Slideup} 1s ease-in-out forwards;
-    `}
-  
-  
+  ${({index,any,isindex})=>css`
+    animation:${getAnimation({index,any,isindex})} 1s ease-in-out forwards;
   `}
-  ${({isindex})=>
-  isindex&&css`animation:${fadeout} 1s ease-in-out forwards;`
-  }
+  
   
 `
 function Userweather2(props){
@@ -255,7 +275,7 @@ function Userweather2(props){
            
               <button onClick={()=>{handlerSlideup()}}>위로</button>
             { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
-            <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0} >
+            <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0&&"first"} >
           <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
           </Weatheritemwrapper>
           </>
@@ -267,7 +287,7 @@ function Userweather2(props){
         
               {timeindex<weatherdata.length-1&&
               <>
-               <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1}>
+               <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1&&"last"}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
                 {animationeff}
