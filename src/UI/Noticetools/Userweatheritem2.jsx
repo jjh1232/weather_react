@@ -20,8 +20,10 @@ import { faDroplet as droplet } from "@fortawesome/free-solid-svg-icons";
 
 
 const WeatherContainer=styled.div`
-    
+    width: 250px;
+    height:85px;
     border: 1px solid red;
+    visibility: ${props=>props.visi?"hidden" :"visable"};
 `
 const WeatherHeader=styled.div`
     
@@ -58,14 +60,14 @@ function Userweatheritem2(props){
 
     const {dates}=props;
     const [data,setData]=useState({
-        time:dates.time,
-        date:dates.date,
-        reh:dates.reh,
-        rn1:dates.rn1,
-        sky:dates.sky,
-        t1h:dates.t1H,
-        pty:dates.pty,
-        wsd:dates.wsd
+        time:dates?.time||"",
+        date:dates?.date||"",
+        reh:dates?.reh||"",
+        rn1:dates?.rn1||"",
+        sky:dates?.sky||"",
+        t1h:dates?.t1H||"",
+        pty:dates?.pty||"",
+        wsd:dates?.wsd||""
     });
 
     /*
@@ -107,7 +109,8 @@ function Userweatheritem2(props){
             else if(pty==="1") return  (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
             else if(pty==="2")  return  (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
             else if(pty==="3") return 흐리고눈
-            else if(pty==="5") return 흐리고빗방울
+            else if(pty==="5") return (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
+                ///흐리고빗방울
             else if(pty==="6") return 흐리고빗방울눈날림
             else if(pty==="7") return 흐리고눈날림
         }
@@ -115,7 +118,9 @@ function Userweatheritem2(props){
 
     
 
-    return (<WeatherContainer>
+    return (
+    <>{data.time!==""?
+    <WeatherContainer>
         <WeatherHeader>
         <WeatherDate>
         날짜:{data.date}
@@ -166,7 +171,10 @@ function Userweatheritem2(props){
     
     </WeatherBody>
     
-    </WeatherContainer>)
+    </WeatherContainer>
+    :<WeatherContainer visi={true}>노데이터</WeatherContainer>}
+    </>
+    )
 
 }
 export default Userweatheritem2;

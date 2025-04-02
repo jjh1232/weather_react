@@ -17,34 +17,42 @@ const Wrapper=styled.div`
 //슬라이드애니메이션
 const Slideup=keyframes`
   from{
-    transform: translateY(0) scale(0.9);
+    transform: translateY(0) scale(0.9) ;
+    opacity: 0.5;
     }
   to{
-    transform: translateY(-100px) scale(1);
+    transform: translateY(-100px) scale(1) ;
+    opacity: 1;
     }
 `
 const Slidedown=keyframes`
     from{
-    transform: translateY(0)  scale(0.9);
+    transform: translateY(0)  scale(0.9) ;
+    opacity: 0.5;
    }
   to{
-    transform: translateY(100px)  scale(1);;
+    transform: translateY(100px)  scale(1) ;
+    opacity: 1;
     }
 `
 const mainSlideup=keyframes`
   from{
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) ;
+    opacity: 1;
     }
   to{
-    transform: translateY(-100px) scale(0.9);
+    transform: translateY(-100px) scale(0.9) ;
+    opacity: 0.5;
     }
 `
 const mainSlidedown=keyframes`
     from{
-    transform: translateY(0)  scale(1);;
+    transform: translateY(0)  scale(1) ;
+    opacity: 1;
    }
   to{
-    transform: translateY(100px)  scale(0.9);;
+    transform: translateY(100px)  scale(0.9) ;
+    opacity: 0.5;
     }
 `
 const turnup=keyframes`
@@ -134,15 +142,19 @@ const getAnimation=({index,any,isindex})=>{
 if(index===0){
  if(any==="down"){
  
-  if(isindex==="first"){
-    return fadeout;
-  }else{
+  
   return turnup;
-  }
+  
  }else if(any ==="up"){
 
  
+  if(isindex==="last"){
+
+    return fadeout
+  }
+  else{
   return Slidedown;
+  }
  }
 
 }
@@ -162,14 +174,14 @@ else if (index===2){
 
   if(any==="down"){
 
+    
     return Slideup;
+    
    }else if(any ==="up"){
   
-    if(isindex==="last"){
-      return fadeout;
-    }else{
+  
     return turndown;
-    }
+    
    }
 }
 
@@ -274,22 +286,26 @@ function Userweather2(props){
               <>
            
               <button onClick={()=>{handlerSlideup()}}>위로</button>
-            { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
-            <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0&&"first"} >
-          <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
-          </Weatheritemwrapper>
+          
           </>
               }
+                     { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
+              <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0&&"first"} >
+          <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
+          </Weatheritemwrapper>
+       
+
                <Weatheritemwrapper index={1}isCurrent={true} isNew={true}  any={animationeff} >
             <Userweatheritem2  key={timeindex}  dates={weatherdata[timeindex]}/> 
             
             </Weatheritemwrapper>
         
-              {timeindex<weatherdata.length-1&&
-              <>
-               <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-1&&"last"}>
+            <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-2&&"last"}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
+              {timeindex<weatherdata.length-1&&
+              <>
+           
                 {animationeff}
                 <button onClick={()=>{handlerSlidedown()}}>앞으로</button>  
                 
