@@ -11,7 +11,9 @@ const Headers=styled.div`
 `
 
 const Wrapper=styled.div`
-
+  position: relative;
+  border: 1px solid blue;;
+  top: 10px;
   
 `
 //슬라이드애니메이션
@@ -118,15 +120,25 @@ const turndown=keyframes`
 const fadeout=keyframes`
   from{
     opacity: 0.5;
-    
+    transform: scale(0.9);
   }
   to{
     
     opacity: 0.0;
-   
+    transform: scale(0.5);
   }
 `
 
+const Arrow=styled.div`
+   position: relative;
+    margin: 10px;
+    content: '';
+    width: 30px; //화살표 크기
+    height: 30px; //화살표 크기
+    border-top: 5px solid #000; //화살표 선
+    border-right: 5px solid #000; //화살표 선
+    transform:${props=>props.rota?'rotate(-45deg)':'rotate(135deg)'} ; //다음 화살표
+`
 //컨테이너스타일
 const WeatherContainer=styled.div`
   display: flex;
@@ -141,20 +153,24 @@ const getAnimation=({index,any,isindex})=>{
 //첫번째 요소 조건
 if(index===0){
  if(any==="down"){
- 
   
-  return turnup;
+  if(isindex==="last"){
+
+    return fadeout;
+  }else{
+
+    return turnup;
+  }
+  
+ 
   
  }else if(any ==="up"){
 
  
-  if(isindex==="last"){
-
-    return fadeout
-  }
-  else{
+  
+ 
   return Slidedown;
-  }
+  
  }
 
 }
@@ -180,7 +196,13 @@ else if (index===2){
    }else if(any ==="up"){
   
   
-    return turndown;
+    if(isindex==="first"){
+
+      return fadeout;
+    }else{
+  
+      return turndown;
+    }
     
    }
 }
@@ -275,6 +297,7 @@ function Userweather2(props){
         <Headers>
         {loginuser.userinfo &&loginuser.userinfo.region.replaceAll("+"," ")
        }    
+      
         </Headers>
       
         
@@ -284,13 +307,13 @@ function Userweather2(props){
               <>
               {timeindex>0&&
               <>
-           
-              <button onClick={()=>{handlerSlideup()}}>위로</button>
           
+
+              <Arrow rota={true} onClick={()=>{handlerSlideup()}}/>
           </>
               }
                      { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
-              <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===0&&"first"} >
+              <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-2&&"last"} >
           <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
           </Weatheritemwrapper>
        
@@ -300,14 +323,15 @@ function Userweather2(props){
             
             </Weatheritemwrapper>
         
-            <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-2&&"last"}>
+            <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===1&&"first"}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
               {timeindex<weatherdata.length-1&&
               <>
            
-                {animationeff}
-                <button onClick={()=>{handlerSlidedown()}}>앞으로</button>  
+                
+                <Arrow rota={false} onClick={()=>{handlerSlidedown()}}/>
+                
                 
               </>}
           
