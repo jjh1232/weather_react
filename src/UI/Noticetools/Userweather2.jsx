@@ -255,11 +255,12 @@ function Userweather2(props){
     //========================================
     useEffect(()=>{
         if(loginuser.userinfo){
-          console.log("유저주소있음"+loginuser.userinfo.region)
+          console.log("유저주소있음"+loginuser.userinfo.gridy)
           axios.get("http://localhost:8081/open/weatherdata",{
             params:{
-                region:loginuser.userinfo.region.replaceAll("+"," ")
-               
+                region:loginuser.userinfo.region.replaceAll("+"," "),
+                gridx:loginuser.userinfo.gridx,
+                gridy:loginuser.userinfo.gridy
             }
           }).then((res)=>{
             console.log(res)
@@ -278,6 +279,8 @@ function Userweather2(props){
             .then((res)=>{
                 console.log("날씨데이터"+res)
                 setWeatherdata(res.data)
+                //유저없어도쿠키는가져오기
+                Setloginuser("weather",res.data[0])
             }).catch((err)=>{
               console.log("날씨정보를가져오지못했습니다")
             })

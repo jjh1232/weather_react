@@ -41,7 +41,7 @@ function Userweather(props){
             Setloginuser("weather",res.data[2])
             
           }).catch((err)=>{
-
+            console.log("날씨정보를가져오지못했습니다")
           })
         }
         else{
@@ -51,6 +51,8 @@ function Userweather(props){
             .then((res)=>{
                 console.log("날씨데이터"+res)
                 setWeatherdata(res.data)
+                //없어도웨더쿠키는가져오자
+                Setloginuser("weather",res.data[2])
             }).catch((err)=>{
               console.log("날씨정보를가져오지못했습니다")
             })

@@ -6,6 +6,7 @@ import LeftSideBar from "./LeftSideBar";
 import RightSideBar from "./RightSideBar";
 import { Outlet } from "react-router-dom";
 import WeatherComponent from "./WeatherComponent";
+import { useCookies } from "react-cookie";
 
 
 const Wrapper=styled.div`
@@ -42,7 +43,8 @@ const thema={
         ground: ['#8B0000', '#A52A2A']
       },
       night: {
-        sky: ['#1A1D23', '#1A1D23','#1A1D23'],
+        sky:['white','white','white'],
+       // sky: ['#1A1D23', '#1A1D23','#1A1D23'],
         horizon: '#FF6347',
         ground: ['#8B0000', '#A52A2A']
       }
@@ -89,6 +91,39 @@ const Ground = styled.div`
 
 export default function MainLayout(props){
     const [currentthema,setCurrentthema]=useState(thema.dawn);
+    const [weathercookie,removeweather]=useCookies(['weather'])//어차피쿠키다가져오는데이유는몰겟음
+    const [weatherdata,setWeatherdata]=useState();
+
+
+    //동기화를위해 유즈이펙트가좋다네요..
+    useEffect(()=>{
+        //데이터존재여부확인이안전하다고함
+      if (!weathercookie.weather) {
+        setWeatherdata({});
+        return;
+      }
+      //안전하게json파싱
+      try{
+        //const parsed=JSON.parse(weathercookie.weather)
+        //console.log("제대로왔는가:"+parsed)
+      const weathercook={
+        sky:weathercookie.weather.sky||1,
+        pty:weathercookie.weather.pty||0,
+        t1h:weathercookie.weather.t1h||10,
+        rn1:weathercookie.weather.rn1||0
+      }
+
+      setWeatherdata(prev=>JSON.stringify(prev)===JSON.stringify(weathercook)
+    ?prev //변경사항 없으면 리렌더링안함
+    :weathercook//변경시
+    )
+    }
+    catch(error){
+      console.log("쿠키파싱실패:"+error)
+      setWeatherdata({});
+    }
+    },[weathercookie.weather])
+
 
     const Weatherandtime=()=>{
       let time=new Date().getHours();
@@ -115,6 +150,7 @@ export default function MainLayout(props){
     },[])
     return (
         <Wrapper>
+          {weatherdata&&<>제대로왔나:{weatherdata.sky}</>}
             <ThemeProvider theme={currentthema}>
             <Background>
                 <Sky></Sky>
