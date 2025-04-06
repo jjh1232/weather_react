@@ -8,7 +8,7 @@ width:15%;
 height:120%;
 position:absolute;
 left:13%;
-top:3px;
+top:50px;
 border: 1px solid
 `
 

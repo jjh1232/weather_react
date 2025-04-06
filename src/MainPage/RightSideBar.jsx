@@ -45,8 +45,9 @@ function RightSideBar(){
         listname:"",
         roomid:""
     });
-    const [searchdata,setSearchdata]=useState();
     const navigate=useNavigate();
+    const [searchdata,setSearchdata]=useState();
+   
     const searchref=useRef();
     const [ref,inview]=useInView({//감지해야하는 객체에ref저장 
                 //inview:boolean값이고 감시하고있는요소가 화면에보일떄true벗어날떄false
@@ -125,9 +126,10 @@ if(window.location.pathname==="/noticecreate"){
         <Wrapper >
 
         <Loginpage/>
-       
+       {/*
        <div ref={searchref} className="usersearch">
-        <Usersearchinput type="search" placeholder="유저닉네임을입력하세요" onChange={(e)=>{usersearch(e)}}
+        <Usersearchinput type="search" placeholder="유저닉네임을입력하세요"
+         onChange={(e)=>{usersearch(e)}}
             className="usersearch"
             />
         
@@ -146,6 +148,7 @@ if(window.location.pathname==="/noticecreate"){
         })} </div>}
         
         </div>
+        */}
         <ChatUi listname={data.listname} roomid={data.roomid}/>
        
     </Wrapper>

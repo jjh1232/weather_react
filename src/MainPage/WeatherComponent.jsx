@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import SkyObject from './WeatherObject/SkyObject';
 
 const rainAnimation = keyframes`
   0% { transform: translateY(-100%); }
@@ -42,10 +43,53 @@ const Sun = styled.svg`
   animation: ${sunAnimation} 3s ease-in-out infinite;
 `;
 
-export default function WeatherComponent(){
-
+export default function WeatherComponent(props){
+  const {sky,pty,t1h,rn1}=props;
     
-  const renderWeatherEffect = () => {
+  //하늘상태 아마여기서 태양이나달도생각해야할듯
+  const skyrender=(sky)=>{
+    if(sky===1){
+      //맑음
+      return (
+        <>
+        
+        </>
+      )
+    }
+    else if(sky===3){
+        //구름많음
+    }
+    else{
+      //흐림
+    }
+  }
+
+
+  //강수상태와 강수량
+  const renderWeatherEffect = (pty,rn1) => {
+      if(pty===0){
+        //없음
+      }
+      else if(pty===1){
+        //비
+      }
+      else if(pty===2){
+        //비/눈
+
+      }
+      else if(pty===3){
+        //눈
+      }
+      else if(pty===5){
+        //빗방울
+      }
+      else if (pty===6){
+        //빗방울눈날림
+      }
+      else {
+        //(7)눈날림
+
+      }
     return Array.from({ length: 40 }).map((_, index) => (
         <RainDrop
           key={index}
@@ -57,9 +101,14 @@ export default function WeatherComponent(){
         />
       ));
   }
+  //기온에따른상태
+  const temprender=(t1h)=>{
+
+  }
  return (
     <WeatherBackground>
       {renderWeatherEffect()}
+      <SkyObject sky={sky}/>
     </WeatherBackground>
   );
 }

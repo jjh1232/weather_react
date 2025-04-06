@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import CreateAxios from "../customhook/CreateAxios";
 import { useState } from "react";
@@ -11,15 +11,27 @@ import Loginpage from "../MemberPage/Loginpage";
 
 const Wrapper=styled.div`
 position: fixed;
-left:28%;
-border:1px solid;
-width:43%;
-height:7%;
-top:3px;
+//left:28%;
+border:1px solid red;
+width:100%;
+height:5%;
+
 z-index: 10;
 `
+//가상공간
+const Spacer=styled.div`
+    position: relative;
+    height: 50px;
+    
+`
+//검색
+const Usersearchinput=styled.input`
+position:fixed;
+top:0.5%;
+left:72%;
+width:15%;
 
-
+`
 function Header(){
 
     if(window.location.pathname===`/userprofile`) return null
@@ -28,6 +40,8 @@ function Header(){
     const axiosinstance=CreateAxios();
     const [searchdata,setSearchdata]=useState();
   
+     
+      const searchref=useRef();
     const [ref,inview]=useInView({//감지해야하는 객체에ref저장 
                 //inview:boolean값이고 감시하고있는요소가 화면에보일떄true벗어날떄false
         //옵션설정가능!
@@ -82,15 +96,36 @@ const modalon=()=>{
 
 if(window.location.pathname===`/manyimage`) return null
     return (
-        
+        <>
         <Wrapper>
             
-          {}
+          
         <h1 onClick={()=>{navigate("/notice/twitform")}}>메인페이지</h1>
         
+        <div ref={searchref} className="usersearch">
+        <Usersearchinput type="search" placeholder="유저닉네임을입력하세요"
+         onChange={(e)=>{usersearch(e)}}
+            className="usersearch"
+            />
         
+        {searchdata && 
+            <div className ="usersearch"ref={ref} 
+            style=
+            {{justifyContent:"center",background:"white",top:"30px",
+            position:"fixed",zIndex:"10" ,width:"280px",height:"600px",
+            overflowY: "scroll"}}>
+            {searchdata.map((data)=>{
+           
+           return(
+                <Userdata username={data.username} usernickname={data.nickname}/>
+               
+            )
+        })} </div>}
+        </div>
         
         </Wrapper>
+        <Spacer></Spacer>
+        </>
     )
 }
 export default Header;

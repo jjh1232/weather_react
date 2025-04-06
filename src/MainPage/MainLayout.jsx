@@ -7,16 +7,10 @@ import RightSideBar from "./RightSideBar";
 import { Outlet } from "react-router-dom";
 import WeatherComponent from "./WeatherComponent";
 import { useCookies } from "react-cookie";
-
+import SkyObject from "./WeatherObject/SkyObject";
 
 const Wrapper=styled.div`
-    background-color: white;
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: cover;
-    min-height: 100vh;
-    overflow: auto;
-    width: 100%;
+   
     
     
 `
@@ -68,6 +62,7 @@ const Sky = styled.div`
     ${({ theme }) => theme.sky[1]} 50%,
     ${({ theme }) => theme.sky[2]} 100%
   );
+
 `;
 
 // 3. 지평선 효과
@@ -124,7 +119,11 @@ export default function MainLayout(props){
     }
     },[weathercookie.weather])
 
+    //날씨에다른 변화
 
+
+    
+//시간에따른 배경변화
     const Weatherandtime=()=>{
       let time=new Date().getHours();
      // let time=String(now.getHours.padStart(2,'0'))//한자리숫자를위해padstart
@@ -150,15 +149,18 @@ export default function MainLayout(props){
     },[])
     return (
         <Wrapper>
-          {weatherdata&&<>제대로왔나:{weatherdata.sky}</>}
+        
             <ThemeProvider theme={currentthema}>
             <Background>
-                <Sky></Sky>
+                <Sky>
+                {weatherdata&&<SkyObject sky={weatherdata.sky}/>}
+                   
+                </Sky>
                 <Horizon></Horizon>
                 <Ground></Ground>
             </Background>
             </ThemeProvider>
-        <WeatherComponent/>
+            
         <Header/>
         <AdminLeft/>
         <LeftSideBar/>
