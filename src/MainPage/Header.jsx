@@ -10,12 +10,15 @@ import Loginpage from "../MemberPage/Loginpage";
 //import * as deletefiles from `./`
 
 const Wrapper=styled.div`
+display: flex;
 position: fixed;
 //left:28%;
 border:1px solid red;
-width:100%;
+left:13%;
+width:74%;
 height:5%;
-
+justify-content: center;
+gap:7px;
 z-index: 10;
 `
 //가상공간
@@ -23,6 +26,22 @@ const Spacer=styled.div`
     position: relative;
     height: 50px;
     
+    
+`
+//3단디브
+const Logodiv=styled.div`
+    border: 1px solid blue;
+    width: 20%;
+`
+const Maindiv=styled.div`
+    border:1px solid green;
+    width: 57%;
+    padding-left: 10px;
+    padding-right: 10px;
+`
+const Searchdiv=styled.div`
+    border:1px solid purple;
+    width: 20%;
 `
 //검색
 const Usersearchinput=styled.input`
@@ -67,17 +86,28 @@ delay : 감지에 딜레이를 추가할 수 있다. 예를 들어, 요소가 �
         }
     },[inview])
 
+
     const navigate=useNavigate();
-    //여기도 헤더가리기 
-    /*
-    if(window.location.pathname==="/noticecreate"){
-        const location=useLocation();
-        console.log(location)
-        return (
-            null
-        )
-    }
-        */
+  useEffect(()=>{
+        document.addEventListener("mousedown",searchclose)
+        
+        return ()=>document.removeEventListener("mousedown",searchclose);
+    },[])
+
+    const searchclose=(e)=>{
+        
+        console.log("ref클래스네임"+searchref.current)
+            console.log("지금누른거"+e.target)
+            
+            if(!e.target.contains(searchref.current)){
+                console.log("서치열려있음")
+                setSearchdata(null)
+            }else{
+                console.log("포함안함")
+            }
+          
+                
+        }
 
     //유저검색
     const usersearch=(e)=>{
@@ -99,10 +129,13 @@ if(window.location.pathname===`/manyimage`) return null
         <>
         <Wrapper>
             
+          <Logodiv>로고</Logodiv>
+          <Maindiv>
+            <span onClick={()=>{navigate("/notice/twitform")}}>메인페이지 </span>
           
-        <h1 onClick={()=>{navigate("/notice/twitform")}}>메인페이지</h1>
-        
-        <div ref={searchref} className="usersearch">
+          </Maindiv>
+          <Searchdiv>
+          <div ref={searchref} className="usersearch">
         <Usersearchinput type="search" placeholder="유저닉네임을입력하세요"
          onChange={(e)=>{usersearch(e)}}
             className="usersearch"
@@ -113,7 +146,8 @@ if(window.location.pathname===`/manyimage`) return null
             style=
             {{justifyContent:"center",background:"white",top:"30px",
             position:"fixed",zIndex:"10" ,width:"280px",height:"600px",
-            overflowY: "scroll"}}>
+            overflowY: "scroll",border:"1px solid black"}}>
+
             {searchdata.map((data)=>{
            
            return(
@@ -122,6 +156,11 @@ if(window.location.pathname===`/manyimage`) return null
             )
         })} </div>}
         </div>
+
+          </Searchdiv>
+        
+        
+        
         
         </Wrapper>
         <Spacer></Spacer>
