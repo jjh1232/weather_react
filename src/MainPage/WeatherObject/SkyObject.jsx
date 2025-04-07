@@ -24,6 +24,19 @@ const Moon = styled.div`
       : 'inset -20px -20px 30px rgba(0, 0, 0, 0.5)'}; /* 달의 위상 표현 */
   position: relative;
   top: 50px;
+   /* 반달 모양 만들기 */
+   &::before {
+    content: '';
+    position: absolute;
+    width: ${(props) => props.size || '100px'};
+    height: ${(props) => props.size || '100px'};
+    background-color: ${(props) => props.background || '#000'}; /* 어두운 부분 */
+    border-radius: 50%; /* 원형 */
+    top: 0;
+    left: ${(props) =>
+      props.phase === 'half' ? '50%' : '25%'}; /* 반달 위치 조정 */
+    transform: translateX(-50%);
+  }
 `;
 // 구름 조각
 const CloudPart = styled.div`
