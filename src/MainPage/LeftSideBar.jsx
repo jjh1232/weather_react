@@ -4,9 +4,10 @@ import Userweather from "../UI/Userweather";
 import Userweather2 from "../UI/Noticetools/Userweather2";
 
 const Wrapper=styled.div`
+
 width:15%;
 height:120%;
-position:absolute;
+position:fixed;
 left:13%;
 top:50px;
 border: 1px solid

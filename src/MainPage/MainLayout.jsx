@@ -37,7 +37,7 @@ const thema={
         ground: ['#8B0000', '#A52A2A']
       },
       night: {
-        sky:['white','white','white'],
+        sky:['gray','gray','gray'],
        // sky: ['#1A1D23', '#1A1D23','#1A1D23'],
         horizon: '#FF6347',
         ground: ['#8B0000', '#A52A2A']
@@ -48,6 +48,7 @@ const Background = styled.div`
   position: fixed;
   width: 100%;
   height: 100vh;
+  bottom:50px;
   z-index: -10px;
   //overflow: hidden;
  `
@@ -152,8 +153,9 @@ export default function MainLayout(props){
         
             <ThemeProvider theme={currentthema}>
             <Background>
+            
                 <Sky>
-                {weatherdata&&<SkyObject sky={weatherdata.sky}/>}
+                {weatherdata&&<SkyObject sky={weatherdata.sky} />}
                    
                 </Sky>
                 <Horizon></Horizon>
@@ -161,7 +163,7 @@ export default function MainLayout(props){
             </Background>
             </ThemeProvider>
             
-        <Header/>
+            <Header/>
         <AdminLeft/>
         <LeftSideBar/>
         

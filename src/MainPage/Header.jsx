@@ -135,6 +135,7 @@ if(window.location.pathname===`/manyimage`) return null
           
           </Maindiv>
           <Searchdiv>
+            
           <div ref={searchref} className="usersearch">
         <Usersearchinput type="search" placeholder="유저닉네임을입력하세요"
          onChange={(e)=>{usersearch(e)}}
