@@ -6,7 +6,7 @@ import Userweather2 from "../UI/Noticetools/Userweather2";
 const Wrapper=styled.div`
 
 width:15%;
-height:120%;
+height:100%;
 position:fixed;
 left:13%;
 top:50px;

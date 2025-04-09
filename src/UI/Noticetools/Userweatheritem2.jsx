@@ -22,11 +22,12 @@ import { faDroplet as droplet } from "@fortawesome/free-solid-svg-icons";
 const WeatherContainer=styled.div`
     width: 250px;
     height:85px;
-    border: 1px solid red;
+    border: 1px solid black;
+    background-color: #9fd1fa; //마지막두자리가투명도 16진수임
     visibility: ${props=>props.visi?"hidden" :"visable"};
 `
 const WeatherHeader=styled.div`
-    
+    color: black;
 `
 const WeatherDate=styled.div`
     
@@ -88,29 +89,29 @@ function Userweatheritem2(props){
         let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
 
         if(sky==="1"){//맑음
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moon}/>맑음</>:<><FontAwesomeIcon icon={sun}/>맑음</>)
-            else if(pty==="1") return (isnight? <><FontAwesomeIcon icon={cloudmoonrain}/>맑음,빗방울</> :<><FontAwesomeIcon icon={rain}/>맑음,빗방울</> )
-            else if(pty==="2") return (isnight?<> <FontAwesomeIcon icon={cloudmoonrain}/>비,눈</> :<><FontAwesomeIcon icon={rain}/>비,눈</> )
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moon}/><br/>맑음</>:<><FontAwesomeIcon icon={sun}/><br/>맑음</>)
+            else if(pty==="1") return (isnight? <><FontAwesomeIcon icon={cloudmoonrain}/><br/>맑음,빗방울</> :<><FontAwesomeIcon icon={rain}/><br/>맑음,빗방울</> )
+            else if(pty==="2") return (isnight?<> <FontAwesomeIcon icon={cloudmoonrain}/><br/>비,눈</> :<><FontAwesomeIcon icon={rain}/><br/>비,눈</> )
             else if(pty==="3") return 맑고눈
             else if(pty==="5") return 맑지만빗방울
             else if(pty==="6") return 맑고빗방울눈날림
             else if(pty==="7") return 맑지만눈날림
 
         }else if(sky==="3"){//구름많음
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={cloudmoon}/>맑음</>:<><FontAwesomeIcon icon={cloudsun}/>맑음</>)
-            else if(pty==="1")  return (<><FontAwesomeIcon icon={rain}/> 비</>)
-            else if(pty==="2")  return (<><FontAwesomeIcon icon={rain}/> 비,눈</>)
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={cloudmoon}/><br/>구름많음</>:<><FontAwesomeIcon icon={cloudsun}/><br/>구름많음</>)
+            else if(pty==="1")  return (<><FontAwesomeIcon icon={rain}/> <br/>비</>)
+            else if(pty==="2")  return (<><FontAwesomeIcon icon={rain}/> <br/>비,눈</>)
             else if(pty==="3") return 구름많고눈
             else if(pty==="5") return 구름많고빗방울
             else if(pty==="6") return 구름많고빗방울눈날림
             else if(pty==="7") return 구름많고눈날림
 
         }else if(sky==="4"){//흐림
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moonblur}/>맑음</>:<><FontAwesomeIcon icon={sunblur}/>맑음</>)
-            else if(pty==="1") return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>비</>:<><FontAwesomeIcon icon={cloudsunrain}/>비</>)
-            else if(pty==="2")  return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>비눈</>:<><FontAwesomeIcon icon={cloudsunrain}/>비,눈</>)
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moonblur}/><br/>흐림</>:<><FontAwesomeIcon icon={sunblur}/><br/>흐림</>)
+            else if(pty==="1") return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>비</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>비</>)
+            else if(pty==="2")  return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>비눈</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>비,눈</>)
             else if(pty==="3") return 흐리고눈
-            else if(pty==="5") return (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>구름많고빗방울</>:<><FontAwesomeIcon icon={cloudsunrain}/>구름많고빗방울</>)
+            else if(pty==="5") return (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>구름많고빗방울</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>구름많고빗방울</>)
                 ///흐리고빗방울
             else if(pty==="6") return 흐리고빗방울눈날림
             else if(pty==="7") return 흐리고눈날림

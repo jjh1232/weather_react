@@ -37,8 +37,8 @@ const thema={
         ground: ['#8B0000', '#A52A2A']
       },
       night: {
-        sky:['gray','gray','gray'],
-       // sky: ['#1A1D23', '#1A1D23','#1A1D23'],
+      
+        sky: ['#677ba3', '#2d4b88','#1A1D23'],
         horizon: '#FF6347',
         ground: ['#8B0000', '#A52A2A']
       }

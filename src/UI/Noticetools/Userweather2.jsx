@@ -12,8 +12,10 @@ const Headers=styled.div`
 
 const Wrapper=styled.div`
   position: relative;
-  border: 1px solid blue;;
+  
   top: 10px;
+  background-color: rgba(255,255,255,0.1);
+  
   
 `
 //슬라이드애니메이션
