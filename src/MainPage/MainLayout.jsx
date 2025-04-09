@@ -19,28 +19,28 @@ const thema={
     dawn: {
         sky: ['#4B6CB7', '#8E9EC6','#D7E1EC'],
         horizon: '#90EE90',
-        ground: ['#8B4513', '#A0522D']
+        ground: ['#eec1a2', '#180903']
       },
       morning: {
         sky: ['#89b8df', '#87CEFA','#C9E4CA '],
         horizon: '#FF6347',
-        ground: ['#8B0000', '#A52A2A']
+        ground: ['#eec1a2', '#180903']
       },
         noon: {
         sky: ['#c9ddee', '#c0d6dd',' #d9e4ee'],
         horizon: '#FF6347',
-        ground: ['#8B0000', '#A52A2A']
+        ground: ['#eec1a2', '#180903']
       },
       evening: {
         sky: ['#1A1D23', '#6495ED','#FFD700'],
         horizon: '#FF6347',
-        ground: ['#8B0000', '#A52A2A']
+        ground: ['#eec1a2', '#180903']
       },
       night: {
       
         sky: ['#677ba3', '#2d4b88','#1A1D23'],
         horizon: '#FF6347',
-        ground: ['#8B0000', '#A52A2A']
+        ground: ['#a09c9a', '#a29fa5']
       }
 }
 // 1. 기본 구조 선택
@@ -75,7 +75,7 @@ const Horizon = styled.div`
 
 // 4. 땅 레이어
 const Ground = styled.div`
-  height: 12%;
+  height: 15%;
   background: 
     linear-gradient(
       0deg,
