@@ -81,7 +81,7 @@ const queryClient=new QueryClient()
     </Route>
     
     <Route path="/favoritenotice" element={<FavoriteNotice/>}/>
-    <Route path="manyimage" element={<Manyimage/>}/>
+    
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
     <Route path="/notice/twitform" element={<Twitformex/>}/>
@@ -112,6 +112,7 @@ const queryClient=new QueryClient()
       <Route path="/noaccess" element={<NoAccess/>}/>
 
       </Route> 
+      <Route path="manyimage" element={<Manyimage/>}/>
     </Routes>
    
     </BrowserRouter>

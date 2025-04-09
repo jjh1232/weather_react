@@ -14,29 +14,16 @@ const SunObject=styled.div`
 `
 
 const Moon = styled.div`
-  width: ${(props) => props.size || '100px'}; /* 크기 */
+  width: ${(props) => props.size || '100px'};
   height: ${(props) => props.size || '100px'};
-  background-color: ${(props) => props.color || '#f0e68c'}; /* 색상 */
-  border-radius: 50%; /* 원형 */
-  box-shadow: ${(props) =>
-    props.phase === 'full'
-      ? '0 0 20px rgba(255, 255, 255, 0.5)' // 가득 찬 달
-      : 'inset -20px -20px 30px rgba(0, 0, 0, 0.5)'}; /* 달의 위상 표현 */
+  background-color: ${(props) => props.color || '#f0ed668b'};
+  border-radius: 50%;
+  transform: rotate(120deg);
+  top:60px;
+  left: 60px;
   position: relative;
-  top: 50px;
-   /* 반달 모양 만들기 */
-   &::before {
-    content: '';
-    position: absolute;
-    width: ${(props) => props.size || '100px'};
-    height: ${(props) => props.size || '100px'};
-    background-color: ${(props) => props.background || '#000'}; /* 어두운 부분 */
-    border-radius: 50%; /* 원형 */
-    top: 0;
-    left: ${(props) =>
-      props.phase === 'half' ? '50%' : '25%'}; /* 반달 위치 조정 */
-    transform: translateX(-50%);
-  }
+  clip-path: path('M50 0A50 50 0 1 1 0 75A25 25 0 0 0 50 0Z');
+  //clip-path: polygon(50% 0%, 50% 100%, 0% 100%, 0% 0%);
 `;
 // 구름 조각
 const CloudPart = styled.div`
@@ -61,7 +48,7 @@ const Cloud = styled.div`
   position: absolute;
  
   margin: 10px;
-  border: 2px solid red;
+
 
 `;
 

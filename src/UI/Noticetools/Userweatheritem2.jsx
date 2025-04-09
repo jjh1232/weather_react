@@ -85,31 +85,32 @@ function Userweatheritem2(props){
     //날씨 이모티콘 정리
     
     const Weatherimo=(sky,pty,hour)=>{
-        const isnight=hour>=2200 || hour <600
+        let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
+
         if(sky==="1"){//맑음
-            if(pty==="0") return (isnight?<FontAwesomeIcon icon={moon}/>:<FontAwesomeIcon icon={sun}/>)
-            else if(pty==="1") return (isnight? <FontAwesomeIcon icon={cloudmoonrain}/> :<FontAwesomeIcon icon={rain}/> )
-            else if(pty==="2") return (isnight? <FontAwesomeIcon icon={cloudmoonrain}/> :<FontAwesomeIcon icon={rain}/> )
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moon}/>맑음</>:<><FontAwesomeIcon icon={sun}/>맑음</>)
+            else if(pty==="1") return (isnight? <><FontAwesomeIcon icon={cloudmoonrain}/>맑음,빗방울</> :<><FontAwesomeIcon icon={rain}/>맑음,빗방울</> )
+            else if(pty==="2") return (isnight?<> <FontAwesomeIcon icon={cloudmoonrain}/>비,눈</> :<><FontAwesomeIcon icon={rain}/>비,눈</> )
             else if(pty==="3") return 맑고눈
             else if(pty==="5") return 맑지만빗방울
             else if(pty==="6") return 맑고빗방울눈날림
             else if(pty==="7") return 맑지만눈날림
 
         }else if(sky==="3"){//구름많음
-            if(pty==="0") return (isnight?<FontAwesomeIcon icon={cloudmoon}/>:<FontAwesomeIcon icon={cloudsun}/>)
-            else if(pty==="1")  return (<FontAwesomeIcon icon={rain}/> )
-            else if(pty==="2")  return (<FontAwesomeIcon icon={rain}/> )
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={cloudmoon}/>맑음</>:<><FontAwesomeIcon icon={cloudsun}/>맑음</>)
+            else if(pty==="1")  return (<><FontAwesomeIcon icon={rain}/> 비</>)
+            else if(pty==="2")  return (<><FontAwesomeIcon icon={rain}/> 비,눈</>)
             else if(pty==="3") return 구름많고눈
             else if(pty==="5") return 구름많고빗방울
             else if(pty==="6") return 구름많고빗방울눈날림
             else if(pty==="7") return 구름많고눈날림
 
         }else if(sky==="4"){//흐림
-            if(pty==="0") return (isnight?<FontAwesomeIcon icon={moonblur}/>:<FontAwesomeIcon icon={sunblur}/>)
-            else if(pty==="1") return  (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
-            else if(pty==="2")  return  (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
+            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moonblur}/>맑음</>:<><FontAwesomeIcon icon={sunblur}/>맑음</>)
+            else if(pty==="1") return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>비</>:<><FontAwesomeIcon icon={cloudsunrain}/>비</>)
+            else if(pty==="2")  return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>비눈</>:<><FontAwesomeIcon icon={cloudsunrain}/>비,눈</>)
             else if(pty==="3") return 흐리고눈
-            else if(pty==="5") return (isnight?<FontAwesomeIcon icon={cloudmoonrain}/>:<FontAwesomeIcon icon={cloudsunrain}/>)
+            else if(pty==="5") return (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/>구름많고빗방울</>:<><FontAwesomeIcon icon={cloudsunrain}/>구름많고빗방울</>)
                 ///흐리고빗방울
             else if(pty==="6") return 흐리고빗방울눈날림
             else if(pty==="7") return 흐리고눈날림
@@ -131,15 +132,16 @@ function Userweatheritem2(props){
     <Skyicon>
     
     {//- 하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)
-    data.sky
+    
     
     // 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7) 
-    },{data.pty}<br/>
+    },<br/>
     {Weatherimo(data.sky,data.pty,data.time)}<br/>
     
     </Skyicon>
 
     <Tempcss>
+        <br/>
     {data.t1h+"\u2103" }  
     </Tempcss>
     <Etc>
