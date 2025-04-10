@@ -300,9 +300,9 @@ function Userweather2(props){
         
         <Wrapper>
         <Headers>
-        {loginuser.userinfo &&loginuser.userinfo.region.replaceAll("+"," ")
+        {loginuser.userinfo ?loginuser.userinfo.region.replaceAll("+"," "):<>서울</>
        }    
-      
+
         </Headers>
       
         
@@ -312,8 +312,10 @@ function Userweather2(props){
               <>
               {timeindex>0&&
               <>
-          
-
+              {//날짜정리필요
+              weatherdata[timeindex].date}
+                {//위화살표
+                }
               <Arrow rota={true} onClick={()=>{handlerSlideup()}}/>
           </>
               }

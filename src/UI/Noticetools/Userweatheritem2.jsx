@@ -159,15 +159,32 @@ function Userweatheritem2(props){
         }
     }
 
-    
+    const timepar=(time)=>{
+       const numtime= parseInt(time,10);
+
+       //오전오후판별
+       const period=numtime>=1200?"오후":"오전";
+
+       let hours=Math.floor(numtime/100);
+       if(hours>1200){
+            hours-=12;
+       }else if(hours===0){
+            hours=12; //자정처리
+       }
+       return (
+        <>
+        {period}{hours}시
+        </>
+       )
+    }
 
     return (
     <>{data.time!==""?
     <WeatherContainer>
         <WeatherHeader>
         <WeatherDate>
-        날짜:{data.date}
-        시간:{data.time}
+        {timepar(data.time)}
+     
         </WeatherDate>
         </WeatherHeader>
         <WeatherBody>
