@@ -76,12 +76,27 @@ const Etc=styled.div`
 `
 const Humidity=styled.div`
     width: 25%;
+    display: flex;
+    flex-direction: column;
 `
 const Raindrop=styled.div`
      width: 50%;
+     display: flex;
+     flex-direction: column;
 `
 const Windblow=styled.div`
      width: 25%;
+     display: flex;
+     flex-direction: column;
+`
+const Etcheader=styled.div`
+    text-align: center;
+`
+const Etcicon=styled.div`
+     text-align: center;
+`
+const Etcresult=styled.div`
+     text-align: center;
 `
 function Userweatheritem2(props){
 
@@ -181,23 +196,50 @@ function Userweatheritem2(props){
     </Tempcss>
     <Etc>
     <Humidity>
-    습도 <br/>
-    <FontAwesomeIcon icon={droplet}/> <br/>
-    {data.reh}% <br/>
+        <Etcheader>
+        습도 
+        </Etcheader>
+        <Etcicon>
+        <FontAwesomeIcon icon={droplet}/> 
+        </Etcicon>
+        <Etcresult>
+        {data.reh}% 
+        </Etcresult>
+    
+   
+    
+   
   
     </Humidity>
     <Raindrop>
-    1시간강수량
-    <FontAwesomeIcon icon={umbrella}/> <br/>
-    {data.rn1}<br/>
+    <Etcheader>
+    1시간강수
+            </Etcheader>
+            <Etcicon>
+            <FontAwesomeIcon icon={umbrella}/>
+            </Etcicon>
+            <Etcresult>
+            {data.rn1}
+            </Etcresult>
+    
     
 
     </Raindrop>
    
     <Windblow>
+    <Etcheader>
     풍속
-    <FontAwesomeIcon icon={wind}/> <br/>
-    {data.wsd}m/s<br/>
+            </Etcheader>
+            <Etcicon>
+            <FontAwesomeIcon icon={wind}/> 
+            </Etcicon>
+            <Etcresult>
+            {data.wsd}m/s
+            </Etcresult>
+    
+    
+    
+    
   
     </Windblow>
     
