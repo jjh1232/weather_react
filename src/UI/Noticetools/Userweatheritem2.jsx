@@ -17,7 +17,7 @@ import { faSun as sun } from "@fortawesome/free-regular-svg-icons";
 import { faSun as sunblur } from "@fortawesome/free-solid-svg-icons";
 import { faCloud as cloud } from "@fortawesome/free-solid-svg-icons";
 import { faDroplet as droplet } from "@fortawesome/free-solid-svg-icons";
-
+import { faTemperatureLow as temper } from "@fortawesome/free-solid-svg-icons";
 
 const WeatherContainer=styled.div`
     width: 250px;
@@ -37,12 +37,38 @@ const WeatherBody=styled.div`
 `
 const Skyicon=styled.div`
     width: 20%;
+    height: 100%;
+
     border: 1px solid blue;
 `
+const Icondiv=styled.div`
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  border: 1px solid black;
+  height: 40px; /* Set a height for the container */
+`
+const Skytext=styled.div`
+    text-align: center;
+`
+
+
+
 const Tempcss=styled.div`
     width: 15%;
     border: 1px solid green;
 `
+const Tempicon=styled.div`
+    display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  border: 1px solid black;
+  height: 40px; /* Set a height for the container */
+`
+const Temptext=styled.div`
+    text-align: center;
+`
+
 const Etc=styled.div`
     display: flex;
     width: 65%;
@@ -89,29 +115,29 @@ function Userweatheritem2(props){
         let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
 
         if(sky==="1"){//맑음
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moon}/><br/>맑음</>:<><FontAwesomeIcon icon={sun}/><br/>맑음</>)
-            else if(pty==="1") return (isnight? <><FontAwesomeIcon icon={cloudmoonrain}/><br/>맑음,빗방울</> :<><FontAwesomeIcon icon={rain}/><br/>맑음,빗방울</> )
-            else if(pty==="2") return (isnight?<> <FontAwesomeIcon icon={cloudmoonrain}/><br/>비,눈</> :<><FontAwesomeIcon icon={rain}/><br/>비,눈</> )
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={moon}/></Icondiv><Skytext>맑음</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"} icon={sun}/></Icondiv><Skytext>맑음</Skytext></>)
+            else if(pty==="1") return (isnight? <><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> :<><Icondiv><FontAwesomeIcon size={"2x"} icon={rain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> )
+            else if(pty==="2") return (isnight?<> <Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoonrain}/></Icondiv><Skytext>비,눈</Skytext></> :<><Icondiv><FontAwesomeIcon size={"2x"} icon={rain}/></Icondiv><Skytext>비,눈</Skytext></> )
             else if(pty==="3") return 맑고눈
             else if(pty==="5") return 맑지만빗방울
             else if(pty==="6") return 맑고빗방울눈날림
             else if(pty==="7") return 맑지만눈날림
 
         }else if(sky==="3"){//구름많음
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={cloudmoon}/><br/>구름많음</>:<><FontAwesomeIcon icon={cloudsun}/><br/>구름많음</>)
-            else if(pty==="1")  return (<><FontAwesomeIcon icon={rain}/> <br/>비</>)
-            else if(pty==="2")  return (<><FontAwesomeIcon icon={rain}/> <br/>비,눈</>)
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoon}/></Icondiv><Skytext>구름많음</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudsun}/></Icondiv><Skytext>구름많음</Skytext></>)
+            else if(pty==="1")  return (<><Icondiv><FontAwesomeIcon size={"2x"} icon={rain}/> </Icondiv><br/><Skytext>비</Skytext></>)
+            else if(pty==="2")  return (<><Icondiv><FontAwesomeIcon size={"2x"} icon={rain}/> </Icondiv><br/><Skytext>비,눈</Skytext></>)
             else if(pty==="3") return 구름많고눈
             else if(pty==="5") return 구름많고빗방울
             else if(pty==="6") return 구름많고빗방울눈날림
             else if(pty==="7") return 구름많고눈날림
 
         }else if(sky==="4"){//흐림
-            if(pty==="0") return (isnight?<><FontAwesomeIcon icon={moonblur}/><br/>흐림</>:<><FontAwesomeIcon icon={sunblur}/><br/>흐림</>)
-            else if(pty==="1") return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>비</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>비</>)
-            else if(pty==="2")  return  (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>비눈</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>비,눈</>)
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={moonblur}/></Icondiv><Skytext>흐림</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"}icon={sunblur}/></Icondiv><Skytext>흐림</Skytext></>)
+            else if(pty==="1") return  (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoonrain}/></Icondiv><Skytext>비</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudsunrain}/></Icondiv><Skytext>비</Skytext></>)
+            else if(pty==="2")  return  (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoonrain}/></Icondiv><Skytext>비,눈</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudsunrain}/></Icondiv><Skytext>비,눈</Skytext></>)
             else if(pty==="3") return 흐리고눈
-            else if(pty==="5") return (isnight?<><FontAwesomeIcon icon={cloudmoonrain}/><br/>구름많고빗방울</>:<><FontAwesomeIcon icon={cloudsunrain}/><br/>구름많고빗방울</>)
+            else if(pty==="5") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudmoonrain}/></Icondiv><Skytext>구름많고빗방울</Skytext></>:<><Icondiv><FontAwesomeIcon size={"2x"} icon={cloudsunrain}/></Icondiv><Skytext>구름많고빗방울</Skytext></>)
                 ///흐리고빗방울
             else if(pty==="6") return 흐리고빗방울눈날림
             else if(pty==="7") return 흐리고눈날림
@@ -136,14 +162,22 @@ function Userweatheritem2(props){
     
     
     // 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7) 
-    },<br/>
+    }
     {Weatherimo(data.sky,data.pty,data.time)}<br/>
     
     </Skyicon>
 
     <Tempcss>
-        <br/>
-    {data.t1h+"\u2103" }  
+        {parseInt(data.t1h)<0
+        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/></Tempicon>
+        <Temptext> {data.t1h+"\u2103" } </Temptext>
+        </> 
+        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/></Tempicon>
+        <Temptext> {data.t1h+"\u2103" } </Temptext>
+        </>}
+   
+    
+    
     </Tempcss>
     <Etc>
     <Humidity>
