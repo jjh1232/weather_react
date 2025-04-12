@@ -14,7 +14,7 @@ display: flex;
 position: fixed;
 //left:28%;
 border:1px solid red;
-left:13%;
+left:12%;
 width:74%;
 height:5%;
 justify-content: center;
@@ -31,17 +31,17 @@ const Spacer=styled.div`
 //3단디브
 const Logodiv=styled.div`
     border: 1px solid blue;
-    width: 20%;
+    width: 22%;
 `
 const Maindiv=styled.div`
     border:1px solid green;
-    width: 57%;
+    width: 59%;
     padding-left: 10px;
     padding-right: 10px;
 `
 const Searchdiv=styled.div`
     border:1px solid purple;
-    width: 20%;
+    width: 19%;
 `
 //검색
 const Usersearchinput=styled.input`
