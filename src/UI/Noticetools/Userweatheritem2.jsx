@@ -58,10 +58,13 @@ const Icondiv=styled.div`
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
   border: 1px solid black;
+  width: 70%;
   height: 70%; /* Set a height for the container */
 `
 const Skytext=styled.div`
-    text-align: center;
+    width: 145%;
+   
+    
     height: 30%;
 `
 
@@ -205,16 +208,18 @@ function Userweatheritem2(props){
     
     // 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7) 
     }
-    {Weatherimo(data.sky,data.pty,data.time)}<br/>
+   
+    {Weatherimo(data.sky,data.pty,data.time)}
+    
     
     </Skyicon>
     <Tempcss>
         {parseInt(data.t1h)<0
-        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/></Tempicon>
-        <Temptext> {data.t1h+"\u2103" } </Temptext>
+        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/> {data.t1h+"\u2103" } </Tempicon>
+        
         </> 
-        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/></Tempicon>
-        <Temptext> {data.t1h+"\u2103" } </Temptext>
+        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/> {data.t1h+"\u2103" } </Tempicon>
+       
         </>}
    
     
