@@ -24,11 +24,18 @@ const WeatherContainer=styled.div`
     width: 280px;
     height:150px;
     border: 1px solid black;
-    background-color: #9fd1fa; //마지막두자리가투명도 16진수임
+
+    //background-color: #9fd1fa; //마지막두자리가투명도 16진수임
     visibility: ${props=>props.visi?"hidden" :"visable"};
     margin: 10px;
     display: flex;
     flex-direction: column;
+    background-color: ${(props)=>{
+        const hue=props.temp>=0
+        ? Math.min(0 + props.temp * 2, 360) // 빨간색 계열 (0도 이상)
+      : Math.max(240 + props.temp * 2, 240); // 파란색 계열 (0도 이하)
+    return `hsl(${hue}, 100%, 50%)`;
+    }};
 `
 const WeatherHeader=styled.div`
     display: flex;
@@ -83,7 +90,7 @@ const Tempcss=styled.div`
     display: flex;
     width: 50%;
     position: relative;
-    border: 1px solid black;
+    border: 1px solid gray;
     
 `
 const Tempicon=styled.div`
@@ -92,15 +99,16 @@ const Tempicon=styled.div`
   align-items: center; /* Centers vertically */
   border: 1px solid blue;
   position: relative;
-  right: 6%;
+  right: 0%;
   height: 70%; /* Set a height for the container */
 `
 const Temptext=styled.div`
     position: relative;
-
+    width: 60px;
     text-align: center;
-
-    font-size: 30px;
+    
+    height: 70%;
+    font-size: 25px;
     border: 1px solid blue;
 `
 
@@ -113,10 +121,17 @@ const Humidity=styled.div`
     width: 25%;
     display: flex;
     flex-direction: column;
+    
+`
+const Basecss=styled.div`
+    background-color: white;
+    border-radius: 50%;
+    width: 70px;
 `
 const Raindrop=styled.div`
      width: 50%;
      display: flex;
+     align-items: center;
      flex-direction: column;
 `
 const Windblow=styled.div`
@@ -214,7 +229,7 @@ function Userweatheritem2(props){
 
     return (
     <>{data.time!==""?
-    <WeatherContainer>
+    <WeatherContainer temp={data.temp}>
         <WeatherHeader>
         <WeatherDate>
         {timepar(data.time)}
@@ -238,10 +253,10 @@ function Userweatheritem2(props){
    
     <Tempcss>
         {parseInt(data.t1h)<0
-        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="blue"/> <Temptext>{data.t1h+"\u2103" } </Temptext> </Tempicon>
+        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="blue"/></Tempicon> <Temptext>{data.t1h+"\u2103" } </Temptext> 
         
         </> 
-        : <><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="red"/> <Temptext>{data.t1h+"\u2103" } </Temptext></Tempicon>
+        : <><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="red"/> </Tempicon><Temptext>{data.t1h+"\u2103" } </Temptext>
        
         </>}
    
@@ -256,6 +271,7 @@ function Userweatheritem2(props){
    
     <Etc>
     <Humidity>
+        <Basecss>
         <Etcheader>
         습도 
         </Etcheader>
@@ -266,12 +282,13 @@ function Userweatheritem2(props){
         {data.reh}% 
         </Etcresult>
     
-   
+        </Basecss>
     
    
   
     </Humidity>
     <Raindrop>
+    <Basecss>
     <Etcheader>
     1시간강수
             </Etcheader>
@@ -283,10 +300,11 @@ function Userweatheritem2(props){
             </Etcresult>
     
     
-
+            </Basecss>
     </Raindrop>
    
     <Windblow>
+    <Basecss>
     <Etcheader>
     풍속
             </Etcheader>
@@ -299,7 +317,7 @@ function Userweatheritem2(props){
     
     
     
-    
+            </Basecss>
   
     </Windblow>
     
