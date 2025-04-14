@@ -47,42 +47,61 @@ const WeatherBody=styled.div`
     display: flex;
    
 `
+const Skyandtempdiv=styled.div`
+    
+    width: 65%;
+    display: flex;
+    
+`
 const Skyicon=styled.div`
-    width: 45%;
+    width: 55%;
     height: 100%;
-
-    border: 1px solid blue;
+   
+   
+    
 `
 const Icondiv=styled.div`
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
-  border: 1px solid black;
+ 
+  position: relative;
+  left: 20px;
   width: 70%;
   height: 70%; /* Set a height for the container */
 `
 const Skytext=styled.div`
-    width: 145%;
+    width: 180%;
    
-    
+   
     height: 30%;
 `
 
 
 
 const Tempcss=styled.div`
-    width: 20%;
-    border: 1px solid green;
+    display: flex;
+    width: 50%;
+    position: relative;
+    border: 1px solid black;
+    
 `
 const Tempicon=styled.div`
     display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
-  border: 1px solid black;
+  border: 1px solid blue;
+  position: relative;
+  right: 6%;
   height: 70%; /* Set a height for the container */
 `
 const Temptext=styled.div`
+    position: relative;
+
     text-align: center;
+
+    font-size: 30px;
+    border: 1px solid blue;
 `
 
 const Etc=styled.div`
@@ -201,6 +220,8 @@ function Userweatheritem2(props){
         {timepar(data.time)}
      
         </WeatherDate>
+
+        <Skyandtempdiv>
         <Skyicon>
     
     {//- 하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)
@@ -212,19 +233,22 @@ function Userweatheritem2(props){
     {Weatherimo(data.sky,data.pty,data.time)}
     
     
+
     </Skyicon>
+   
     <Tempcss>
         {parseInt(data.t1h)<0
-        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/> {data.t1h+"\u2103" } </Tempicon>
+        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="blue"/> <Temptext>{data.t1h+"\u2103" } </Temptext> </Tempicon>
         
         </> 
-        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/> {data.t1h+"\u2103" } </Tempicon>
+        : <><Tempicon><FontAwesomeIcon icon={temper} size={"2xl"} color="red"/> <Temptext>{data.t1h+"\u2103" } </Temptext></Tempicon>
        
         </>}
    
     
     
     </Tempcss>
+    </Skyandtempdiv>
         </WeatherHeader>
         <WeatherBody>
    
