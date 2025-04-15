@@ -30,12 +30,26 @@ const WeatherContainer=styled.div`
     margin: 10px;
     display: flex;
     flex-direction: column;
-    background-color: ${(props)=>{
-        const hue=props.temp>=0
-        ? Math.min(0 + props.temp * 2, 360) // 빨간색 계열 (0도 이상)
-      : Math.max(240 + props.temp * 2, 240); // 파란색 계열 (0도 이하)
-    return `hsl(${hue}, 100%, 50%)`;
-    }};
+    background-color:${(props) => {
+    const brightness = 0; // 
+    const minBrightness = 200;//최소색깔
+    if (props.temp === 0) {
+      // 0°C일 때 흰색에 가까운 회색
+      return `rgb(${brightness}, ${brightness }, ${brightness })`;
+    } else if (props.temp > 0) {
+      // 양수일 때 빨간색 계열
+      const red = Math.min(Math.max(props.temp * 10 + brightness,minBrightness), 255);
+      return `rgb(${red}, 100, 100)`;
+    } else {
+      // 음수일 때 파란색 계열
+      const blue = Math.min(Math.max(Math.abs(props.temp) * 10 + brightness,minBrightness) ,255);
+      return `rgb(${brightness}, ${brightness}, ${blue})`;
+    }
+  }};
+     background-image: radial-gradient(circle, #87ceeb 20%, transparent 20%), 
+                    radial-gradient(circle, #87ceeb 20%, transparent 20%);
+  background-size: 30px 30px; /* 물방울 크기 조정 */
+  background-position: 0px 0px, 15px 15px; /* 물방울 위치 조정 */
 `
 const WeatherHeader=styled.div`
     display: flex;
@@ -47,6 +61,7 @@ const WeatherHeader=styled.div`
 `
 const WeatherDate=styled.div`
     width: 35%;
+    font-size: 30px;
 
 `
 const WeatherBody=styled.div`
@@ -78,9 +93,11 @@ const Icondiv=styled.div`
   height: 70%; /* Set a height for the container */
 `
 const Skytext=styled.div`
-    width: 180%;
-   
-   
+
+    width: 180px;
+    float: left;
+   border-top: 1px solid gray;
+   border-left: 1px solid gray;
     height: 30%;
 `
 
@@ -125,17 +142,20 @@ const Humidity=styled.div`
 `
 const Basecss=styled.div`
     background-color: white;
-    border-radius: 50%;
+    border-radius: 20%;
     width: 70px;
+    margin: 3px;
+    
 `
 const Raindrop=styled.div`
-     width: 50%;
+     width: 48%;
      display: flex;
      align-items: center;
      flex-direction: column;
 `
 const Windblow=styled.div`
      width: 25%;
+    
      display: flex;
      flex-direction: column;
 `
@@ -147,6 +167,40 @@ const Etcicon=styled.div`
 `
 const Etcresult=styled.div`
      text-align: center;
+`
+const TimeContainer=styled.div`
+     display: flex;
+     height: 71px;
+    flex-direction: column;
+  align-items: center; /* 가로 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  font-family: Arial, sans-serif;
+  border: 1px solid black;
+`
+const Perioddiv=styled.div`
+    position: relative;
+    top:10px;
+    
+    font-size: 18px; 
+  color: black; 
+  //margin-bottom: 5px;
+ /* font-weight    :bold ;
+ margin-top:auto;
+  margin-bottom: 20px;
+  margin-left: 4px;
+  margin-right:1px;
+  */
+ 
+`
+const Hourdiv=styled.div`
+    text-align: center;
+    align-items: center;
+    position: relative;
+    top:1px;
+    margin-bottom: 25px;
+     font-size: 30px; 
+  font-weight: bold; 
+  color: black;      
 `
 function Userweatheritem2(props){
 
@@ -176,37 +230,39 @@ function Userweatheritem2(props){
    */
     //날씨 이모티콘 정리
     
-    const Weatherimo=(sky,pty,hour)=>{
+    const Weatherimo=(sky,pty,hour,t1h)=>{
         let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
+        let iscolor=parseInt(t1h)>10?"red":"blue"
 
         if(sky==="1"){//맑음
-            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"3x"} icon={moon}/></Icondiv><Skytext>맑음</Skytext></>:<><Icondiv><FontAwesomeIcon size={"3x"} icon={sun}/></Icondiv><Skytext>맑음</Skytext></>)
-            else if(pty==="1") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,비</Skytext></> :<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,비</Skytext></> )
-            else if(pty==="2") return (isnight?<> <Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,비,눈</Skytext></> :<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,비,눈</Skytext></> )
-            else if(pty==="3") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>맑음,눈</Skytext></>
-            else if(pty==="5") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> :<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> )
-            else if(pty==="6") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,빗방울,눈날림</Skytext></> :<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,빗방울,눈날림</Skytext></> )
-            else if(pty==="7") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>맑음,눈</Skytext></>
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={moon}/></Icondiv><Skytext>맑음</Skytext></>:<><Icondiv><FontAwesomeIcon  color={iscolor} size={"3x"} icon={sun}/></Icondiv><Skytext>맑음</Skytext></>)
+            else if(pty==="1") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,비</Skytext></> :<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,비</Skytext></> )
+            else if(pty==="2") return (isnight?<> <Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,비,눈</Skytext></> :<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,비,눈</Skytext></> )
+            else if(pty==="3") return <><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={snow}/></Icondiv><Skytext>맑음,눈</Skytext></>
+            else if(pty==="5") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> :<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,빗방울</Skytext></> )
+            else if(pty==="6") return (isnight? <><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={cloudmoonrain}/></Icondiv><Skytext>맑음,빗방울,눈날림</Skytext></> :<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsunrain}/></Icondiv><Skytext>맑음,빗방울,눈날림</Skytext></> )
+            else if(pty==="7") return <><Icondiv><FontAwesomeIcon size={"3x"} color={iscolor} icon={snow}/></Icondiv><Skytext>맑음,눈</Skytext></>
 
         }else if(sky==="3"){//구름많음
-            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoon}/></Icondiv><Skytext>구름많음</Skytext></>:<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsun}/></Icondiv><Skytext>구름많음</Skytext></>)
-            else if(pty==="1")  return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={rain}/> </Icondiv><Skytext>구름많음,비</Skytext></>)
-            else if(pty==="2")  return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={woobak}/> </Icondiv><Skytext>구름많음,비,눈</Skytext></>)
-            else if(pty==="3") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>구름많음,눈</Skytext></>
-            else if(pty==="5") return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={rain}/> </Icondiv><Skytext>구름많음,빗방울</Skytext></>)
-            else if(pty==="6") return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={woobak}/> </Icondiv><Skytext>구름많음,비방울,눈날림</Skytext></>)
-            else if(pty==="7") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>구름많음,눈날림</Skytext></>
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudmoon}/></Icondiv><Skytext>구름많음</Skytext></>:<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsun}/></Icondiv><Skytext>구름많음</Skytext></>)
+            else if(pty==="1")  return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={rain}/> </Icondiv><Skytext>구름많음,비</Skytext></>)
+            else if(pty==="2")  return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={woobak}/> </Icondiv><Skytext>구름많음,비,눈</Skytext></>)
+            else if(pty==="3") return <><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={snow}/></Icondiv><Skytext>구름많음,눈</Skytext></>
+            else if(pty==="5") return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={rain}/> </Icondiv><Skytext>구름많음,빗방울</Skytext></>)
+            else if(pty==="6") return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={woobak}/> </Icondiv><Skytext>구름많음,비방울,눈날림</Skytext></>)
+            else if(pty==="7") return <><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={snow}/></Icondiv><Skytext>구름많음,눈날림</Skytext></>
 
         }else if(sky==="4"){//흐림
-            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudmoon}/></Icondiv><Skytext>흐림</Skytext></>:<><Icondiv><FontAwesomeIcon size={"3x"} icon={cloudsun}/></Icondiv><Skytext>흐림</Skytext></>)
-                else if(pty==="1")  return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={rain}/> </Icondiv><Skytext>흐림,비</Skytext></>)
-                else if(pty==="2")  return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={woobak}/> </Icondiv><Skytext>흐림,비,눈</Skytext></>)
-                else if(pty==="3") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>흐림,눈</Skytext></>
-                else if(pty==="5") return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={rain}/> </Icondiv><Skytext>흐림,빗방울</Skytext></>)
-                else if(pty==="6") return (<><Icondiv><FontAwesomeIcon size={"3x"} icon={woobak}/> </Icondiv><Skytext>흐림,빗방울,눈날림</Skytext></>)
-                else if(pty==="7") return <><Icondiv><FontAwesomeIcon size={"3x"} icon={snow}/></Icondiv><Skytext>흐림,눈날림</Skytext></>
+            if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudmoon}/></Icondiv><Skytext>흐림</Skytext></>:<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={cloudsun}/></Icondiv><Skytext>흐림</Skytext></>)
+                else if(pty==="1")  return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={rain}/> </Icondiv><Skytext>흐림,비</Skytext></>)
+                else if(pty==="2")  return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={woobak}/> </Icondiv><Skytext>흐림,비,눈</Skytext></>)
+                else if(pty==="3") return <><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={snow}/></Icondiv><Skytext>흐림,눈</Skytext></>
+                else if(pty==="5") return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={rain}/> </Icondiv><Skytext>흐림,빗방울</Skytext></>)
+                else if(pty==="6") return (<><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={woobak}/> </Icondiv><Skytext>흐림,빗방울,눈날림</Skytext></>)
+                else if(pty==="7") return <><Icondiv><FontAwesomeIcon color={iscolor} size={"3x"} icon={snow}/></Icondiv><Skytext>흐림,눈날림</Skytext></>
         }
     }
+
 
     const timepar=(time)=>{
        const numtime= parseInt(time,10);
@@ -215,21 +271,28 @@ function Userweatheritem2(props){
        const period=numtime>=1200?"오후":"오전";
 
        let hours=Math.floor(numtime/100);
-       if(hours>1200){
+       if(hours>12){
             hours-=12;
        }else if(hours===0){
             hours=12; //자정처리
        }
        return (
-        <>
-        {period}{hours}시
-        </>
+        <TimeContainer>
+        <Perioddiv>
+        {period}
+        </Perioddiv>
+        <Hourdiv>{hours}시</Hourdiv>
+        
+        </TimeContainer>
        )
     }
 
     return (
-    <>{data.time!==""?
-    <WeatherContainer temp={data.temp}>
+    <>
+    
+    {data.time!==""?
+        
+    <WeatherContainer temp={1}>
         <WeatherHeader>
         <WeatherDate>
         {timepar(data.time)}
@@ -245,7 +308,7 @@ function Userweatheritem2(props){
     // 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7) 
     }
    
-    {Weatherimo(data.sky,data.pty,data.time)}
+    {Weatherimo(data.sky,data.pty,data.time,data.t1h)}
     
     
 
