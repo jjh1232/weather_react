@@ -20,6 +20,23 @@ import { faDroplet as droplet } from "@fortawesome/free-solid-svg-icons";
 import { faTemperatureLow as temper } from "@fortawesome/free-solid-svg-icons";
 import { faSnowflake as snow} from "@fortawesome/free-regular-svg-icons";
 import { faCloudRain as smallrain } from "@fortawesome/free-solid-svg-icons";
+
+const Weathercolor={
+    //30도이상
+    veryhot:" rgba(255,85,85,0.8)",
+    //20도이상
+    hot:" rgba(255, 176, 4, 0.979)",
+    //10도이상
+    warm:" rgba(154,231,197,0.8)",
+    //0도이상
+    cool:" rgba(112,185,220,0.8)",
+    //영하
+    cold:" rgba(67,29,180,0.8)"
+
+    
+
+}
+
 const WeatherContainer=styled.div`
     width: 280px;
     height:150px;
@@ -30,26 +47,9 @@ const WeatherContainer=styled.div`
     margin: 10px;
     display: flex;
     flex-direction: column;
-    background-color:${(props) => {
-    const brightness = 0; // 
-    const minBrightness = 200;//최소색깔
-    if (props.temp === 0) {
-      // 0°C일 때 흰색에 가까운 회색
-      return `rgb(${brightness}, ${brightness }, ${brightness })`;
-    } else if (props.temp > 0) {
-      // 양수일 때 빨간색 계열
-      const red = Math.min(Math.max(props.temp * 10 + brightness,minBrightness), 255);
-      return `rgb(${red}, 100, 100)`;
-    } else {
-      // 음수일 때 파란색 계열
-      const blue = Math.min(Math.max(Math.abs(props.temp) * 10 + brightness,minBrightness) ,255);
-      return `rgb(${brightness}, ${brightness}, ${blue})`;
-    }
-  }};
-     background-image: radial-gradient(circle, #87ceeb 20%, transparent 20%), 
-                    radial-gradient(circle, #87ceeb 20%, transparent 20%);
-  background-size: 30px 30px; /* 물방울 크기 조정 */
-  background-position: 0px 0px, 15px 15px; /* 물방울 위치 조정 */
+    background-color:${(props) => props.tempcolor}
+    
+  
 `
 const WeatherHeader=styled.div`
     display: flex;
@@ -76,7 +76,7 @@ const Skyandtempdiv=styled.div`
     
 `
 const Skyicon=styled.div`
-    width: 55%;
+    width: 50%;
     height: 100%;
    
    
@@ -228,6 +228,17 @@ function Userweatheritem2(props){
 
     },[])
    */
+    //온도에배경색 함수
+    const tempthema=(t1h)=>{
+        if(t1h>=30){
+            return Weathercolor.veryhot
+        }
+        else if(t1h>=20) return Weathercolor.hot
+        else if(t1h>=10) return Weathercolor.warm
+        else if(t1h>=0) return Weathercolor.cool
+        else return Weathercolor.cold
+    }
+
     //날씨 이모티콘 정리
     
     const Weatherimo=(sky,pty,hour,t1h)=>{
@@ -292,7 +303,7 @@ function Userweatheritem2(props){
     
     {data.time!==""?
         
-    <WeatherContainer temp={1}>
+    <WeatherContainer tempcolor={tempthema(data.t1h)}>
         <WeatherHeader>
         <WeatherDate>
         {timepar(data.time)}
