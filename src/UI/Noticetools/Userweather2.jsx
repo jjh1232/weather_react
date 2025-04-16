@@ -7,9 +7,18 @@ import Userweatheritem2 from "./Userweatheritem2";
 import { css } from "styled-components";
 
 const Headers=styled.div`
+  border: 1px solid red;
   
+  text-align: center;
+  font-size: 18px;
 `
 
+const Datediv=styled.div`
+border: 1px solid blue;
+width: 100%;
+text-align: center;
+  font-size: 30px;
+`
 const Wrapper=styled.div`
   position: relative;
   
@@ -296,6 +305,15 @@ function Userweather2(props){
       },[timeindex])
 
       
+
+      //날짜함수
+      const Datefor=(data)=>{
+        const str = data.toString();
+        const year=str.substring(0,4)
+        const month=str.substring(4,6)
+        const day=str.substring(6,8)
+        return `${year}년 ${month}월 ${day}일`
+      }
     return(
         
         <Wrapper>
@@ -312,8 +330,11 @@ function Userweather2(props){
               <>
               {timeindex>0&&
               <>
-              {//날짜정리필요
-              weatherdata[timeindex].date}
+              <Datediv>
+                  {//날짜정리필요
+                  Datefor(weatherdata[timeindex].date)
+                     }
+              </Datediv>
                 {//위화살표
                 }
               <Arrow rota={true} onClick={()=>{handlerSlideup()}}/>

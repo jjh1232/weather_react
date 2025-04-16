@@ -62,6 +62,7 @@ const WeatherHeader=styled.div`
 const WeatherDate=styled.div`
     width: 35%;
     font-size: 30px;
+    
 
 `
 const WeatherBody=styled.div`
@@ -93,7 +94,8 @@ const Icondiv=styled.div`
   height: 70%; /* Set a height for the container */
 `
 const Skytext=styled.div`
-
+    position: relative;
+    
     width: 180px;
     float: left;
    border-top: 1px solid gray;
@@ -364,7 +366,7 @@ function Userweatheritem2(props){
     <Raindrop>
     <Basecss>
     <Etcheader>
-    1시간강수
+    강수량
             </Etcheader>
             <Etcicon>
             <FontAwesomeIcon icon={umbrella}/>
