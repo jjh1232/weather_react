@@ -17,13 +17,37 @@ const Wrapper=styled.div`
 position:relative;
 float:left;
 top:7%;
-height: 80px;
+height: 140px;
 display: flex;
 border: 1px solid black;
 //border-bottom: 1px solid;
 border-radius: 3%;
 background-color: wheat;
 `
+//로그인이전 css 
+const BeforeWrapper=styled.div`
+  position:relative;
+float:left;
+top:7%;
+height: 140px;
+display: flex;
+flex-direction: column;
+border: 1px solid black;
+//border-bottom: 1px solid;
+border-radius: 3%;
+background-color: wheat;
+`
+const Loginfromdiv=styled.div`
+  border:1px solid blue
+
+`
+const FindFormdiv=styled.div`
+  border:1px solid green;
+`
+const Authdiv=styled.div`
+  border:1px solid green;
+`
+//로그인이후 css
 const Infodiv=styled.div`
   display: flex;
   flex-direction: column;
@@ -49,6 +73,7 @@ height: 50px;
 border: 1px solid yellow;
 //position:relative;
 //list-style: none;
+
 `
 
 const Profileview=styled.div`
@@ -294,12 +319,12 @@ const naverlogin=()=>{
  
 
   return (
-    <Wrapper>
+    <>
    
   
     {!islogin?  
-
-        <div>
+    <BeforeWrapper>
+        <Loginfromdiv>
       <form>
      이메일 :<input style= {{width:"150px"}}type="text" name="username" onChange={(e)=>Setloginform({...loginform,username:e.target.value})}/>
       <br/>
@@ -308,7 +333,13 @@ const naverlogin=()=>{
       <button style= {{height:"20px"}}type="submit" onClick={login} >로그인</button> 
       </form>
             
-      <Button title="아이디찾기" onClick={()=>{
+    
+
+   
+               
+   </Loginfromdiv>
+   <FindFormdiv>
+   <Button title="아이디찾기" onClick={()=>{
         navigate(`/memberidfind`)
       }}/>
     <Button title="비밀번호찾기" onClick={()=>{
@@ -318,9 +349,9 @@ const naverlogin=()=>{
                     navigate(`/membercreate`)
 
                 }}/>
-                <br/>
-
-    <a onClick={googlelogin}>
+                </FindFormdiv>
+                <Authdiv>
+                <a onClick={googlelogin}>
       구글로그인
 
     </a>
@@ -331,10 +362,9 @@ const naverlogin=()=>{
       style={{width:"110px", padding:"10px"}}
     />
        </a> 
-               
-   </div>
-
-   : <>
+                </Authdiv>
+</BeforeWrapper>
+   : <Wrapper>
    <Infodiv>
    <Userdatadiv>
     
@@ -371,12 +401,12 @@ const naverlogin=()=>{
     
     
 
-   </>
+   </Wrapper>
    }
     
    
 
-    </Wrapper>
+    </>
   )
 }
 export default Loginpage;
