@@ -17,6 +17,7 @@ const Wrapper=styled.div`
 position:relative;
 float:left;
 top:7%;
+width: 295px;
 height: 140px;
 display: flex;
 border: 1px solid black;
@@ -29,6 +30,7 @@ const BeforeWrapper=styled.div`
   position:relative;
 float:left;
 top:7%;
+width: 295px;
 height: 140px;
 display: flex;
 flex-direction: column;
@@ -38,20 +40,36 @@ border-radius: 3%;
 background-color: wheat;
 `
 const Loginfromdiv=styled.div`
-  border:1px solid blue
-
+  border:1px solid blue;
+  display:flex;
+ 
+`
+//로그인디브폼
+const LoginButton=styled.button`
+  border-radius: 3%;
+  width: 60px;
+  height: 45px;
+  border:1px solid yellowgreen;
+`
+const Buttondiv=styled.div`
+   
+`
+const Inputdiv=styled.div`
+  border: 1px solid red;
+  float: right;
+  
 `
 const FindFormdiv=styled.div`
   border:1px solid green;
 `
 const Authdiv=styled.div`
-  border:1px solid green;
+  border:1px solid red;
 `
 //로그인이후 css
 const Infodiv=styled.div`
   display: flex;
   flex-direction: column;
-
+  
 `
 const Userdatadiv=styled.div`
  
@@ -325,17 +343,19 @@ const naverlogin=()=>{
     {!islogin?  
     <BeforeWrapper>
         <Loginfromdiv>
-      <form>
+        <Inputdiv>
+      
      이메일 :<input style= {{width:"150px"}}type="text" name="username" onChange={(e)=>Setloginform({...loginform,username:e.target.value})}/>
       <br/>
       비밀번호:<input style= {{width:"150px"}} type="password"  name="password" onChange={(e)=>Setloginform({...loginform,password:e.target.value})}/>
       
-      <button style= {{height:"20px"}}type="submit" onClick={login} >로그인</button> 
-      </form>
-            
     
-
-   
+      
+            
+    </Inputdiv>
+    <Buttondiv>
+      <LoginButton type="submit" onClick={login} >로그인</LoginButton> 
+      </Buttondiv>
                
    </Loginfromdiv>
    <FindFormdiv>
