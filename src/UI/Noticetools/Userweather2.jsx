@@ -21,11 +21,17 @@ text-align: center;
 `
 const Wrapper=styled.div`
   position: relative;
-  
+  overflow: hidden;
   top: 10px;
   background-color: rgba(255,255,255,0.1);
+
+
   
-  
+`
+const WeathercardConatiner=styled.div`
+  overflow: hidden;
+  border: 1px solid blue;
+  height: 500px;
 `
 //슬라이드애니메이션
 const Slideup=keyframes`
@@ -34,7 +40,7 @@ const Slideup=keyframes`
     opacity: 0.5;
     }
   to{
-    transform: translateY(-100px) scale(1) ;
+    transform: translateY(-170px) scale(1) ;
     opacity: 1;
     }
 `
@@ -44,7 +50,7 @@ const Slidedown=keyframes`
     opacity: 0.5;
    }
   to{
-    transform: translateY(100px)  scale(1) ;
+    transform: translateY(170px)  scale(1) ;
     opacity: 1;
     }
 `
@@ -54,7 +60,7 @@ const mainSlideup=keyframes`
     opacity: 1;
     }
   to{
-    transform: translateY(-100px) scale(0.9) ;
+    transform: translateY(-170px) scale(0.9) ;
     opacity: 0.5;
     }
 `
@@ -64,7 +70,7 @@ const mainSlidedown=keyframes`
     opacity: 1;
    }
   to{
-    transform: translateY(100px)  scale(0.9) ;
+    transform: translateY(170px)  scale(0.9) ;
     opacity: 0.5;
     }
 `
@@ -73,28 +79,28 @@ const turnup=keyframes`
     transform: translateY(0)  scale(0.9);
   
   }10%{
-    transform: translateY(17px)  scale(0.86);
+    transform: translateY(-34px)  scale(0.9);
   }20%{
-    transform: translateY(34px)  scale(0.82);
+    transform: translateY(-68px)  scale(0.9);
   }30%{
-    transform: translateY(51px)  scale(0.78);
+    transform: translateY(-102px)  scale(0.9);
   }40%{
-    transform: translateY(68px)  scale(0.74);
+    transform: translateY(-136px)  scale(0.9);
   }50%{
-    transform: translateY(85px)  scale(0.7);
+    transform: translateY(-170px)  scale(0.9);
   }
-  
+  55%  { opacity: 0; }
   60%{
-    transform: translateY(102px)  scale(0.74);
+    transform: translateY(476px) scale(0.9) ;
   }70%{
-    transform: translateY(119px)  scale(0.78);
+    transform: translateY(452px) scale(0.9) ;
   }80%{
-    transform: translateY(136px)  scale(0.82);
+    transform: translateY(408px)  scale(0.9);
   }90%{
-    transform: translateY(153px)  scale(0.86);
+    transform: translateY(374px)  scale(0.9);
   }
   100%{
-    transform: translateY(170px)  scale(0.9);
+    transform: translateY(340px)  scale(0.9);
    
   }
 `
@@ -103,28 +109,28 @@ const turndown=keyframes`
     transform: translateY(0)  scale(0.9);
   
   }10%{
-    transform: translateY(-17px)  scale(0.86);
+    transform: translateY(34px)  scale(0.9);
   }20%{
-    transform: translateY(-34px)  scale(0.82);
+    transform: translateY(68px)  scale(0.9);
   }30%{
-    transform: translateY(-51px)  scale(0.78);
+    transform: translateY(102px) scale(0.9) ;
   }40%{
-    transform: translateY(-68px)  scale(0.74);
+    transform: translateY(136px)  scale(0.9);
   }50%{
-    transform: translateY(-85px)  scale(0.7);
+    transform: translateY(170px)  scale(0.9);
   }
-  
+  55%  { opacity: 0; }
   60%{
-    transform: translateY(-102px)  scale(0.74);
+    transform: translateY(-476px)  scale(0.74);
   }70%{
-    transform: translateY(-119px)  scale(0.78);
+    transform: translateY(-452px)  scale(0.78);
   }80%{
-    transform: translateY(-136px)  scale(0.82);
+    transform: translateY(-408px)  scale(0.82);
   }90%{
-    transform: translateY(-153px)  scale(0.86);
+    transform: translateY(-374px)  scale(0.86);
   }
   100%{
-    transform: translateY(-170px)  scale(0.9);
+    transform: translateY(-340px)  scale(0.9);
    
   }
 `
@@ -341,6 +347,8 @@ function Userweather2(props){
           </>
               }
                      { /*키값주면 알아서 렌더링되긴함 useeffect안써도 근데비용이크다고함*/ }
+        <WeathercardConatiner>
+
               <Weatheritemwrapper index={0} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===weatherdata.length-2&&"last"} >
           <Userweatheritem2 key={timeindex-1}   dates={weatherdata[timeindex-1]}/>
           </Weatheritemwrapper>
@@ -354,6 +362,7 @@ function Userweather2(props){
             <Weatheritemwrapper index={2} isCurrent={false} isNew={true}  any={animationeff} isindex={timeindex===1&&"first"}>
               <Userweatheritem2  key={timeindex+1}  dates={weatherdata[timeindex+1]} />
               </Weatheritemwrapper>
+              </WeathercardConatiner>
               {timeindex<weatherdata.length-1&&
               <>
            

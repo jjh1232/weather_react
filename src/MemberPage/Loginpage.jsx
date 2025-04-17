@@ -17,24 +17,47 @@ const Wrapper=styled.div`
 position:relative;
 float:left;
 top:7%;
-
-border: 3px solid;
+height: 80px;
+display: flex;
+border: 1px solid black;
 //border-bottom: 1px solid;
-border-radius: 8%;
+border-radius: 3%;
+background-color: wheat;
+`
+const Infodiv=styled.div`
+  display: flex;
+  flex-direction: column;
+
+`
+const Userdatadiv=styled.div`
+ 
+ border: 1px solid blue;
+ display: flex;
+`
+const Quickbuttondiv=styled.div`
+
 `
 
+const Menudiv=styled.div`
+  border: 1px solid red;
+  width: 20%;
+`
 const Menustyle= styled.ul`
-width:25%;
-float:right;
-top:-25px;
-position:relative;
-list-style: none;
+width:40px;
+height: 50px;
+
+border: 1px solid yellow;
+//position:relative;
+//list-style: none;
 `
 
 const Profileview=styled.div`
     border:1px solid;
     width:45px;
     height:45px;
+`
+const ProfileText=styled.div`
+  
 `
 
 
@@ -311,7 +334,10 @@ const naverlogin=()=>{
                
    </div>
 
-   : <div>
+   : <>
+   <Infodiv>
+   <Userdatadiv>
+    
     <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser.userinfo["profileimg"]}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -320,27 +346,32 @@ const naverlogin=()=>{
       {loginuser.userinfo["nickname"]}님환영합니다! 
       
      {alarmchat}
-            
-        
+     </Userdatadiv>
+        <Quickbuttondiv>
+     <Button title="로그아웃" onClick={logout}/>
+    <Button title="정보수정" onClick={()=>{
+      navigate("/memberupdate")
+    }}/>
+    </Quickbuttondiv>
     
+    </Infodiv>
+    <Menudiv>
 
    <Menustyle onClick={
     (e)=>{Setmenuover(!menuover)}} onMouseOut={()=>{Setmenuover(true)}}
     >
-    
-    <img src="/img/menu.png" style={{width:"40px"}}/>   
+      
+    <img src="/img/menu.png"  style={{objectFit:"fill",width:"100%",height:"100%"}}/>   
 
     {menuover &&<Dropdown />}
     
     
     </Menustyle>
-    <br/>
-    <Button title="로그아웃" onClick={logout}/>
-    <Button title="정보수정" onClick={()=>{
-      navigate("/memberupdate")
-    }}/>
+    </Menudiv>
+    
+    
 
-   </div>
+   </>
    }
     
    
