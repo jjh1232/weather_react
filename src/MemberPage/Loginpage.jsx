@@ -46,24 +46,59 @@ const Loginfromdiv=styled.div`
 `
 //로그인디브폼
 const LoginButton=styled.button`
-  border-radius: 3%;
+margin: 2px;
+margin-left: 4px;
+border-radius: 3%;
   width: 60px;
   height: 45px;
-  border:1px solid yellowgreen;
+  font-size: 15px;
+  color: white;
+  box-shadow: 0 4px 12px 0 rgba(5,5,0,0.3);
+  background: linear-gradient(0deg, #18b0f7 0%, #4aa1db 100%);
+  border:1px solid black;
 `
 const Buttondiv=styled.div`
-   
+   border:1px solid red;
+   width: 67px;
+   align-items: center;
+`
+const Inputcss=styled.input`
+  width: 150px;
+  border-radius: 10%;
+  background-color: #f1f4f5;
+
 `
 const Inputdiv=styled.div`
   border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   float: right;
   
 `
+
 const FindFormdiv=styled.div`
-  border:1px solid green;
+  border:px solid green;
+  display: flex;
+  
+`
+const Subbuttoncss=styled.div`
+  border-right: 1px solid gray;
+  width: 33%;
+  text-align: center;
+  cursor: pointer;
 `
 const Authdiv=styled.div`
+display: flex;
+position: relative;
+top: 10px;
   border:1px solid red;
+`
+const Authimage=styled.img`
+  width: 49%;
+  padding:2px;
+  height: 40px;
+
 `
 //로그인이후 css
 const Infodiv=styled.div`
@@ -344,11 +379,11 @@ const naverlogin=()=>{
     <BeforeWrapper>
         <Loginfromdiv>
         <Inputdiv>
-      
-     이메일 :<input style= {{width:"150px"}}type="text" name="username" onChange={(e)=>Setloginform({...loginform,username:e.target.value})}/>
-      <br/>
-      비밀번호:<input style= {{width:"150px"}} type="password"  name="password" onChange={(e)=>Setloginform({...loginform,password:e.target.value})}/>
-      
+      <label > 이메일 :
+     <Inputcss  type="text" name="username" onChange={(e)=>Setloginform({...loginform,username:e.target.value})}/>
+     </label>
+     <label > 비밀번호:<Inputcss  type="password"  name="password" onChange={(e)=>Setloginform({...loginform,password:e.target.value})}/>
+     </label>
     
       
             
@@ -359,29 +394,37 @@ const naverlogin=()=>{
                
    </Loginfromdiv>
    <FindFormdiv>
-   <Button title="아이디찾기" onClick={()=>{
+   <Subbuttoncss onClick={()=>{
         navigate(`/memberidfind`)
-      }}/>
-    <Button title="비밀번호찾기" onClick={()=>{
+      }}>아이디찾기
+      </Subbuttoncss>
+    <Subbuttoncss   onClick={()=>{
       navigate(`/memberpasswordfind`)
-    }}/>
-    <Button title="회원가입" onClick={()=>{
+    }}>비밀번호찾기
+      </Subbuttoncss>
+    <Subbuttoncss   onClick={()=>{
                     navigate(`/membercreate`)
 
-                }}/>
+                }}>회원가입
+                </Subbuttoncss>
                 </FindFormdiv>
-                <Authdiv>
-                <a onClick={googlelogin}>
-      구글로그인
 
-    </a>
-     <a onClick={naverlogin} >  
+                <Authdiv>
+
+            
+       <Authimage src={`${process.env.PUBLIC_URL}/img/google.png`}
+      onClick={googlelogin}
+    />
+
     
 
-    <img src={`${process.env.PUBLIC_URL}/img/NAVERBTG.png`}
-      style={{width:"110px", padding:"10px"}}
+
+    
+
+    <Authimage src={`${process.env.PUBLIC_URL}/img/NAVERBTG.png`}
+      onClick={naverlogin}
     />
-       </a> 
+       
                 </Authdiv>
 </BeforeWrapper>
    : <Wrapper>
