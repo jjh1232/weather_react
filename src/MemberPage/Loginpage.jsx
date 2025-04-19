@@ -42,6 +42,7 @@ background-color: wheat;
 const Loginfromdiv=styled.div`
   border:1px solid blue;
   display:flex;
+  height: 40%;
  
 `
 //로그인디브폼
@@ -66,7 +67,7 @@ const Inputcss=styled.input`
   width: 150px;
   border-radius: 10%;
   background-color: #f1f4f5;
-
+  
 `
 const Inputdiv=styled.div`
   border: 1px solid red;
@@ -75,11 +76,16 @@ const Inputdiv=styled.div`
   align-items: flex-end;
   float: right;
   
+  
 `
 
 const FindFormdiv=styled.div`
-  border:px solid green;
+  border:3px solid blue;
   display: flex;
+  height: 20%;
+  text-align: center;
+
+  font-size: 15px;
   
 `
 const Subbuttoncss=styled.div`
@@ -91,13 +97,15 @@ const Subbuttoncss=styled.div`
 const Authdiv=styled.div`
 display: flex;
 position: relative;
-top: 10px;
+
+height: 30%;
   border:1px solid red;
 `
 const Authimage=styled.img`
-  width: 49%;
+  width: 40%;
+  flex: 1;
   padding:2px;
-  height: 40px;
+  height: 38px;
 
 `
 //로그인이후 css
