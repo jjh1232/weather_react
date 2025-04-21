@@ -12,19 +12,11 @@ import Session from "react-session-api";
 import * as StompJS from "@stomp/stompjs"
 import Userweather from "../UI/Userweather";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell as bell } from "@fortawesome/free-regular-svg-icons";
+import Profilediv from "../UI/Modals/Profilediv";
 
-const Wrapper=styled.div`
-position:relative;
-float:left;
-top:7%;
-width: 295px;
-height: 140px;
-display: flex;
-border: 1px solid black;
-//border-bottom: 1px solid;
-border-radius: 3%;
-background-color: wheat;
-`
+
 //로그인이전 css 
 const BeforeWrapper=styled.div`
   position:relative;
@@ -61,6 +53,8 @@ border-radius: 3%;
 const Buttondiv=styled.div`
    border:1px solid red;
    width: 67px;
+   display: flex;
+   justify-content:center;
    align-items: center;
 `
 const Inputcss=styled.input`
@@ -91,8 +85,30 @@ const FindFormdiv=styled.div`
 const Subbuttoncss=styled.div`
   border-right: 1px solid gray;
   width: 33%;
-  text-align: center;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+`
+const Subtext=styled.span`
+  position: relative;
+   cursor: pointer;
+   
+   &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px; /* 밑줄 두께 */
+    background: #5c5d5e; /* 밑줄 색상 */
+    transform: scaleX(0); //콘텐츠카로크기를곱하는것0을하면안보인다!
+   
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
 `
 const Authdiv=styled.div`
 display: flex;
@@ -108,19 +124,75 @@ const Authimage=styled.img`
   height: 38px;
 
 `
-//로그인이후 css
+//로그인이후 css=====================================================================
+
+const Wrapper=styled.div`
+position:relative;
+float:left;
+top:7%;
+width: 295px;
+height: 140px;
+display: flex;
+flex-direction: column;
+border: 1px solid black;
+//border-bottom: 1px solid;
+border-radius: 3%;
+background-color: wheat;
+`
+
 const Infodiv=styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   
 `
 const Userdatadiv=styled.div`
- 
- border: 1px solid blue;
+ height: 65%;
+ border: 2px solid red;
  display: flex;
+
+`
+
+const Profileview=styled.div`
+    border:1px solid black;
+  
+    flex:3;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
+`
+const Loginprofileimg=styled.img`
+    width:45px;
+    height:45px;
+    object-fit: fill;
+    border: 1px solid black;
+`
+const ProfileTextdiv=styled.div`
+  border:1px solid blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex:10;
+`
+
+const Logdiv=styled.div`
+  border:1px solid green;
+  flex:2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+const Imoticondiv=styled.div`
+  border: 1px solid red;
 `
 const Quickbuttondiv=styled.div`
-
+display: flex;
+align-items: center;
+  justify-content: center;
+border:1px solid green;
+height: 35%;
 `
 
 const Menudiv=styled.div`
@@ -137,14 +209,7 @@ border: 1px solid yellow;
 
 `
 
-const Profileview=styled.div`
-    border:1px solid;
-    width:45px;
-    height:45px;
-`
-const ProfileText=styled.div`
-  
-`
+
 
 
 function Loginpage(props){
@@ -402,18 +467,28 @@ const naverlogin=()=>{
                
    </Loginfromdiv>
    <FindFormdiv>
-   <Subbuttoncss onClick={()=>{
+   <Subbuttoncss >
+      <Subtext onClick={()=>{
         navigate(`/memberidfind`)
-      }}>아이디찾기
+      }}>
+      아이디찾기
+      </Subtext>
       </Subbuttoncss>
-    <Subbuttoncss   onClick={()=>{
+    <Subbuttoncss   >
+      <Subtext onClick={()=>{
       navigate(`/memberpasswordfind`)
-    }}>비밀번호찾기
+
+    }}>
+      비밀번호찾기
+      </Subtext>
       </Subbuttoncss>
-    <Subbuttoncss   onClick={()=>{
+    <Subbuttoncss  >
+                  <Subtext  onClick={()=>{
                     navigate(`/membercreate`)
 
-                }}>회원가입
+                }}>
+                  회원가입
+                  </Subtext>
                 </Subbuttoncss>
                 </FindFormdiv>
 
@@ -435,39 +510,43 @@ const naverlogin=()=>{
        
                 </Authdiv>
 </BeforeWrapper>
-   : <Wrapper>
+   : 
+   <Wrapper>
    <Infodiv>
    <Userdatadiv>
     
     <Profileview>
-    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser.userinfo["profileimg"]}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}
+    <Loginprofileimg   src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser.userinfo["profileimg"]}
+  
                 />
     </Profileview>
+    
+    <ProfileTextdiv>
       {loginuser.userinfo["nickname"]}님환영합니다! 
-      
-     {alarmchat}
+      <br/>
+      {loginuser.userinfo["username"]} 
+      </ProfileTextdiv>
+      <Logdiv>
+      <Imoticondiv>
+        <FontAwesomeIcon icon={bell} size="2x"/>
+        </Imoticondiv>
+     {
+     //alarmchat
+     }
+     </Logdiv>
      </Userdatadiv>
         <Quickbuttondiv>
      <Button title="로그아웃" onClick={logout}/>
     <Button title="정보수정" onClick={()=>{
       navigate("/memberupdate")
     }}/>
+    
     </Quickbuttondiv>
     
     </Infodiv>
     <Menudiv>
 
-   <Menustyle onClick={
-    (e)=>{Setmenuover(!menuover)}} onMouseOut={()=>{Setmenuover(true)}}
-    >
-      
-    <img src="/img/menu.png"  style={{objectFit:"fill",width:"100%",height:"100%"}}/>   
-
-    {menuover &&<Dropdown />}
-    
-    
-    </Menustyle>
+ 
     </Menudiv>
     
     
