@@ -185,7 +185,21 @@ const Logdiv=styled.div`
   justify-content: center;
 `
 const Imoticondiv=styled.div`
+  position: relative;
   border: 1px solid red;
+`
+const Imotebatge=styled.div`
+position: absolute;
+top: -6px;
+right: -6px;
+  border:1px solid red;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  min-width:18px;
+  text-align: center;
+  
+  pointer-events: none;
 `
 const Quickbuttondiv=styled.div`
 display: flex;
@@ -193,6 +207,15 @@ align-items: center;
   justify-content: center;
 border:1px solid green;
 height: 35%;
+`
+const QuickButtonitem=styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid blue;
+  flex: 1;
+  cursor: pointer;  
+
 `
 
 const Menudiv=styled.div`
@@ -410,6 +433,7 @@ const naverlogin=()=>{
       //},
       
   
+
       onConnect:()=>{
         console.log("구독함수시작")
         subcribe(loginuser.userinfo["username"]);//연결시작시구독
@@ -529,25 +553,47 @@ const naverlogin=()=>{
       <Logdiv>
       <Imoticondiv>
         <FontAwesomeIcon icon={bell} size="2x"/>
+        <Imotebatge>
+          {alarmchat}
+        </Imotebatge>
         </Imoticondiv>
-     {
-     //alarmchat
+     {/* 이거메뉴버전
+       <Menustyle onClick={
+        (e)=>{Setmenuover(!menuover)}} onMouseOut={()=>{Setmenuover(true)}}
+        >
+          
+        <img src="/img/menu.png"  style={{objectFit:"fill",width:"100%",height:"100%"}}/>   
+    
+        {menuover &&<Dropdown />}
+        
+        
+        </Menustyle>
+        */
+    
      }
      </Logdiv>
      </Userdatadiv>
         <Quickbuttondiv>
-     <Button title="로그아웃" onClick={logout}/>
-    <Button title="정보수정" onClick={()=>{
+          <QuickButtonitem onClick={()=>{
+      navigate(`/userpage/${loginuser.userinfo["username"]}`)
+    }}>
+          마이페이지
+          </QuickButtonitem>
+          <QuickButtonitem  onClick={()=>{
       navigate("/memberupdate")
-    }}/>
-    
+    }}>
+          정보수정
+          </QuickButtonitem>
+     
+          <QuickButtonitem onClick={logout}>
+          로그아웃
+          </QuickButtonitem>
+     
+ 
     </Quickbuttondiv>
     
     </Infodiv>
-    <Menudiv>
-
  
-    </Menudiv>
     
     
 
