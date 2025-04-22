@@ -15,6 +15,7 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell as bell } from "@fortawesome/free-regular-svg-icons";
 import Profilediv from "../UI/Modals/Profilediv";
+import CreateAxios from "../customhook/CreateAxios";
 
 
 //로그인이전 css 
@@ -147,7 +148,7 @@ const Infodiv=styled.div`
   
 `
 const Userdatadiv=styled.div`
- height: 65%;
+ height: 60%;
  border: 2px solid red;
  display: flex;
 
@@ -163,8 +164,9 @@ const Profileview=styled.div`
 
 `
 const Loginprofileimg=styled.img`
-    width:45px;
-    height:45px;
+    width:50px;
+    background-color: white;
+    height:50px;
     object-fit: fill;
     border: 1px solid black;
 `
@@ -172,8 +174,8 @@ const ProfileTextdiv=styled.div`
   border:1px solid blue;
   display: flex;
   align-items: center;
-  justify-content: center;
-
+  //justify-content: center;
+  font-size: 15px;
   flex:10;
 `
 
@@ -206,15 +208,30 @@ display: flex;
 align-items: center;
   justify-content: center;
 border:1px solid green;
-height: 35%;
+height: 38%;
 `
-const QuickButtonitem=styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid blue;
-  flex: 1;
-  cursor: pointer;  
+const QUickButtonitemdiv=styled.div`
+  
+`
+const QuickButtonitem=styled.span`
+position: relative;
+   cursor: pointer;
+   
+   &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px; /* 밑줄 두께 */
+    background: #5c5d5e; /* 밑줄 색상 */
+    transform: scaleX(0); //콘텐츠카로크기를곱하는것0을하면안보인다!
+   
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
 
 `
 
@@ -247,7 +264,7 @@ function Loginpage(props){
   const [menuover,Setmenuover]=useState(false)
 
   const [alarmchat,Setalrmchat]=useState("없음")
-
+  const axiosinstance=CreateAxios();
   const navigate=useNavigate();
   //const form = new FormData(); 폼데이터형식
   //form.append("email", "asd");
@@ -263,12 +280,25 @@ function Loginpage(props){
    
   },[islogin])
 
+ //에미터테스트
+ const Ssetest=()=>{
+    axiosinstance.get("/ssetest",{
+      id:1
+    })
+ }
+
+ //에미터유저확인
+ const Ssetest2=()=>{
+  axiosinstance.get("/ssetest2"
+  )
+}
  
   //SSe실행
   const sse=()=>{
   
     console.log("sse시작")
-    //const eventSource = new EventSource('http://localhost:8081/ssetest')// 일반 sse요청 헤더못넣음
+    //const eventSource = new EventSource('http://localhost:8081/ssetest')
+    // 위에는 일반 sse요청 헤더못넣음
     const eventSource= new EventSourcePolyfill(
       "http://localhost:8081/ssesub",{
       headers:{
@@ -282,25 +312,27 @@ function Loginpage(props){
   
    
    eventSource.onopen=(res)=>{
-    console.log("연결성공")
-    removeLoginuser("Refreshtoken");
-          removeLoginuser("Acesstoken");
+    console.log("sse연결성공"+res)
+    //removeLoginuser("Refreshtoken");
+          //removeLoginuser("Acesstoken");
           //삭제해줘야함
-          setLoginuser("Acesstoken",res.headers.get("Authorization"),{path:"/"})
-          setLoginuser("Refreshtoken",res.headers.get("Refreshtoken"),{path:"/"})
+         // setLoginuser("Acesstoken",res.headers.get("Authorization"),{path:"/"})
+          //setLoginuser("Refreshtoken",res.headers.get("Refreshtoken"),{path:"/"})
    }
   
+   /*
    eventSource.onopen=()=>{
     console.log("연결성공!")
   
    
   }
+    */
   eventSource.onmessage= (e)=>{
     console.log("알림메세지ex")
     const res=e.data;
     //const js=JSON.parse(res)
     
-    console.log(res)
+    console.log("알림메세지ex:"+res)
     
   
   }
@@ -318,6 +350,8 @@ function Loginpage(props){
       console.log("로그인안함")
     }
   },[])
+
+
   //oauth2로그인===================
 const googlelogin=()=>{
   let googleurl= "http://localhost:8081/oauth2/authorization/google";
@@ -490,7 +524,25 @@ const naverlogin=()=>{
       </Buttondiv>
                
    </Loginfromdiv>
-   <FindFormdiv>
+   
+                <Authdiv>
+
+            
+       <Authimage src={`${process.env.PUBLIC_URL}/img/google.png`}
+      onClick={googlelogin}
+    />
+
+    
+
+
+    
+
+    <Authimage src={`${process.env.PUBLIC_URL}/img/NAVERBTG.png`}
+      onClick={naverlogin}
+    />
+       
+                </Authdiv>
+                <FindFormdiv>
    <Subbuttoncss >
       <Subtext onClick={()=>{
         navigate(`/memberidfind`)
@@ -516,23 +568,6 @@ const naverlogin=()=>{
                 </Subbuttoncss>
                 </FindFormdiv>
 
-                <Authdiv>
-
-            
-       <Authimage src={`${process.env.PUBLIC_URL}/img/google.png`}
-      onClick={googlelogin}
-    />
-
-    
-
-
-    
-
-    <Authimage src={`${process.env.PUBLIC_URL}/img/NAVERBTG.png`}
-      onClick={naverlogin}
-    />
-       
-                </Authdiv>
 </BeforeWrapper>
    : 
    <Wrapper>
@@ -579,6 +614,7 @@ const naverlogin=()=>{
     }}>
           마이페이지
           </QuickButtonitem>
+
           <QuickButtonitem  onClick={()=>{
       navigate("/memberupdate")
     }}>
@@ -588,7 +624,13 @@ const naverlogin=()=>{
           <QuickButtonitem onClick={logout}>
           로그아웃
           </QuickButtonitem>
-     
+          <QuickButtonitem onClick={Ssetest}>
+          sse테스트
+          </QuickButtonitem>
+          <QuickButtonitem onClick={Ssetest2}>
+          sse테스트2
+          </QuickButtonitem>
+          
  
     </Quickbuttondiv>
     
