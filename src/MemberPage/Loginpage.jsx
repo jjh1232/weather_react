@@ -16,6 +16,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell as bell } from "@fortawesome/free-regular-svg-icons";
 import Profilediv from "../UI/Modals/Profilediv";
 import CreateAxios from "../customhook/CreateAxios";
+import { useQuery } from "@tanstack/react-query";
+import UserNotification from "./UserNotification";
 
 
 //로그인이전 css 
@@ -213,6 +215,12 @@ height: 38%;
 const QUickButtonitemdiv=styled.div`
   
 `
+const Notificationdiv=styled.div`
+  position: absolute;
+  top: 40px;
+  right: -230px;
+  z-index: 30;
+`
 const QuickButtonitem=styled.span`
 position: relative;
    cursor: pointer;
@@ -262,8 +270,8 @@ function Loginpage(props){
   const [loginuser,Setloginuser,removeloginuser]=useCookies(['userinfo'])
   const client=useRef(null)
   const [menuover,Setmenuover]=useState(false)
-
-  const [alarmchat,Setalrmchat]=useState("없음")
+  const [isnotify,setisnotify]=useState(false);
+  const [alarmchatcount,Setalrmchatcount]=useState()
   const axiosinstance=CreateAxios();
   const navigate=useNavigate();
   //const form = new FormData(); 폼데이터형식
@@ -274,6 +282,15 @@ function Loginpage(props){
   const logincheck=AuthCheck();
 
 
+  //알람메세지가져오기
+  const {data:alarmchat,isLoading,error}=useQuery({
+    queryKey:["alarmchat"],
+    queryFn:async()=>{
+      const res=await axiosinstance.get("/notification")
+      Setalrmchatcount(res.data.totalElements)
+      return res.data.content;
+    }
+  })
   useEffect(()=>{
     console.log("실행")
     Setislogin(logincheck);
@@ -331,7 +348,7 @@ function Loginpage(props){
     console.log("알림메세지ex")
     const res=e.data;
     //const js=JSON.parse(res)
-    
+    Setalrmchatcount((prev)=>prev+1)
     console.log("알림메세지ex:"+res)
     
   
@@ -586,12 +603,16 @@ const naverlogin=()=>{
       {loginuser.userinfo["username"]} 
       </ProfileTextdiv>
       <Logdiv>
-      <Imoticondiv>
+      <Imoticondiv onClick={()=>{setisnotify(!isnotify)}}>
         <FontAwesomeIcon icon={bell} size="2x"/>
         <Imotebatge>
-          {alarmchat}
+         
         </Imotebatge>
+        
         </Imoticondiv>
+        {isnotify&&<Notificationdiv>
+          <UserNotification notifidata={alarmchat}/>
+        </Notificationdiv>}
      {/* 이거메뉴버전
        <Menustyle onClick={
         (e)=>{Setmenuover(!menuover)}} onMouseOut={()=>{Setmenuover(true)}}
