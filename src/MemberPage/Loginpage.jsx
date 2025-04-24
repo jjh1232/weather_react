@@ -283,12 +283,12 @@ function Loginpage(props){
 
 
   //알람메세지가져오기
-  const {data:alarmchat,isLoading,error}=useQuery({
-    queryKey:["alarmchat"],
+  const {data:notificount,isLoading,error}=useQuery({
+    queryKey:["notificount"],
     queryFn:async()=>{
-      const res=await axiosinstance.get("/notification")
-      Setalrmchatcount(res.data.totalElements)
-      return res.data.content;
+      const res=await axiosinstance.get("/notificationcount")
+      Setalrmchatcount(res.data)
+      return res.data;
     }
   })
   useEffect(()=>{
@@ -611,7 +611,8 @@ const naverlogin=()=>{
         
         </Imoticondiv>
         {isnotify&&<Notificationdiv>
-          <UserNotification notifidata={alarmchat}/>
+          <UserNotification />
+          
         </Notificationdiv>}
      {/* 이거메뉴버전
        <Menustyle onClick={
