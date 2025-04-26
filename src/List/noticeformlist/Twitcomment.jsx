@@ -3,16 +3,30 @@ import Twitcommentlistitem from "./Twitcommentlistitem"
 import Commentform from "../../Noticepage/Commentform"
 import Replycomment from "../../UI/Replycomment"
 import Commentlist from "../Commentlist"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
 export default function Twitcomment(props){
 
 
-    const {comments,noticeid,commentcreate
+    const {noticeid,commentcreate
         ,commentupdate,
         commentdelete
 
     }=props
 
-    console.log("메인코멘트에서코멘츠"+comments)
+    
+
+    
+    const {data:comments}=useQuery({
+        queryKey:["comments"],
+        queryFn:async ()=>{
+            const res= await axios.get("/open/commentshow",{
+                params:{noticeid:noticeid}
+            })
+             
+            return res.data.content
+        }
+    })
     return (
         <>
         {comments&&comments.map((data)=>{

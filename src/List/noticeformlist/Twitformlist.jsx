@@ -113,13 +113,6 @@ export default function Twitformlist(props){
 
       
 
-        if(isreple){
-            
-            showreply();
-        }else{
-           
-
-        }
 
     
 
@@ -153,6 +146,16 @@ export default function Twitformlist(props){
 
         })
     
+        useEffect(()=>{
+          if(isreple){
+            
+            showreply();
+        }else{
+           
+  
+        }
+        },[isreple])
+     
    
 
     }
