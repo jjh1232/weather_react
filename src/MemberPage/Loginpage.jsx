@@ -289,7 +289,8 @@ function Loginpage(props){
       const res=await axiosinstance.get("/notificationcount")
       Setalrmchatcount(res.data)
       return res.data;
-    }
+    },
+    enabled:logincheck
   })
   useEffect(()=>{
     console.log("실행")

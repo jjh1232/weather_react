@@ -159,87 +159,7 @@ export default function Twitformlist(props){
    
 
     }
-    //=============================코멘트작성=============================
-    const commentsubmit=(
-      username,usernickname,comment,noticenum,depth,cnum
-    )=>{
-      console.log("시작왜리렌더링")
-      
-      
-      if(comment===''){
-        alert("글을작성해주십시오")
-      }
-      else{
-        
-        axiosinstance.post("/commentcreate",{
-          noticeid:noticenum,
-          depth:depth,
-          cnum:cnum,
-          username:username,
-          nickname:usernickname,
-          text:comment,
-          
-
-        }).then((res)=>{
-                      
-          alert("작성완료")
-          showreply()
-        
-        }).catch((error)=>{
-            alert("코멘트에러!")
-            console.log("코멘트에러")
-        })
-      
-      }
-      
-    }
-
-  //==============================코멘트업데이트========================
-
-
-const commentupdate=(commentid,commentusername,updatecomment)=>{
-  
-  if(updatecomment===undefined){
-   alert("바뀐내용을입력해주세요")
-  }
-  else if(updatecomment===''){
-   alert("빈칸은입력할수없습니다")
-  }
-  else{
-   axiosinstance.put(`/commentupdate`,{
-     id:commentid,
-     username:commentusername,
-     text:updatecomment
-
-   }).then((res)=>{
-     alert("성공적으로변경하였습니다")
-     showreply()
-     
-     
-   }).catch((err)=>{
-    alert("수정못햇음")
-
-   })
-   
- }
- return false;
-}
-
-
-//============================코멘트삭제==============================
-const commentdelete=(id)=>{
-  console.log("해당댓글삭제!"+id)
-    axiosinstance.delete(`/commentdelete/${id}`).then((res)=>{
-          alert("성공적으로삭제하였습니다")
-          showreply()
-          
-    }).catch((error)=>{
-      alert('삭제요청실패')
     
-    })
-    return false;
- }
-
  const postUpdate=()=>{
     setIsupdate(true)
 
@@ -441,10 +361,8 @@ const simpleprofile =(e)=>{
             
             
             {isreple&&<>
-                <Twitcomment comments={comments} noticeid={post.num} 
-                commentcreate={commentsubmit}
-                commentupdate={commentupdate}
-                commentdelete={commentdelete}
+                <Twitcomment  noticeid={post.num} 
+               
                 />
                 </>}
             
