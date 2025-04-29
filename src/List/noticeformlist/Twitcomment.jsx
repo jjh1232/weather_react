@@ -17,7 +17,7 @@ export default function Twitcomment(props){
 const axiosinstance=CreateAxios();
     
     const {data:comments}=useQuery({
-        queryKey:["comments"],
+        queryKey:["comments",noticeid], //두번째는 식별자 왠만하면이렇게쓰는게좋다함
         queryFn:async ()=>{
             const res= await axios.get("/open/commentshow",{
                 params:{noticeid:noticeid}
@@ -29,14 +29,14 @@ const axiosinstance=CreateAxios();
 
     const queryclient=useQueryClient();
     //=================================코멘트작성================================================
-    const createcomment=useMutation({
+    const createcomment=useMutation({//리턴을하는게올바른사용법이라함
         mutationFn:({noticenum,depth,cnum,username,usernickname,comment})=>{
             if(comment===""){
                 alert("글을작성해주세요!")
             }
             else{
                 console.log("댓글작성시작")
-                axiosinstance.post("/commentcreate",{
+              return  axiosinstance.post("/commentcreate",{
                     noticeid:noticenum,
                     depth:depth,
                     cnum:cnum,
@@ -49,11 +49,45 @@ const axiosinstance=CreateAxios();
                  
                 }
         },
+        onMutate:async (variables)=>{ //서버요청전에 로컬캐시를 먼저업데이트 이거 내가보낸파라미터
+            //기존 댓글데이터가져오고 쿼리잠시중단 두번째는 식별자임 게시글번호로식별
+            await queryclient.cancelQueries(["comments",variables.noticenum]);
+            //기존데이터백업
+            console.log("온뮤테이트시작")
+            const previus=queryclient.getQueryData(["comments",variables.noticenum])
+            //임시댓글객체생성 (id는 임시로)
+            const opticomment={
+                id:"temp-"+Date.now(),
+                noticeid:variables.noticenum,
+                depth:variables.depth,
+                username: variables.username,
+        nickname: variables.usernickname,
+        text: variables.comment,
+        createdAt: new Date().toISOString(),
+        // 필요한 필드 추가
+      };
+      //캐시에 임시댓글추가
+      queryclient.setQueryData(["comments",variables.noticenum],(old=[])=>[
+        ...old,
+        opticomment,]
+      );
+      //롤백용 데이터 반환 
+      console.log("온뮤테이트종류후리턴")
+      return {previus}
+            }
+        ,
         onSuccess:(res)=>{
             alert("성공하였습니다")
-            queryclient.invalidateQueries(["comments"])
-        },onError:()=>{
-
+           // queryclient.invalidateQueries(["comments"])
+           //간단하게 리렌더링할때 ux는조금아쉽다! 요청도두번하게되는것
+        },onError:(error,variables,context)=>{//실패시롤백  context는 onmutation에서 리턴한값
+            if(context?.previus){
+                queryclient.setQueryData(["comments",variables.noticenum],context.previus);
+            }
+            alert("댓글작성오류")
+        },
+        onSettled:(data,error,variables)=>{ //성공실패없이 상관없이 서버데이터로 동기화
+            queryclient.invalidateQueries(["comments", variables.noticenum]);
         }
     })
       const commentcr=(username,usernickname,comment,noticenum,depth,cnum)=>{
@@ -71,7 +105,7 @@ const axiosinstance=CreateAxios();
                     alert("빈칸은입력할수없습니다")
                    }
                    else{
-                    axiosinstance.put(`/commentupdate`,{
+                    return   axiosinstance.put(`/commentupdate`,{
                       id:commentid,
                       username:commentusername,
                       text:updatecomment
@@ -81,7 +115,7 @@ const axiosinstance=CreateAxios();
             },
             onSuccess:()=>{
                 alert("업데이트완료")
-                queryclient.invalidateQueries(["comments"])
+                queryclient.invalidateQueries(["comments",noticeid])
             },onError:()=>{
 
             }
@@ -94,7 +128,7 @@ const axiosinstance=CreateAxios();
 //=================================코멘트삭제================================
         const codelmutate=useMutation({
             mutationFn:(id)=>{
-                axiosinstance.delete(`/commentdelete/${id}`)
+                return  axiosinstance.delete(`/commentdelete/${id}`)
             },
             onSuccess:()=>{
                 alert("삭제성공")
@@ -110,6 +144,11 @@ const axiosinstance=CreateAxios();
 
     return (
         <>
+      
+<Commentform noticenum ={noticeid} depth="0" cnum=""
+commentsubmit={commentcr}
+/>
+     
         {comments&&comments.map((data)=>{
             return (<>
                {data.depth===0 &&
@@ -139,10 +178,6 @@ const axiosinstance=CreateAxios();
        
 }
 
-===============================댓글작성==================
-<Commentform noticenum ={noticeid} depth="0" cnum=""
-commentsubmit={commentcr}
-/>
-        </>
+</>
     )
 }
