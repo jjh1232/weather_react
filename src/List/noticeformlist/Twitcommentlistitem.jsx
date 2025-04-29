@@ -4,6 +4,35 @@ import styled from "styled-components";
 import Replycomment from "../../UI/Replycomment";
 import { useCookies } from "react-cookie";
 import Button from "../../UI/Button";
+const Wrapper=styled.div`
+    display: flex;
+
+`
+const Profilediv=styled.div`
+    
+`
+const MainDiv=styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const MainHeader=styled.div`
+    display: flex;
+`
+const Usernamediv=styled.div`
+    
+`
+const Useremaildiv=styled.div`
+    
+`
+const Timediv=styled.div`
+    
+`
+const Upanddeletediv=styled.div`
+    
+`
+const MainText=styled.div`
+    
+`
 
 const Profileview=styled.div`
     border:1px solid;
@@ -62,10 +91,9 @@ return (
                   <Button title="취소" onClick={()=>{setIsupdate(false)}}/>
     </>
     :
-    <>
-    <div onClick={()=>{
-        setIsreple(!isreple)
-    }}> 
+    <Wrapper>
+  
+    <Profilediv>
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
@@ -73,15 +101,22 @@ return (
                 />
                 
      </Profileview>
-    {comment.nickname}님  @{comment.username}
-
-    
-    <br/>
-    {comment.text}
-    <br/>
-    {comment.redtime}
-    <br/>
-    {isusercheck?<>
+     </Profilediv>
+     <MainDiv  onClick={()=>{
+        setIsreple(!isreple)
+    }}>
+    <MainHeader>
+    <Usernamediv>
+    {comment.nickname}
+    </Usernamediv>
+    <Useremaildiv>
+     {comment.username}
+     </Useremaildiv>
+     <Timediv>
+     {comment.redtime}
+     </Timediv>
+     <Upanddeletediv>
+     {isusercheck?<>
     <Button title="수정" onClick={()=>{
                     setIsupdate(true)
             }}/>
@@ -93,8 +128,17 @@ return (
             </>:<>
             
             </>}
-    </div>
-     </>}
+            </Upanddeletediv>
+    </MainHeader>
+    <MainText>
+    {comment.text}
+    </MainText>
+
+    
+  
+   
+    </MainDiv>
+     </Wrapper>}
     {isreple&&<>
         <Commentform 
         noticenum={noticeid}

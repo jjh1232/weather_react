@@ -46,7 +46,7 @@ export default function Twitformex(props){
    
         const axiosinstance=CreateAxios();
 
-        let [query,setQuery]=useSearchParams({
+        let [query,setQuery]=useSearchParams({ //기초값일꺼임
             form:"twitform",
             selectoptions:"title",
             keywords:"",
@@ -191,8 +191,9 @@ export default function Twitformex(props){
             
             const newcontent=res.data.content;
           
-            console.log("뉴");
-            if(res.data.content.length===0){
+            console.log("뉴"+newcontent);
+            if(newcontent===undefined){
+                
                 console.log("자료가없어요!")
             }
             else{
