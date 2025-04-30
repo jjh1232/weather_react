@@ -47,8 +47,13 @@ const Useremaildiv=styled.div`
 const Timediv=styled.div`
    
 `
-const Upanddeletediv=styled.div`
+const Replediv=styled.div`
     margin-left: auto;
+    border: 1px solid red;
+`
+const Upanddeletediv=styled.div`
+    
+    border: 1px solid red;
 `
 const MainText=styled.div`
     border: 1px solid green;
@@ -178,9 +183,7 @@ return (
                 
      </Profileview>
      </Profilediv>
-     <MainDiv  onClick={()=>{
-        setIsreple(!isreple)
-    }}>
+     <MainDiv  >
     <MainHeader>
     <Usernamediv>
     {comment.nickname}
@@ -192,6 +195,11 @@ return (
      
      <Datefor inputdate={comment.redtime} colors={"black"}/>
      </Timediv>
+     <Replediv onClick={()=>{
+        setIsreple(!isreple)
+    }}>
+     답글달기
+     </Replediv>
      <Upanddeletediv>
      {isusercheck?<>
     <Button title="수정" onClick={()=>{
@@ -206,7 +214,9 @@ return (
             
             </>}
             </Upanddeletediv>
+            
     </MainHeader>
+    
     <MainText>
     {comment.text}
    
