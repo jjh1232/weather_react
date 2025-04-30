@@ -9,13 +9,58 @@ import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import { css } from "styled-components";
 
+const Wrapper=styled.div`
+    display: flex;
+    padding-left: 6%;
+    border: 1px solid red;
+    width: 95%;
+    
+`
+const Profilediv=styled.div`
+    border: 1px solid blue;
+    width: 50px;
+`
+const MainDiv=styled.div`
+    display: flex;
+    flex-direction: column;
+    border:1px solid black;
+    flex:1;
+
+`
+const MainHeader=styled.div`
+    display: flex;
+    border: 1px solid blue;
+    gap: 5px;
+`
+const Usernamediv=styled.div`
+    font-size: 17px;
+    color: black;
+`
+const Useremaildiv=styled.div`
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:#353535f4;
+`
+const Timediv=styled.div`
+   
+`
+const Upanddeletediv=styled.div`
+    margin-left: auto;
+`
+const MainText=styled.div`
+    border: 1px solid green;
+`
+
 const Profileview=styled.div`
     border:1px solid;
     width:45px;
     height:45px;
 `
 
-const Wrapper=styled.div`
+
+const Wrappers=styled.div`
 
 border:0.1px solid;
 position: relative;

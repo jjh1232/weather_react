@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 const Timecss=styled.div`
 
-    color: gray;
+    color:${(props)=>props.color || "gray"} ;
 `
 export default function Datefor(props){
-    const {inputdate}=props;
+    const {inputdate,colors}=props;
 
     //현재시각
     let currentdate=new Date();
@@ -62,7 +62,7 @@ export default function Datefor(props){
     }
     let result=timemethod();
     return (
-        <Timecss>
+        <Timecss color={colors}>
          {result}
         </Timecss>
     )
