@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from "react";
 import { BrowserRouter,Routes,Route, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import Noticemain from "./Noticepage/Noticemain";
 import Noticemainex from "./Noticepage/Noticeex";
 import Noticecreate from "./Noticepage/Noticecreate";
@@ -49,17 +49,30 @@ import ChatroomDetail from "./admin/managepage/list/ChatroomDetail";
 import Adminnoticedetail from "./admin/managepage/list/Adminnoticedetail";
 import Adminloginhistory from "./customhook/Admintools/Adminloginhistory";
 import MainLayout from "./MainPage/MainLayout";
-
-
+import theme from "./UI/Manyim/Themecss";
+import { createGlobalStyle } from "styled-components";
+const GlobalStyle = createGlobalStyle`
+  body {
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    transition: background 0.3s, color 0.3s;
+  }
+`;
 
 
 function App(props) {
+  const [isdarkmode,setIsdarkmode]=useState(false);
   
 const queryClient=new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>
       
       <CookiesProvider>
+      <ThemeProvider theme={theme(isdarkmode?"dark":"light")}>
+        <GlobalStyle/>
       
     <BrowserRouter>
     
@@ -116,6 +129,7 @@ const queryClient=new QueryClient()
     </Routes>
    
     </BrowserRouter>
+    </ThemeProvider>
     </CookiesProvider>
 
     
