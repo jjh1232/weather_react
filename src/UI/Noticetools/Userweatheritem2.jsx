@@ -163,12 +163,16 @@ const Windblow=styled.div`
 `
 const Etcheader=styled.div`
     text-align: center;
+    background-color: black;
 `
 const Etcicon=styled.div`
      text-align: center;
+     background-color:black;
+    
 `
 const Etcresult=styled.div`
      text-align: center;
+     background-color: black;
 `
 const TimeContainer=styled.div`
      display: flex;

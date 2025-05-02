@@ -10,7 +10,7 @@ height:100%;
 position:fixed;
 left:12%;
 top:50px;
-border: 1px solid
+background-color: ${(props)=>props.theme.background};
 `
 
 function LeftSideBar(){

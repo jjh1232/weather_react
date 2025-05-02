@@ -81,7 +81,7 @@ border-top-right-radius: 15%;
 `
 
 const Mainscreen=styled.div`
-background-color:bisque ;
+background-color:${(props)=>props.theme.background};
 
 position: relative;
 width: 99.9%;

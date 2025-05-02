@@ -140,7 +140,7 @@ flex-direction: column;
 border: 1px solid black;
 //border-bottom: 1px solid;
 border-radius: 3%;
-background-color: wheat;
+background:${(props)=>props.theme.background};
 `
 
 const Infodiv=styled.div`

@@ -19,6 +19,8 @@ left:28.5%;
 width:43%;
 height:100%;
  border: 1px solid;
+ color:${props => props.theme.text};
+ background:${props => props.theme.background};
  top: 8%;
 
 `

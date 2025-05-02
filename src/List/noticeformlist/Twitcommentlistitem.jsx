@@ -177,7 +177,7 @@ return (
     <Profilediv>
         <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}
+   style={{objectFit:"fill",width:"100%",height:"100%",backgroundColor:"white"}}
   
                 />
                 

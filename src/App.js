@@ -67,12 +67,29 @@ function App(props) {
   const [isdarkmode,setIsdarkmode]=useState(false);
   
 const queryClient=new QueryClient()
+
+//다크모드
+useEffect(()=>{
+const updatetime=()=>{
+  const now=new Date();
+  const hours=now.getHours();
+  const isnight=hours>=18 || hours<6;
+  setIsdarkmode(isnight);
+  console.log("다크모드"+isnight)
+}
+ 
+  updatetime();
+  const interval=setInterval(updatetime,1000* 60);
+
+  return ()=>clearInterval(interval) //컴포넌트 언마운트시 정리
+
+},[])
   return (
     <QueryClientProvider client={queryClient}>
-      
+    
       <CookiesProvider>
       <ThemeProvider theme={theme(isdarkmode?"dark":"light")}>
-        <GlobalStyle/>
+     <GlobalStyle/>
       
     <BrowserRouter>
     
@@ -134,7 +151,9 @@ const queryClient=new QueryClient()
 
     
      <ReactQueryDevtools/>
+     
     </QueryClientProvider>
+     
   )
   
 }

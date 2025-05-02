@@ -248,7 +248,7 @@ const simpleprofile =(e)=>{
           navigate(`/userpage/${post.username}`);
         }}>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}
+   style={{objectFit:"fill",width:"100%",height:"100%",background:"white"}}
   
                 />
                 

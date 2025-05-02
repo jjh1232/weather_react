@@ -23,7 +23,7 @@ const Wrapper=styled.div`
   position: relative;
   overflow: hidden;
   top: 10px;
-  background-color: rgba(255,255,255,0.1);
+  background-color: ${(props)=>props.theme.background};
 
 
   

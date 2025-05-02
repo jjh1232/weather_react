@@ -20,6 +20,7 @@ height:5%;
 justify-content: center;
 gap:7px;
 z-index: 10;
+background-color: ${(props)=>props.theme.background};
 `
 //가상공간
 const Spacer=styled.div`
