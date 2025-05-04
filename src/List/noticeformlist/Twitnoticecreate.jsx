@@ -36,8 +36,12 @@ export default function Twitnoticecreate(props){
     }])
     let temp=cookie.weather.t1H
     let rain=cookie.weather.rn1
-    let pty=Weatherpa.getpty(cookie.weather.pty);
-    let sky=Weatherpa.getsky(cookie.weather.sky);
+    let pty=cookie.weather.pty;
+    let sky=cookie.weather.sky;
+    let reh=cookie.weather.reh
+    let wsd=cookie.weather.wsd
+
+  
     //모듈 설정
     
     const fileindex=useRef(1)
@@ -176,6 +180,8 @@ const createtwitnotice=()=>{
         sky:sky,
         pty:pty,
         rain:rain,
+        reh:reh,
+        wsd:wsd,
         files:filelist
     }).then((res)=>{
         alert("글작성성공")
@@ -193,7 +199,7 @@ const createtwitnotice=()=>{
         <Wrapper>
          <Weathercss> {//날씨css
          }       
-        {temp},{rain},{sky},{pty}
+        {temp},{rain},{Weatherpa.getsky(sky)},{Weatherpa.getpty(pty)} ,{reh},{wsd}
         </Weathercss>
         이메일:{cookie.userinfo["username"]}
         <br/>

@@ -30,7 +30,7 @@ import React from "react";
         switch(data){
             
             case "0":
-               pty="맑음";
+               pty="없음";
                 break;
            
             case "1":

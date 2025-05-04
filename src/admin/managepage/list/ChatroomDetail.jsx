@@ -232,10 +232,10 @@ export default function ChatroomDetail(props){
 <Sidebar>
     <Userlistcss>
         <Userheader>
-            유저리스트 {roomdata.memberlist.length}
+            유저리스트 {roomdata&&roomdata.memberlist.length}
         </Userheader>
         <Usermain>
-            {roomdata.memberlist&&roomdata.memberlist.map((data)=>{
+            {roomdata&&roomdata.memberlist.map((data)=>{
                 return (
                     <Userlistdiv>
                     <Listprofile>

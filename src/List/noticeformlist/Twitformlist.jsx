@@ -16,6 +16,8 @@ import { faHeart as full } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as empty}  from "@fortawesome/free-regular-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Noticemenu from "./DateCom/Noticemenu";
+import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
+
 
 const Wrapper=styled.div`
     border:1px solid yellow;
@@ -66,6 +68,9 @@ const Timecss=styled.div`
 const Menucss=styled.div`
  //내부요소 오른쪽정렬
   margin-left: auto;
+`
+const Weatherdiv=styled.div`
+  
 `
 const TitleCss=styled.div`
   display: flex;
@@ -229,7 +234,15 @@ const simpleprofile =(e)=>{
     setOnprepage(true)
   }
 }
+//날씨=====================================================
+// 1. 날씨 관련 key만 모아둔 배열
+const weatherKeys = ['sky', 'rain', 'pty', 'temp', 'reh', 'wsd'];
 
+// 2. 전체 데이터에서 날씨 데이터만 추출
+const weatherData = weatherKeys.map(key=>({
+  type:key,
+  value:post?.[key]
+}))
 //==========================렌더링==============================
     return (
       
@@ -281,7 +294,13 @@ const simpleprofile =(e)=>{
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
+
+                  <Weatherdata>
                     
+                  {weatherData.map(data=>(
+                    <NoticeWeathericon type={data.type} value={data.value}/>
+                  ))}
+                    </Weatherdata>     
                     <Menucss ref={menuref}>
                     <FontAwesomeIcon 
                     onClick={()=>{
@@ -301,7 +320,7 @@ const simpleprofile =(e)=>{
                     
                     </Menucss>      
               
-                    
+                 
             
      </Nameheader>
 
@@ -318,8 +337,7 @@ const simpleprofile =(e)=>{
          
             <TitleCss>
             <Title>{post.title}</Title> 
-            
-            <Weatherdata>{post.temp }{post.pty}{post.sky}{post.rain}</Weatherdata>
+         
             </TitleCss>
             
             
