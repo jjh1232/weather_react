@@ -66,7 +66,7 @@ const axiosinstance=CreateAxios();
         createdAt: new Date().toISOString(),
         // 필요한 필드 추가
       };
-      //캐시에 임시댓글추가
+      //캐시에 임시댓글추가                               //old가 처음에undefined일수있음 그럴떄빈배열로초기화
       queryclient.setQueryData(["comments",variables.noticenum],(old=[])=>[
         ...old,
         opticomment,]
@@ -99,10 +99,10 @@ const axiosinstance=CreateAxios();
         const coupmutate=useMutation({
             mutationFn:({commentid,commentusername,updatecomment})=>{
                 if(updatecomment===undefined){
-                    alert("바뀐내용을입력해주세요")
+                    throw new Error("바뀐내용을입력해주세요")
                    }
                    else if(updatecomment===''){
-                    alert("빈칸은입력할수없습니다")
+                    throw new Error("빈칸은입력할수없습니다")
                    }
                    else{
                     return   axiosinstance.put(`/commentupdate`,{
@@ -113,11 +113,34 @@ const axiosinstance=CreateAxios();
                     })
             }
             },
+            onMutate:async (variables)=>{
+                //진행중쿼리취소
+                await queryclient.cancelQueries(["comments",noticeid]);
+                //스냅샷
+                const previus=queryclient.getQueryData(["comments",noticeid])
+                //낙관적업데이트 두번째인자에 변경할것
+                queryclient.setQueryData(["comments",noticeid],(old)=>
+                old.map((comment)=>comment.id===variables.commentid
+                                    ?{...comment,text:variables.updatecomment}
+                                    :comment
+            )
+                )
+                //롤백용데이터반환
+                return {previus}
+            },
             onSuccess:()=>{
                 alert("업데이트완료")
+               // queryclient.invalidateQueries(["comments",noticeid])
+            },onError:(error,variables,context)=>{
+                //오류발생시롤백
+                if(context?.previus){
+                    queryclient.setQueryData(["comments",noticeid],context.previus);
+                }
+                alert(error.message || "수정 실패했습니다")
+            },
+            onSettled:()=>{
+                //최종동기화 (안해도될듯?)
                 queryclient.invalidateQueries(["comments",noticeid])
-            },onError:()=>{
-
             }
         })
 
@@ -129,12 +152,25 @@ const axiosinstance=CreateAxios();
         const codelmutate=useMutation({
             mutationFn:(id)=>{
                 return  axiosinstance.delete(`/commentdelete/${id}`)
+            },onMutate: async (id)=>{ //muataefn 실행전에 나옴
+                await queryclient.cancelQueries(["comments",noticeid])
+                const previus=queryclient.getQueryData(["comments",noticeid]);
+
+                queryclient.setQueryData(["comments",noticeid],(old)=>
+                old.filter((comment)=>comment.id!==id)
+                )
+                return {previus}
             },
             onSuccess:()=>{
                 alert("삭제성공")
-                queryclient.invalidateQueries(["comments"])
-            },onError:()=>{
-                
+              //  queryclient.invalidateQueries(["comments"])
+            },onError:(error,id,context)=>{
+                if(context?.previus){
+                    queryclient.setQueryData(["comments",noticeid],context.previus);
+                }
+                alert("삭제실패했습니다")
+            },onSettled:()=>{
+                queryclient.invalidateQueries(["comments",noticeid])
             }
         })
 

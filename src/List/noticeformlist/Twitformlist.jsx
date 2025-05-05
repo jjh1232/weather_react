@@ -83,18 +83,25 @@ const Weatherdata =styled.div`
     position: relative;
     right:0px;
     border:1px solid yellow;
+    margin-left: auto;
 `
 const Textarea=styled.div`
 border: 1px solid blue;
-  height:500px;
+  //height:500px;
   text-overflow: ellipsis;
   overflow: hidden;
+  max-height: ${(props)=>props.over?"none":"500px"};
 `
 const Blockcss=styled.div`
   border: 1px solid blue;
   height:500px;
  
   overflow: hidden;
+`
+const Overflowdiv=styled.div`
+  background-color: red;
+  width: 100%;
+  height: 100px;
 `
 const Noticefooter=styled.div`
   
@@ -115,11 +122,16 @@ export default function Twitformlist(props){
     const menuref=useRef();
      const [ishover,setIshover]=useState(false);
     const [onprepage,setOnprepage]=useState(false);
+    const [expend,setExpend]=useState(false);
+    const Textref=useRef();
 
-      
+    const [textoverflow,setTextoverflow]=useState(false);
 
-
-    
+    useEffect(()=>{
+      if(Textref.current){
+        setTextoverflow(Textref.current.scrollHeight>Textref.current.clientHeight)
+      }
+    },[textoverflow])
 
     useEffect(()=>{
       if(loginuser.userinfo){
@@ -295,12 +307,13 @@ const weatherData = weatherKeys.map(key=>({
      <Datefor inputdate={post.red}/>
      </Timecss>
 
-                  <Weatherdata>
+     <Weatherdata>
                     
-                  {weatherData.map(data=>(
-                    <NoticeWeathericon type={data.type} value={data.value}/>
-                  ))}
-                    </Weatherdata>     
+                    {weatherData.map(data=>(
+                      <NoticeWeathericon type={data.type} value={data.value}/>
+                    ))}
+                      </Weatherdata>    
+                 
                     <Menucss ref={menuref}>
                     <FontAwesomeIcon 
                     onClick={()=>{
@@ -337,7 +350,7 @@ const weatherData = weatherKeys.map(key=>({
          
             <TitleCss>
             <Title>{post.title}</Title> 
-         
+            
             </TitleCss>
             
             
@@ -355,8 +368,14 @@ const weatherData = weatherKeys.map(key=>({
           
           
             :<>
-            {<Textarea dangerouslySetInnerHTML={{__html:post.text}}></Textarea>}
-
+            {<Textarea ref={Textref} dangerouslySetInnerHTML={{__html:post.text}}
+            over={expend} 
+            >
+            
+              </Textarea>}
+              {textoverflow&&!expend&&<Overflowdiv onClick={()=>setExpend(!expend)}>
+                더보기
+                </Overflowdiv>}
             {
         //게시글메인끝 게시글푸터 =============================================
         }
