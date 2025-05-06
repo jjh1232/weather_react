@@ -13,9 +13,10 @@ const Wrapper=styled.div`
 display: flex;
 position: fixed;
 //left:28%;
-border:1px solid red;
+margin: 3px;
+border:1px solid gray;
 left:12%;
-width:74%;
+width:75.5%;
 height:5%;
 justify-content: center;
 gap:7px;
@@ -31,18 +32,17 @@ const Spacer=styled.div`
 `
 //3단디브
 const Logodiv=styled.div`
-    border: 1px solid blue;
+    border-right:1px solid gray;
     width: 22%;
 `
 const Maindiv=styled.div`
-    border:1px solid green;
-    width: 59%;
-    padding-left: 10px;
-    padding-right: 10px;
+  border-right:1px solid gray;
+    width: 58%;
+   
 `
 const Searchdiv=styled.div`
-    border:1px solid purple;
-    width: 19%;
+    
+    width: 21%;
 `
 //검색
 const Usersearchinput=styled.input`

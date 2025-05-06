@@ -109,14 +109,14 @@ const Tempcss=styled.div`
     display: flex;
     width: 50%;
     position: relative;
-    border: 1px solid gray;
+    //border: 1px solid gray;
     
 `
 const Tempicon=styled.div`
     display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
-  border: 1px solid blue;
+  //border: 1px solid blue;
   position: relative;
   right: 0%;
   height: 70%; /* Set a height for the container */
@@ -128,7 +128,7 @@ const Temptext=styled.div`
     
     height: 70%;
     font-size: 25px;
-    border: 1px solid blue;
+    //border: 1px solid blue;
 `
 
 const Etc=styled.div`
@@ -181,7 +181,7 @@ const TimeContainer=styled.div`
   align-items: center; /* 가로 중앙 정렬 */
   justify-content: center; /* 세로 중앙 정렬 */
   font-family: Arial, sans-serif;
-  border: 1px solid black;
+ // border: 1px solid black;
 `
 const Perioddiv=styled.div`
     position: relative;

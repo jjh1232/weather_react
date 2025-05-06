@@ -7,14 +7,14 @@ import Userweatheritem2 from "./Userweatheritem2";
 import { css } from "styled-components";
 
 const Headers=styled.div`
-  border: 1px solid red;
+  
   
   text-align: center;
   font-size: 18px;
 `
 
 const Datediv=styled.div`
-border: 1px solid blue;
+
 width: 100%;
 text-align: center;
   font-size: 30px;
@@ -30,7 +30,7 @@ const Wrapper=styled.div`
 `
 const WeathercardConatiner=styled.div`
   overflow: hidden;
-  border: 1px solid blue;
+
   height: 500px;
 `
 //슬라이드애니메이션
@@ -152,8 +152,9 @@ const Arrow=styled.div`
     content: '';
     width: 30px; //화살표 크기
     height: 30px; //화살표 크기
-    border-top: 5px solid #000; //화살표 선
-    border-right: 5px solid #000; //화살표 선
+    color:${(props)=>props.theme.text};
+    border-top: 5px solid ${(props)=>props.theme.text}; //화살표 선
+    border-right: 5px solid ${(props)=>props.theme.text}; //화살표 선
     transform:${props=>props.rota?'rotate(-45deg)':'rotate(135deg)'} ; //다음 화살표
 `
 //컨테이너스타일
