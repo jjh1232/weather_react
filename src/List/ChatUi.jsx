@@ -13,8 +13,9 @@ import AuthCheck from "../customhook/authCheck";
 
 const Modalout=styled.div`
 width:14.5% ;
-height:63% ;
-top:26%;
+
+height:58% ;
+top:27%;
 margin: 1px;
 position: fixed;
 background:rgba(0,0,0,0.5);
@@ -30,6 +31,8 @@ height:50%;
 bottom: 5%;
 position: relative;
 background-color: #FFFFFF;
+color:black;
+border-radius: 5%;
 justify-content:center;//왼쪽에서중간
 `
 
@@ -54,7 +57,7 @@ const MainBox=styled.div`
 display:flex;
 position: relative;
 //justify-content:space-around;
-border:1px solid red;
+
 
 height: 5%;
 width: 100%;
@@ -68,7 +71,7 @@ const Boxlist=styled.button`
 background-color:${(props)=>props.tapcolor===props.data?"blue":"black"};
 
 color: white;
-border: 1px solid white;
+border: 1px solid gray;
 width: 100%;
 
 border-top-left-radius: 15%;

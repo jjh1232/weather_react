@@ -13,14 +13,14 @@ import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
 
 const Wrapper=styled.div`
- border   : 1px solid yellow ;
+
 `
 
 const Searchdiv=styled.div`
-    border: 1px solid green;
+    border: 1px solid gray;
 `
 const Userlistdiv=styled.div`
-    border: 1px solid blue;
+    
     display: flex;
     flex-direction:column;
 `

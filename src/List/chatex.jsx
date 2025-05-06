@@ -24,7 +24,7 @@ const Header=styled.div`
     display: flex;
     position: relative;
     top: 1px;
-    border: 1px solid black;
+  
 `
 const Main=styled.div`
   width: 100%;

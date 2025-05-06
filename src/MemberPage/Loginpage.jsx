@@ -27,15 +27,18 @@ float:left;
 top:7%;
 width: 295px;
 height: 140px;
+max-height: 140px;
 display: flex;
 flex-direction: column;
-border: 1px solid black;
+border: 1px solid ${(props)=>props.theme.text};
 //border-bottom: 1px solid;
+color: ${(props)=>props.theme.text};
+background:${(props)=>props.theme.background};
 border-radius: 3%;
-background-color: wheat;
+
 `
 const Loginfromdiv=styled.div`
-  border:1px solid blue;
+  margin: 3px;
   display:flex;
   height: 40%;
  
@@ -54,7 +57,7 @@ border-radius: 3%;
   border:1px solid black;
 `
 const Buttondiv=styled.div`
-   border:1px solid red;
+  
    width: 67px;
    display: flex;
    justify-content:center;
@@ -67,7 +70,7 @@ const Inputcss=styled.input`
   
 `
 const Inputdiv=styled.div`
-  border: 1px solid red;
+  
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -77,11 +80,11 @@ const Inputdiv=styled.div`
 `
 
 const FindFormdiv=styled.div`
-  border:3px solid blue;
+ 
   display: flex;
   height: 20%;
   text-align: center;
-
+  margin: 5px;
   font-size: 15px;
   
 `
@@ -116,14 +119,14 @@ const Subtext=styled.span`
 const Authdiv=styled.div`
 display: flex;
 position: relative;
-
+margin: 3px;
 height: 30%;
-  border:1px solid red;
+ 
 `
 const Authimage=styled.img`
-  width: 40%;
-  flex: 1;
-  padding:2px;
+  width: 45%;
+  //flex: 1;
+  padding:5px;
   height: 38px;
 
 `
@@ -137,9 +140,10 @@ width: 295px;
 height: 140px;
 display: flex;
 flex-direction: column;
-border: 1px solid black;
+border: 2px solid black;
 //border-bottom: 1px solid;
 border-radius: 3%;
+color: ${(props)=>props.theme.text};
 background:${(props)=>props.theme.background};
 `
 
@@ -151,7 +155,7 @@ const Infodiv=styled.div`
 `
 const Userdatadiv=styled.div`
  height: 60%;
- border: 2px solid red;
+
  display: flex;
 
 `
@@ -298,18 +302,7 @@ function Loginpage(props){
    
   },[islogin])
 
- //에미터테스트
- const Ssetest=()=>{
-    axiosinstance.get("/ssetest",{
-      id:1
-    })
- }
 
- //에미터유저확인
- const Ssetest2=()=>{
-  axiosinstance.get("/ssetest2"
-  )
-}
  
   //SSe실행
   const sse=()=>{
@@ -647,12 +640,7 @@ const naverlogin=()=>{
           <QuickButtonitem onClick={logout}>
           로그아웃
           </QuickButtonitem>
-          <QuickButtonitem onClick={Ssetest}>
-          sse테스트
-          </QuickButtonitem>
-          <QuickButtonitem onClick={Ssetest2}>
-          sse테스트2
-          </QuickButtonitem>
+      
           
  
     </Quickbuttondiv>
