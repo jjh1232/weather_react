@@ -20,7 +20,7 @@ import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
 
 
 const Wrapper=styled.div`
-    border:1px solid yellow;
+    border:3px solid black;
     
 `
 
@@ -29,7 +29,7 @@ const Noticedata=styled.div`
   width: 100%;
 `
 const NoticeHeader=styled.div`
-  border: 1px solid red;
+  //border: 1px solid red;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -42,28 +42,30 @@ const Profileview=styled.div`
     height:45px;
 `
 const Nameheader=styled.div`
- border: 1px solid blue;
+// border: 1px solid blue;
  display: flex;
- height: 40px;
+ height: 30px;
   width: 100%;
+  border-bottom: 1px solid black;
 `
 const Nickname=styled.div`
  
   
   
-  
-  border: 1px solid green;
+ 
 `
 const Username=styled.div`
  position: relative;
   color: gray;
-  
-  border: 1px solid yellow;
+  margin-left: 10px;
+ 
+ // border: 1px solid yellow;
 `
 
 const Timecss=styled.div`
    position: relative;
-   border: 1px solid black;
+   margin-left: 10px;
+ 
 `
 const Menucss=styled.div`
  //내부요소 오른쪽정렬
@@ -77,31 +79,40 @@ const TitleCss=styled.div`
 `
 const Title=styled.div`
   float: left;
-  border: 1px solid blue;
+  font-size:20px;
+  margin-left:7px;
+ // border: 1px solid blue;
 `
 const Weatherdata =styled.div`
     position: relative;
     right:0px;
-    border:1px solid yellow;
+    
+    //border:1px solid yellow;
     margin-left: auto;
 `
 const Textarea=styled.div`
-border: 1px solid blue;
+border: 1px solid black;
   //height:500px;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-height: ${(props)=>props.over?"none":"500px"};
+  min-height: 150px;
+  max-height: ${(props)=>props.over?"none":"300px"};
 `
 const Blockcss=styled.div`
-  border: 1px solid blue;
+  border: 1px solid black;
   height:500px;
  
   overflow: hidden;
 `
 const Overflowdiv=styled.div`
-  background-color: red;
+  position: relative;
+ background-color: rgba(243, 240, 240, 0.2);
+ z-index: 10px;
   width: 100%;
-  height: 100px;
+  bottom: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
 `
 const Noticefooter=styled.div`
   
