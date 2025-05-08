@@ -24,13 +24,13 @@ const Wrapper=styled.div`
   overflow: hidden;
   top: 10px;
   background-color: ${(props)=>props.theme.background};
-
+  
 
   
 `
 const WeathercardConatiner=styled.div`
   overflow: hidden;
-
+  border: 1px solid black;
   height: 500px;
 `
 //슬라이드애니메이션
@@ -152,6 +152,7 @@ const Arrow=styled.div`
     content: '';
     width: 30px; //화살표 크기
     height: 30px; //화살표 크기
+   
     color:${(props)=>props.theme.text};
     border-top: 5px solid ${(props)=>props.theme.text}; //화살표 선
     border-right: 5px solid ${(props)=>props.theme.text}; //화살표 선
@@ -164,6 +165,7 @@ const WeatherContainer=styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  
   position: relative;
 `
 //애니메이션 효과
@@ -231,6 +233,7 @@ return null;
 const Weatheritemwrapper=styled.div`
   //transition: all 0.3s ease;
   opacity: ${props=>props.isCurrent?1:0.5}; //투명도
+  //border: 1px solid red;
   transform: scale(${props => props.isCurrent ? 1 : 0.9}); //크기
   ${({index,any,isindex})=>css`
     animation:${getAnimation({index,any,isindex})} 1s ease-in-out forwards;

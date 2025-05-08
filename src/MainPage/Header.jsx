@@ -14,14 +14,16 @@ display: flex;
 position: fixed;
 //left:28%;
 margin: 3px;
-border:1px solid gray;
-left:12%;
-width:75.5%;
+//border:1px solid red;
+left:11.5%;
+width:76%;
 height:5%;
-justify-content: center;
-gap:7px;
+
+//justify-content: space-between;
+//gap:18px;
 z-index: 10;
-background-color: ${(props)=>props.theme.background};
+
+//background-color: ${(props)=>props.theme.background};
 `
 //가상공간
 const Spacer=styled.div`
@@ -32,17 +34,28 @@ const Spacer=styled.div`
 `
 //3단디브
 const Logodiv=styled.div`
-    border-right:1px solid gray;
-    width: 22%;
+    border:1px solid gray;
+    width: 21.2%;
+    margin-right: 15px;
+    box-sizing: border-box;
+    background-color: ${(props)=>props.theme.background};
 `
 const Maindiv=styled.div`
-  border-right:1px solid gray;
-    width: 58%;
+  border:1px solid gray;
+    width: 56.7%;
+
+    box-sizing: border-box;
+    margin-right: 9px;
+    //padding: 5 15px;
+    background-color: ${(props)=>props.theme.background};
    
 `
 const Searchdiv=styled.div`
+      box-sizing: border-box;
+      border: 1px solid gray;
+    width: 20.65%;
+    background-color: ${(props)=>props.theme.background};
     
-    width: 21%;
 `
 //검색
 const Usersearchinput=styled.input`

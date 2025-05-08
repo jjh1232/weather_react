@@ -18,31 +18,32 @@ const Wrapper=styled.div`
 const thema={
     dawn: {
         sky: ['#4B6CB7', '#8E9EC6','#D7E1EC'],
-        horizon: '#90EE90',
-        ground: ['#eec1a2', '#180903']
+        horizon: '#90EE90'
+        
       },
       morning: {
         sky: ['#89b8df', '#87CEFA','#C9E4CA '],
-        horizon: '#FF6347',
-        ground: ['#eec1a2', '#180903']
+        horizon: '#FF6347'
+       
       },
         noon: {
         sky: ['#c9ddee', '#c0d6dd',' #d9e4ee'],
-        horizon: '#FF6347',
-        ground: ['#eec1a2', '#180903']
+        horizon: '#FF6347'
+        
       },
       evening: {
         sky: ['#1A1D23', '#6495ED','#FFD700'],
-        horizon: '#FF6347',
-        ground: ['#eec1a2', '#180903']
+        horizon: '#FF6347'
+        
       },
       night: {
       
         sky: ['#677ba3', '#2d4b88','#1A1D23'],
-        horizon: '#FF6347',
-        ground: ['#a09c9a', '#a29fa5']
+        horizon: '#FF6347'
+      
       }
 }
+
 // 1. 기본 구조 선택
 const Background = styled.div`
   position: fixed;
@@ -55,7 +56,7 @@ const Background = styled.div`
 
 // 2. 하늘 레이어
 const Sky = styled.div`
-  height: 90%;
+  height: 110%;
   //그라데이션 아마 시간대별로 조정
   background: linear-gradient( 
     0deg,
@@ -73,20 +74,12 @@ const Horizon = styled.div`
   box-shadow: 0 0 10px rgba(144,238,144,0.5);
 `;
 
-// 4. 땅 레이어
-const Ground = styled.div`
-  height: 15%;
-  background: 
-    linear-gradient(
-      0deg,
-      ${({ theme }) => theme.ground[0]} 0%,
-      ${({ theme }) => theme.ground[1]} 100%
-    );
-`;
+
 
 
 export default function MainLayout(props){
     const [currentthema,setCurrentthema]=useState(thema.dawn);
+
     const [weathercookie,removeweather]=useCookies(['weather'])//어차피쿠키다가져오는데이유는몰겟음
     const [weatherdata,setWeatherdata]=useState();
 
@@ -138,6 +131,10 @@ export default function MainLayout(props){
 
       
     }
+    //날씨데이터에따른 땅배경
+    const WeatherGroundset=(weatherdata)=>{
+     
+    }
     //날씨정리코드
     //구름이나해등추가해야하는데흠..
 
@@ -159,7 +156,7 @@ export default function MainLayout(props){
                    
                 </Sky>
                 <Horizon></Horizon>
-                <Ground></Ground>
+                
             </Background>
             </ThemeProvider>
             

@@ -4,12 +4,12 @@ import Userweather from "../UI/Userweather";
 import Userweather2 from "../UI/Noticetools/Userweather2";
 
 const Wrapper=styled.div`
-
+border: 1px solid black;
 width:16%;
-height:100%;
+height:50%;
 position:fixed;
-left:12%;
-top:50px;
+left:11.64%;
+top:56px;
 background-color: ${(props)=>props.theme.background};
 `
 

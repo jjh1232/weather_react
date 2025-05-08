@@ -108,7 +108,7 @@ export default function WeatherComponent(props){
  return (
     <WeatherBackground>
       {renderWeatherEffect()}
-      <SkyObject sky={sky}/>
+     
     </WeatherBackground>
   );
 }
