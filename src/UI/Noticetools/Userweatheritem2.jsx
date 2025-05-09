@@ -147,6 +147,7 @@ const Temptext=styled.div`
     font-weight: bold; 
     height: 70%;
     font-size: 25px;
+    color: ${(props)=>props.textcolor};
     //border: 1px solid blue;
 `
 
@@ -196,16 +197,16 @@ const Etcheader=styled.div`
 const Etcicon=styled.div`
      text-align: center;
      //background-color:white;
-        color:red;
+     color:${(props)=>props.color}  
           
     
 `
 const Etcresult=styled.div`
      text-align: center;
     // background-color: white;
-    
+    color: black;
         white-space: nowrap;
-        color:red;
+       
 `
 const TimeContainer=styled.div`
      display: flex;
@@ -353,6 +354,7 @@ function Userweatheritem2(props){
         </WeatherDate>
 
         <Skyandtempdiv>
+
         <Skyicon>
     
     {//- 하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)
@@ -369,10 +371,10 @@ function Userweatheritem2(props){
    
     <Tempcss>
         {parseInt(data.t1h)<0
-        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/></Tempicon> <Temptext>{data.t1h+"\u2103" } </Temptext> 
+        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/></Tempicon> <Temptext textcolor="blue">{data.t1h+"\u2103" } </Temptext> 
         
         </> 
-        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/> </Tempicon><Temptext>{data.t1h+"\u2103" } </Temptext>
+        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/> </Tempicon><Temptext textcolor="red">{data.t1h+"\u2103" } </Temptext>
        
         </>}
    
@@ -389,8 +391,8 @@ function Userweatheritem2(props){
     <Humidity>
         <Basecss>
         
-        <Etcicon>
-        <FontAwesomeIcon icon={droplet}/>  
+        <Etcicon color="deepskyblue">
+        <FontAwesomeIcon icon={droplet} size="xl"/>  
         </Etcicon>
         <Etcresult>
         {data.reh}% 
@@ -404,8 +406,8 @@ function Userweatheritem2(props){
     <Raindrop>
     <Basecss>
   
-            <Etcicon>
-            <FontAwesomeIcon icon={umbrella}/>
+            <Etcicon color="navy">
+            <FontAwesomeIcon icon={umbrella} size="xl"/>
             </Etcicon>
             <Etcresult>
             {data.rn1}
@@ -418,8 +420,8 @@ function Userweatheritem2(props){
     <Windblow>
     <Basecss>
     
-            <Etcicon>
-            <FontAwesomeIcon icon={wind}/>  
+            <Etcicon color="black">
+            <FontAwesomeIcon icon={wind} size="xl"/>  
             </Etcicon>
             <Etcresult>
             {data.wsd}m/s
