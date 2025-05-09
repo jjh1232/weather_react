@@ -31,7 +31,7 @@ const Wrapper=styled.div`
 const WeathercardConatiner=styled.div`
   overflow: hidden;
   border: 1px solid black;
-  height: 500px;
+  height: 400px;
 `
 //슬라이드애니메이션
 const Slideup=keyframes`

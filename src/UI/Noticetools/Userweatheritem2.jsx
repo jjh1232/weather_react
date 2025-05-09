@@ -39,7 +39,7 @@ const Weathercolor={
 
 const WeatherContainer=styled.div`
     width: 250px;
-    height:100px;
+    height:110px;
     border: 1px solid black;
 
     //background-color: #9fd1fa; //마지막두자리가투명도 16진수임
@@ -56,23 +56,24 @@ const WeatherHeader=styled.div`
     
     width: 100%;
     color: black;
-    height: 60%;
+    height: 50%;
    
     text-align: center;
 `
 const WeatherDate=styled.div`
     width: 35%;
-
+   
     
 
 `
 const WeatherBody=styled.div`
     width: 100%;
     display: flex;
+    
    height: 50%;
 `
 const Skyandtempdiv=styled.div`
-
+ 
     width: 65%;
     display: flex;
     
@@ -90,9 +91,9 @@ const Icondiv=styled.div`
   align-items: center; /* Centers vertically */
 top: 2px;
   position: relative;
-  left: 20px;
+  left: 13px;
   width: 70%;
-
+     
   height: 55%; /* Set a height for the container */
 `
 const Skytext=styled.div`
@@ -123,7 +124,7 @@ const Tempcss=styled.div`
     display: flex;
     width: 50%;
     position: relative;
-    border: 1px solid red;
+  
     overflow: hidden;
     
     padding-top:5px;
@@ -143,7 +144,7 @@ const Temptext=styled.div`
     text-align: center;
     top:12%;
     right: 6%;
-    
+    font-weight: bold; 
     height: 70%;
     font-size: 25px;
     //border: 1px solid blue;
@@ -158,7 +159,7 @@ const Etc=styled.div`
 const Humidity=styled.div`
     width: 25%;
     display: flex;
-   
+    
     flex-direction: column;
     
 `
@@ -176,12 +177,12 @@ const Raindrop=styled.div`
      width: 48%;
      display: flex;
      align-items: center;
-  
+ 
      flex-direction: column;
 `
 const Windblow=styled.div`
      width: 25%;
-     
+   
      display: flex;
      flex-direction: column;
 `
@@ -189,22 +190,29 @@ const Windblow=styled.div`
 const Etcheader=styled.div`
     text-align: center;
     background-color: white;
+ 
 `
 //
 const Etcicon=styled.div`
      text-align: center;
-     background-color:white;
+     //background-color:white;
+        color:red;
+          
     
 `
 const Etcresult=styled.div`
      text-align: center;
-     background-color: white;
+    // background-color: white;
+    
+        white-space: nowrap;
+        color:red;
 `
 const TimeContainer=styled.div`
      display: flex;
-     height: 71px;
-
-    flex-direction: column;
+     //height: 71px;
+ // border:1px solid blue;
+    width: 100px;
+   flex-direction: column;
   align-items: center; /* 가로 중앙 정렬 */
   justify-content: center; /* 세로 중앙 정렬 */
   font-family: Arial, sans-serif;
@@ -212,9 +220,9 @@ const TimeContainer=styled.div`
 `
 const Perioddiv=styled.div`
     position: relative;
-    top:10px;
-  
-    font-size: 18px; 
+    //top:1px;
+  font-weight: 600; 
+    font-size: 15px; 
   color: black; 
   //margin-bottom: 5px;
  /* font-weight    :bold ;
@@ -229,7 +237,8 @@ const Hourdiv=styled.div`
     text-align: center;
     align-items: center;
     position: relative;
-    top:1px;
+    //top:2px;
+   bottom: 10px;
     margin-bottom: 25px;
      font-size: 30px; 
   font-weight: bold; 
