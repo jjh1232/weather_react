@@ -23,13 +23,13 @@ import { faCloudRain as smallrain } from "@fortawesome/free-solid-svg-icons";
 
 const Weathercolor={
     //30도이상
-    veryhot:" rgba(255,85,85,0.8)",
+    veryhot:" rgba(250, 96, 96, 0.8)",
     //20도이상
-    hot:" rgba(255, 176, 4, 0.979)",
+    hot:" rgba(252, 226, 166, 0.979)",
     //10도이상
-    warm:" rgba(154,231,197,0.8)",
+    warm:" rgba(123, 223, 253, 0.8)",
     //0도이상
-    cool:" rgba(112,185,220,0.8)",
+    cool:" rgba(98, 200, 248, 0.8)",
     //영하
     cold:" rgba(67,29,180,0.8)"
 
@@ -47,7 +47,8 @@ const WeatherContainer=styled.div`
     margin: 10px;
     display: flex;
     flex-direction: column;
-    background-color:${(props) => props.tempcolor}
+    background-color:${(props) => props.tempcolor};
+    border-radius: 12%;
     
   
 `
@@ -286,7 +287,7 @@ function Userweatheritem2(props){
     //다음부턴 객체로 따로 조건만들어서하자.
     const Weatherimo=(sky,pty,hour,t1h)=>{
         let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
-        let iscolor=parseInt(t1h)>10?"red":"blue"
+        let iscolor=sky==="1"?"white":"dimgray"
 
         if(sky==="1"){//맑음
             if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} color={iscolor} icon={moon}/></Icondiv><Skytext><Text>맑음</Text></Skytext></>:<><Icondiv><FontAwesomeIcon  color={iscolor} size={"2x"} icon={sun}/></Icondiv><Skytext><Text>맑음</Text></Skytext></>)
@@ -391,8 +392,8 @@ function Userweatheritem2(props){
     <Humidity>
         <Basecss>
         
-        <Etcicon color="deepskyblue">
-        <FontAwesomeIcon icon={droplet} size="xl"/>  
+        <Etcicon color="blue">
+        <FontAwesomeIcon icon={droplet} size="xl" />  
         </Etcicon>
         <Etcresult>
         {data.reh}% 

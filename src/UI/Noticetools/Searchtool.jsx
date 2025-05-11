@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 Searchtool.defaultProps={
     searchdata:{
@@ -11,6 +12,36 @@ Searchtool.defaultProps={
     
 }
 
+const Wrapper=styled.div`
+  float: right;
+  
+  width: 100%;
+  display: flex;
+ 
+`
+const SearchSelect=styled.select`
+ //    padding: 0 12px;
+  border: 1.5px solid #bdbdbd;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  font-size: 16px;
+  //appearance: none; /* 브라우저 기본 스타일 제거 */
+  outline: none;
+  cursor: pointer;
+  transition: border 0.2s;
+
+  &:hover, &:focus {
+    border: 1.5px solid #4caf50;
+    background: #f5fff5;
+  }
+`
+const Searchinput=styled.input`
+  width: 60%;
+`
+const SearchButton=styled.button`
+  
+`
 export default function Searchtool(props){
 
     const {searchdata,deletemethod,twitformpage}=props
@@ -47,9 +78,9 @@ export default function Searchtool(props){
   }
   }
   return (
-    <>
+    <Wrapper>
    
-    <select onChange={(e)=>{
+    <SearchSelect onChange={(e)=>{
         setSearchdatas((prev)=>({...prev,selectoptions:e.target.value}))
     }}>
         {options.map((option)=>{
@@ -62,13 +93,13 @@ export default function Searchtool(props){
             )
         })}
 
-    </select>
-    <input type="text" value={searchdatas.keyword} onChange={(e)=>{
+    </SearchSelect>
+    <Searchinput type="text" value={searchdatas.keyword} onChange={(e)=>{
          setSearchdatas((prev)=>({...prev,keyword:e.target.value}))
     }}/>
-    <button onClick={search}>검색</button>
+    <SearchButton onClick={search}>검색</SearchButton>
     
-    </>
+    </Wrapper>
   )
 
 }

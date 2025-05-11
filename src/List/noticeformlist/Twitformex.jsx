@@ -18,7 +18,7 @@ position: relative;
 left:28.5%;
 width:43%;
 height:100%;
- border: 1px solid;
+
  color:${props => props.theme.text};
  background:${props => props.theme.background};
  top: 8%;
@@ -40,6 +40,24 @@ width:90%;
 height:70%;
 background-color: #FFFFFF;
 
+`
+//헤더
+const Headerdiv=styled.div`
+    display: flex;
+    
+    border: 1px solid red;
+`
+const Creatediv=styled.div`
+     border: 1px solid blue;
+     
+`
+const Searchdiv=styled.div`
+     border: 1px solid yellow;
+     width: 50%;
+`
+const Formdiv=styled.div`
+     border: 1px solid green;
+     width: 50%;
 `
 
 export default function Twitformex(props){
@@ -260,21 +278,43 @@ export default function Twitformex(props){
         //setNotice([...notice])
         window.location.reload();
        }
+       const islogincheck=AuthCheck();
+       const Createnotice=()=>{
+            if(islogincheck){
+                setIscreate(true)
+            }
+            else{
+                alert("로그인후이용해주세요!")
+            }
+       }
        //==============렌더링!==============================================================
        return (
         <>
        
         
-       {process.env.PUBLIC_URL}
+       
         <Wrapper>
+        <Headerdiv>
+        
+            <Creatediv>
         <button onClick={()=>{
-            setIscreate(true)
+            Createnotice();
         }}> 글작성하기 </button>{statuschange}
+        </Creatediv>
+       
+       <Formdiv>
         <Noticeformbutton/>
+    </Formdiv>
         
-        
-        <br/>
-        
+                    <Searchdiv>
+    <Searchtool
+         searchdata={querydata}
+         deletemethod={noticereset}
+         twitformpage={setpagehandler}
+        />
+         </Searchdiv>
+ 
+</Headerdiv>
 
         {iscreate &&<Modalout>
 
@@ -285,11 +325,7 @@ export default function Twitformex(props){
         </Modalout>}
        
             
-        <Searchtool
-         searchdata={querydata}
-         deletemethod={noticereset}
-         twitformpage={setpagehandler}
-        />
+    
        
         {notice&&
         <div>
