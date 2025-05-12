@@ -20,7 +20,7 @@ const Wrapper=styled.div`
  
 `
 const SearchSelect=styled.select`
- //    padding: 0 12px;
+ // padding: 0 12px;
   border: 1.5px solid #bdbdbd;
   border-radius: 6px;
   background: #fff;
@@ -38,6 +38,11 @@ const SearchSelect=styled.select`
 `
 const Searchinput=styled.input`
   width: 60%;
+  border-radius: 3px;
+  background: #fff;
+    color: #222;
+  font-size: 16px;
+ // transition: border 0.2s;
 `
 const SearchButton=styled.button`
   

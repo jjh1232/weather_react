@@ -3,9 +3,33 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Buttonlist=styled.div`
+width: 100%;
+border:1px solid black;
 
-border:1px solid;
-
+`
+const CreateButton=styled.button`
+    //display: inline-flex;
+  align-items: center;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 4px;
+  white-space: nowrap;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 1rem;
+  height: 2.25rem;
+  font-size: 1rem;
+  background: #228be6;  /* 솔리드 컬러 */
+  transition: background 0.2s;
+  /* 기본 그림자 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  &:hover {
+    background: #339af0;
+  }
+  &:active {
+    background: #1c7ed6;
+  }
 `
 export default function Noticeformbutton(){
 
@@ -15,23 +39,23 @@ export default function Noticeformbutton(){
     return (
         
         <Buttonlist>
-        <button onClick={()=>{navigate(`/notice?form=noticeform`)
-            window.location.reload();
-        }}>
-                게시
-            </button>
-            <button onClick={()=>{navigate(`/notice/twitform`)
+
+        
+            <CreateButton onClick={()=>{navigate(`/notice/twitform`)
 window.location.reload();
 
             }}>
                 일반게시글
-            </button>
-            <button onClick={()=>{navigate(`/favoritenotice`)
+            </CreateButton >
+            <CreateButton  onClick={()=>{navigate(`/favoritenotice`)
               window.location.reload();
             }}>
                 좋아요 한게시글
-            </button>
-            
+            </CreateButton >
+             <CreateButton  
+            >
+                이미지
+            </CreateButton >
             </Buttonlist>
         
     )
