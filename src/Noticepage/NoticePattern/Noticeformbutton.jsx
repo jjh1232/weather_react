@@ -5,30 +5,34 @@ import styled from "styled-components";
 const Buttonlist=styled.div`
 width: 100%;
 border:1px solid black;
+display: flex;
 
 `
-const CreateButton=styled.button`
+const CreateButton=styled.div`
     //display: inline-flex;
   align-items: center;
   outline: none;
   border: 1px solid black;
   border-radius: 4px;
   white-space: nowrap;
-  color: white;
+  color: ${(props)=>{props.theme.text}};
   font-weight: bold;
   cursor: pointer;
   padding: 0 1rem;
   height: 2.25rem;
   font-size: 1rem;
-  background: #228be6;  /* 솔리드 컬러 */
+  
   transition: background 0.2s;
   /* 기본 그림자 */
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   &:hover {
-    background: #339af0;
+   color: #339af0;
+   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+   background-color: gray;
   }
   &:active {
-    background: #1c7ed6;
+    color: #1c7ed6;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   }
 `
 export default function Noticeformbutton(){

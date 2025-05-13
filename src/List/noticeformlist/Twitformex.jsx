@@ -76,7 +76,7 @@ const CreateButton=styled.button`
   }
 `
 const Searchdiv=styled.div`
-     border: 1px solid yellow;
+     //border: 1px solid yellow;
      width: 50%;
 `
 const Formdiv=styled.div`

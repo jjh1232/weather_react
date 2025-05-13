@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass as glass } from "@fortawesome/free-solid-svg-icons";
 
 Searchtool.defaultProps={
     searchdata:{
@@ -13,39 +15,74 @@ Searchtool.defaultProps={
 }
 
 const Wrapper=styled.div`
-  float: right;
-  
-  width: 100%;
+  //float: right;
   display: flex;
+  position: relative;
+  top: 6px;
+  align-items: center;      /* 세로(수직) 중앙정렬 */
+  /* 필요하다면 가로(수평) 정렬도 추가 */
+  justify-content: center;  /* 가로 중앙정렬 */
+  
  
 `
 const SearchSelect=styled.select`
  // padding: 0 12px;
   border: 1.5px solid #bdbdbd;
-  border-radius: 6px;
+  border-radius: 3px;
   background: #fff;
+    height: 24px;
   color: #222;
   font-size: 16px;
   //appearance: none; /* 브라우저 기본 스타일 제거 */
   outline: none;
   cursor: pointer;
   transition: border 0.2s;
-
+ 
   &:hover, &:focus {
     border: 1.5px solid #4caf50;
     background: #f5fff5;
   }
 `
 const Searchinput=styled.input`
-  width: 60%;
+
+  width: 100%;
+  height: 20px;
+  border: 1.5px solid #cfd8dc;
   border-radius: 3px;
-  background: #fff;
-    color: #222;
   font-size: 16px;
- // transition: border 0.2s;
-`
+  background: #f5f7fa;
+  color: #222;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: #90a4ae;
+    opacity: 1;
+    font-size: 0.95em;
+  }
+
+  &:focus {
+    border-color: #228be6;
+    box-shadow: 0 2px 8px rgba(34, 139, 230, 0.12);
+    background: #fff;
+  }
+`;
+
 const SearchButton=styled.button`
-  
+  height: 27px;
+  cursor:pointer;
+  background-color: white;
+
+    &:hover {
+   color: #339af0;
+   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    background-color: rgba(128,128,128,0.6); /* 회색, 60% 불투명 */
+  }
+  &:active {
+    color: #1c7ed6;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+     background-color: rgba(128,128,128,0.5); /* 회색, 50% 불투명 */
+  }
 `
 export default function Searchtool(props){
 
@@ -102,7 +139,10 @@ export default function Searchtool(props){
     <Searchinput type="text" value={searchdatas.keyword} onChange={(e)=>{
          setSearchdatas((prev)=>({...prev,keyword:e.target.value}))
     }}/>
-    <SearchButton onClick={search}>검색</SearchButton>
+    <SearchButton onClick={search}>
+    <FontAwesomeIcon icon={glass}/>
+
+    </SearchButton>
     
     </Wrapper>
   )
