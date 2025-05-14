@@ -86,9 +86,10 @@ const Formdiv=styled.div`
 
 export default function Twitformex(props){
     //const {posts,onClickItem,noticecreate,querydatas
+        //로케이션으로 좋아요 와 일반게시글차이만들자
+     
    
-   
-        const axiosinstance=CreateAxios();
+       // const axiosinstance=CreateAxios();
 
         let [query,setQuery]=useSearchParams({ //기초값일꺼임
             form:"twitform",
@@ -111,6 +112,7 @@ export default function Twitformex(props){
       const [totalpage,setTotalpage]=useState(1);
        const [ref,inView]=useInView();
       //console.log("프롭스렝스:"+totalpages.length)
+       //로케이션으로 좋아요 와 일반게시글차이만들자
       const location=useLocation();
        const [searchdatas,setSearchdatas]=useState(
         {
@@ -133,17 +135,25 @@ export default function Twitformex(props){
        let islogin=AuthCheck();
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
-        if(islogin){
-            console.log("로그인상태")
-            loginnoticedata()
+        let apiurl="";
+        if(location.pathname==="/notice/twitform"){
+            islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
+          
+        }else if(location.pathname==="/notice/twitform/liked"){
+             if(islogin){
+                apiurl=`/onlikenotice`;
             
-        }else{
+            }
+            else{
             console.log("비로그인상태")
+            alert("로그인을후 이용해주세요!")
+            }
            
-        noticedata()
+      
         }
+        noticedata(apiurl)
     }
-       ,[page,location])
+       ,[page,location,islogin])
 
        //인뷰를따로뺴야할거같은데 
        useEffect(()=>{
@@ -163,13 +173,15 @@ export default function Twitformex(props){
        
       
 
-       //이거 검색시 기존데이터삭제 메소드필요해서 서치에넘겨야할ㄷㅅ?
-        
+    const axiosinstance=islogin ? CreateAxios() : axios;
 
-       const noticedata=()=>{
+       const noticedata=(apiurl)=>{
+       
+        //값없을시 막기
+        if (!apiurl) return;
         console.log(query.get("keywords"))
        setIsloading(true)
-        axios.get(`/open/noticesearch`,{
+        axiosinstance.get(apiurl,{
           params:{
           option:query.get("selectoptions"),
           keyword:query.get("keywords"),
@@ -179,7 +191,7 @@ export default function Twitformex(props){
            const newcontent=res.data.content;
           
             console.log("뉴");
-            if(res.data.content.length===0){
+            if(newcontent===undefined){
                 console.log("자료가없어요!")
             }
             else{

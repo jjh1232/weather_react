@@ -51,7 +51,7 @@ window.location.reload();
             }}>
                 일반게시글
             </CreateButton >
-            <CreateButton  onClick={()=>{navigate(`/favoritenotice`)
+            <CreateButton  onClick={()=>{navigate(`/notice/twitform/liked`)
               window.location.reload();
             }}>
                 좋아요 한게시글

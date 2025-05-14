@@ -110,11 +110,12 @@ const updatetime=()=>{
       <Route path="/admin/loginhistory" element={<Adminloginhistory/>}/>
     </Route>
     
-    <Route path="/favoritenotice" element={<FavoriteNotice/>}/>
+    
     
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
-    <Route path="/notice/twitform" element={<Twitformex/>}/>
+    <Route path="/notice/twitform" element={<Twitformex />}/>
+    <Route path="/notice/twitform/liked" element={<Twitformex />}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
     <Route index element={<Twitformex/>}/>
     <Route path="notice" element={<CenterPage/>}/>
