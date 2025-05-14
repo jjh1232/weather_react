@@ -175,40 +175,32 @@ export default function Twitformex(props){
           keyword:query.get("keywords"),
           page:page
           }
-        }).then((res)=>{
-          
-            console.log(res)
-           
-            
-            const newcontent=res.data.content;
+        }).then((res)=>{    
+           const newcontent=res.data.content;
           
             console.log("뉴");
             if(res.data.content.length===0){
                 console.log("자료가없어요!")
             }
             else{
-                if(notice===""){
-                    console.log("기존자료없음")
+                
+                    
                     
                     let arr=totalpageget(res.data.totalPages).length-1
                     setTotalpage(arr);
-                    setNotice(res.data.content)
+                    setNotice(prevNotice=>{
+                        if(!prevNotice || prevNotice.length===0) return newcontent
+
+                    return [...prevNotice,...newcontent]
+            });
+
                     if(page<=arr){
                         
                         console.log("토탈페이지11:"+arr)
                         console.log("토탈페이지111:"+totalpage)
                     }
                  
-                }else{
-                    ///...은배열이개별원소가된다 .객체의경우나머지를의미하게됨
-                    console.log("포스트추가")
-                    //전개연산자로재활당을해야하는데어떻게하지..
-                setNotice([...notice,...res.data.content])
-                let arr=totalpageget(res.data.totalPages).length-1
-                
-                setTotalpage(arr);
-                
-                }
+              
             }
            
           
@@ -230,7 +222,7 @@ export default function Twitformex(props){
           }
         }).then((res)=>{
           
-            console.log(res)
+           
            
             
             const newcontent=res.data.content;
@@ -241,28 +233,22 @@ export default function Twitformex(props){
                 console.log("자료가없어요!")
             }
             else{
-                if(notice===""){
-                    console.log("기존자료없음")
-                    
+                
                     let arr=totalpageget(res.data.totalPages).length-1
                     setTotalpage(arr);
-                    setNotice(res.data.content)
+                    setNotice(prevData=>{
+                        if(!prevData||prevData.length===0) return newcontent
+
+                        return [...prevData,...newcontent]
+                    })
                     if(page<=arr){
                         
                         console.log("토탈페이지11:"+arr)
                         console.log("토탈페이지111:"+totalpage)
                     }
                  
-                }else{
-                    ///...은배열이개별원소가된다 .객체의경우나머지를의미하게됨
-                    console.log("포스트추가")
-                    //전개연산자로재활당을해야하는데어떻게하지..
-                setNotice([...notice,...res.data.content])
-                let arr=totalpageget(res.data.totalPages).length-1
-                
-                setTotalpage(arr);
-                
-                }
+               
+                 
             }
            
           
