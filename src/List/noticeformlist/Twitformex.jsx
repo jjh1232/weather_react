@@ -136,7 +136,7 @@ export default function Twitformex(props){
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
         let apiurl="";
-        if(location.pathname==="/notice/twitform"){
+        if(location.pathname==="/notice/twitform"||location.pathname==="/main"||location.pathname==="/"){
             islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
           
         }else if(location.pathname==="/notice/twitform/liked"){

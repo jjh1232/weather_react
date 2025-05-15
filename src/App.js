@@ -51,6 +51,7 @@ import Adminloginhistory from "./customhook/Admintools/Adminloginhistory";
 import MainLayout from "./MainPage/MainLayout";
 import theme from "./UI/Manyim/Themecss";
 import { createGlobalStyle } from "styled-components";
+import Mainout from "./UI/Manyim/Mainout";
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
@@ -114,10 +115,17 @@ const updatetime=()=>{
     
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
-    <Route path="/notice/twitform" element={<Twitformex />}/>
+    <Route path="/notice/twitform" element={<Mainout/>}>
+      <Route index element={<Twitformex/>}/>
+    </Route>
+   <Route path="/" element={<Mainout />}>
+  <Route index element={<Twitformex />} />
+</Route>
+    
+     
     <Route path="/notice/twitform/liked" element={<Twitformex />}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
-    <Route index element={<Twitformex/>}/>
+   
     <Route path="notice" element={<CenterPage/>}/>
     <Route path="userprofile" element={<Userimage/>}/>
       <Route path="main" element={<Twitformex/>}/>
