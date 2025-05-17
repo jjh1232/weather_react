@@ -4,7 +4,7 @@ import Twitformlist from "./Twitformlist";
 
 import axios from "axios";
 import Searchtool from "../../UI/Noticetools/Searchtool";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import Noticeformbutton from "../../Noticepage/NoticePattern/Noticeformbutton";
 import Noticecreate from "../../Noticepage/Noticecreate"
@@ -18,7 +18,7 @@ position: relative;
 left:28.5%;
 width:43%;
 height:100%;
-
+border: 1px solid blue;
  color:${props => props.theme.text};
  background:${props => props.theme.background};
  top: 8%;
@@ -83,6 +83,9 @@ const Formdiv=styled.div`
      border: 1px solid green;
      width: 50%;
 `
+const Maindatadiv=styled.div`
+   
+`
 
 export default function Twitformex(props){
     //const {posts,onClickItem,noticecreate,querydatas
@@ -97,22 +100,13 @@ export default function Twitformex(props){
             keywords:"",
             pages:1
         })
-        const [statuschange,setStatuschange]=useState()
-       //}=props;
-        //console.log(`트윗폼메인함수시작`+totalpages.length)
        
-        const [notice,setNotice]=useState("");
-     
-       const scrollref=useRef(null);
-        
-     const [isloading,setIsloading]=useState(false);
 
       const [page,setPage]=useState(parseInt(query.get("pages")));
-      console.log("트윗폼시작"+page)
+   
       const [totalpage,setTotalpage]=useState(1);
-       const [ref,inView]=useInView();
-      //console.log("프롭스렝스:"+totalpages.length)
-       //로케이션으로 좋아요 와 일반게시글차이만들자
+      
+     
       const location=useLocation();
        const [searchdatas,setSearchdatas]=useState(
         {
@@ -133,152 +127,15 @@ export default function Twitformex(props){
 
        const [iscreate,setIscreate]=useState(false)
        let islogin=AuthCheck();
-       //이거 어싱크함수로 밖에빼서 한번해볼까함 
-       useEffect(()=>{
-        let apiurl="";
-        if(location.pathname==="/notice/twitform"||location.pathname==="/main"||location.pathname==="/"){
-            islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
-          
-        }else if(location.pathname==="/notice/twitform/liked"){
-             if(islogin){
-                apiurl=`/onlikenotice`;
-            
-            }
-            else{
-            console.log("비로그인상태")
-            alert("로그인을후 이용해주세요!")
-            }
-           
       
-        }
-        noticedata(apiurl)
-    }
-       ,[page,location,islogin])
-
-       //인뷰를따로뺴야할거같은데 
-       useEffect(()=>{
-        
-        
-
-        if(page<=totalpage&&!isloading&&inView){
-        setPage((prev)=>prev+1)
-        console.log("현재페이지:"+page)
-        console.log("토탈페이지:"+totalpage)    
-        }
-        
-    
-       },[inView])
       
 
        
       
 
-    const axiosinstance=islogin ? CreateAxios() : axios;
-
-       const noticedata=(apiurl)=>{
-       
-        //값없을시 막기
-        if (!apiurl) return;
-        console.log(query.get("keywords"))
-       setIsloading(true)
-        axiosinstance.get(apiurl,{
-          params:{
-          option:query.get("selectoptions"),
-          keyword:query.get("keywords"),
-          page:page
-          }
-        }).then((res)=>{    
-           const newcontent=res.data.content;
-          
-            console.log("뉴");
-            if(newcontent===undefined){
-                console.log("자료가없어요!")
-            }
-            else{
-                
-                    
-                    
-                    let arr=totalpageget(res.data.totalPages).length-1
-                    setTotalpage(arr);
-                    setNotice(prevNotice=>{
-                        if(!prevNotice || prevNotice.length===0) return newcontent
-
-                    return [...prevNotice,...newcontent]
-            });
-
-                    if(page<=arr){
-                        
-                        console.log("토탈페이지11:"+arr)
-                        console.log("토탈페이지111:"+totalpage)
-                    }
-                 
-              
-            }
-           
-          
-            
-            setIsloading(false)
-        })
-        
- 
-      }
-      //로그인시 일단따로
-      const loginnoticedata=()=>{
-        console.log(query.get("keywords"))
-       setIsloading(true)
-        axiosinstance.get(`/noticeget`,{
-          params:{
-          option:query.get("selectoptions"),
-          keyword:query.get("keywords"),
-          page:page
-          }
-        }).then((res)=>{
-          
-           
-           
-            
-            const newcontent=res.data.content;
-          
-            console.log("뉴"+newcontent);
-            if(newcontent===undefined){
-                
-                console.log("자료가없어요!")
-            }
-            else{
-                
-                    let arr=totalpageget(res.data.totalPages).length-1
-                    setTotalpage(arr);
-                    setNotice(prevData=>{
-                        if(!prevData||prevData.length===0) return newcontent
-
-                        return [...prevData,...newcontent]
-                    })
-                    if(page<=arr){
-                        
-                        console.log("토탈페이지11:"+arr)
-                        console.log("토탈페이지111:"+totalpage)
-                    }
-                 
-               
-                 
-            }
-           
-          
-            
-            setIsloading(false)
-        })
-        
- 
-      }
-      const totalpageget=(totalpage)=>{
-
-        const arr=[]
-        for(let i=1;i<=totalpage;i++){
-            arr[i]=i;
-        }
   
-        return arr;
-      }
+     
+  
 
    
        //검색옵션 =========================================
@@ -347,32 +204,9 @@ export default function Twitformex(props){
         </Modalout>}
        
             
-    
-       
-        {notice&&
-        <div>
-        {notice.map((post,key)=>{
-            return (
-                <>
-
-                <Twitformlist
-                key={key} post={post} 
-            />
-            
-            <br/>
-           
-            </>
-            )
-    
-        }
-      
-    )
-       
-    }
-            <div ref={ref} >마지막부분</div>
-        </div>
-        }
-            
+        <Maindatadiv>
+            <Outlet/>
+         </Maindatadiv>   
             
             
         

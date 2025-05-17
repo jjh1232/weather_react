@@ -52,6 +52,8 @@ import MainLayout from "./MainPage/MainLayout";
 import theme from "./UI/Manyim/Themecss";
 import { createGlobalStyle } from "styled-components";
 import Mainout from "./UI/Manyim/Mainout";
+import Imageform from "./List/noticeformlist/Imageform/Imageform";
+import Twitformver from "./List/noticeformlist/Twitformver";
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
@@ -115,15 +117,18 @@ const updatetime=()=>{
     
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
-    <Route path="/notice/twitform" element={<Mainout/>}>
-      <Route index element={<Twitformex/>}/>
+   
+    <Route path="/notice" element={<Twitformex/>}>
+      <Route path="imgform" element={<Imageform/>}/>
+      <Route path="twitform/liked" element={<Twitformver />}/>
+      <Route  path="twitform"index element={<Twitformver/>}/>
     </Route>
    <Route path="/" element={<Mainout />}>
   <Route index element={<Twitformex />} />
 </Route>
     
      
-    <Route path="/notice/twitform/liked" element={<Twitformex />}/>
+    
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
    
     <Route path="notice" element={<CenterPage/>}/>

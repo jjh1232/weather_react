@@ -56,7 +56,7 @@ window.location.reload();
             }}>
                 좋아요 한게시글
             </CreateButton >
-             <CreateButton  
+             <CreateButton  onClick={()=>{navigate("/notice/imgform")}}
             >
                 이미지
             </CreateButton >
