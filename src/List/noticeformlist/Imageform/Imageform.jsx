@@ -41,12 +41,13 @@ export default function Imageform(){
                 const res=await axios.get("/open/notice/imagelist",{
                     params:{page:pageParam}
                 })
-                return res.data.content
+                console.log(res)
+                return res.data
             },
             getNextPageParam:(lastPage,allPages)=>{
-
+                console.log("페이지파람:"+lastPage)
                 if(lastPage.last) return undefined;
-                return lastPage.number+1;
+                return lastPage.number + 2;
             }
     })
     const {ref,inView}=useInView();
@@ -61,23 +62,28 @@ export default function Imageform(){
         <Wrapper>
         
 
-        {imgnoticelist&&imgnoticelist.pages.map((data)=>{
+        {imgnoticelist&&imgnoticelist.pages.map((data,pageindex)=>{
             return (
                 <>
+                {console.log(pageindex)}
                 {console.log(data)}
-                {data.map((da)=>{
+                {data.content.map((da)=>{
                     return (
                         <>
-                        {console.log(da)}
-                          {da.title}
+                            {da.title}
                      {da.mainimage}
                         </>
                     )
                 })}
-              
+                  
+                      
+           
                 </>
             )
         })}
+         <div ref={ref} >
+        {isFetchingNextPage&&<>...로딩중..</>}
+         </div>
         </Wrapper>
     )
 }
