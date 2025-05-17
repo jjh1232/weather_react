@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
+import { InView, useInView } from "react-intersection-observer";
 import styled from "styled-components";
 
 const Wrapper=styled.div`
@@ -16,7 +17,7 @@ height:100%;
 `
 
 export default function Imageform(){
-    
+    /*
     const {data : imgnoticelist}=useQuery({
         queryKey:["imgnoticelist"],
         queryFn:async ()=>{
@@ -26,21 +27,54 @@ export default function Imageform(){
         }
 
     })
+        */
+    //무한스크롤용 인피니티쿼리
+    const {
+        data:imgnoticelist,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        status,
+    }= useInfiniteQuery({
+            queryKey:["imgnoticelist"],
+            queryFn: async ({pageParam=1})=>{
+                const res=await axios.get("/open/notice/imagelist",{
+                    params:{page:pageParam}
+                })
+                return res.data.content
+            },
+            getNextPageParam:(lastPage,allPages)=>{
+
+                if(lastPage.last) return undefined;
+                return lastPage.number+1;
+            }
+    })
+    const {ref,inView}=useInView();
+
+    useEffect(()=>{
+        if(inView&&hasNextPage&&!isFetchingNextPage){
+            fetchNextPage();
+        }
+    },[inView,hasNextPage,isFetchingNextPage,fetchNextPage])
 
     return (
         <Wrapper>
-        이미지리스트dd
-        d
-        d
-        d 
-        d 
-        d 
+        
 
-        {imgnoticelist&&imgnoticelist.map((data)=>{
+        {imgnoticelist&&imgnoticelist.pages.map((data)=>{
             return (
                 <>
-                {data.title}
-                {data.mainimage}
+                {console.log(data)}
+                {data.map((da)=>{
+                    return (
+                        <>
+                        {console.log(da)}
+                          {da.title}
+                     {da.mainimage}
+                        </>
+                    )
+                })}
+              
                 </>
             )
         })}
