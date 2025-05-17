@@ -34,44 +34,31 @@ export default function Twitformver(props){
             keywords:"",
             pages:1
         })
-        const [statuschange,setStatuschange]=useState()
-       //}=props;
-        //console.log(`트윗폼메인함수시작`+totalpages.length)
        
+      
         const [notice,setNotice]=useState("");
      
-       const scrollref=useRef(null);
+      
         
      const [isloading,setIsloading]=useState(false);
 
       const [page,setPage]=useState(parseInt(query.get("pages")));
-      console.log("트윗폼시작"+page)
+    
       const [totalpage,setTotalpage]=useState(1);
        const [ref,inView]=useInView();
       //console.log("프롭스렝스:"+totalpages.length)
        //로케이션으로 좋아요 와 일반게시글차이만들자
       const location=useLocation();
-       const [searchdatas,setSearchdatas]=useState(
-        {
-            form:query.get("form"),
-            selectoptions:query.get("selectoptions"),
-            keywords:query.get("keywords"),
-            
-        }
-       )
-       const querydata={
-
-            form:query.get("form"),
-            selectoptions:query.get("selectoptions"),
-            keywords:query.get("keywords"),
-       }
+       
+      
        //스크롤페이지변경시 실행 
        
 
-       const [iscreate,setIscreate]=useState(false)
+       
        let islogin=AuthCheck();
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
+        console.log("노티스유즈이펙트실행!")
         let apiurl="";
         if(location.pathname==="/notice/twitform"||location.pathname==="/main"||location.pathname==="/"){
             islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
@@ -88,26 +75,30 @@ export default function Twitformver(props){
            
       
         }
+
         noticedata(apiurl)
     }
-       ,[page,location,islogin])
+       ,[page,location,islogin,query,location.search])
 
        //인뷰를따로뺴야할거같은데 
        useEffect(()=>{
         
         
-
         if(page<=totalpage&&!isloading&&inView){
         setPage((prev)=>prev+1)
-        console.log("현재페이지:"+page)
-        console.log("토탈페이지:"+totalpage)    
+         
         }
         
     
        },[inView])
       
 
-       
+       //검색시데이터초기화 무한스크롤이라필요
+       useEffect(()=>{
+        setPage(1)
+        setNotice([])
+
+       },[query])
       
 
     const axiosinstance=islogin ? CreateAxios() : axios;
@@ -171,34 +162,8 @@ export default function Twitformver(props){
       }
 
    
-       //검색옵션 =========================================
-       //서치툴로 다해결하고싶은데 props일일히 주고 옮기기도귀찮고 그냥여기서 검색메서드넘기자
-       const noticereset=()=>{
-        setNotice("")
-        //노티스리셋
-        
-       }
-       //페이지리셋이 쿼리단계로안먹힘..
-       const setpagehandler=()=>{
-        setPage(1)
-       }
-       //글작성시상태변경
-       const redataon=()=>{
-        console.log("글작성시리렌더노티스지워준뒤다시")
-        //배열아니면map을못받고 스프레드연산자를 배열밖에서안쓰면map이안되고..
-        //일단무식하게그냥새로고침..
-        //setNotice([...notice])
-        window.location.reload();
-       }
-       const islogincheck=AuthCheck();
-       const Createnotice=()=>{
-            if(islogincheck){
-                setIscreate(true)
-            }
-            else{
-                alert("로그인후이용해주세요!")
-            }
-       }
+      
+     
        //==============렌더링!==============================================================
        return (
         <>

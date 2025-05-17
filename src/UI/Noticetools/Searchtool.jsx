@@ -86,9 +86,14 @@ const SearchButton=styled.button`
 `
 export default function Searchtool(props){
 
-    const {searchdata,deletemethod,twitformpage}=props
+    //const {searchdata,deletemethod,twitformpage}=props
     const navigate=useNavigate();
-        const [searchdatas,setSearchdatas]=useState(searchdata);
+        const [searchdatas,setSearchdatas]=useState(
+          {selectoptions:"title",
+            keyword:"",
+            
+          }
+        );
       //셀렉트검색
   const options = [
     {value:"title",name:"제목"}, 
@@ -107,18 +112,18 @@ export default function Searchtool(props){
       alert("검색어를입력하세요")
     }
   else{  
-    if(searchdatas.form==="twitform"){
-        deletemethod();
-        twitformpage(1);
-        console.log("트윗폼")
-        navigate(`/notice/twitform?form=${searchdatas.form}&pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
+   // if(searchdatas.form==="twitform"){
+        //deletemethod();
+       // twitformpage(1);
+        //console.log("트윗폼")
+        navigate(`/notice/twitform?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
         //window.location.reload()
     }
-    else{
-   navigate(`/notice?form=${searchdatas.form}&pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
-    }
+   // else{
+   //navigate(`/notice?form=${searchdatas.form}&pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
+    //}
   }
-  }
+  //}
   return (
     <Wrapper>
    

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import AuthCheck from "../../customhook/authCheck";
 
 const Buttonlist=styled.div`
 width: 100%;
@@ -38,7 +39,17 @@ const CreateButton=styled.div`
 export default function Noticeformbutton(){
 
     const navigate=useNavigate();
-
+    let islogin=AuthCheck();
+    const Likebuttonhandler=()=>{
+      
+        if(islogin){
+          navigate(`/notice/twitform/liked`)
+           window.location.reload();
+        }
+        else{
+          alert("로그인후이용해주세요!")
+        }
+    }
 
     return (
         
@@ -46,13 +57,13 @@ export default function Noticeformbutton(){
 
         
             <CreateButton onClick={()=>{navigate(`/notice/twitform`)
-window.location.reload();
+            window.location.reload();
 
             }}>
                 일반게시글
             </CreateButton >
-            <CreateButton  onClick={()=>{navigate(`/notice/twitform/liked`)
-              window.location.reload();
+            <CreateButton  onClick={()=>{ Likebuttonhandler();
+             
             }}>
                 좋아요 한게시글
             </CreateButton >
