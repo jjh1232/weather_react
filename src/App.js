@@ -123,8 +123,8 @@ const updatetime=()=>{
       <Route path="twitform/liked" element={<Twitformver />}/>
       <Route  path="twitform"index element={<Twitformver/>}/>
     </Route>
-   <Route path="/" element={<Mainout />}>
-  <Route index element={<Twitformex />} />
+   <Route path="/" element={<Twitformex />}>
+  <Route index element={<Twitformver />} />
 </Route>
     
      
