@@ -97,7 +97,17 @@ export default function Twitformex(props){
       
 
        const [iscreate,setIscreate]=useState(false)
-       
+       let logincheck=AuthCheck();
+       const createnoticeon=()=>{
+
+            if(logincheck){
+                setIscreate(true)
+            }
+            else {
+                alert("로그인후이용해주세요!")
+            }
+       }
+
        //==============렌더링!==============================================================
        return (
         <>
@@ -109,7 +119,7 @@ export default function Twitformex(props){
         
             <Creatediv>
         <CreateButton onClick={()=>{
-            Createnotice();
+            createnoticeon();
         }}> 글작성하기 </CreateButton>
         </Creatediv>
        

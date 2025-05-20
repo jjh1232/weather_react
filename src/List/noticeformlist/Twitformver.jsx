@@ -71,6 +71,7 @@ export default function Twitformver(props){
             else{
             console.log("비로그인상태")
             alert("로그인을후 이용해주세요!")
+                
             }
            
       
