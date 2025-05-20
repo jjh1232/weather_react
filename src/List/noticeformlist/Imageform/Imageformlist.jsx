@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages as imagesicon } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper=styled.div`
 
@@ -15,6 +16,7 @@ const Wrapper=styled.div`
 const Header=styled.div`
    border : 1px solid blue ;
    display: flex;
+   height: 50px;
 `
 const Profileimg=styled.img`
     width: 40px;
@@ -45,22 +47,25 @@ const MainImage=styled.img`
 `
 const Imagenumdiv=styled.div`
 position: absolute;
-    border: 1px solid red;
+   
     top: 1px;
-    right: 1px;
-    z-index: 10;
+    right: 2px;
+    
+    border-radius: 4px;
+    padding: 3px 5px;
+    font-size: 13px;
     background-color: rgba(0, 0, 0, 0.5); 
   color: white; 
 `
 const Likebuttondiv=styled.div`
 position: absolute;
-     border: 1px solid red;
-     z-index: 10px;
-     bottom: 60px;
-     right: 1px;
-    background-color: rgba(0, 0, 0, 0.5); 
+       
+     bottom: 70px;
+     right: 5px;
+   
   color: white; 
 `
+
 
 export default function Imageformlist(props){
     const {content}=props;
@@ -87,10 +92,12 @@ export default function Imageformlist(props){
         <Main>
             <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
             <Imagenumdiv>
+                
                 <FontAwesomeIcon icon={imagesicon} /> {content.imagenum}
             </Imagenumdiv>
             <Likebuttondiv>
-                <FontAwesomeIcon icon={heart} size="xl" color="red" />
+                <FontAwesomeIcon icon={heart} size="xl" color="black" />
+                <FontAwesomeIcon icon={fullheart} size="xl" color="white" />
             </Likebuttondiv>
         </Main>
       
