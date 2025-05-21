@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages as imagesicon } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
+import CreateAxios from "../../../customhook/CreateAxios";
+import AuthCheck from "../../../customhook/authCheck";
 
 const Wrapper=styled.div`
 
@@ -69,7 +71,21 @@ position: absolute;
 
 export default function Imageformlist(props){
     const {content}=props;
-
+    let logincheck=AuthCheck();
+   let axiosinstance=CreateAxios()
+    const Noticelikehandler=()=>{
+        if(logincheck){
+             
+             axiosinstance.get(`/noticelike/${content.id}`).then((res)=>{
+                alert(res.content)
+             }).catch((err)=>{
+                alert ("좋아요실패했어요!")
+             })
+            
+        }else{
+            alert("로그인후이용해주세요")
+        }
+    }
 
     return (
         <Wrapper>
@@ -95,9 +111,10 @@ export default function Imageformlist(props){
                 
                 <FontAwesomeIcon icon={imagesicon} /> {content.imagenum}
             </Imagenumdiv>
-            <Likebuttondiv>
-                <FontAwesomeIcon icon={heart} size="xl" color="black" />
-                <FontAwesomeIcon icon={fullheart} size="xl" color="white" />
+            <Likebuttondiv onClick={()=>{Noticelikehandler()}}>
+                <FontAwesomeIcon icon={heart} size="xl" color={content.likely?"red":"black"} style={{position:"absolute",right:"1px",bottom:"1px"}}/>
+                <FontAwesomeIcon icon={fullheart} size="xl" color={content.likely?"red":"white"}  style={{position:"absolute",right:"1px",bottom:"1px"}}/>
+
             </Likebuttondiv>
         </Main>
       

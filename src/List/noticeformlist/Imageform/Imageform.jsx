@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import { InView, useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import Imageformlist from "./Imageformlist";
+import AuthCheck from "../../../customhook/authCheck";
+import CreateAxios from "../../../customhook/CreateAxios";
 
 const Wrapper=styled.div`
 position: relative;
@@ -32,6 +34,9 @@ export default function Imageform(){
     })
         */
     //무한스크롤용 인피니티쿼리
+    //로그인체크용
+    let loginuser=AuthCheck();
+    let axiosinstance=CreateAxios();
     const {
         data:imgnoticelist, //받아온전체데이터 (페이지별로쌓인다)
         fetchNextPage, //다음페이지를 불러오는함수
@@ -41,7 +46,8 @@ export default function Imageform(){
     }= useInfiniteQuery({
             queryKey:["imgnoticelist"],
             queryFn: async ({pageParam=1})=>{
-                const res=await axios.get("/open/notice/imagelist",{
+                const logch=loginuser? axiosinstance :axios
+                const res=await logch.get("/open/notice/imagelist",{
                     params:{page:pageParam}
                 })
                 console.log(res)
