@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages as imagesicon } from "@fortawesome/free-regular-svg-icons";
@@ -6,14 +6,18 @@ import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
 import CreateAxios from "../../../customhook/CreateAxios";
 import AuthCheck from "../../../customhook/authCheck";
+import theme from "../../../UI/Manyim/Themecss";
+import ImageListmodal from "../../Noticeimage/ImageListmodal";
+
 
 const Wrapper=styled.div`
 
     border: 1px solid gray;
-    width: 270px;
+    width: 266px;
     margin-right:1px ;
     height: 300px;
     overflow: hidden;
+    
 `
 const Header=styled.div`
    //border : 1px solid blue ;
@@ -21,6 +25,7 @@ const Header=styled.div`
    width: 100%;
    height: 50px;
       min-width: 0;
+      border-bottom: 1px solid ${theme.text};
 `
 const Profileimg=styled.img`
     width: 40px;
@@ -39,7 +44,7 @@ const Userandtitlediv=styled.div`
 const Userdatadiv=styled.div`
     width: 100%;
     display: flex;
-    border-bottom: 1px solid blue ;
+    border-bottom: 1px solid ${theme.text} ;
 `
 const Nicknamediv=styled.div`
     font-size: 15px;
@@ -51,20 +56,20 @@ const Usernamediv=styled.div`
 `
 
 const Titlediv=styled.div`
-border: 1px solid red;
-     width: 185px;
-    display: flex;
-    flex-direction: column;
+
+     width: 100%;
+    
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+    
 `
 const Main=styled.div`
     width: 100%;
     height: 250px;
     position: relative;
-    border: 1px solid blue;
+  
 `
 const MainImage=styled.img`
     width: 100%;
@@ -109,6 +114,7 @@ const Likenumdiv=styled.div`
 */
 export default function Imageformlist(props){
     const {content}=props;
+    const [isPreview,setisPreview]=useState(false);
     let logincheck=AuthCheck();
    let axiosinstance=CreateAxios()
    
@@ -140,7 +146,7 @@ export default function Imageformlist(props){
        
             </Userdatadiv>
            <Titlediv>
-             {content.title}zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+             {content.title}
             </Titlediv> 
        
         </Userandtitlediv>
@@ -149,10 +155,13 @@ export default function Imageformlist(props){
             </Header>
         <Main>
             <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
-            <Imagenumdiv>
-                
+            <Imagenumdiv onClick={()=>{
+                    setisPreview(true)
+            }}>
+                {isPreview&&<ImageListmodal noticeid={content.id} ispreview={setisPreview}/>}    
                 <FontAwesomeIcon icon={imagesicon} /> {content.imagenum}
             </Imagenumdiv>
+
             <Likebuttondiv onClick={()=>{Noticelikehandler()}}>
 
                 <FontAwesomeIcon icon={fullheart} size="xl" color={content.likely?"red":"white"}  style={{position:"absolute",right:"1px",bottom:"1px"}}/>

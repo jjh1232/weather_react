@@ -17,8 +17,8 @@ flex-wrap: wrap;
  color:${props => props.theme.text};
  background:${props => props.theme.background};
  top: 8%;
- border: 1px solid red;
-
+// border: 1px solid red;
+gap: 5px;
 `
 
 export default function Imageform(){
