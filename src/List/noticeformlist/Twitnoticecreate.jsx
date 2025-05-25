@@ -51,16 +51,22 @@ const imagehandler=()=>{
     const input =document.createElement("input")
     input.setAttribute("type","file");
     input.setAttribute("accept","image/*")
+    input.setAttribute("multiple","multiple")
     //그걸클릭한효과
     input.click();
 
     input.onchange=()=>{
         console.log("이미지핸들러온채인지")
-        const file=input.files[0];
+        const files=input.files;
+       if(!files || files.length===0) return ;
+       Array.from(files).forEach((file)=>{
         const formdata=new FormData();
         const img=new Image();
 
             img.src=URL.createObjectURL(file);
+       
+        
+       
           
            
 
@@ -90,9 +96,9 @@ const imagehandler=()=>{
                 console.log("이미지height:"+height)
                 ctx.drawImage(img,0,0,canvas.width,canvas.height);
                 //캔버스를 데이터로 나타내고 이후 다시 파일로 변경
-              const files=canvas.toDataURL("image/png")
+              const base64=canvas.toDataURL("image/png")
               
-              let blobBin=atob(files.split(`,`)[1]); //base64데이터디코딩
+              let blobBin=atob(base64.split(`,`)[1]); //base64데이터디코딩
                    var array=[];
                 for(var i=0;i<blobBin.length;i++){
                     array.push(blobBin.charCodeAt(i));
@@ -104,10 +110,9 @@ const imagehandler=()=>{
         
         
         try{
-            console.log("포스트리설트")
+            
             const result = await axiosinstance.post('/contentimage', formdata)
             
-            console.log('성공 시, 백엔드가 보내주는 데이터', result);
             
             const imgurl =process.env.PUBLIC_URL+"/noticeimages/"+result.data;
            //절대경로가안됨..
@@ -139,7 +144,7 @@ const imagehandler=()=>{
         catch(error){
             console.log("에러")
         }
-    }
+    }})
     }
 }
 const modules=useMemo(()=>{
@@ -153,6 +158,7 @@ const modules=useMemo(()=>{
         handlers:{
             "image":imagehandler
         }
+        
     }
 }
 }

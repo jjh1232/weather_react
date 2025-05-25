@@ -155,6 +155,7 @@ const axiosinstance=CreateAxios();
     //속성써주기
     input.setAttribute("type","file");
     input.setAttribute("accept","image/*");
+    input.setAttribute("multiple","multiple")
     input.click()//에디터이미지버튼을 클릭하면 이 input이클릭됨
     //인풋이 클릭되면 파일선택창이 나타난다
 

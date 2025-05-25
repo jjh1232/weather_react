@@ -7,7 +7,8 @@ const Wrapper=styled.div`
     height: 200px;
 `
 const Prev=styled.img`
-     width: 200px;
+     width:200px;
+    //  flex: 0 0 calc((100% - 16px * 3) / 4);
     height: 200px;
     object-fit: fill;
     border: 1px solid black;
