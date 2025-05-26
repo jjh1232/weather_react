@@ -1,4 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#이미지도 올라가는듯?
+.public/noticeimages
+.public/userprofileimg
 
 # dependencies
 /node_modules

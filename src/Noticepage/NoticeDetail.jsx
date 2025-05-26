@@ -17,7 +17,7 @@ import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 
 const Wrapper=styled.div`
-    color:"white"
+    color:"white";
 padding: 50px;
 position:relative;
 left:28.5%;
@@ -51,33 +51,7 @@ const noticeurl=`/open/noticedetail/`+detailnum.num;
 const commenturl=`/open/comment/`+detailnum.num;
 
 
-/*
-useEffect(()=>{
-  axios.get(noticeurl  
-  ).then((res)=>{
-    Setnoticedetail(res.data)
-  })
-},[])
 
-useEffect(()=>{
-  axios.get(commenturl)
-  .then((res)=>{
-    setComments(res.data)
-  })
-},[])
-
-//두개동시엔대 cors에러가나옴 이게되네 ㅋㅋ;
-useEffect(()=>{
-  axios.all([axios.get(noticeurl),axios.get(commenturl)])
-  .then(axios.spread((res1,res2)=>{
-    Setnoticedetail(res1.data)
-    Setcomments(res2.data)
-   
-   
-  }))
-},[])
-*/
-//최상위에서선언..
 const axiosinstance=CreateAxios()
 
 useEffect(()=>{
