@@ -8,6 +8,7 @@ import CreateAxios from "../../../customhook/CreateAxios";
 import AuthCheck from "../../../customhook/authCheck";
 import theme from "../../../UI/Manyim/Themecss";
 import ImageListmodal from "../../Noticeimage/ImageListmodal";
+import { useNavigate } from "react-router-dom";
 
 
 const Wrapper=styled.div`
@@ -117,7 +118,7 @@ export default function Imageformlist(props){
     const [isPreview,setisPreview]=useState(false);
     let logincheck=AuthCheck();
    let axiosinstance=CreateAxios()
-   
+   const navigate=useNavigate();
     const Noticelikehandler=()=>{
         if(logincheck){
              
@@ -153,7 +154,7 @@ export default function Imageformlist(props){
     
         
             </Header>
-        <Main>
+        <Main onClick={()=>{navigate(`/noticedetail/${content.id}`)}}>
             <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
             <Imagenumdiv onClick={()=>{
                     setisPreview(true)

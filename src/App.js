@@ -54,6 +54,7 @@ import { createGlobalStyle } from "styled-components";
 import Mainout from "./UI/Manyim/Mainout";
 import Imageform from "./List/noticeformlist/Imageform/Imageform";
 import Twitformver from "./List/noticeformlist/Twitformver";
+import Noticedetailre from "./Noticepage/Noticedetailre";
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
@@ -122,6 +123,7 @@ const updatetime=()=>{
       <Route path="imgform" element={<Imageform/>}/>
       <Route path="twitform/liked" element={<Twitformver />}/>
       <Route  path="twitform"index element={<Twitformver/>}/>
+      <Route path="detail/:noticeid" element={<Noticedetailre/>}/>
     </Route>
     
    <Route path="/" element={<Twitformex />}>
@@ -138,7 +140,7 @@ const updatetime=()=>{
       <Route path="noticeex/:page" element={<Noticemainex/>}/>
       <Route path="noticelogic" element={<NoticelistView/>}/>
       <Route path="noticecreate" element={<Noticecreate/>}/>
-      <Route path="noticedetail/:num" element={<NoticeDetail/>}/>
+      
       <Route path="noticeupdate/:num" element={<NoticeUpdate/>}/>
       <Route path="membercreate" element={<Membercreate/>}/>
       <Route path="login" element={<Loginpage/>}/>
