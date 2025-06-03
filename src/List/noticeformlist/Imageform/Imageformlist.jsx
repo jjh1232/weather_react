@@ -154,7 +154,7 @@ export default function Imageformlist(props){
     
         
             </Header>
-        <Main onClick={()=>{navigate(`/noticedetail/${content.id}`)}}>
+        <Main onClick={()=>{navigate(`/notice/detail/${content.id}`)}}>
             <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
             <Imagenumdiv onClick={()=>{
                     setisPreview(true)
