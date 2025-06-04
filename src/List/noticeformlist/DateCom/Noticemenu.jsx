@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Noticeblockmodal from "./Menumodal/Noticeblockmodal";
 import Noticedeclmodal from "./Menumodal/Noticedeclmodal";
+import { useCookies } from "react-cookie";
 const Wrapper=styled.div`
     position: absolute;
     right: 0px;
@@ -24,12 +25,28 @@ const Innerdiv=styled.div`
 
 
 export default function Noticemenu(props){
-    const {updatemethod,deletemethod,isowner,username,nickname,noticeuser,noticeid,setisblock}=props;
+    const {updatemethod,deletemethod,noticeuser,noticeid,setisblock,isclose}=props;
     const navigate=useNavigate();
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
+    //쿠키읽기 여기서하는게나은듯
+    const [cookies,setCookie,removeCookie]=useCookies(["userinfo","Acesstoken"]);
     const [isnoticeblockform,setIsnoticeblockform]=useState(false)
    //const [followcheck,setFollowcheck]=useState();
+
+   //유저체크
+   const isowner=cookies.userinfo?noticeuser===cookies.userinfo["username"]?true:false:false;
+   const username=cookies.userinfo?cookies.userinfo["username"]:"";
+   const nickname=cookies.userinfo?cookies.userinfo["nickname"]:"";
+
+
+   useEffect(()=>{
+    if(!cookies.userinfo){
+        alert("로그인후이용해주세요!")
+        isclose(false)
+    }
+
+   },[cookies.userinfo])
 
     //많이바뀔꺼같아서 따로하긴하는데 동시에하는거랑 뭐가더 비용적으로 좋은지 모르겠음
     //한번에 데이터가져올경우 변경시 다른데이터까지 다시 가져옴
@@ -167,17 +184,7 @@ export default function Noticemenu(props){
     }
     return (
         <Wrapper>
-            {isowner&&<>
-                <Innerdiv onClick={()=>{deletemethod()}}>
-                게시글삭제@{nickname}
-                
-            </Innerdiv>
-                <Innerdiv onClick={()=>{updatemethod()}}>
-                게시글수정@{nickname}
-                
-            </Innerdiv>
-            </>
-            }
+            
                 <Innerdiv onClick={()=>{usermove()}}>
                       
                         
@@ -207,7 +214,17 @@ export default function Noticemenu(props){
                         게시글신고
                         
                     </Innerdiv>}
-                   
+                   {isowner&&<>
+                <Innerdiv onClick={()=>{deletemethod()}}>
+                게시글삭제@{nickname}
+                
+            </Innerdiv>
+                <Innerdiv onClick={()=>{updatemethod()}}>
+                게시글수정@{nickname}
+                
+            </Innerdiv>
+            </>
+            }
                     {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid} setisblock={setisblock}/> }
                     {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform} noticeid={noticeid}/>}
         </Wrapper>

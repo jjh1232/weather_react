@@ -15,7 +15,7 @@ const skyMap = {
   };
   
   const ptyMap = {
-    '0': { icon: faCloud, color: 'skyblue', label: '강수없음' },
+    '0': { icon: faCloud, color: 'skyblue', label: '맑음' },
     '1': { icon: faCloudRain, color: 'blue', label: '비' },
     '2': { icon: faCloudRain, color: 'deepskyblue', label: '비/눈' },
     '3': { icon: faCloudRain, color: 'gray', label: '눈' }

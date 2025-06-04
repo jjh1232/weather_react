@@ -333,12 +333,11 @@ const weatherData = weatherKeys.map(key=>({
                     style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
                    
                     {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
-                     isowner={loginuser.userinfo?post.username===loginuser.userinfo["username"]?true:false:false}
-                     username={loginuser.userinfo?loginuser.userinfo["username"]:""}
-                     nickname={loginuser.userinfo?loginuser.userinfo["nickname"]:""}
+
                      noticeuser={post.username}
                      noticeid={post.num}
                      setisblock={setIsblock}
+                     isclose={setIsmenu}
                      />}
                 
                     

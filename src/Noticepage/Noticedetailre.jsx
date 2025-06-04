@@ -1,10 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Commentlist from "../List/Commentlist";
+import NoticeWeathericon from "../UI/Noticetools/NoticeWeathericon";
+import Datefor from "../List/noticeformlist/DateCom/Datefor";
+import theme from "../UI/Manyim/Themecss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import Noticemenu from "../List/noticeformlist/DateCom/Noticemenu";
+import CreateAxios from "../customhook/CreateAxios";
 
 const Wrapper=styled.div`
    position: relative;
@@ -34,15 +41,24 @@ const Headdatadiv=styled.div`
 `
 const Userdiv=styled.div`
     display: flex;
+    gap:5px;
     
+`
+
+const Nickdiv=styled.div`
+      color: ${(props)=>props.theme.text};
 `
 const Usernamediv=styled.div`
     display: flex;
+    color: gray;
 `
-const Nickdiv=styled.div`
+const Timediv=styled.div`
     
 `
 const Weatherdiv=styled.div`
+    margin-left: auto;
+`
+const Menudiv=styled.div`
     
 `
 const Titlediv=styled.div`
@@ -63,7 +79,10 @@ export default function Noticedetailre(props){
     
     const [page,setPage]=useState(1);
     const  {noticeid}=useParams();
-
+    const noticemenuref=useRef(null);
+    const [ismenu,setIsmenu]=useState(false);
+    const [isupdate,setIsupdate]=useState(false);
+    let axiosinstance=CreateAxios();
     console.log("노티스디테일")
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",noticeid],
         queryFn:async ()=>{
@@ -87,6 +106,45 @@ export default function Noticedetailre(props){
         }
     })
 
+
+    const weatherKeys = ['sky', 'rain', 'pty', 'temp', 'reh', 'wsd'];
+    const Weatherdata=weatherKeys.map((data)=> ({
+        type:data,
+        value:post?.[data]
+    }))
+
+    //메뉴관리
+    useEffect(()=>{
+        const noticemenuoutside=(e)=>{
+            if(noticemenuref.current&&!noticemenuref.current.contains(e.target)){
+                setIsmenu(false)
+            }
+        }
+        document.addEventListener("mousedown",noticemenuoutside);
+        return ()=>{
+            document.removeEventListener("mousedown",noticemenuoutside)
+        }
+    },[])
+
+    const postUpdate=()=>{
+    setIsupdate(true)
+
+ }
+
+ const postDelete=()=>{
+    if(window.confirm("정말로삭제하시겠습니까?")){
+      axiosinstance.delete(`/noticedelete/${post.id}`)
+      .then((res)=>{
+        alert("정상적으로삭제되었습니다")
+        //뒤로가기구현
+
+      }).catch((err)=>{
+        alert("에러가났어요")
+      })
+    }else{
+     // alert("삭제취소")
+    }
+ }
     return (
 <Wrapper>
         {noticeloading&&<>로딩중...</>}
@@ -105,23 +163,41 @@ export default function Noticedetailre(props){
      
          <Nickdiv>   {post.nickname}</Nickdiv>
          <Usernamediv> {post.username} </Usernamediv>
-
+    <Timediv>
+        <Datefor inputdate={post.red}/>
+         
+         </Timediv>
             <Weatherdiv>
-        pty:{post.pty},rain:{post.rain},reh:{post.reh},sky:{post.sky},temp:{post.temp},wsd:{post.wsd}
+                {Weatherdata&&Weatherdata.map((data)=>{
+                    return (
+             <NoticeWeathericon type={data.type} value={data.value}/>
+                    )
+                })}
+              
 
               </Weatherdiv>
+              <Menudiv onClick={()=>{setIsmenu(!ismenu)}} ref={noticemenuref}>
+                <FontAwesomeIcon onClick={()=>{setIsmenu(!ismenu)}}icon={faEllipsis} fontSize={"25px"}/>
+                
+                  {ismenu&&<Noticemenu 
+                    updatemethod={postUpdate} deletemethod={postDelete} noticeuser={post?.username} noticeid={post?.id}
+                    setisblock={null} isclose={setIsmenu}
+              />}
+            
+              </Menudiv>
+              
+            
        </Userdiv>
      
                 <Titlediv>
-                    제목:{post.title}
+                    {post.title}
                
-               
-         날짜:{post.red}
+           
          </Titlediv>
          </Headdatadiv>
          </Header>
          <NoticeMaindiv>
-        내용: <div dangerouslySetInnerHTML={{__html:post.text}} />
+         <div dangerouslySetInnerHTML={{__html:post.text}} />
         
        </NoticeMaindiv>
 
