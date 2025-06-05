@@ -33,12 +33,15 @@ flex-grow: 1;
 export default function AdminLeft(){
 
 
-    if(!window.location.pathname.includes("/admin")) return null
-
-    if(window.location.pathname.includes("/admin/loginhistory")) return null
     const navigate=useNavigate();
 
 
+       if (
+        !window.location.pathname.includes("/admin") ||
+        window.location.pathname.includes("/admin/loginhistory")
+    ) {
+        return null;
+    }
    
     return (
         <Wrapper>

@@ -27,34 +27,25 @@ export default function Twitformver(props){
      
    
        // const axiosinstance=CreateAxios();
-
         let [query,setQuery]=useSearchParams({ //기초값일꺼임
             form:"twitform",
             selectoptions:"title",
             keywords:"",
             pages:1
         })
-       
-      
-        const [notice,setNotice]=useState("");
-     
-      
-        
+       const [page,setPage]=useState(parseInt(query.get("pages")));
+          const [notice,setNotice]=useState("");
+                  
      const [isloading,setIsloading]=useState(false);
-
-      const [page,setPage]=useState(parseInt(query.get("pages")));
-    
-      const [totalpage,setTotalpage]=useState(1);
+      
+          const [totalpage,setTotalpage]=useState(1);
        const [ref,inView]=useInView();
       //console.log("프롭스렝스:"+totalpages.length)
        //로케이션으로 좋아요 와 일반게시글차이만들자
       const location=useLocation();
-       
-      
+             
        //스크롤페이지변경시 실행 
-       
-
-       
+             
        let islogin=AuthCheck();
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
@@ -102,15 +93,17 @@ export default function Twitformver(props){
        },[query])
       
 
-    const axiosinstance=islogin ? CreateAxios() : axios;
-
+   //훅규칙때매 여기서만들고 함수안에서분기
+const axiosinstance= CreateAxios() 
        const noticedata=(apiurl)=>{
-       
+        //외부에
+        //함수안에서분기
+        const instance=islogin?axiosinstance:axios;
         //값없을시 막기
         if (!apiurl) return;
         console.log(query.get("keywords"))
        setIsloading(true)
-        axiosinstance.get(apiurl,{
+        instance.get(apiurl,{
           params:{
           option:query.get("selectoptions"),
           keyword:query.get("keywords"),
@@ -124,14 +117,13 @@ export default function Twitformver(props){
                 console.log("자료가없어요!")
             }
             else{
-                
-                    
-                    
+                                                        
                     let arr=totalpageget(res.data.totalPages).length-1
                     setTotalpage(arr);
                     setNotice(prevNotice=>{
                         if(!prevNotice || prevNotice.length===0) return newcontent
 
+                        
                     return [...prevNotice,...newcontent]
             });
 
@@ -167,18 +159,11 @@ export default function Twitformver(props){
      
        //==============렌더링!==============================================================
        return (
-        <>
+        
        
         
        
         <Wrapper>
-       
-
-      
-       
-            
-    
-       
         {notice&&
         <div>
         {notice.map((post,key)=>{
@@ -202,6 +187,12 @@ export default function Twitformver(props){
             <div ref={ref} >마지막부분</div>
         </div>
         }
+  
+       
+            
+    
+       
+       
             
             
             
@@ -209,6 +200,6 @@ export default function Twitformver(props){
             
       
         </Wrapper>
-        </>
+        
     )
 }

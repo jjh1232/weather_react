@@ -67,8 +67,7 @@ width:15%;
 `
 function Header(){
 
-    if(window.location.pathname===`/userprofile`) return null
-    if(window.location.pathname.includes("/admin")) return null
+   
 
     const axiosinstance=CreateAxios();
     const [searchdata,setSearchdata]=useState();
@@ -137,8 +136,17 @@ delay : 감지에 딜레이를 추가할 수 있다. 예를 들어, 요소가 �
 const modalon=()=>{
 
 }
+// if(window.location.pathname===`/userprofile`) return null
+//if(window.location.pathname.includes("/admin")) return null
 
-if(window.location.pathname===`/manyimage`) return null
+//if(window.location.pathname===`/manyimage`) return null
+if (
+        window.location.pathname === `/userprofile` ||
+        window.location.pathname.includes("/admin") ||
+        window.location.pathname === `/manyimage`
+    ) {
+        return null;
+    }
     return (
         <>
         <Wrapper>

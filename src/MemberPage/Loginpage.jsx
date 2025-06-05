@@ -286,6 +286,24 @@ function Loginpage(props){
   const logincheck=AuthCheck();
 
 
+  let eventsource=null;
+
+
+    useEffect(()=>{
+    if(logincheck===true){
+      eventsource=sse();
+    }
+    else{
+      console.log("로그인안함")
+    }
+  },[logincheck])
+
+useEffect(()=>{
+    console.log("실행")
+    Setislogin(logincheck);
+   
+  },[islogin])
+
   //알람메세지가져오기
   const {data:notificount,isLoading,error}=useQuery({
     queryKey:["notificount"],
@@ -296,11 +314,7 @@ function Loginpage(props){
     },
     enabled:logincheck
   })
-  useEffect(()=>{
-    console.log("실행")
-    Setislogin(logincheck);
-   
-  },[islogin])
+  
 
 
  
@@ -352,25 +366,26 @@ function Loginpage(props){
     eventSource.close();
     
   }
+  return eventSource;
   }
-  useEffect(()=>{
-    if(logincheck===true){
-      sse();
-    }
-    else{
-      console.log("로그인안함")
-    }
-  },[])
+
 
 
   //oauth2로그인===================
 const googlelogin=()=>{
-  let googleurl= "http://localhost:8081/oauth2/authorization/google";
+  const prevpath=window.location.pathname;
+  //스태이트정보로 로그인시 현재페이지가게 인코딩안하면 특수문자때매이상해진다함
+  //스태이트만들었는데 뭐어저고저쩌고해서 안된다함
+  //이전페이지를 미리 저장해두고 성공페이지에서이동하자
+  localStorage.setItem("oauthbeforepath",window.location.pathname);
+  let googleurl= `http://localhost:8081/oauth2/authorization/google?state=${encodeURIComponent(prevpath)}`;
   document.location.href=googleurl;
 }
 
 const naverlogin=()=>{
-  let naverurl="http://localhost:8081/oauth2/authorization/naver";
+  const prevpath=window.location.pathname;
+  localStorage.setItem("oauthbeforepath",window.location.pathname);
+  let naverurl=`http://localhost:8081/oauth2/authorization/naver?state=${encodeURIComponent(prevpath)}`;
     document.location.href=naverurl;
 
     
@@ -448,16 +463,18 @@ const naverlogin=()=>{
 
   const logout=()=>{
 
-    axios.get("/memberlogout").then((res)=>{
-      
-    })
-    removeloginuser("userinfo");
+    axiosinstance.get("/memberlogout").then((res)=>{
+      console.log(res)
+    
+       removeloginuser("userinfo");
     removeloginuser("Refreshtoken");
     removeloginuser("Acesstoken");
     removeloginuser("weather")
     alert("로그아웃되었습니다")
     Setislogin(false)
-    navigate("/main")
+    navigate("/")
+    })
+   
   }
 
 

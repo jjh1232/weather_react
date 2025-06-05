@@ -33,10 +33,6 @@ width:15%;
 `
 function RightSideBar(){
 
-    if(window.location.pathname.includes("/admin")) return null
-    if(window.location.pathname===`/userprofile`) return null
-
-    if(window.location.pathname===`/manyimage`) return null
    
     //데이터에 정보를 넘겨주자 
 
@@ -120,6 +116,13 @@ if(window.location.pathname==="/noticecreate"){
     })
 }
     
+      if (
+        window.location.pathname.includes("/admin") ||
+        window.location.pathname === `/userprofile` ||
+        window.location.pathname === `/manyimage`
+    ) {
+        return null;
+    }
 
     return (
         

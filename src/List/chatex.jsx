@@ -293,7 +293,7 @@ function Chatex(props) {
     }
     useEffect(() => {
 
-        con()
+      //  con()
         //chatroomdataget()
         return () => disconect();
     }, [])

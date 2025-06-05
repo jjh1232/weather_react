@@ -55,6 +55,7 @@ import Mainout from "./UI/Manyim/Mainout";
 import Imageform from "./List/noticeformlist/Imageform/Imageform";
 import Twitformver from "./List/noticeformlist/Twitformver";
 import Noticedetailre from "./Noticepage/Noticedetailre";
+import OauthSuccesspage from "./UI/Manyim/OauthSuccesspage";
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
@@ -131,7 +132,7 @@ const updatetime=()=>{
 </Route>
     
      
-    
+    <Route path="/oauthsuccess" element={<OauthSuccesspage/>}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
    
     <Route path="notice" element={<CenterPage/>}/>
