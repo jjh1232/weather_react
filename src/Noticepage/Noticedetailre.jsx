@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Noticemenu from "../List/noticeformlist/DateCom/Noticemenu";
 import CreateAxios from "../customhook/CreateAxios";
+import Commentform from "./Commentform";
 
 const Wrapper=styled.div`
    position: relative;
@@ -204,7 +205,7 @@ export default function Noticedetailre(props){
         </Noticediv>
 
         }
-
+        <Commentform />
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
             <Commentlist comments={comment}/>

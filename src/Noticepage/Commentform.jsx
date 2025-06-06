@@ -13,7 +13,7 @@ const Wrapper=styled.div`
   width: 100%;
   min-height: 60px;
   max-height: fit-content;
-  border: 1px solid black;
+  border: 1px solid blue;
   word-break: break-all;
   overflow: hidden;
 `
@@ -22,9 +22,10 @@ const Img=styled.img`
   top:2px;
   left:0%;
   width: 60px;
-  height: 57px;
+  height: 55px;
   display:inline-block;
   border: 1px solid black;
+  background-color: white;
 `
 const Username=styled.span`
   position: absolute;
@@ -35,25 +36,40 @@ const Username=styled.span`
 `
 
 
-
+const Commentmaindiv=styled.div`
+  display: flex;
+  border: 1px solid green;
+`
 const Commentinput=styled.textarea`
 position: relative;
-display: inline-block;
+//display: inline-block;
 width: 85%;
 font-size: 20px;
 top: 25px;
 left:64px;
 
 
+
 `
+
 const CreateButton=styled.button`
 
-position: absolute;
-left: 87.2%;
+//position: absolute;
+//left: 87.2%;
 top:28%;
 width: 45px;
 height: 40px;
 `
+const Nologininput=styled.input`
+  padding: 5px;
+  margin: 3px;
+  width: 88%;
+  border-radius: 5%;
+`
+const Nologinbutton=styled.button`
+  
+`
+
 
 function Commentform(props){
   const [loginuser,Setloginuser,removeloginuser]=useCookies()
@@ -85,7 +101,7 @@ const resize=()=>{
     <Username>
     {loginuser.userinfo["nickname"]}님
     </Username>
-        
+        <Commentmaindiv>
         <Commentinput type="text" name="text" value={comments.text} 
         onInput={resize}
         rows={1}
@@ -112,12 +128,16 @@ const resize=()=>{
             textref.current.style.height="30px"
 
         }
-      }>댓글작성</CreateButton>
+      }>댓글작성
+      </CreateButton>
+      </Commentmaindiv>
     </Wrapper>
-    :<form>
-      <input type="text" value="로그인후작성하실수있습니다"/>
-      <button type="submit" >댓글작성</button>
+    :<Wrapper>
+    <form>
+      <Nologininput type="text" value="로그인후작성하실수있습니다"/>
+      <Nologinbutton type="submit" >댓글작성</Nologinbutton>
     </form>
+    </Wrapper>
 }
 </>
 
