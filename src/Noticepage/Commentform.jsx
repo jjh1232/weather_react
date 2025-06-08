@@ -6,19 +6,29 @@ import AuthCheck from "../customhook/authCheck";
 import CreateAxios from "../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 
 
 const Wrapper=styled.div`
   position: relative;
   width: 100%;
+  display: flex;
   min-height: 60px;
   max-height: fit-content;
   border: 1px solid blue;
   word-break: break-all;
   overflow: hidden;
 `
+const Imgdiv=styled.div`
+  border: 1px solid black;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+    justify-content: center;  /* 가로 중앙 정렬 */
+
+`
 const Img=styled.img`
-  position: absolute;
+  
   top:2px;
   left:0%;
   width: 60px;
@@ -27,8 +37,19 @@ const Img=styled.img`
   border: 1px solid black;
   background-color: white;
 `
+
+const Maindiv=styled.div`
+border: 1px solid yellow;
+flex-grow: 110;
+display: flex;
+flex-direction: column;
+`
+const Headerdiv=styled.div`
+border: 1px solid red;
+
+`
 const Username=styled.span`
-  position: absolute;
+
    left: 64px;
   font-size: 15px;
    
@@ -41,9 +62,9 @@ const Commentmaindiv=styled.div`
   border: 1px solid green;
 `
 const Commentinput=styled.textarea`
-position: relative;
+//position: relative;
 //display: inline-block;
-width: 85%;
+width: 92%;
 font-size: 20px;
 top: 25px;
 left:64px;
@@ -59,11 +80,12 @@ const CreateButton=styled.button`
 top:28%;
 width: 45px;
 height: 40px;
+margin-left: 5px;
 `
 const Nologininput=styled.input`
   padding: 5px;
   margin: 3px;
-  width: 88%;
+  width:88%;
   border-radius: 5%;
 `
 const Nologinbutton=styled.button`
@@ -72,8 +94,9 @@ const Nologinbutton=styled.button`
 
 
 function Commentform(props){
-  const [loginuser,Setloginuser,removeloginuser]=useCookies()
-  const {noticenum,depth,cnum,commentsubmit}=props
+ //,commentsubmit
+  const {noticenum,depth,cnum,page}=props
+  
   const logincheck=AuthCheck()
   const axiosinstance=CreateAxios();
   const [comments,setComment]=useState({
@@ -81,26 +104,60 @@ function Commentform(props){
     text:''
 
   });
+  const [cookie,setcookie,removecookie]=useCookies(['userinfo'])
+  const username=cookie.userinfo?.username;
+  const usernickname=cookie.userinfo?.usernickname;
+
   const url="/commentcreate";
 const navigate=useNavigate();
 
-
+const queryclient=useQueryClient()
 const textref=useRef()
+//자연스럽게늘리기
 const resize=()=>{
   textref.current.style.height=`auto`;
   textref.current.style.height=textref.current.scrollHeight+`px`;
 
 }
+const Commentcreate=async ({noticenum,depth,cnum,username,usernickname,comment})=>{
+  const res=await axiosinstance.post("/commentcreate",{
+      noticeid:noticenum,
+      depth:depth,
+      cnum:cnum,
+      username:username,
+      nickname:usernickname,
+      text:comment,
+      
+
+    })
+
+}
+const commentmutate=useMutation({
+   mutationFn:Commentcreate,
+   onSuccess:(data)=>{
+    queryclient.invalidateQueries({queryKey:["comments",noticeid,page]})
+   }
+})
+
+const Commenthandler=()=>{
+  mutation.mutate({noticenum,depth,cnum,username,usernickname,comments})
+}
 
   return (
     <>{logincheck?<Wrapper>
     
-      
-      <Img src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser.userinfo["profileimg"]}/>
-    
+      <Imgdiv>
+      <Img src={process.env.PUBLIC_URL+"/userprofileimg"+cookie.userinfo["profileimg"]}/>
+    </Imgdiv>
+
+    <Maindiv>
+
+      <Headerdiv>
     <Username>
-    {loginuser.userinfo["nickname"]}님
+    {cookie.userinfo["nickname"]}님
     </Username>
+    </Headerdiv>
+
         <Commentmaindiv>
         <Commentinput type="text" name="text" value={comments.text} 
         onInput={resize}
@@ -114,23 +171,17 @@ const resize=()=>{
 
 
 <CreateButton type="submit" onClick={()=>{
-          
-          commentsubmit(loginuser.userinfo["username"],
-            loginuser.userinfo["nickname"],
-            comments.text,
-            noticenum,
-           
-            depth,
-            cnum
-
-          )
+          Commenthandler(noticenum,depth,cnum,username,usernickname,comments.text)
+       
             setComment({text:""})
             textref.current.style.height="30px"
 
         }
       }>댓글작성
       </CreateButton>
+     
       </Commentmaindiv>
+      </Maindiv>
     </Wrapper>
     :<Wrapper>
     <form>
