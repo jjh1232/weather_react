@@ -168,7 +168,7 @@ const updatetime=()=>{
     </CookiesProvider>
 
     
-     <ReactQueryDevtools/>
+     <ReactQueryDevtools initialIsOpen={true}/>
      
     </QueryClientProvider>
      

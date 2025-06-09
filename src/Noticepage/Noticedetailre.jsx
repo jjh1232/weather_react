@@ -94,7 +94,8 @@ export default function Noticedetailre(props){
         }
     })
 
-      const {data:comment,isLoading:commentloading,error:commenterror}=useQuery({queryKey:["comments",noticeid,page],
+      const {data:comment,isLoading:commentloading,error:commenterror}=
+      useQuery({queryKey:["comments",noticeid,page],
         queryFn:async ()=>{
             const res=await axios.get( "/open/commentshow/",{
                 params:{
@@ -103,6 +104,8 @@ export default function Noticedetailre(props){
                 }
             });
               console.log("댓글:",res)
+              console.log("쿼리키노티스아이디:"+noticeid)
+              console.log("쿼리키노티스페이지:"+page)
             return res.data.content;
         }
     })
@@ -205,7 +208,7 @@ export default function Noticedetailre(props){
         </Noticediv>
 
         }
-        <Commentform />
+        <Commentform noticenum={post?.id} depth={0} cnum={0} page={page}/>
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
             <Commentlist comments={comment}/>

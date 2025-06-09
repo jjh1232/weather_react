@@ -99,14 +99,10 @@ function Commentform(props){
   
   const logincheck=AuthCheck()
   const axiosinstance=CreateAxios();
-  const [comments,setComment]=useState({
-   
-    text:''
-
-  });
+  const [comments,setComment]=useState();
   const [cookie,setcookie,removecookie]=useCookies(['userinfo'])
   const username=cookie.userinfo?.username;
-  const usernickname=cookie.userinfo?.usernickname;
+  const usernickname=cookie.userinfo?.nickname;
 
   const url="/commentcreate";
 const navigate=useNavigate();
@@ -119,14 +115,14 @@ const resize=()=>{
   textref.current.style.height=textref.current.scrollHeight+`px`;
 
 }
-const Commentcreate=async ({noticenum,depth,cnum,username,usernickname,comment})=>{
+const Commentcreate=async ({noticenum,depth,cnum,username,usernickname,comments})=>{
   const res=await axiosinstance.post("/commentcreate",{
       noticeid:noticenum,
       depth:depth,
       cnum:cnum,
       username:username,
       nickname:usernickname,
-      text:comment,
+      text:comments
       
 
     })
@@ -134,13 +130,21 @@ const Commentcreate=async ({noticenum,depth,cnum,username,usernickname,comment})
 }
 const commentmutate=useMutation({
    mutationFn:Commentcreate,
-   onSuccess:(data)=>{
-    queryclient.invalidateQueries({queryKey:["comments",noticeid,page]})
+   onSuccess:(data,variable)=>{
+     setComment({text:""})
+     const noticenum=String(variable.noticenum);
+     alert("성공후아이디:"+variable.noticenum+",페이지"+page)
+    queryclient.invalidateQueries({queryKey:["comments",noticenum,page]})
+    //queryclient.refetchQueries({ queryKey: ["comments", variable.noticenum, page] });
+   },
+   onError:(err)=>{
+    alert("에러")
    }
 })
 
-const Commenthandler=()=>{
-  mutation.mutate({noticenum,depth,cnum,username,usernickname,comments})
+const Commenthandler=(noticenum,depth,cnum,username,usernickname,comments)=>{
+
+  commentmutate.mutate({noticenum,depth,cnum,username,usernickname,comments})
 }
 
   return (
@@ -159,21 +163,21 @@ const Commenthandler=()=>{
     </Headerdiv>
 
         <Commentmaindiv>
-        <Commentinput type="text" name="text" value={comments.text} 
+        <Commentinput type="text" name="text" value={comments?.text} 
         onInput={resize}
         rows={1}
         ref={textref}
         onChange={(e)=>{
-          setComment({...comments,text:e.target.value})
+          setComment(e.target.value)
         }}
         />
        
 
 
 <CreateButton type="submit" onClick={()=>{
-          Commenthandler(noticenum,depth,cnum,username,usernickname,comments.text)
+          Commenthandler(noticenum,depth,cnum,username,usernickname,comments)
        
-            setComment({text:""})
+           
             textref.current.style.height="30px"
 
         }
@@ -184,10 +188,10 @@ const Commenthandler=()=>{
       </Maindiv>
     </Wrapper>
     :<Wrapper>
-    <form>
+   
       <Nologininput type="text" value="로그인후작성하실수있습니다"/>
       <Nologinbutton type="submit" >댓글작성</Nologinbutton>
-    </form>
+   
     </Wrapper>
 }
 </>
