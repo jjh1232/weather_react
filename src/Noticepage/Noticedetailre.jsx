@@ -85,6 +85,7 @@ export default function Noticedetailre(props){
     const [isupdate,setIsupdate]=useState(false);
     let axiosinstance=CreateAxios();
     console.log("노티스디테일")
+   
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",noticeid],
         queryFn:async ()=>{
             const res=await axios.get("/open/noticedetail/"+noticeid);
@@ -211,7 +212,7 @@ export default function Noticedetailre(props){
         <Commentform noticenum={post?.id} depth={0} cnum={0} page={page}/>
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
-            <Commentlist comments={comment}/>
+            <Commentlist comments={comment} noticeid={post.id}/>
         </>}
 </Wrapper>
     )

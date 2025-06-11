@@ -133,9 +133,10 @@ const commentmutate=useMutation({
    onSuccess:(data,variable)=>{
      setComment({text:""})
      const noticenum=String(variable.noticenum);
-     alert("성공후아이디:"+variable.noticenum+",페이지"+page)
+     // alert("페이지타입:"+typeof page+"글번호:"+typeof noticenum)
+    // alert("성공후아이디:"+noticenum+",페이지"+page)
     queryclient.invalidateQueries({queryKey:["comments",noticenum,page]})
-    //queryclient.refetchQueries({ queryKey: ["comments", variable.noticenum, page] });
+    //queryclient.refetchQueries({ queryKey: ["comments", noticenum, page] });
    },
    onError:(err)=>{
     alert("에러")

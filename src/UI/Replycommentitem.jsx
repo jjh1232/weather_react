@@ -15,7 +15,7 @@ import { useRef } from "react";
 
 const Wrapper=styled.div`
     display: flex;
-    padding-left: 6%;
+    padding-left: 5%;
     border: 1px solid red;
     max-height: ${(props)=>props.over?"none":"120px"};
     width: 95%;
@@ -32,10 +32,12 @@ const MainDiv=styled.div`
     flex-direction: column;
     border:1px solid black;
     flex:1;
+
     position: relative;
 `
 const MainHeader=styled.div`
     display: flex;
+  
     border: 1px solid blue;
     gap: 5px;
 `
@@ -63,7 +65,7 @@ const Upanddeletediv=styled.div`
 `
 const MainText=styled.div`
     border: 1px solid green;
-    
+   
    // overflow: hidden;
 `
 const Overflowdiv=styled.div`
@@ -126,8 +128,7 @@ ${(props)=>{
       background: blue;
   `;
     case "noticeform":
-      return 
-      css`
+      return css`
       width:95%;
       background: yellow;
   `;
@@ -135,7 +136,7 @@ ${(props)=>{
 
 }}
 
-`
+`;
 
 function Replycommentitem(props){
 const {comment,commentupdate,commentdelete,formstyle}=props
@@ -199,7 +200,7 @@ if(commentref.current){
             <Profilediv>
              <Profileview>
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}  />
+   style={{objectFit:"fill",width:"100%",height:"100%",background:"white"}}  />
                </Profileview>
                </Profilediv>
                <MainDiv>

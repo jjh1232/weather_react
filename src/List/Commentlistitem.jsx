@@ -8,12 +8,53 @@ import { Navigate } from "react-router-dom";
 import AuthCheck from "../customhook/authCheck";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
+import Datefor from "./noticeformlist/DateCom/Datefor";
 
 
 const Wrapper=styled.div`
-  
+  display: flex;
 border-bottom:1px solid;
 
+`
+const Profilediv=styled.div`
+border: 1px solid black;
+  width: 8%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const Profileimg=styled.img`
+  width: 50px;
+  height: 50px;
+  background-color: white;
+`
+const Maindiv=styled.div`
+  display: flex;
+  flex-direction:column;
+  width: 90%;
+  border: 1px solid red;
+`
+const Headerdiv=styled.div`
+  display: flex;
+  width: 100%;
+  
+`
+const Usernamediv=styled.div`
+  
+`
+const Nicknamediv=styled.div`
+    
+`
+const Timediv=styled.div`
+ 
+`
+const Usermenudiv=styled.div`
+  margin-left: auto;
+  
+`
+const Maintextdiv=styled.div`
+  
 `
 function Commentlistitem(props){
 
@@ -42,8 +83,8 @@ function Commentlistitem(props){
  
 
   return (
-    <Wrapper>
-      {isupdate?<div className="isupdate">
+    <>
+      {isupdate?<Wrapper className="isupdate">
         {data.nickname}님<br/>
               
             <input type="text" defaultValue={data.text} onChange={(e)=>{Setupdatecomment(e.target.value)}} /><br/>
@@ -54,15 +95,28 @@ function Commentlistitem(props){
                     
                     }}/>
                   <Button title="취소" onClick={()=>{Setisupdate(false)}}/>
-        </div>
-      :<div  onClick={()=>{
+        </Wrapper>
+      :<Wrapper  onClick={()=>{
         Setreplyclick(!replyclick)
     }}
     >
+      <Profilediv>
+        <Profileimg src={process.env.PUBLIC_URL+"/userprofileimg/"+data.userprofile}/>
+        
+      </Profilediv>
+      <Maindiv>
+        <Headerdiv>
+          <Nicknamediv>
+      {data.nickname}
+      </Nicknamediv> 
+      <Usernamediv>
+        {data.username}
+      </Usernamediv>
+      <Timediv>
+       <Datefor inputdate={data.redtime } colors={"red"}/>
+      </Timediv>
       
-      {data.nickname}님 <br/>
-      {data.text}<br/>
-      {data.redtime} <br/>
+     <Usermenudiv>
       
       {islogin &&<div>
       {loginuser.userinfo["username"]===data.username? 
@@ -80,7 +134,13 @@ function Commentlistitem(props){
       :""}
       </div>       
   }
-</div>
+  </Usermenudiv>
+  </Headerdiv>
+  <Maintextdiv>
+    {data.text}
+  </Maintextdiv>
+  </Maindiv>
+</Wrapper>
 }
     {replyclick?
           <Commentform 
@@ -89,11 +149,11 @@ function Commentlistitem(props){
            
            depth="1"
            cnum={data.id}
-           commentsubmit={commentcreate}
+           page={1}
              />
              :""}
 
-    </Wrapper>
+    </>
 
 
   )
