@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Commentform from "../Noticepage/Commentform";
 import { useCookies } from "react-cookie";
@@ -9,20 +9,24 @@ import AuthCheck from "../customhook/authCheck";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import Datefor from "./noticeformlist/DateCom/Datefor";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis  } from "@fortawesome/free-solid-svg-icons";
+import CommentMenu from "../UI/Buttonlist/CommentMenu";
 
 const Wrapper=styled.div`
   display: flex;
-border-bottom:1px solid;
+border-bottom:1px solid gray;
+gap: 5px;
 
 `
 const Profilediv=styled.div`
 border: 1px solid black;
-  width: 8%;
-  height: 60px;
+  
+  min-height: 55px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 3px;
 `
 const Profileimg=styled.img`
   width: 50px;
@@ -32,25 +36,30 @@ const Profileimg=styled.img`
 const Maindiv=styled.div`
   display: flex;
   flex-direction:column;
-  width: 90%;
-  border: 1px solid red;
+  width: 100%;
+ 
 `
 const Headerdiv=styled.div`
   display: flex;
   width: 100%;
+  gap:5px;
   
 `
 const Usernamediv=styled.div`
-  
+   color:gray;
+   position: relative;
+   font-size: 13px;
+   top: 2px;
 `
 const Nicknamediv=styled.div`
-    
+  color:${(props)=>props.theme.text}  ;
 `
 const Timediv=styled.div`
  
 `
 const Usermenudiv=styled.div`
   margin-left: auto;
+  margin-right:5px;
   
 `
 const Maintextdiv=styled.div`
@@ -65,8 +74,8 @@ function Commentlistitem(props){
   const [updatecomment,Setupdatecomment]=useState();
   const [islogin,Setislogin]=useState(false);
   const axiosinstance=CreateAxios();
-  
-  
+  const [ismenu,setisMenu]=useState(false);
+  const menuref=useRef(false)
   
   
   useEffect(()=>{
@@ -77,8 +86,18 @@ function Commentlistitem(props){
     }
   },[islogin])
   
-  console.log("코멘트")
-  console.log(islogin)
+  
+  useEffect(()=>{
+    const menuclickout=(event)=>{
+      if(ismenu &&menuref.current && !menuref.current.contains(event.target)){
+        setisMenu(false)
+      }
+    }
+  document.addEventListener("mousedown",menuclickout);
+  return ()=>{
+    document.removeEventListener("mousedown",menuclickout)
+  }
+  },[ismenu])
   
  
 
@@ -94,7 +113,8 @@ function Commentlistitem(props){
                     Setisupdate(commentupdate(data.id,data.username,updatecomment,e))
                     
                     }}/>
-                  <Button title="취소" onClick={()=>{Setisupdate(false)}}/>
+                  <Button title="취소" onClick={(e)=>{ e.stopPropagation() 
+                    Setisupdate(!ismenu)}}/>
         </Wrapper>
       :<Wrapper  onClick={()=>{
         Setreplyclick(!replyclick)
@@ -112,28 +132,14 @@ function Commentlistitem(props){
       <Usernamediv>
         {data.username}
       </Usernamediv>
+      
       <Timediv>
-       <Datefor inputdate={data.redtime } colors={"red"}/>
+       <Datefor inputdate={data.redtime } colors={"gray"}/>
       </Timediv>
       
-     <Usermenudiv>
-      
-      {islogin &&<div>
-      {loginuser.userinfo["username"]===data.username? 
-      <div>
-      <Button title="수정" onClick={()=>{
-              Setisupdate(true)
-      }}/>
-      <Button title="삭제" onClick={()=>{
-         if(window.confirm("정말로삭제하시겠습니까?")){
-              
-              Setisupdate(commentdelete(data.id));
-         }
-            }}/>
-      </div>
-      :""}
-      </div>       
-  }
+     <Usermenudiv ref={menuref}>
+      <FontAwesomeIcon icon={faEllipsis} size="xl" onClick={()=>{setisMenu(true)}}/>
+      {ismenu&&<CommentMenu/>}
   </Usermenudiv>
   </Headerdiv>
   <Maintextdiv>
@@ -158,4 +164,4 @@ function Commentlistitem(props){
 
   )
 }
-export default Commentlistitem
+export default Commentlistitem;
