@@ -16,6 +16,9 @@ const Wrapper=styled.div`
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); // 호버 시 그림자 강조
   }
 `
+const Commentmenulist=styled.div`
+    width: 100%;
+`
 
 export default function CommentMenu(props){
     const {nickname,ismenu}=props;
@@ -23,6 +26,16 @@ export default function CommentMenu(props){
 
     const logincheck=AuthCheck();
 
+    const menuList=[
+        {label:"팔로우",onClick:deletemethod},
+        ...(logincheck ?[
+            {label:"삭제",onClick:deletemethod}
+        ]:[])
+    ]
+
+    const deletemethod=()=>{
+
+    }
 
 
     return (

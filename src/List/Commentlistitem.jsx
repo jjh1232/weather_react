@@ -17,21 +17,28 @@ const Wrapper=styled.div`
   display: flex;
 border-bottom:1px solid gray;
 gap: 5px;
+padding-top: 5px;
+padding-bottom: 8px;
 
 `
 const Profilediv=styled.div`
-border: 1px solid black;
-  
+
+  position: relative;
   min-height: 55px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  
   margin-left: 3px;
+  top: 2px;
 `
 const Profileimg=styled.img`
   width: 50px;
   height: 50px;
   background-color: white;
+  border: 1px solid black;
+  object-fit: cover;
+   flex-shrink: 0;    // flex item이 줄어들거나 늘어나지 않게 고정
+  flex-grow: 0;
+    display: block;    
 `
 const Maindiv=styled.div`
   display: flex;
@@ -91,12 +98,14 @@ function Commentlistitem(props){
     const menuclickout=(event)=>{
       if(ismenu &&menuref.current && !menuref.current.contains(event.target)){
         setisMenu(false)
-      }
+      
     }
+  }
   document.addEventListener("mousedown",menuclickout);
   return ()=>{
     document.removeEventListener("mousedown",menuclickout)
   }
+
   },[ismenu])
   
  
@@ -137,8 +146,8 @@ function Commentlistitem(props){
        <Datefor inputdate={data.redtime } colors={"gray"}/>
       </Timediv>
       
-     <Usermenudiv ref={menuref}>
-      <FontAwesomeIcon icon={faEllipsis} size="xl" onClick={()=>{setisMenu(true)}}/>
+     <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setisMenu(!ismenu)}}>
+      <FontAwesomeIcon icon={faEllipsis} size="xl" />
       {ismenu&&<CommentMenu/>}
   </Usermenudiv>
   </Headerdiv>
