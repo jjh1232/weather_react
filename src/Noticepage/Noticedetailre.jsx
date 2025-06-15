@@ -212,7 +212,7 @@ export default function Noticedetailre(props){
         <Commentform noticenum={post?.id} depth={0} cnum={0} page={page}/>
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
-            <Commentlist comments={comment} noticeid={post.id}/>
+            <Commentlist comments={comment} noticeid={post.id} page={page}/>
         </>}
 </Wrapper>
     )

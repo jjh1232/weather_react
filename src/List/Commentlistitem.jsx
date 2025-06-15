@@ -74,7 +74,7 @@ const Maintextdiv=styled.div`
 `
 function Commentlistitem(props){
 
-  const {data,noticeid, commentcreate,commentupdate,commentdelete}=props
+  const {data,noticeid, page,commentcreate,commentupdate,commentdelete}=props
   const [replyclick,Setreplyclick]=useState(false);
   const [loginuser,Setloginuser,removeloginuser]=useCookies()
   const [isupdate,Setisupdate]=useState(false) 
@@ -148,7 +148,7 @@ function Commentlistitem(props){
       
      <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setisMenu(!ismenu)}}>
       <FontAwesomeIcon icon={faEllipsis} size="xl" />
-      {ismenu&&<CommentMenu/>}
+      {ismenu&&<CommentMenu commentid={data.id} noticeid={noticeid} page={page}/>}
   </Usermenudiv>
   </Headerdiv>
   <Maintextdiv>

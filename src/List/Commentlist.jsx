@@ -4,7 +4,7 @@ import Commentform from "../Noticepage/Commentform";
 import Replycomment from "../UI/Replycomment";
 function Commentlist(props){
 
-  const {comments,noticeid,commentcreate,commentupdate,commentdelete}=props
+  const {comments,noticeid,page,commentcreate,commentupdate,commentdelete}=props
   //const [comment]=[{}] 
     
   
@@ -37,12 +37,15 @@ console.log(comments)
                   key={key}
                   data={coment}
                   noticeid={noticeid}
+                  page={page}
                   commentcreate={commentcreate}
                   commentupdate={commentupdate}
                   commentdelete={commentdelete}
                  />
                  
                  <Replycomment parentid={coment.id} commentslist={comments}
+                     noticeid={noticeid}
+                   page={page}
                  commentupdate={commentupdate}
                  commentdelete={commentdelete}
                  />

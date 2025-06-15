@@ -116,6 +116,8 @@ function Followlist(props){
         
         
        })
+
+       
        
        const favoritemutation=useMutation({
         mutationFn:(friendname)=>{
