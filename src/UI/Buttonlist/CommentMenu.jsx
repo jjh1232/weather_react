@@ -2,8 +2,9 @@ import React from "react";
 import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import AuthCheck from "../../customhook/authCheck";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateAxios from "../../customhook/CreateAxios";
+import { use } from "react";
 
 const Wrapper=styled.div`
     background-color: gray;
@@ -25,19 +26,14 @@ const Commentmenulist=styled.div`
 `
 
 export default function CommentMenu(props){
-    const {nickname,ismenu,commentid,noticeid,page}=props;
+    const {nickname,ismenu,isupdate,commentid,noticeid,page,cid}=props;
     const [cookie,setcookie,removecookie]=useCookies(["userinfo"])
 
     const logincheck=AuthCheck();
     const axiosinstance=CreateAxios();
     const queryclient=useQueryClient();
-
-    const menuList=[
-        {label:"팔로우",onClick:console.log("팔로우"),color:"black"},
-        ...(logincheck ?[
-            {label:"삭제",onClick:()=>deletehandler(commentid),color:"red"}
-        ]:[])
-    ]
+    
+    
     //삭제
     const deletehandler=(commentid)=>{
         console.log("삭제시작코멘트아이디"+commentid)
@@ -76,11 +72,76 @@ export default function CommentMenu(props){
     
        
     )
-    //
+    // 업데이트관련
+    const updatehandler=()=>{
+        isupdate(true)
+       // ismenu(true)
+    }
+    //팔로우체크 
+    const {data:followcheck,isLoading,isError}=useQuery({
+        queryKey:["followcheck",cookie.userinfo.userid,cid],
+        queryFn:async ()=>{
+            const res=await axiosinstance.get(`/followchecktwo/${cid}`)
+            console.log("팔로우체크 "+res.data)
+            return res.data;
+        }
+
+    })
+    //팔로우 하기 
+    const followmutation=useMutation({
+        mutationFn:(cid)=> axiosinstance.post(`/follow/${cid}`),
+        onSuccess:()=>{
+            alert("팔로우성공")
+            queryclient.invalidateQueries(["followcheck",cookie.userinfo.userid,cid])
+            queryclient.invalidateQueries(["followlistdata",cookie.userinfo.userid])
+        },
+        onError:()=>{
+            alert("에러입니다잠시기다려주세요")
+        }
+    })
+
+    //팔로우끊기
+    const unfollowmutation=useMutation({
+        mutationFn:(cid)=> axiosinstance.delete(`/follow/delete/${cid}`),
+        onSuccess:()=>{
+            alert("언팔로우")
+            queryclient.invalidateQueries(["followcheck",cookie.userinfo.userid,cid])
+             queryclient.invalidateQueries(["followlistdata",cookie.userinfo.userid])
+        },
+        onError:()=>{
+            alert("에러입니다")
+        }
+    })
+
+    //팔로우핸들러
+    const followhandler=(cid)=>{
+        if(followcheck){
+        console.log("팔로우중")
+       unfollowmutation.mutate(cid)
+        }else{
+ console.log("팔로우안하고있음")
+         followmutation.mutate(cid)
+        }
+    }
+
+    const menuList=[
+        ...(cookie.userinfo.userid !==cid?[{
+                 label:followcheck?"팔로우해제":"팔로우",onClick:()=>{
+           followhandler(cid)
+        },color:"black"
+        }]:[
+          {label:"삭제하기",onClick:()=>deletehandler(commentid),color:"red"},
+            {label:"수정하기",onClick:()=>updatehandler(),color:"black"}
+        ])
+       
+      
+    ]
+
 
 
     return (
         <Wrapper onClick={(e)=>e.stopPropagation()}>
+            
        {menuList.map((list)=>{
         return (
             <Commentmenulist onClick={list.onClick} color={list.color}>

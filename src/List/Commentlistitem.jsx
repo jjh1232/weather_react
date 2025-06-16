@@ -144,11 +144,14 @@ function Commentlistitem(props){
       
       <Timediv>
        <Datefor inputdate={data.redtime } colors={"gray"}/>
+       
       </Timediv>
       
      <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setisMenu(!ismenu)}}>
       <FontAwesomeIcon icon={faEllipsis} size="xl" />
-      {ismenu&&<CommentMenu commentid={data.id} noticeid={noticeid} page={page}/>}
+      {ismenu&&<CommentMenu commentid={data.id} noticeid={noticeid} page={page} 
+        ismenu={setisMenu} isupdate={Setisupdate} cid={data.cid}
+      />}
   </Usermenudiv>
   </Headerdiv>
   <Maintextdiv>

@@ -8,6 +8,7 @@ import Profilediv from "../../UI/Modals/Profilediv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as favoriteicon} from "@fortawesome/free-solid-svg-icons";
 import { faStar as unfavoriteicon } from "@fortawesome/free-regular-svg-icons";
+import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
 
@@ -71,14 +72,14 @@ function Favoritelist(props){
     );
 
 
-    
+        const [usercookie]=useCookies(["userinfo"])
 
  
 
 
     
      const {data:favoritefollow,isLoading,error}=useQuery({
-        queryKey:["favoritelistdata"],
+        queryKey:["favoritelistdata",usercookie.userinfo.userid],
         queryFn:async ()=>{
             const res = await axiosinstance.get("/favoritelist")
 
@@ -92,14 +93,14 @@ function Favoritelist(props){
             axiosinstance.get(`/favoriteunfollow/${friendname}`)
         }
         ,onSuccess:(res,friendname)=>{
-            const olddata=queryclient.getQueryData(["favoritelistdata"])
+            const olddata=queryclient.getQueryData(["favoritelistdata",usercookie.userinfo.userid])
             const newdata=olddata.filter((data)=>{
 
                 return data.username!==friendname
             })
            
 
-            queryclient.setQueriesData(["favoritelistdata"],newdata)
+            queryclient.setQueriesData(["favoritelistdata",usercookie.userinfo.userid],newdata)
             alert ("즐겨찾기에서제거하였습니다")
 
         },onError:()=>{

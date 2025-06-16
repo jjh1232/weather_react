@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
+import { useCookies } from "react-cookie";
 
 
 const Wrapper=styled.div`
@@ -73,7 +74,7 @@ function Followerlist(props){
      );
  
  
-     
+     const [usercookie]=useCookies(["userinfo"])
      useEffect(()=>{
         if(ismodal){
         console.log("실행감지")
@@ -97,7 +98,7 @@ function Followerlist(props){
 
    
      const {data:followerlist,isLoading,error}=useQuery({
-        queryKey:["followerlist"],
+        queryKey:["followerlist",usercookie.userinfo.userid],
         queryFn:async ()=>{
             const res=await axiosinstance.get("/followerlist")
             
@@ -111,13 +112,13 @@ function Followerlist(props){
         mutationFn:(username)=>{
             axiosinstance.get("/follow?friendname="+username)
         },onSuccess:(res,username)=>{
-            const olddata=queryclient.getQueryData(["followerlist"])
+            const olddata=queryclient.getQueryData(["followerlist",usercookie.userinfo.userid])
             console.log("이전데이터"+olddata[0])
             const newdata=olddata.map((data)=>{
 
                 return data.username===username?{...data,followcheck:true}:data
         })
-            queryclient.setQueriesData(["followerlist"],newdata)
+            queryclient.setQueriesData(["followerlist",usercookie.userinfo.userid],newdata)
             alert("팔로우하였습니다")
         },onError:()=>{
             alert("에러!")
@@ -135,13 +136,13 @@ function Followerlist(props){
         mutationFn:(username)=>{
             axiosinstance.delete(`/followdelete/${username}`)
         },onSuccess:(res,username)=>{
-            const olddata=queryclient.getQueryData(["followerlist"])
+            const olddata=queryclient.getQueryData(["followerlist",usercookie.userinfo.userid])
             console.log("이전데이터"+olddata[0])
             const newdata=olddata.map((data)=>{
 
                 return data.username===username?{...data,followcheck:false}:data
         })
-            queryclient.setQueriesData(["followerlist"],newdata)
+            queryclient.setQueriesData(["followerlist",usercookie.userinfo.userid],newdata)
             alert("팔로우하였습니다")
         },onError:()=>{
             alert("에러!")

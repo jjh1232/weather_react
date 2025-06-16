@@ -9,7 +9,7 @@ import Commentlistitem from "../List/Commentlistitem";
 import CreateAxios from "../customhook/CreateAxios";
 
 function Replycomment(props){
-  const{commentslist,parentid,commentupdate,commentdelete,formstyle} =props
+  const{commentslist,parentid,commentupdate,commentdelete,formstyle,noticeid,page} =props
   const[loginuser,Setloginuser,removeloginuser]=useCookies();
   const [isupdate,Setisupdate]=useState(false);
   const [updatecomment,Setupdatecomment]=useState();
@@ -33,6 +33,8 @@ function Replycomment(props){
             //여기서 대댓글은 댓글단곳에만달게한다
           parentid===comment.cnum &&
           <Replycommentitem comment={comment}
+          noticeid={noticeid}
+          page={page}
           commentupdate={commentupdate}
                   commentdelete={commentdelete}
               formstyle={formstyle}

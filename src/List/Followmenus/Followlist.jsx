@@ -11,6 +11,7 @@ import { faStar as favorite} from "@fortawesome/free-solid-svg-icons";
 import { faStar as unfavorite } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
+import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
 
@@ -81,7 +82,7 @@ function Followlist(props){
              y:0
          }
      );
- 
+     const [usercookie]=useCookies(["userinfo"])
  
      useEffect(()=>{
          console.log("실행감지")
@@ -106,7 +107,7 @@ function Followlist(props){
 
 
        const {data:followlist,isLoading,error}=useQuery({
-        queryKey:["followlistdata"],
+        queryKey:["followlistdata",usercookie.userinfo.userid],
         queryFn: async()=>{
             const res= await axiosinstance.get("/followlist")
             return res.data
@@ -126,13 +127,13 @@ function Followlist(props){
             
            //이건비효율 queryclient.invalidateQueries("followlistdata")
 
-           const olddata=queryclient.getQueriesData(["followlistdata"])
+           const olddata=queryclient.getQueriesData(["followlistdata",usercookie.userinfo.userid])
            const newdata=olddata[0][1].map((data)=>{
 
             return data.username===friendname?{...data,favorite:true}:data
            })
 
-           queryclient.setQueriesData(["followlistdata"],newdata)
+           queryclient.setQueriesData(["followlistdata",usercookie.userinfo.userid],newdata)
            alert("성공적으로 즐겨찾기에추가했습니다")
         }
        })
@@ -144,7 +145,7 @@ function Followlist(props){
         mutationFn:(friendname)=>{
             axiosinstance.get(`/favoriteunfollow/${friendname}`)
         },onSuccess:(data,friendname)=>{
-          const olddata= queryclient.getQueriesData(["followlistdata"])
+          const olddata= queryclient.getQueriesData(["followlistdata",usercookie.userinfo.userid])
          
           
             //id값은 안쓰고 유저네임으로하니까
@@ -156,7 +157,7 @@ function Followlist(props){
            })
                   
           
-          queryclient.setQueriesData(["followlistdata"],newdata)
+          queryclient.setQueriesData(["followlistdata",usercookie.userinfo.userid],newdata)
             alert("즐겨찾기를해제하였습니다")
             
         }
@@ -172,7 +173,7 @@ function Followlist(props){
         },
         onSuccess:(data,friendname)=>{
 
-            const olddata=queryclient.getQueriesData(["followlistdata"])
+            const olddata=queryclient.getQueriesData(["followlistdata",usercookie.userinfo.userid])
             //삭제라 필터
             const newdata= olddata[0][1].filter((data)=>{
          
@@ -181,7 +182,7 @@ function Followlist(props){
 
                  })
                       
-                 queryclient.setQueriesData(["followlistdata"],newdata)
+                 queryclient.setQueriesData(["followlistdata",usercookie.userinfo.userid],newdata)
                   alert("팔로우를해제하였습니다")
 
         },onError:()=>{
@@ -204,6 +205,9 @@ function Followlist(props){
     return (
         <Wrapper>
         <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
+            유저아이디:{usercookie.userinfo.userid}
+            유저아이디타입:{typeof usercookie.userinfo.userid}
+            <br/>
         목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> 
         </Searchdiv>
         <Userlistdiv>

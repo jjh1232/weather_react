@@ -167,7 +167,7 @@ const Upanddeletediv=styled.div`
 
 
 function Replycommentitem(props){
-const {comment,commentupdate,commentdelete,formstyle}=props
+const {comment,commentupdate,commentdelete,formstyle,noticeid,page}=props
 const [isupdate,Setisupdate]=useState(false);
 const[loginuser,Setloginuser,removeloginuser]=useCookies();
   const [updatecomment,Setupdatecomment]=useState();
@@ -253,7 +253,9 @@ useEffect(()=>{
          <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setisMenu(!ismenu)}}>
               <FontAwesomeIcon icon={faEllipsis} size="xl" />
               
-              {ismenu&&<CommentMenu/>}               
+              {ismenu&&<CommentMenu noticeid={noticeid} page={page} commentid={comment.id}
+              ismenu={setisMenu} isupdate={Setisupdate}
+              />}               
           </Usermenudiv>
             
              </MainHeader>

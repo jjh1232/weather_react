@@ -213,7 +213,7 @@ function ChatUi(props){
            
            <Mainscreen > 
            
-           {tapmenu[content]}
+           {islogin&&tapmenu[content]}
           
            </Mainscreen>
          
