@@ -210,6 +210,10 @@ useEffect(()=>{
 
 },[ismenu])
   
+ const textcopy=async ()=>{
+    await navigator.clipboard.writeText(comment.text)
+    alert("댓글이 복사되었습니다")
+  }
 
   return(
             <>
@@ -254,7 +258,8 @@ useEffect(()=>{
               <FontAwesomeIcon icon={faEllipsis} size="xl" />
               
               {ismenu&&<CommentMenu noticeid={noticeid} page={page} commentid={comment.id}
-              ismenu={setisMenu} isupdate={Setisupdate}
+              ismenu={setisMenu} isupdate={Setisupdate} cusername={comment.username}
+              textcopy={textcopy}
               />}               
           </Usermenudiv>
             

@@ -168,7 +168,7 @@ const axiosinstance= CreateAxios()
         <div>
         {notice.map((post,key)=>{
             return (
-                <>
+                <React.Fragment key={key}>
 
                 <Twitformlist
                 key={key} post={post} 
@@ -176,7 +176,7 @@ const axiosinstance= CreateAxios()
             
             <br/>
            
-            </>
+            </React.Fragment>
             )
     
         }

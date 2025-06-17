@@ -29,7 +29,7 @@ console.log(comments)
               {comments&&comments.map((coment,key)=>{
                 return(
                   
-                   <React.Fragment>
+                   <React.Fragment key={key}>
                     {coment.depth===0 &&
                     <div>
                  <Commentlistitem 

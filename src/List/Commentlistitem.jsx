@@ -108,6 +108,10 @@ function Commentlistitem(props){
 
   },[ismenu])
   
+  const textcopy=async ()=>{
+    await navigator.clipboard.writeText(data.text)
+    alert("댓글이 복사되었습니다")
+  }
  
 
   return (
@@ -150,7 +154,8 @@ function Commentlistitem(props){
      <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setisMenu(!ismenu)}}>
       <FontAwesomeIcon icon={faEllipsis} size="xl" />
       {ismenu&&<CommentMenu commentid={data.id} noticeid={noticeid} page={page} 
-        ismenu={setisMenu} isupdate={Setisupdate} cid={data.cid}
+        ismenu={setisMenu} isupdate={Setisupdate} cid={data.cid} cusername={data.username}
+        textcopy={textcopy}
       />}
   </Usermenudiv>
   </Headerdiv>

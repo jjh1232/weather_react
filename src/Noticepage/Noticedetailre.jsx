@@ -173,9 +173,9 @@ export default function Noticedetailre(props){
          
          </Timediv>
             <Weatherdiv>
-                {Weatherdata&&Weatherdata.map((data)=>{
+                {Weatherdata&&Weatherdata.map((data,key)=>{
                     return (
-             <NoticeWeathericon type={data.type} value={data.value}/>
+             <NoticeWeathericon type={data.type} value={data.value} key={key}/>
                     )
                 })}
               

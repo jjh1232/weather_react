@@ -40,8 +40,8 @@ export default function Imageform(){
     const {
         data:imgnoticelist, //받아온전체데이터 (페이지별로쌓인다)
         fetchNextPage, //다음페이지를 불러오는함수
-        hasNextPage, //다음페이지존재여부
-        isFetchingNextPage, //다음페이지불러오는중인지여부
+        hasNextPage, //다음페이지존재여부 존재할시true
+        isFetchingNextPage, //다음페이지불러오는중인지여부 
         status, //쿼리상태 loading ,error ,success등
     }= useInfiniteQuery({
             queryKey:["imgnoticelist"],
@@ -56,7 +56,7 @@ export default function Imageform(){
             getNextPageParam:(lastPage,allPages)=>{
                 //올페이지는 지금까지 fetchNextPage로받아온 모든응답데이터가 배열로쌓여서 들어옴
                 //그래서 allPages.length로 페이징도가능
-                console.log("페이지파람:"+lastPage)
+             
                 if(lastPage.last) return undefined;
 
                 //number는 서버가 마지막으로반환한값 1로처리했지만 0시작임으로 0이들어옴 때문에
@@ -76,15 +76,14 @@ export default function Imageform(){
         <Wrapper>
         
 
-        {imgnoticelist&&imgnoticelist.pages.map((data,pageindex)=>{
+        {imgnoticelist&&imgnoticelist.pages.map((data,key)=>{
             return (
-                <>
-                {console.log(pageindex)}
-                {console.log(data)}
-                {data.content.map((da)=>{
+                <React.Fragment key={key}>
+                
+                {data.content.map((da,key)=>{
                     return (
                         
-                        <Imageformlist content={da} />
+                        <Imageformlist content={da} key={key} />
                        
                         
                     )
@@ -92,12 +91,19 @@ export default function Imageform(){
                   
                       
            
-                </>
+                </React.Fragment>
             )
         })}
-         <div ref={ref} >
+        {imgnoticelist && //이미지리스트가 있을경우만있어야함 아니면두번됨
+              <div ref={ref} >
         {isFetchingNextPage&&<>...로딩중..</>}
          </div>
+        }
+         {!hasNextPage && !isFetchingNextPage && (
+        <div style={{ textAlign: "center", color: "#888", margin: "20px 0" }}>
+          마지막입니다
+        </div>
+      )}
         </Wrapper>
     )
 }

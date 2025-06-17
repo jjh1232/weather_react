@@ -119,7 +119,7 @@ const Noticefooter=styled.div`
 `
 export default function Twitformlist(props){
 
-    const {key,post}=props;
+    const {post}=props;
     const navigate=useNavigate();
     const [isreple,setIsreple]=useState(false);
     const [ismenu,setIsmenu]=useState(false);
@@ -320,8 +320,8 @@ const weatherData = weatherKeys.map(key=>({
 
      <Weatherdata>
                     
-                    {weatherData.map(data=>(
-                      <NoticeWeathericon type={data.type} value={data.value}/>
+                    {weatherData.map((data,key)=>(
+                      <NoticeWeathericon type={data.type} value={data.value} key={key}/>
                     ))}
                       </Weatherdata>    
                  

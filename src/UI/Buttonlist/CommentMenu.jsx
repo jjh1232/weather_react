@@ -5,6 +5,7 @@ import AuthCheck from "../../customhook/authCheck";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateAxios from "../../customhook/CreateAxios";
 import { use } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
     background-color: gray;
@@ -14,7 +15,7 @@ const Wrapper=styled.div`
     border: 1px solid black;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);  // 부드러운 그림자
   border-radius: 8px;        
-  
+    z-index: 10;
     &:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); // 호버 시 그림자 강조
   }
@@ -26,13 +27,14 @@ const Commentmenulist=styled.div`
 `
 
 export default function CommentMenu(props){
-    const {nickname,ismenu,isupdate,commentid,noticeid,page,cid}=props;
+    const {nickname,ismenu,isupdate,commentid,noticeid,page,cid,cusername,textcopy}=props;
     const [cookie,setcookie,removecookie]=useCookies(["userinfo"])
 
     const logincheck=AuthCheck();
     const axiosinstance=CreateAxios();
     const queryclient=useQueryClient();
     
+    const navigate=useNavigate();
     
     //삭제
     const deletehandler=(commentid)=>{
@@ -79,12 +81,13 @@ export default function CommentMenu(props){
     }
     //팔로우체크 
     const {data:followcheck,isLoading,isError}=useQuery({
-        queryKey:["followcheck",cookie.userinfo.userid,cid],
+        queryKey:["followcheck",cookie.userinfo?.userid,cid],
         queryFn:async ()=>{
             const res=await axiosinstance.get(`/followchecktwo/${cid}`)
             console.log("팔로우체크 "+res.data)
             return res.data;
-        }
+        },
+        enabled:logincheck,
 
     })
     //팔로우 하기 
@@ -124,16 +127,20 @@ export default function CommentMenu(props){
         }
     }
 
+    //메뉴리스트
+    //삼항연산자는 표현식을 하나밖에 못쓰기떄문에 스프레드 연산자로 배열형식으로 넣어줘야함
     const menuList=[
-        ...(cookie.userinfo.userid !==cid?[{
+        ...(logincheck?
+        (cookie.userinfo.userid !==cid?[{
                  label:followcheck?"팔로우해제":"팔로우",onClick:()=>{
            followhandler(cid)
         },color:"black"
         }]:[
           {label:"삭제하기",onClick:()=>deletehandler(commentid),color:"red"},
-            {label:"수정하기",onClick:()=>updatehandler(),color:"black"}
-        ])
-       
+        {label:"수정하기",onClick:()=>updatehandler(),color:"black"}
+        ]):[]),
+       {label:"유저페이지",onClick:()=>{navigate(`/userpage/${cusername}`)},color:"black"},
+        {label:"텍스트복사",onClick:()=>{textcopy()},color:"black"}
       
     ]
 
@@ -142,9 +149,9 @@ export default function CommentMenu(props){
     return (
         <Wrapper onClick={(e)=>e.stopPropagation()}>
             
-       {menuList.map((list)=>{
+       {menuList.map((list,key)=>{
         return (
-            <Commentmenulist onClick={list.onClick} color={list.color}>
+            <Commentmenulist onClick={list.onClick} color={list.color} key={key}>
                 {list.label}
             </Commentmenulist>
             

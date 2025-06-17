@@ -190,7 +190,7 @@ const Commenthandler=(noticenum,depth,cnum,username,usernickname,comments)=>{
     </Wrapper>
     :<Wrapper>
    
-      <Nologininput type="text" value="로그인후작성하실수있습니다"/>
+      <Nologininput type="text" value="로그인후작성하실수있습니다" readOnly/>
       <Nologinbutton type="submit" >댓글작성</Nologinbutton>
    
     </Wrapper>

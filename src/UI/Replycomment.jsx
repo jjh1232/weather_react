@@ -25,10 +25,10 @@ function Replycomment(props){
   return(
     <div>
       {
-   commentslist&&commentslist.map((comment,index)=>{
+   commentslist&&commentslist.map((comment,key)=>{
    
     return(
-      <React.Fragment>
+      <React.Fragment key={key}>
           {
             //여기서 대댓글은 댓글단곳에만달게한다
           parentid===comment.cnum &&

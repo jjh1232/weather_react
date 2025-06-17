@@ -115,9 +115,9 @@ export default function SkyObject(props){
          
           {Cloudnum.map((cloudstyled,index)=>(
 < Cloud key={index} style={cloudstyled}>
-<CloudPart style={{ width: '40%', height: '40%', top: '10%', left: '5%' }} color={true}/>
-        <CloudPart style={{ width: '50%', height: '50%', top: '0%', left: '30%' }} color={true}/>
-        <CloudPart style={{ width: '35%', height: '35%', top: '20%', left: '70%' }} color={true}/>
+<CloudPart style={{ width: '40%', height: '40%', top: '10%', left: '5%' }} $color={true}/>
+        <CloudPart style={{ width: '50%', height: '50%', top: '0%', left: '30%' }} $color={true}/>
+        <CloudPart style={{ width: '35%', height: '35%', top: '20%', left: '70%' }} $color={true}/>
 </Cloud>
             ))}
           </>
