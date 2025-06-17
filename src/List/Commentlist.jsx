@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Commentlistitem from "./Commentlistitem";
 import Commentform from "../Noticepage/Commentform";
 import Replycomment from "../UI/Replycomment";
+import CommentTree from "./CommentTree";
 function Commentlist(props){
 
   const {comments,noticeid,page,commentcreate,commentupdate,commentdelete}=props
@@ -26,31 +27,16 @@ console.log(comments)
     <div>
        
             <div>
-              {comments&&comments.map((coment,key)=>{
+              {comments&&comments.map((comment,key)=>{
                 return(
                   
                    <React.Fragment key={key}>
-                    {coment.depth===0 &&
-                    <div>
-                 <Commentlistitem 
-
-                  key={key}
-                  data={coment}
-                  noticeid={noticeid}
-                  page={page}
-                  commentcreate={commentcreate}
-                  commentupdate={commentupdate}
-                  commentdelete={commentdelete}
-                 />
-                 
-                 <Replycomment parentid={coment.id} commentslist={comments}
-                     noticeid={noticeid}
-                   page={page}
-                 commentupdate={commentupdate}
-                 commentdelete={commentdelete}
-                 />
-                 </div>
-                    }
+                    <CommentTree 
+                    key={comment.id}
+                    comment={comment}
+                    noticeid={noticeid}
+                    page={page}
+                    />
 
                  </React.Fragment>
             
