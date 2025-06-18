@@ -12,6 +12,7 @@ import Datefor from "./noticeformlist/DateCom/Datefor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis  } from "@fortawesome/free-solid-svg-icons";
 import CommentMenu from "../UI/Buttonlist/CommentMenu";
+import Replycomment from "../UI/Replycomment";
 
 const Wrapper=styled.div`
   display: flex;
@@ -115,7 +116,7 @@ function Commentlistitem(props){
  
 
   return (
-    <>
+    <React.Fragment>
       {isupdate?<Wrapper className="isupdate">
         {data.nickname}님<br/>
               
@@ -176,7 +177,21 @@ function Commentlistitem(props){
              />
              :""}
 
-    </>
+          {data.childs&&data.childs.map((coment)=>{
+           
+            return (
+    <Replycomment parentid={coment.id} 
+                     noticeid={noticeid}
+                   page={page}
+                comment={coment}
+                 />
+            )
+          }
+
+          )
+     
+          }
+    </React.Fragment>
 
 
   )

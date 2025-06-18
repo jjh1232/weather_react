@@ -12,10 +12,11 @@ import AuthCheck from "../customhook/authCheck";
 
 
 const Modalout=styled.div`
-width:14.5% ;
+width:290px ;
 
-height:58% ;
-top:27%;
+height:560px ;
+top:220px;
+
 margin: 1px;
 position: fixed;
 background:rgba(0,0,0,0.5);
@@ -42,10 +43,10 @@ display: flex;
 flex-direction: column;
 position:relative;
 border:1px solid;
-top:8%;
+top:60px;
 
-width:100%;
-height:74%;
+width:290px;
+height:570px;
 border: 8px solid black;
 border-radius: 4%;
 overflow: hidden;

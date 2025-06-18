@@ -12,13 +12,21 @@ import { useLocation } from "react-router-dom";
 
 const Wrapper=styled.div`
 
-width:15%;
-height:85%;
+width:300px;
+// max-width: 20vw;
+height:800px;
 position: fixed;
-right:13%;
-top:3px;
 
-//border: 1px solid;
+right: 12vw;
+top:1px;
+
+
+@media (max-width:1710px){
+    display: none;
+}
+@media (max-width:1900px){
+    right:8vw;
+}
 
 
 `
@@ -129,29 +137,7 @@ if(window.location.pathname==="/noticecreate"){
         <Wrapper >
 
         <Loginpage/>
-       {/*
-       <div ref={searchref} className="usersearch">
-        <Usersearchinput type="search" placeholder="유저닉네임을입력하세요"
-         onChange={(e)=>{usersearch(e)}}
-            className="usersearch"
-            />
-        
-        {searchdata && 
-            <div className ="usersearch"ref={ref} 
-            style=
-            {{justifyContent:"center",background:"white",top:"30px",
-            position:"fixed",zIndex:"10" ,width:"280px",height:"600px",
-            overflowY: "scroll"}}>
-            {searchdata.map((data)=>{
-           
-           return(
-                <Userdata username={data.username} usernickname={data.nickname}/>
-               
-            )
-        })} </div>}
-        
-        </div>
-        */}
+      
         <ChatUi listname={data.listname} roomid={data.roomid}/>
        
     </Wrapper>

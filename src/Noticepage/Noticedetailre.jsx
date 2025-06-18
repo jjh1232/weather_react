@@ -74,7 +74,13 @@ const Userprofile=styled.img`
     
 `
 const NoticeMaindiv=styled.div`
+   
+      img {
+    max-width: 100%;
     
+    height: auto;
+    display: block;
+  }
 `
 export default function Noticedetailre(props){
     
@@ -104,9 +110,7 @@ export default function Noticedetailre(props){
                     page:page
                 }
             });
-              console.log("댓글:",res)
-              console.log("쿼리키노티스아이디:"+noticeid)
-              console.log("쿼리키노티스페이지:"+page)
+              
             return res.data.content;
         }
     })

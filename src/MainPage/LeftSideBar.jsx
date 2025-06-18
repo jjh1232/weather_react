@@ -5,12 +5,16 @@ import Userweather2 from "../UI/Noticetools/Userweather2";
 
 const Wrapper=styled.div`
 border: 1px solid black;
-width:16%;
+width:310px;
 height:50%;
 position:fixed;
 left:11.64%;
 top:56px;
 background-color: ${(props)=>props.theme.background};
+
+@media (max-width:1710px){
+    display: none;
+}
 `
 
 function LeftSideBar(){

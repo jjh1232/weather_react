@@ -10,7 +10,10 @@ import { useCookies } from "react-cookie";
 import SkyObject from "./WeatherObject/SkyObject";
 
 const Wrapper=styled.div`
-   
+   position: relative;
+   width: 100vw;
+   height: 100vh;
+   overflow-x: hidden;
     
     
 `
@@ -43,7 +46,10 @@ const thema={
       
       }
 }
-
+//백그라운드레이어
+const BackgroundLayer=styled.div`
+  
+`
 // 1. 기본 구조 선택
 const Background = styled.div`
   position: fixed;
@@ -51,6 +57,7 @@ const Background = styled.div`
   height: 100vh;
   bottom:50px;
   z-index: -10px;
+ 
   //overflow: hidden;
  `
 
@@ -74,7 +81,44 @@ const Horizon = styled.div`
   box-shadow: 0 0 10px rgba(144,238,144,0.5);
 `;
 
+//포그라운드
+const ForegroundLayer=styled.div`
+    display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
 
+ 
+
+`
+//내용
+
+const Headercss=styled.div`
+
+`
+
+const LeftCss=styled.div`
+  
+`
+const Rightcss=styled.div`
+  
+`
+const MainCss=styled.div`
+position:relative;
+top: 1px;
+//마진으로조정해보자 그냥오른쪽없애는걸로
+//left: 545px;
+left:28.5vw;
+//  margin-left: 28.3vw;   // 왼쪽 사이드바 너비
+ // margin-right: 29vw;  // 오른쪽 사이드바 너비
+bottom: 100px;
+ //width: auto;
+  width:820px;
+  max-width: 820px;
+  border: 1px solid red;
+  
+ // max-width: 0;
+`
 
 
 export default function MainLayout(props){
@@ -147,7 +191,7 @@ export default function MainLayout(props){
     },[])
     return (
         <Wrapper>
-        
+          <BackgroundLayer>
             <ThemeProvider theme={currentthema}>
             <Background>
             
@@ -159,15 +203,30 @@ export default function MainLayout(props){
                 
             </Background>
             </ThemeProvider>
-            
-            <Header/>
+            </BackgroundLayer>
+            <ForegroundLayer>
+              <Headercss>
+  <Header/>
+              </Headercss>
+          
         <AdminLeft/>
-        <LeftSideBar/>
-        
-        <RightSideBar/>  
+       
 
-        <Outlet/>
         
+        <LeftCss>
+            <LeftSideBar/>
+        </LeftCss>
+           <MainCss>
+   <Outlet/>
+        </MainCss>
+
+        <Rightcss>
+ <RightSideBar/>  
+        </Rightcss>
+       
+     
+     
+        </ForegroundLayer>
         </Wrapper>
     )
 }

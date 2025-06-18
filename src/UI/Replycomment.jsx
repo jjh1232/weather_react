@@ -9,7 +9,7 @@ import Commentlistitem from "../List/Commentlistitem";
 import CreateAxios from "../customhook/CreateAxios";
 
 function Replycomment(props){
-  const{commentslist,parentid,commentupdate,commentdelete,formstyle,noticeid,page} =props
+  const{commentslist,parentid,commentupdate,commentdelete,formstyle,noticeid,page,comment} =props
   const[loginuser,Setloginuser,removeloginuser]=useCookies();
   const [isupdate,Setisupdate]=useState(false);
   const [updatecomment,Setupdatecomment]=useState();
@@ -23,38 +23,34 @@ function Replycomment(props){
  
 
   return(
-    <div>
-      {
-   commentslist&&commentslist.map((comment,key)=>{
    
-    return(
-      <React.Fragment key={key}>
-          {
-            //여기서 대댓글은 댓글단곳에만달게한다
-          parentid===comment.cnum &&
+    
+      <React.Fragment >
+          
+           
           <Replycommentitem comment={comment}
           noticeid={noticeid}
           page={page}
-          commentupdate={commentupdate}
-                  commentdelete={commentdelete}
-              formstyle={formstyle}
+          //commentupdate={commentupdate}
+               //   commentdelete={commentdelete}
+             // formstyle={formstyle}
           />
           
            
-           }
+           
             
         
         
 
       </React.Fragment>
 
-    )
-  }
+    
+  
    )
 }
-   </div>
+ export default Replycomment
 
-  )
+  
 
  
 
@@ -64,6 +60,5 @@ function Replycomment(props){
   
 
 
-}
 
-export default Replycomment
+

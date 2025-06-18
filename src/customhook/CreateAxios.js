@@ -42,6 +42,7 @@ instance.interceptors.request.use(
         console.log("요청단계에러")
         //만약 액세스토큰요청후 
         //에러객체넘김
+        //에러 발생시 그에러를 다음으로 던질때 사용
         return Promise.reject(err);
     }
 )
@@ -78,11 +79,10 @@ instance.interceptors.response.use(
                 setLoginuser("Refreshtoken",res.headers.get("Refreshtoken"),{path:"/"})
                //새로운토큰이안들가요
                 const Accesstoken="Bearer "+res.headers.get("Authorization");
-                console.log("리프레쉬받은헤더:"+res.headers.get("Authorization"))
+               
                 //실패응답의 헤더값을 다시 설정한다 
                 err.config.headers.Authorization=Accesstoken;
-                console.log("새로운엑세스토큰:"+Accesstoken)
-                console.log("새로완료설정:"+err.config.headers)
+                
                 //다시설정한 토큰으로 재호출
 
                 //여기에 새액세스토큰이안담김..

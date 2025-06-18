@@ -31,12 +31,14 @@ console.log(comments)
                 return(
                   
                    <React.Fragment key={key}>
-                    <CommentTree 
-                    key={comment.id}
-                    comment={comment}
-                    noticeid={noticeid}
-                    page={page}
-                    />
+                 <Commentlistitem 
+
+                  key={key}
+                  data={comment}
+                  noticeid={noticeid}
+                  page={page}
+               
+                 />
 
                  </React.Fragment>
             

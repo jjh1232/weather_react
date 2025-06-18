@@ -16,7 +16,7 @@ position: fixed;
 margin: 3px;
 //border:1px solid red;
 left:11.5%;
-width:76%;
+width:1465px;
 height:5%;
 
 //justify-content: space-between;
@@ -28,41 +28,46 @@ z-index: 10;
 //가상공간
 const Spacer=styled.div`
     position: relative;
-    height: 50px;
+    height: 55px;
     
     
 `
-//3단디브
+//3단디브 왼쪽 여긴 가변적으로가보자
 const Logodiv=styled.div`
     border:1px solid gray;
-    width: 21.2%;
+    width: 310px;
     margin-right: 15px;
     box-sizing: border-box;
     background-color: ${(props)=>props.theme.background};
+
+
 `
 const Maindiv=styled.div`
   border:1px solid gray;
-    width: 56.7%;
+    width: 820px;
 
     box-sizing: border-box;
-    margin-right: 9px;
+    margin-right: 20px;
     //padding: 5 15px;
     background-color: ${(props)=>props.theme.background};
    
+
 `
 const Searchdiv=styled.div`
+margin-left: 1px;
       box-sizing: border-box;
       border: 1px solid gray;
-    width: 20.65%;
+    width: 300px;
     background-color: ${(props)=>props.theme.background};
     
+
 `
 //검색
 const Usersearchinput=styled.input`
-position:fixed;
+//position:fixed;
 top:0.5%;
-left:72%;
-width:15%;
+//left:72%;
+width:100%;
 
 `
 function Header(){

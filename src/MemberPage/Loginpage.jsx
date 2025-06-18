@@ -25,9 +25,11 @@ const BeforeWrapper=styled.div`
   position:relative;
 float:left;
 top:7%;
-width: 295px;
+//width: 295px;
+width: 100%;
 height: 140px;
 max-height: 140px;
+
 display: flex;
 flex-direction: column;
 border: 1px solid ${(props)=>props.theme.text};
@@ -603,7 +605,7 @@ const naverlogin=()=>{
    <Userdatadiv>
     
     <Profileview>
-    <Loginprofileimg   src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser.userinfo["profileimg"]}
+    <Loginprofileimg   src={process.env.PUBLIC_URL+"/userprofileimg"+loginuser?.userinfo["profileimg"]}
   
                 />
     </Profileview>

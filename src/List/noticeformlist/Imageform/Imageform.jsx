@@ -99,11 +99,13 @@ export default function Imageform(){
         {isFetchingNextPage&&<>...로딩중..</>}
          </div>
         }
+
          {!hasNextPage && !isFetchingNextPage && (
         <div style={{ textAlign: "center", color: "#888", margin: "20px 0" }}>
-          마지막입니다
+          마지막입니다!
         </div>
       )}
+
         </Wrapper>
     )
 }

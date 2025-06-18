@@ -15,13 +15,15 @@ import AuthCheck from "../../customhook/authCheck";
 
 const Wrapper=styled.div`
 position: relative;
-left:28.5%;
-width:43%;
+
+width:100%;
 height:100%;
 border: 1px solid blue;
  color:${props => props.theme.text};
  background:${props => props.theme.background};
  top: 8%;
+ 
+ 
 
 `
 const Modalout=styled.div`

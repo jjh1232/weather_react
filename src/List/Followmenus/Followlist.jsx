@@ -107,7 +107,7 @@ function Followlist(props){
 
 
        const {data:followlist,isLoading,error}=useQuery({
-        queryKey:["followlistdata",usercookie.userinfo.userid],
+        queryKey:["followlistdata",usercookie.userinfo?.userid],
         queryFn: async()=>{
             const res= await axiosinstance.get("/followlist")
             return res.data
