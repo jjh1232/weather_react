@@ -13,7 +13,8 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Noticemenu from "../List/noticeformlist/DateCom/Noticemenu";
 import CreateAxios from "../customhook/CreateAxios";
 import Commentform from "./Commentform";
-
+import Pagenation from "../customhook/Pagenation";
+import CommentPagination from "./CommentPagination";
 const Wrapper=styled.div`
    position: relative;
     display: flex;
@@ -111,7 +112,8 @@ export default function Noticedetailre(props){
                 }
             });
               
-            return res.data.content;
+            console.log("코멘트",res)
+            return res.data;
         }
     })
 
@@ -216,8 +218,15 @@ export default function Noticedetailre(props){
         <Commentform noticenum={post?.id} depth={0} cnum={0} page={page}/>
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
-            <Commentlist comments={comment} noticeid={post.id} page={page}/>
+            <Commentlist comments={comment.content} noticeid={post.id} page={page}/>
         </>}
+        {
+            //코멘트페이지
+           
+            <CommentPagination currentpage={page} totalpage={comment.totalPages} setpage={setPage}/>
+            
+        }
+        현재 page:{page}
 </Wrapper>
     )
 }
