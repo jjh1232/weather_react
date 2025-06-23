@@ -83,6 +83,12 @@ const NoticeMaindiv=styled.div`
     display: block;
   }
 `
+const Pagenationcss=styled.div`
+
+    display: flex;
+    align-items: center;         // 세로 중앙정렬
+    justify-content: center;     // 가로 중앙정렬
+`
 export default function Noticedetailre(props){
     
     const [page,setPage]=useState(1);
@@ -219,14 +225,16 @@ export default function Noticedetailre(props){
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
             <Commentlist comments={comment.content} noticeid={post.id} page={page}/>
+            <Pagenationcss>
+            <CommentPagination currentpage={page} totalpage={comment?.totalPages} setpage={setPage}/>
+            </Pagenationcss>
         </>}
         {
             //코멘트페이지
            
-            <CommentPagination currentpage={page} totalpage={comment.totalPages} setpage={setPage}/>
             
         }
-        현재 page:{page}
+       
 </Wrapper>
     )
 }

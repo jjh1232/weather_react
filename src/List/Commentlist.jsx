@@ -16,7 +16,9 @@ function Commentlist(props){
   //const [reply]=[{}]
 
   
-
+if (!comments || comments.length===0){
+  return <>댓글이없습니다</>
+}
   
 
   
