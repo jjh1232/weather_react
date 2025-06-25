@@ -1,21 +1,25 @@
 import styled from "styled-components";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 
 const PagenationWrapper=styled.div`
-    border: 1px solid red;
-    width: 50%;
+    
+    //width: 30%;
     display: flex;
+    gap: 15px;
       cursor: pointer;
 `
 const Lastmovediv=styled.div`
-    border: 1px solid blue;
+
     flex:1;
     text-align: center;
       font-size: 20px;
       cursor: pointer;
 `
 const Arrowdiv=styled.div`
-    border: 1px solid yellow;
+   
     flex:1;
       text-align: center;
         cursor: pointer;
@@ -23,18 +27,38 @@ const Arrowdiv=styled.div`
 `
 const CountWrapper=styled.div`
     display: flex;
-    border: 1px solid blue;
+   
     flex:6;
       cursor: pointer;
+      gap: 10px;
 `
 const Counttab=styled.div`
-    border:1px solid green;
-    color: ${(props)=>props.color};
+
+    color: ${(props)=>props.isactive?"red":"black"};
     flex:1;
       text-align: center;
     cursor: pointer;
     font-size: 20px;
-`
+    border: 1px solid ${(props)=>(props.isactive?"#ff4d4f":"rgba(0,0,0,0.07)")};
+    box-shadow: ${(props)=>props.isactive?'#fff0f0':'white'};
+    font-weight: ${(props) => (props.isactive ? 'bold' : 'normal')};
+    background-color: ${(props) => (props.isactive ? 'white' : 'white')};
+  transition: all 0.2s;
+    //클릭아닐시 효과
+  ${(props) =>
+    !props.isactive &&
+    `
+      &:hover {
+        border: 2px solid #ff4d4f;
+        box-shadow: 0 2px 8px rgba(255,77,79,0.15);
+        color: #ff4d4f;
+        background: #fff5f5;
+        font-weight: bold;
+      }
+    `
+    }
+`;
+
 
 
 export default function CommentPagination(props){
@@ -75,35 +99,39 @@ export default function CommentPagination(props){
 
     return (
     <PagenationWrapper>
-   {pagearray[0]>1 && (<Lastmovediv>
+   {pagearray[0]>1 && (<Lastmovediv onClick={()=>{setpage(1)}}>
    ...1
    </Lastmovediv>)}
-   {currentpage>1 && <Arrowdiv onClick={prevhandler}>이전</Arrowdiv>}
+   {currentpage>1 && <Arrowdiv onClick={prevhandler}>
+     <FontAwesomeIcon icon={faAnglesLeft}/>
+    </Arrowdiv>}
    <CountWrapper>
     {pagearray.map((count,key)=>{
      return (
             <React.StrictMode key={key}>
-            {count===currentpage?
-              <Counttab color="red">
-        {//현재페이지
+           
+              <Counttab isactive={count===currentpage?true:false} onClick={()=>{
+                 if (count === currentpage) return; // 현재 페이지면 아무 동작 안 함
+                setpage(count);
+     }
+              }>
+        {
             count
         }
         </Counttab> 
-        :
-         <Counttab color="black" onClick={()=>{setpage(count)}}>
-        {//다른페이지
-            count
-        }
-        </Counttab>   
-        }
+       
+        
             </React.StrictMode>
         )
     })
 }
 </CountWrapper>
-    {currentpage<totalpage&&<Arrowdiv onClick={nexthandler}>다음</Arrowdiv>}
+    {currentpage<totalpage&&<Arrowdiv onClick={nexthandler}>
+        <FontAwesomeIcon icon={faAnglesRight}/>
+        
+        </Arrowdiv>}
 
-  {pagearray[4]<totalpage&&<Lastmovediv>...{totalpage}</Lastmovediv>}
+  {pagearray[4]<totalpage&&<Lastmovediv onClick={()=>{setpage(totalpage)}}>...{totalpage}</Lastmovediv>}
       
     
   

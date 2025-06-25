@@ -84,7 +84,7 @@ const Usermenudiv=styled.div`
 
 
 const Maintextdiv=styled.div`
-  
+    white-space: pre-wrap;
 `
 const Overflowdiv=styled.div`
     

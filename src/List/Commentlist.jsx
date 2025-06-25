@@ -5,7 +5,7 @@ import Replycomment from "../UI/Replycomment";
 import CommentTree from "./CommentTree";
 function Commentlist(props){
 
-  const {comments,noticeid,page,commentcreate,commentupdate,commentdelete}=props
+  const {comments,noticeid,page}=props
   //const [comment]=[{}] 
     
   
@@ -22,7 +22,7 @@ if (!comments || comments.length===0){
   
 
   
-console.log(comments)
+
  
   
   return (

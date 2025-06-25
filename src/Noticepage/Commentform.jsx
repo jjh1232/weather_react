@@ -137,6 +137,9 @@ const commentmutate=useMutation({
     // alert("성공후아이디:"+noticenum+",페이지"+page)
     queryclient.invalidateQueries({queryKey:["comments",noticenum,page]})
     //queryclient.refetchQueries({ queryKey: ["comments", noticenum, page] });
+    
+    console.log("재실행넘버:"+noticenum+" |타입:"+typeof noticenum);
+    console.log("재실행페이지"+page+" |타입:"+typeof page);
    },
    onError:(err)=>{
     alert("에러")
@@ -144,7 +147,7 @@ const commentmutate=useMutation({
 })
 
 const Commenthandler=(noticenum,depth,cnum,username,usernickname,comments)=>{
-
+  
   commentmutate.mutate({noticenum,depth,cnum,username,usernickname,comments})
 }
 
@@ -169,6 +172,7 @@ const Commenthandler=(noticenum,depth,cnum,username,usernickname,comments)=>{
         rows={1}
         ref={textref}
         onChange={(e)=>{
+        
           setComment(e.target.value)
         }}
         />
