@@ -11,8 +11,8 @@ import SkyObject from "./WeatherObject/SkyObject";
 
 const Wrapper=styled.div`
    position: relative;
-   width: 100vw;
-   height: 100vh;
+ //  width: 100vw;
+   //height: 100vh;
    overflow-x: hidden;
     
     

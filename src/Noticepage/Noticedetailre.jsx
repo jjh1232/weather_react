@@ -20,8 +20,8 @@ const Wrapper=styled.div`
     display: flex;
     flex-direction: column;
 width:100%;
-height:100%;
-
+//height:100%;
+overflow: hidden;
 `
 const Noticediv=styled.div`
     
@@ -75,7 +75,7 @@ const Userprofile=styled.img`
     
 `
 const NoticeMaindiv=styled.div`
-   
+   overflow: hidden;
       img {
     max-width: 100%;
     
@@ -97,6 +97,7 @@ export default function Noticedetailre(props){
     const [ismenu,setIsmenu]=useState(false);
     const [isupdate,setIsupdate]=useState(false);
     let axiosinstance=CreateAxios();
+    const pageref=useRef(null)
     console.log("노티스디테일")
    
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",noticeid],
@@ -162,6 +163,24 @@ export default function Noticedetailre(props){
      // alert("삭제취소")
     }
  }
+const isMounted = useRef(false);
+useEffect(() => {
+       setTimeout(() => {
+    
+  
+  if (!isMounted.current) {
+    // 최초 렌더링일 때는 아무것도 하지 않고, isMounted만 true로 바꿔줌
+    isMounted.current = true;
+    return;
+  }
+
+  // 최초가 아니라면(즉, page가 바뀌어서 useEffect가 재실행된 경우)
+  if (pageref.current) {
+    pageref.current.scrollIntoView({ behavior: 'smooth' });
+  }
+    }, 1500);
+}, [page]);
+
     return (
 <Wrapper>
         {noticeloading&&<>로딩중...</>}
@@ -221,10 +240,10 @@ export default function Noticedetailre(props){
         </Noticediv>
 
         }
-        <Commentform noticenum={post?.id} depth={0} cnum={0} page={page}/>
+        <Commentform noticenum={post?.id} depth={0} cnum={0} page={page} />
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
-            <Commentlist comments={comment.content} noticeid={post.id} page={page}/>
+            <Commentlist comments={comment.content} noticeid={post.id} page={page} ref={pageref} />
             <Pagenationcss>
             <CommentPagination currentpage={page} totalpage={comment?.totalPages} setpage={setPage}/>
             </Pagenationcss>

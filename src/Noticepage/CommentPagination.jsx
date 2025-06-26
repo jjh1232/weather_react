@@ -10,6 +10,7 @@ const PagenationWrapper=styled.div`
     display: flex;
     gap: 15px;
       cursor: pointer;
+      padding: 3px;
 `
 const Lastmovediv=styled.div`
 
@@ -17,6 +18,10 @@ const Lastmovediv=styled.div`
     text-align: center;
       font-size: 20px;
       cursor: pointer;
+
+       &:hover{
+       border: 2px solid #a8a8a8;
+    }
 `
 const Arrowdiv=styled.div`
    
@@ -24,6 +29,10 @@ const Arrowdiv=styled.div`
       text-align: center;
         cursor: pointer;
           font-size: 20px;
+
+    &:hover{
+       border: 2px solid #a8a8a8;
+    }
 `
 const CountWrapper=styled.div`
     display: flex;
@@ -31,28 +40,42 @@ const CountWrapper=styled.div`
     flex:6;
       cursor: pointer;
       gap: 10px;
+      //align-items: center;
+       align-items: center;         /* 세로 중앙 */
+justify-content: center;     /* 가로 중앙 */
+
+    
 `
 const Counttab=styled.div`
-
-    color: ${(props)=>props.isactive?"red":"black"};
+width: 20px;
+height: 20px;
+display: flex;               /* 추가! */
+align-items: center;         /* 세로 중앙 */
+justify-content: center;     /* 가로 중앙 */
+text-align: center;
+  width: 20px;
+  height: 20px;
+    color: ${({isactive,theme})=>isactive?"#fa6e37":theme.text};
     flex:1;
-      text-align: center;
+    
     cursor: pointer;
-    font-size: 20px;
-    border: 1px solid ${(props)=>(props.isactive?"#ff4d4f":"rgba(0,0,0,0.07)")};
+  
+      
+    font-size: 18px;
+    border: 2px solid ${(props)=>(props.isactive?"#a8a8a8":"rgba(0,0,0,0.07)")};
     box-shadow: ${(props)=>props.isactive?'#fff0f0':'white'};
     font-weight: ${(props) => (props.isactive ? 'bold' : 'normal')};
-    background-color: ${(props) => (props.isactive ? 'white' : 'white')};
+    
   transition: all 0.2s;
     //클릭아닐시 효과
   ${(props) =>
     !props.isactive &&
     `
       &:hover {
-        border: 2px solid #ff4d4f;
+        border: 2px solid #a8a8a8;
         box-shadow: 0 2px 8px rgba(255,77,79,0.15);
-        color: #ff4d4f;
-        background: #fff5f5;
+        color: #f55d37;
+        
         font-weight: bold;
       }
     `
