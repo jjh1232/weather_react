@@ -89,9 +89,17 @@ const Pagenationcss=styled.div`
     align-items: center;         // 세로 중앙정렬
     justify-content: center;     // 가로 중앙정렬
 `
+
+//로컬스트레지에 커멘트페이지연습겸
+//근데구지전역할필요없긴함 ㅋ
+const Notice_Page_Key="noticecommentpaging";
+
 export default function Noticedetailre(props){
-    
-    const [page,setPage]=useState(1);
+    //커멘트페이지
+    const [page,setPage]=useState(()=>{
+        const saved=localStorage.getItem(Notice_Page_Key);
+        return saved? Number(saved):1;
+    });
     const  {noticeid}=useParams();
     const noticemenuref=useRef(null);
     const [ismenu,setIsmenu]=useState(false);
@@ -99,6 +107,13 @@ export default function Noticedetailre(props){
     let axiosinstance=CreateAxios();
     const pageref=useRef(null)
     console.log("노티스디테일")
+
+    //페이지 저장
+    useEffect(()=>{
+        alert("페이지변환 스토리지저장"+page)
+        localStorage.setItem(Notice_Page_Key,page);
+
+    },[page])
    
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",noticeid],
         queryFn:async ()=>{

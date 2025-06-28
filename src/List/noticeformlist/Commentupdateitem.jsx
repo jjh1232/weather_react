@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../UI/Button";
 import Datefor from "./DateCom/Datefor";
+import CommentUpdatelogic from "./CommentLogic/CommentUpdatelogic";
 
 const Wrapper=styled.div`
   display: flex;
    width: 100%;
+   gap: 5px;
 `
 const Profilediv=styled.div`
     position: relative;
@@ -14,6 +16,7 @@ const Profilediv=styled.div`
     
   margin-left: 3px;
   top: 5px;
+  padding: 1px;
 `
 const Profileimg=styled.img`
     width: 50px;
@@ -29,6 +32,7 @@ const Maindiv=styled.div`
    display: flex;
   flex-direction:column;
   width: 100%;
+  gap:5px;
 
 `
 
@@ -49,6 +53,9 @@ const Usernamediv=styled.div`
 const Timediv=styled.div`
   
 `
+const MainButtondiv=styled.div`
+  margin-left :  auto;
+`
 const MainBodydiv=styled.div`
 
   display: flex;
@@ -56,6 +63,7 @@ const MainBodydiv=styled.div`
  
 top: 25px;
 left:64px;
+gap: 5px;
 `
 const MainTextdiv=styled.div`
 
@@ -63,9 +71,9 @@ const MainTextdiv=styled.div`
 `
 const MainTextarea=styled.textarea`
  font-size: 20px;
-width: 100%;
+width: 93%;
 `
-const MainButtondiv=styled.div`
+const UpdateButton=styled.div`
   
 `
 
@@ -76,6 +84,23 @@ export default function Commentupdateitem(props){
 
     const [updatecomment,Setupdatecomment]=useState(data.text)
 
+    //뮤테이션로직
+    const {mutate,isLoading}=CommentUpdatelogic();
+    
+    const updatehandler=()=>{
+
+        mutate({
+          commentid:data.id,
+          username:data.username,
+          text:updatecomment,
+          noticeid:noticeid,
+          page:page
+        },{
+          onSuccess:()=>{
+              Setisupdate(false)
+          }
+        })
+    }
 
     
     return (
@@ -85,8 +110,9 @@ export default function Commentupdateitem(props){
           </Profilediv>
           <Maindiv>
             <MainHeader>
+            
                    <Nicknamediv>
-                    {data.nickname}
+                    {data.nickname} 
                     </Nicknamediv> 
                     <Usernamediv>
                       {data.username}
@@ -96,25 +122,30 @@ export default function Commentupdateitem(props){
                     <Datefor inputdate={data.redtime } colors={"gray"}/>
                     
                     </Timediv>
+                      <MainButtondiv>
+
+                 
+                  <Button title="취소" onClick={(e)=>{ e.stopPropagation() 
+                    Setisupdate(false)}}/>
+                     <Button title="수정완료" onClick={(e)=>{
+                      updatehandler();
+                  //  Setisupdate(commentupdate(data.id,data.username,updatecomment,e))
+                    
+                    }}/>
+              </MainButtondiv>
             </MainHeader>
             <MainBodydiv>
               <MainTextdiv>
             <MainTextarea defaultValue={data.text} onChange={(e)=>{Setupdatecomment(e.target.value)}} /><br/>
            
               </MainTextdiv>
-              <MainButtondiv>
-
-                  <Button title="수정완료" onClick={(e)=>{
-                    
-                  //  Setisupdate(commentupdate(data.id,data.username,updatecomment,e))
-                    
-                    }}/>
-                  <Button title="취소" onClick={(e)=>{ e.stopPropagation() 
-                    Setisupdate(false)}}/>
-              </MainButtondiv>
+             
             </MainBodydiv>
-          </Maindiv>
+
            
+          </Maindiv>
+           {//여기플렉스로 두는게맞는듯?
+           }
               
             
                  

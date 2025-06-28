@@ -475,6 +475,7 @@ const naverlogin=()=>{
     alert("로그아웃되었습니다")
     Setislogin(false)
     navigate("/")
+    window.location.reload();
     })
    
   }
