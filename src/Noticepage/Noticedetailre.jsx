@@ -110,7 +110,7 @@ export default function Noticedetailre(props){
 
     //페이지 저장
     useEffect(()=>{
-        alert("페이지변환 스토리지저장"+page)
+        
         localStorage.setItem(Notice_Page_Key,page);
 
     },[page])

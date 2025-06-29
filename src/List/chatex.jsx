@@ -293,8 +293,8 @@ function Chatex(props) {
     }
     useEffect(() => {
 
-      //  con()
-        //chatroomdataget()
+       con()
+       // chatroomdataget()
         return () => disconect();
     }, [])
 
@@ -344,11 +344,11 @@ function Chatex(props) {
     const [chatdata, setChatdata] = useState();
     const [roomdata,setRoomdata]=useState();
     const {data,isLoading,error}=useQuery({
-        queryKey:["chatdata"],
+        queryKey:["chatdata",roomid],
         queryFn:async ()=>{
             console.log("쿼리실행")
             const res=await axiosinstance.get("/chatroomdataget?roomid=" + roomid)
-           
+              console.log("쿼리값",res.data)
             return res.data
         },
         select:(data)=>{
