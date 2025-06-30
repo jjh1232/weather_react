@@ -176,7 +176,7 @@ function ChatUi(props){
         
         />,
         chatroomlist:<Chatroomlist setContent={setContent} setRoomid={setRoomstateid}/>,
-        chatroom:<Chatex setcontent={setContent} roomid={roomstateid}/>
+        chatroom:<Chatex setcontent={setContent} roomid={roomstateid} />
     }
 
     //유저검색기능

@@ -102,20 +102,20 @@ const updatetime=()=>{
     
     
     <Routes>
-    <Route path="/" element={<MainLayout />}>
+   
 
-    <Route element={<PrivateRoute/>}>
-      <Route path="/admin" element={<Adminmain/>}/>
-      <Route path="/admin/chatroom" element={<Chatroommanage/>}/>
-      <Route path="/admin/comment" element={<Commentmanage/>}/>
-      <Route path="/admin/member" element={<Membermanage/>}/>
-      <Route path="/admin/notice" element={<Noticemanage/>}/>
-      <Route path="/admin/room/:roomid" element={<ChatroomDetail/>}/>
-      <Route path="/admin/notice/detail/:noticeid" element={<Adminnoticedetail/>}/>
-      <Route path="/admin/loginhistory" element={<Adminloginhistory/>}/>
+    <Route path="admin" element={<PrivateRoute/>}>
+      <Route index element={<Adminmain/>}/>
+      <Route path="chatroom" element={<Chatroommanage/>}/>
+      <Route path="comment" element={<Commentmanage/>}/>
+      <Route path="member" element={<Membermanage/>}/>
+      <Route path="notice" element={<Noticemanage/>}/>
+      <Route path="room/:roomid" element={<ChatroomDetail/>}/>
+      <Route path="notice/detail/:noticeid" element={<Adminnoticedetail/>}/>
+      <Route path="loginhistory" element={<Adminloginhistory/>}/>
     </Route>
     
-    
+     <Route path="/" element={<MainLayout />}>
     
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>

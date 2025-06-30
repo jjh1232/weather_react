@@ -208,16 +208,16 @@ function Chatex(props) {
     const navigate = useNavigate();
     const [menuopen, setMenuopen] = useState(false);
     //스크롤 감지 로 채팅데이터를 뒤에서 가져오자
-    const [scroll, setScroll] = useState(false);
+    
     const scrollref = useRef();
     const menuref = useRef();
 
     //채팅 나누기관리
-    const [monthchat, setMonthchat] = useState();
+    
     const client = useRef(null);
 
 
-    const [chatroomdata, setChatroomdata] = useState();
+    
 
 
     //const username=loginuser.userinfo[`nickname`]
@@ -294,7 +294,7 @@ function Chatex(props) {
     useEffect(() => {
 
        con()
-       // chatroomdataget()
+       
         return () => disconect();
     }, [])
 
@@ -342,56 +342,62 @@ function Chatex(props) {
 
     //챗룸기존데이터가져오기
     const [chatdata, setChatdata] = useState();
-    const [roomdata,setRoomdata]=useState();
-    const {data,isLoading,error}=useQuery({
-        queryKey:["chatdata",roomid],
+  
+    const {data : roominfo,isLoading:roominfoloading,error:roominfoerror}=useQuery({
+        queryKey:["roominfo",roomid],
         queryFn:async ()=>{
-            console.log("쿼리실행")
-            const res=await axiosinstance.get("/chatroomdataget?roomid=" + roomid)
-              console.log("쿼리값",res.data)
+            console.log("룸정보가져오기시작")
+             const res=await axiosinstance.get(`/chatroomdata/info/${roomid}`)
+              console.log("룸인포",res.data)
             return res.data
-        },
-        select:(data)=>{
+        }
+    })
+     const {data : chatlist,isLoading:chatloading,error:chaterror}=useQuery({
+        queryKey:["chatlist",roomid],
+        queryFn:async ()=>{
+                console.log("챗팅가져오기시작")
+              const res=await axiosinstance.get(`/chatroomdata/chatdata/${roomid}`)
+              console.log("챗리스트",res.data)
+            return res.data
+        },    
+         select:(data)=>{
             
-            const {chatdata,...roomdatawithoutchat}=data;
-           return {
-            chatdata:makeSection(chatdata),
-            roomdata:roomdatawithoutchat
-           }
-        }   
-        
+           
+           return makeSection(data)
+           
+           
+        }   ,
+        enabled: !!roomid,
     })
     //유즈이펙트쓰래 
     useEffect(()=>{
-        if(data){ //데이터가 처음에없어서 에러난다 
-            setChatdata(data.chatdata)
-            setRoomdata(data.roomdata)
-        }
-    },[data])
-   /*
-    const chatroomdataget = () => {
-        console.log("챗데이터불러오기1")
-        axiosinstance.get("/chatroomdataget?roomid=" + roomid)//2
-            .then((data) => {
+        console.log("useEffect 실행! chatlist:", chatlist, "타입:", typeof chatlist, "keys:", chatlist && Object.keys(chatlist));
 
-                setChatroomdata(data.data.roomdata)
-                setChatdata(makeSection(data.data.beforechat))
-                console.log("실행완료")
-                scrollcontroller();
-            }).catch((err) => {
-                console.log("에러" + err)
-            })
-    }
-            */
+        console.log("채팅셋유즈이펙트시작==============================================",chatlist)
+      //데이터가 처음에없어서 에러난다 
+        if(chatlist  && Object.keys(chatlist).length > 0)setChatdata(chatlist)
+            
+         
+           
+        
+    },[chatlist])
+console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:", chatlist && Object.keys(chatlist));
     //섹션으로 날짜나누기
         //따로 이펙트만들어줬음..
         useEffect(() => {
             scrollcontroller();
         }, [chatdata])
     
+      
     const makeSection = (chatdata) => {
+        //useeffect가 실행이안되는문제가
+        if(!Array.isArray(chatdata)){
+            console.log("makesection에 chatdata가배열이아님",chatdata)
+            return {};
+        }
         let chatmonth = {}
-        console.log("메이크섹션시작:" + chatdata)
+        console.log("메이크섹션시작:" , chatdata)
+        //반환값안써서 사실 foreach가더좋다고함
         chatdata.map((chat) => {
 
             let monthDate = chat.red.substr(0, 10)
@@ -461,11 +467,16 @@ function Chatex(props) {
             
        
     }
-  
+  useEffect(() => {
+  // 방에 들어올 때마다 캐시 삭제 후 refetch
+  queryclient.removeQueries(["chatlist", roomid]);
+}, []);
 
     //뒤로가기
     const backpage = () => {
         console.log("실행")
+        //이거 문제인거같음
+         queryclient.removeQueries(["chatlist", roomid]);
         setcontent("chatroomlist")
     }
 
@@ -482,16 +493,18 @@ function Chatex(props) {
 
                 {/*상단의 메뉴버튼 */}
 
-
+            {roominfoloading || !roominfo ?(<div>방 정보로딩중</div>)
+            : 
+            
                 <Header >
                     
                     <FontAwesomeIcon icon={faArrowLeft} size="xl" onClick={backpage}
                     style={{paddingLeft:"3px",paddingRight:"3px", marginRight:"auto"}}
                     ></FontAwesomeIcon>
                     <Roomnamecss>
-                    {roomdata && roomdata.roomname}
+                    {roominfo && roominfo.roomname}
                     </Roomnamecss>
-                    ({roomdata && roomdata.memberlist.length})
+                    ({roominfo  && roominfo.memberlist.length})
 
                     
                     <FontAwesomeIcon icon={faBars} size="xl" style={{ float: "right", 
@@ -503,19 +516,23 @@ function Chatex(props) {
 
 
                 </Header>
+            }
                 {/*메뉴누르고난다음 */}
 
-                {menuopen && <Chatmenumoda ref={menuref} roomdata={roomdata}
+                {menuopen && <Chatmenumoda ref={menuref} roomdata={roominfo}
                      />}
 
                 {/* 챗데이터 내용 div */}
                 
                 <Main >
-                    {chatdata &&
+                    {chatloading?<>채팅로딩중...</> 
+                    :                   
+                    chatdata &&
                         Object.entries(chatdata).map(([date, chats]) => {
+                                console.log("오브젝트date:",date,"오브젝트chats:",chats)
 
                             return (
-
+                            
                                 <Datediv key={date} >
 
                                     <Datecss>
@@ -602,7 +619,8 @@ function Chatex(props) {
 
                             )
 
-                        })}
+                        })
+                        }
 
                     {//아래로 내리기위한 div태그
                     }

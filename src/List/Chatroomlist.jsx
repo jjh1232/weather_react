@@ -57,10 +57,12 @@ function Chatroomlist(props){
     return (
 
         <Wrapper style={{width:"100%",height:"100%", overflow:"auto"}}>
+        
         {chatroomlistdata&&chatroomlistdata.length>0?chatroomlistdata.map((data)=>{
             return(
                 
-                <Chatroomlistitem chatroomdata={data} onclick={exit} inroom={intotheroom}
+                <Chatroomlistitem key={data.roomid}
+                chatroomdata={data} onclick={exit} inroom={intotheroom}
                
                 
                

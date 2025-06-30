@@ -143,9 +143,9 @@ export default function Chatroommanage(){
                 </TableHeader>
             {chatroom&&chatroom.map((data,key)=>{
                 return ( <>
-                                    <Chatroomlist data={data} key={key}
+                                    <Chatroomlist data={data} key={key}/>
                                 
-                                    />
+                                    
                                         
                                    </>)
             })}

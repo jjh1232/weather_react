@@ -15,14 +15,17 @@ import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
 
 
 const Wrapper=styled.div`
-    
+    width: 1000px;
+    height: 1000px;
+    z-index: 100px;
     position: absolute;
     top: 0%;
-    left:18%;
-    width: 80%;
-    height: 99%;
+   // left:18%;
+    //width: 80%;
+    //height: 99%;
     border: 1px solid black;
     text-align: center;
+    
 
 `
 

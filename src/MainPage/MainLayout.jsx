@@ -56,7 +56,7 @@ const Background = styled.div`
   width: 100%;
   height: 100vh;
   bottom:50px;
-  z-index: -10px;
+  z-index: -100px;
  
   //overflow: hidden;
  `
@@ -209,13 +209,14 @@ export default function MainLayout(props){
   <Header/>
               </Headercss>
           
-        <AdminLeft/>
+       
        
 
         
         <LeftCss>
             <LeftSideBar/>
         </LeftCss>
+
            <MainCss>
    <Outlet/>
         </MainCss>
