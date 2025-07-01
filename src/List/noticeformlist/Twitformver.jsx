@@ -51,10 +51,13 @@ export default function Twitformver(props){
        useEffect(()=>{
         console.log("노티스유즈이펙트실행!")
         let apiurl="";
+        
         if(location.pathname==="/notice/twitform"||location.pathname==="/main"||location.pathname==="/"){
             islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
+            
           
         }else if(location.pathname==="/notice/twitform/liked"){
+           
              if(islogin){
                 apiurl=`/onlikenotice`;
             
@@ -69,9 +72,12 @@ export default function Twitformver(props){
         }
 
         noticedata(apiurl)
-    }
-       ,[page,location,islogin,query,location.search])
+    },[page,location,islogin,query,location.search])
 
+       useEffect(()=>{
+        setPage(1);
+        setNotice([])
+       },[location.pathname])
        //인뷰를따로뺴야할거같은데 
        useEffect(()=>{
         
@@ -94,7 +100,7 @@ export default function Twitformver(props){
       
 
    //훅규칙때매 여기서만들고 함수안에서분기
-const axiosinstance= CreateAxios() 
+const axiosinstance= CreateAxios() ;
        const noticedata=(apiurl)=>{
         //외부에
         //함수안에서분기

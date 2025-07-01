@@ -44,7 +44,7 @@ export default function Noticeformbutton(){
       
         if(islogin){
           navigate(`/notice/twitform/liked`)
-           window.location.reload();
+       
         }
         else{
           alert("로그인후이용해주세요!")
@@ -57,7 +57,7 @@ export default function Noticeformbutton(){
 
         
             <CreateButton onClick={()=>{navigate(`/notice/twitform`)
-            window.location.reload();
+            
 
             }}>
                 일반게시글

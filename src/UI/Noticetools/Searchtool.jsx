@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass as glass } from "@fortawesome/free-solid-svg-icons";
@@ -85,7 +85,11 @@ const SearchButton=styled.button`
   }
 `
 export default function Searchtool(props){
-
+  //path에따라 form값생성
+  const location=useLocation();
+  let form="default"
+  if(location.pathname.includes("/liked")) form ="liked";
+  else if (location.pathname.includes("/imgform")) form ="image";
     //const {searchdata,deletemethod,twitformpage}=props
     const navigate=useNavigate();
         const [searchdatas,setSearchdatas]=useState(
@@ -104,20 +108,22 @@ export default function Searchtool(props){
 
   const search=()=>{
     console.log("서치메소드시작")
-    console.log("셀렉트옵션:"+searchdatas.selectoptions)
-    console.log("서치키워드"+searchdatas.keywords)
+   
    
 
     if(searchdatas.keyword===""){
       alert("검색어를입력하세요")
     }
   else{  
-   // if(searchdatas.form==="twitform"){
-        //deletemethod();
-       // twitformpage(1);
-        //console.log("트윗폼")
+        if(form==="default"){
         navigate(`/notice/twitform?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
-        //window.location.reload()
+        }
+        else if(form ==="liked"){
+        navigate(`/notice/twitform/liked?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
+        }
+        else if(form ==="image"){
+        navigate(`/notice/imgform?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
+        }
     }
    // else{
    //navigate(`/notice?form=${searchdatas.form}&pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)

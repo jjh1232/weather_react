@@ -129,10 +129,9 @@ export default function Twitformex(props){
         <Noticeformbutton/>
     </Formdiv>
         
-                    <Searchdiv>
-    <Searchtool
-     
-        />
+        <Searchdiv>
+            <Searchtool/>   
+        
          </Searchdiv>
  
 </Headerdiv>
@@ -146,6 +145,7 @@ export default function Twitformex(props){
         </Modalout>}
        
             
+
         <Maindatadiv>
             <Outlet/>
          </Maindatadiv>   
