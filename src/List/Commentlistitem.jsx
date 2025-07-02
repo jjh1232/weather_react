@@ -32,7 +32,8 @@ function Commentlistitem(props){
 
   return (
     <React.Fragment>
-      {isupdate?<Wrapper className="isupdate">
+      {isupdate?
+      <Wrapper className="isupdate">
         <Commentupdateitem data={data} Setisupdate={Setisupdate} noticeid={noticeid} page={page}/>
         </Wrapper>
       :<Wrapper  onClick={()=>{

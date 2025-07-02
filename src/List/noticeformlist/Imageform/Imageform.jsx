@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Imageformlist from "./Imageformlist";
 import AuthCheck from "../../../customhook/authCheck";
 import CreateAxios from "../../../customhook/CreateAxios";
+import { useSearchParams } from "react-router-dom";
 
 const Wrapper=styled.div`
 position: relative;
@@ -37,6 +38,13 @@ export default function Imageform(){
     //로그인체크용
     let loginuser=AuthCheck();
     let axiosinstance=CreateAxios();
+         let [query,setQuery]=useSearchParams({ //기초값일꺼임
+                
+                selectoptions:"title",
+                keywords:"",
+                pages:1
+            })
+            
     const {
         data:imgnoticelist, //받아온전체데이터 (페이지별로쌓인다)
         fetchNextPage, //다음페이지를 불러오는함수
@@ -44,11 +52,15 @@ export default function Imageform(){
         isFetchingNextPage, //다음페이지불러오는중인지여부 
         status, //쿼리상태 loading ,error ,success등
     }= useInfiniteQuery({
-            queryKey:["imgnoticelist"],
+            queryKey:["imgnoticelist",query.get("selectoptions"),query.get("keywords")],
             queryFn: async ({pageParam=1})=>{
                 const logch=loginuser? axiosinstance :axios
                 const res=await logch.get("/open/notice/imagelist",{
-                    params:{page:pageParam}
+                    params:{page:pageParam,
+                            option:query.get("selectoptions"),
+                            keyword:query.get("keywords"),
+
+                    }
                 })
                 console.log(res)
                 return res.data

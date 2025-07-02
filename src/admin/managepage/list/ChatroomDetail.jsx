@@ -111,7 +111,7 @@ const Callendercss=styled.div`
 
 export default function ChatroomDetail(props){
 
-
+    //여기도 로직좀수정해야하나
 
     const [roomdata,setRoomdata]=useState();
     const {roomid}=useParams();

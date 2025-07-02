@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -98,6 +98,17 @@ export default function Searchtool(props){
             
           }
         );
+        
+         useEffect(() => {
+    // 페이지(탭) 이동 시 폼 초기화
+    setSearchdatas({
+      selectoptions: "title",
+      keyword: "",
+    });
+  }, [location.pathname]);
+  // ...이하 생략
+
+         
       //셀렉트검색
   const options = [
     {value:"title",name:"제목"}, 
@@ -122,7 +133,7 @@ export default function Searchtool(props){
         navigate(`/notice/twitform/liked?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
         }
         else if(form ==="image"){
-        navigate(`/notice/imgform?pages=${1}&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
+        navigate(`/notice/imgform?&selectoptions=${searchdatas.selectoptions}&keywords=${searchdatas.keyword}`)
         }
     }
    // else{

@@ -6,25 +6,12 @@ import CommentTree from "./CommentTree";
 function Commentlist(props){
 
   const {comments,noticeid,page}=props
-  //const [comment]=[{}] 
-    
-  
-  
-  
-  
-
-  //const [reply]=[{}]
-
+ 
   
 if (!comments || comments.length===0){
   return <>댓글이없습니다</>
 }
-  
-
-  
-
- 
-  
+     
   return (
     <div>
        

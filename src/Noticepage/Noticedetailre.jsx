@@ -15,6 +15,11 @@ import CreateAxios from "../customhook/CreateAxios";
 import Commentform from "./Commentform";
 import Pagenation from "../customhook/Pagenation";
 import CommentPagination from "./CommentPagination";
+import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
+import Viewtrans from "../List/noticeformlist/DateCom/Viewtrans";
+
 const Wrapper=styled.div`
    position: relative;
     display: flex;
@@ -63,8 +68,15 @@ const Weatherdiv=styled.div`
 const Menudiv=styled.div`
     
 `
+const TitleTooldiv=styled.div`
+    display: flex;
+    border: 1px solid red;
+`
 const Titlediv=styled.div`
     
+`
+const Tooldiv=styled.div`
+
 `
 const Userprofile=styled.img`
     width: 40px;
@@ -239,12 +251,21 @@ useEffect(() => {
               
             
        </Userdiv>
-     
+                    <TitleTooldiv>
                 <Titlediv>
                     {post.title}
                
            
          </Titlediv>
+         <Tooldiv>
+                    <FontAwesomeIcon icon={fullheart} size="xl" color={post.likely?"red":"white"}  style={{position:"absolute",right:"1px",bottom:"1px"}}/>
+                    <FontAwesomeIcon icon={heart} size="xl" color={post.likely?"red":"black"} style={{position:"absolute",right:"1px",bottom:"1px"}}/>
+                    {post.likely?"true":"false"}
+                    <FontAwesomeIcon icon={view}/> {Viewtrans(post.views)}
+                     여기 absolute설정이랑다해야해
+            
+         </Tooldiv>
+         </TitleTooldiv>
          </Headdatadiv>
          </Header>
          <NoticeMaindiv>

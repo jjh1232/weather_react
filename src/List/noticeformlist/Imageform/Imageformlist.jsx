@@ -9,6 +9,8 @@ import AuthCheck from "../../../customhook/authCheck";
 import theme from "../../../UI/Manyim/Themecss";
 import ImageListmodal from "../../Noticeimage/ImageListmodal";
 import { useNavigate } from "react-router-dom";
+import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
+import Viewtrans from "../DateCom/Viewtrans";
 
 
 const Wrapper=styled.div`
@@ -97,6 +99,19 @@ position: absolute;
    
   color: white; 
 `
+const Viewsdiv=styled.div`
+    position: absolute;
+    bottom:10px;
+    left:5px;
+  border-radius: 4px;
+    padding: 3px 5px;
+    font-size: 13px;
+    background-color: rgba(0, 0, 0, 0.5); 
+  color: white; 
+  display: flex;       // flex로 정렬
+  align-items: center; // 수직 정렬
+
+`
 /*
 const Likenumdiv=styled.div`
    
@@ -147,7 +162,7 @@ export default function Imageformlist(props){
        
             </Userdatadiv>
            <Titlediv>
-             {content.title}
+             {content.title} 
             </Titlediv> 
        
         </Userandtitlediv>
@@ -155,11 +170,17 @@ export default function Imageformlist(props){
         
             </Header>
         <Main onClick={()=>{navigate(`/notice/detail/${content.id}`)}}>
-            <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
+            {content.blockcheck?<>
+             <MainImage src={process.env.PUBLIC_URL+"/front/Subimages/chdan.png"}/>
+          
+            </>
+            :<>
+                <MainImage src={process.env.PUBLIC_URL+content.mainimage}/>
             <Imagenumdiv onClick={()=>{
                     setisPreview(true)
             }}>
-                {isPreview&&<ImageListmodal noticeid={content.id} ispreview={setisPreview}/>}    
+                {isPreview&&<ImageListmodal noticeid={content.id} ispreview={setisPreview}/>}
+
                 <FontAwesomeIcon icon={imagesicon} /> {content.imagenum}
             </Imagenumdiv>
 
@@ -169,6 +190,13 @@ export default function Imageformlist(props){
                 <FontAwesomeIcon icon={heart} size="xl" color={content.likely?"red":"black"} style={{position:"absolute",right:"1px",bottom:"1px"}}/>
                         
             </Likebuttondiv>
+            <Viewsdiv>
+                <FontAwesomeIcon icon={view} style={{marginRight:"6px"}} />
+                {Viewtrans(content.views)}
+            </Viewsdiv>
+            </>
+            }
+        
              
         </Main>
       

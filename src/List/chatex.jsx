@@ -469,6 +469,7 @@ console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:
     }
   useEffect(() => {
   // 방에 들어올 때마다 캐시 삭제 후 refetch
+  //이게 렌더링만바뀌다보니 이전캐시가 남아있게되서 makesection을 안함;
   queryclient.removeQueries(["chatlist", roomid]);
 }, []);
 

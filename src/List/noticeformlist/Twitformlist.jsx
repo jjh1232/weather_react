@@ -17,6 +17,8 @@ import { faHeart as empty}  from "@fortawesome/free-regular-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Noticemenu from "./DateCom/Noticemenu";
 import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
+import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
+import Viewtrans from "./DateCom/Viewtrans";
 
 
 const Wrapper=styled.div`
@@ -398,13 +400,17 @@ const weatherData = weatherKeys.map(key=>({
             }>
             showreply
             </button>
+            {//----------------------여기좀수정하자
+            }
             {islike?
             <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" fontSize={"20px"}/>
             :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red" fontSize={"20px"}/>
             }
             {likenum}
             
-          
+            <FontAwesomeIcon icon={view}/>
+            {Viewtrans(post.views)}            
+              수정수정대기
             
             
             {isreple&&<>
