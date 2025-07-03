@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -19,6 +19,7 @@ import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "../List/noticeformlist/DateCom/Viewtrans";
+import AuthCheck from "../customhook/authCheck";
 
 const Wrapper=styled.div`
    position: relative;
@@ -70,13 +71,58 @@ const Menudiv=styled.div`
 `
 const TitleTooldiv=styled.div`
     display: flex;
-    border: 1px solid red;
+    border: 1px solid gray;
 `
 const Titlediv=styled.div`
-    
+    border: 1px solid blue;
+    width: 80%;
 `
 const Tooldiv=styled.div`
+    margin-left:auto;
+    width: 19.8%;
+    border: 1px solid yellow;
+    display: flex;
+    justify-content: flex-end;
+    
 
+
+`
+const Favoritediv=styled.div`
+   
+    display: flex;
+    border: 1px solid blue;
+    width: 50%;
+    //여긴 텍스트마진줘서 
+    //갭필요없는듯
+`
+const FavoriteIcon=styled.div`
+     position: relative;
+     bottom:5px;
+`
+const FavoriteText=styled.div`
+    
+    position: relative;
+    //패딩주면안겹친
+    font-size: 18px;
+    //마진이 더좋은듯 패딩은 값늘면 문제생김
+    margin-left: 28px;
+    //그레인데 좀찐한그레이로바꿔야할듯
+    color:${({theme})=>theme.gray};
+    bottom: 1px;
+`
+const Viewsdiv=styled.div`
+       position: relative;
+       display: flex;
+       border:1px solid red;
+        gap   : 5px;
+       width: 50%;
+`
+const ViewIcondiv=styled.div`
+    
+`
+const ViewTextdiv=styled.div`
+      font-size: 18px;
+      color:${({theme})=>theme.gray};
 `
 const Userprofile=styled.img`
     width: 40px;
@@ -119,7 +165,8 @@ export default function Noticedetailre(props){
     let axiosinstance=CreateAxios();
     const pageref=useRef(null)
     console.log("노티스디테일")
-
+    let logincheck=AuthCheck();
+    const queryclient=useQueryClient();
     //페이지 저장
     useEffect(()=>{
         
@@ -127,7 +174,7 @@ export default function Noticedetailre(props){
 
     },[page])
    
-    const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",noticeid],
+    const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",Number(noticeid)],
         queryFn:async ()=>{
             const res=await axios.get("/open/noticedetail/"+noticeid);
             
@@ -191,6 +238,7 @@ export default function Noticedetailre(props){
     }
  }
 const isMounted = useRef(false);
+//스크롤이어색해서
 useEffect(() => {
        setTimeout(() => {
     
@@ -207,6 +255,39 @@ useEffect(() => {
   }
     }, 1500);
 }, [page]);
+
+//좋아요시 캐시만 수정
+const likemutation=useMutation({
+    mutationFn:async (noticeid)=>{
+        const res=await axiosinstance.post(`/noticelike/${noticeid}`);
+
+        console.log("데이터여부:"+res.data);
+        return res.data
+    },onSuccess:(data,noticeid)=>{
+        //쿼리키 데이터가져오기
+        console.log("노티스아이디타입:"+typeof noticeid + "값:"+noticeid)
+        queryclient.setQueryData(["post",noticeid],(oldData)=>{
+            if(!oldData) return oldData;
+            //좋아요관련 데이터업데이트
+            return {
+                ...oldData,
+                likely:data,
+                //서버에서안내려줌
+                likes:oldData.likes+(data?1:-1)
+            }
+        })
+    },onError:()=>{
+        alert("잠시후다시시도해주세요")
+    }
+})
+
+const LikeButtonhandler=(noticeid)=>{
+    if(logincheck){
+        likemutation.mutate(noticeid);
+        }else{
+        alert("로그인후 이용하실수있습니다")
+    }
+}
 
     return (
 <Wrapper>
@@ -258,11 +339,25 @@ useEffect(() => {
            
          </Titlediv>
          <Tooldiv>
-                    <FontAwesomeIcon icon={fullheart} size="xl" color={post.likely?"red":"white"}  style={{position:"absolute",right:"1px",bottom:"1px"}}/>
-                    <FontAwesomeIcon icon={heart} size="xl" color={post.likely?"red":"black"} style={{position:"absolute",right:"1px",bottom:"1px"}}/>
-                    {post.likely?"true":"false"}
-                    <FontAwesomeIcon icon={view}/> {Viewtrans(post.views)}
-                     여기 absolute설정이랑다해야해
+                    <Favoritediv>
+                    <FavoriteIcon onClick={()=>LikeButtonhandler(post.id)}>
+                    <FontAwesomeIcon icon={fullheart} size="xl" color={post.likely?"red":"white"}  style={{position:"absolute",left:"0px",top:"5px"}}/>
+                    <FontAwesomeIcon icon={heart} size="xl" color={post.likely?"red":"black"} style={{position:"absolute",left:"0px",top:"5px"}}/>
+                    </FavoriteIcon>
+                    <FavoriteText>
+                     {Viewtrans(post.likes)}
+                    </FavoriteText>
+                   </Favoritediv>
+                   
+                    <Viewsdiv>
+                        <ViewIcondiv>
+                    <FontAwesomeIcon icon={view} size="xl"/> 
+                        </ViewIcondiv>
+                    <ViewTextdiv>
+                          {Viewtrans(post.views)}
+                    </ViewTextdiv>
+                    
+                    </Viewsdiv>
             
          </Tooldiv>
          </TitleTooldiv>

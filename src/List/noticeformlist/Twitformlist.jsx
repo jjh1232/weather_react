@@ -410,7 +410,7 @@ const weatherData = weatherKeys.map(key=>({
             
             <FontAwesomeIcon icon={view}/>
             {Viewtrans(post.views)}            
-              수정수정대기
+              수정수정대기//중
             
             
             {isreple&&<>
