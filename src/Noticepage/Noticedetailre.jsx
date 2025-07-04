@@ -176,7 +176,7 @@ export default function Noticedetailre(props){
    
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",Number(noticeid)],
         queryFn:async ()=>{
-            const res=await axios.get("/open/noticedetail/"+noticeid);
+            const res=await axiosinstance.get("/open/noticedetail/"+noticeid);
             
             console.log("노티스:",res)
             return res.data;
@@ -186,7 +186,7 @@ export default function Noticedetailre(props){
       const {data:comment,isLoading:commentloading,error:commenterror}=
       useQuery({queryKey:["comments",noticeid,page],
         queryFn:async ()=>{
-            const res=await axios.get( "/open/commentshow/",{
+            const res=await axiosinstance.get( "/open/commentshow/",{
                 params:{
                     noticeid:noticeid,
                     page:page
@@ -271,7 +271,7 @@ const likemutation=useMutation({
             //좋아요관련 데이터업데이트
             return {
                 ...oldData,
-                likely:data,
+              likeusercheck:data,
                 //서버에서안내려줌
                 likes:oldData.likes+(data?1:-1)
             }
@@ -341,8 +341,9 @@ const LikeButtonhandler=(noticeid)=>{
          <Tooldiv>
                     <Favoritediv>
                     <FavoriteIcon onClick={()=>LikeButtonhandler(post.id)}>
-                    <FontAwesomeIcon icon={fullheart} size="xl" color={post.likely?"red":"white"}  style={{position:"absolute",left:"0px",top:"5px"}}/>
-                    <FontAwesomeIcon icon={heart} size="xl" color={post.likely?"red":"black"} style={{position:"absolute",left:"0px",top:"5px"}}/>
+                  
+                    <FontAwesomeIcon icon={fullheart} size="xl" color={post.likeusercheck?"red":"white"}  style={{position:"absolute",left:"0px",top:"5px"}}/>
+                    <FontAwesomeIcon icon={heart} size="xl" color={post.likeusercheck?"red":"black"} style={{position:"absolute",left:"0px",top:"5px"}}/>
                     </FavoriteIcon>
                     <FavoriteText>
                      {Viewtrans(post.likes)}

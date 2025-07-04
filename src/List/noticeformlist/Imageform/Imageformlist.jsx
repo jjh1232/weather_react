@@ -11,6 +11,7 @@ import ImageListmodal from "../../Noticeimage/ImageListmodal";
 import { useNavigate } from "react-router-dom";
 import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "../DateCom/Viewtrans";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 
 
 const Wrapper=styled.div`
@@ -129,19 +130,47 @@ const Likenumdiv=styled.div`
 `
 */
 export default function Imageformlist(props){
-    const {content}=props;
+    //옵션과키워드는 쿼리리페치를위해
+    const {content,option,keyword}=props;
     const [isPreview,setisPreview]=useState(false);
     let logincheck=AuthCheck();
    let axiosinstance=CreateAxios()
    const navigate=useNavigate();
-    const Noticelikehandler=()=>{
+   const queryclient=useQueryClient();
+
+ const likemutation=useMutation({
+     mutationFn:async (noticeid)=>{
+         const res=await axiosinstance.post(`/noticelike/${noticeid}`);
+ 
+         console.log("데이터여부:"+res.data);
+         return res.data
+     },onSuccess:(data,noticeid)=>{
+         //쿼리키 데이터가져오기
+        
+         queryclient.setQueryData(["imgnoticelist",option,keyword],(oldData)=>{
+             if(!oldData) return oldData;
+             //좋아요관련 데이터업데이트
+             return {
+                 ...oldData,
+                 pages:oldData.pages.map(page=>({
+                    ...page,
+                    content:page.content.map(item=>
+                        item.id===noticeid 
+                        ?{...item,likeusercheck:data,likes:item.likes+(data ?1 :-1)}
+                        :item
+                    )
+                 }))
+           
+             }
+         })
+     },onError:()=>{
+         alert("잠시후다시시도해주세요")
+     }
+ })
+    const Noticelikehandler=(noticeid)=>{
         if(logincheck){
              
-             axiosinstance.get(`/noticelike/${content.id}`).then((res)=>{
-                alert(res.content)
-             }).catch((err)=>{
-                alert ("좋아요실패했어요!")
-             })
+            likemutation.mutate(noticeid)
             
         }else{
             alert("로그인후이용해주세요")
@@ -184,7 +213,9 @@ export default function Imageformlist(props){
                 <FontAwesomeIcon icon={imagesicon} /> {content.imagenum}
             </Imagenumdiv>
 
-            <Likebuttondiv onClick={()=>{Noticelikehandler()}}>
+            <Likebuttondiv onClick={(e)=>{
+                e.stopPropagation();
+                Noticelikehandler(content.id)}}>
 
                 <FontAwesomeIcon icon={fullheart} size="xl" color={content.likely?"red":"white"}  style={{position:"absolute",right:"1px",bottom:"1px"}}/>
                 <FontAwesomeIcon icon={heart} size="xl" color={content.likely?"red":"black"} style={{position:"absolute",right:"1px",bottom:"1px"}}/>

@@ -32,9 +32,16 @@ instance.interceptors.request.use(
         else{
             //헤더가없을경우
             console.log("헤더가비어있는처음!")
-            const Accesstoken="Bearer "+loginuser.Acesstoken;
             const newConfig={...config};
+            if(loginuser.Acesstoken){
+            const Accesstoken="Bearer "+loginuser.Acesstoken;
+            
             newConfig.headers.Authorization=Accesstoken;
+            }else{
+                //혹시남아있을수있으니삭제
+                delete newConfig.headers.Authorization;
+            }
+
             return newConfig;
         }
    
@@ -50,13 +57,23 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
      (res)=>{
         console.log("요청전달성공 "+res)
-       
+         const accessToken = res.headers.get
+      ? res.headers.get("Authorization")
+      : res.headers["authorization"]; // fetch와 axios 호환
+    const refreshToken = res.headers.get
+      ? res.headers.get("refreshtoken")
+      : res.headers["refreshtoken"];
         
         removeLoginuser("Acesstoken");
+        //removeLoginuser("Refreshtoken")
         //삭제해줘야함
-        setLoginuser("Acesstoken",res.headers.get("Authorization"),{path:"/"})
-        setLoginuser("Refreshtoken",res.headers.get("refreshtoken"),{path:"/"})
-        
+        // 토큰이 있을 때만 쿠키에 저장
+    if (accessToken) {
+      setLoginuser("Acesstoken", accessToken, { path: "/" });
+    }
+    if (refreshToken) {
+      setLoginuser("Refreshtoken", refreshToken, { path: "/" });
+    }
         return res;
     },(err)=>{
         
