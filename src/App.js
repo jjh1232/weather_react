@@ -7,7 +7,7 @@ import Noticecreate from "./Noticepage/Noticecreate";
 import NoticeDetail from "./Noticepage/NoticeDetail";
 import NoticeUpdate from "./Noticepage/NoticeUpdate";
 import Membercreate from "./MemberPage/Membercreate";
-import MainPage from "./MainPage/Main";
+
 import Loginpage from "./MemberPage/Loginpage"
 import { CookiesProvider } from "react-cookie";
 import Memberidfind from "./MemberPage/Memberidfind";
@@ -27,7 +27,7 @@ import Userviewtest from "./MainPage/userviewtest";
 import RightSideBar from "./MainPage/RightSideBar";
 import LeftSideBar from "./MainPage/LeftSideBar";
 import NoticelistView from "./Noticepage/NoticePattern/NoticelistView";
-import CenterPage from "./MainPage/CenterPage";
+
 import Lifecycle from "./customhook/Lifecycletest/Lifecycle";
 import Twitformex from "./List/noticeformlist/Twitformex";
 import Statetest from "./customhook/Statetest";
@@ -115,18 +115,19 @@ const updatetime=()=>{
       <Route path="loginhistory" element={<Adminloginhistory/>}/>
     </Route>
     
-     <Route path="/" element={<MainLayout />}>
+ <Route path="/" element={<MainLayout />}>
     
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
    
-    <Route path="/notice" element={<Twitformex/>}>
-      <Route path="imgform" element={<Imageform/>}/>
-      <Route path="twitform/liked" element={<Twitformver />}/>
-      <Route  path="twitform"index element={<Twitformver/>}/>
-      <Route path="detail/:noticeid" element={<Noticedetailre/>}/>
-    </Route>
+      <Route path="/notice" element={<Twitformex/>}>
+        <Route path="imgform" element={<Imageform/>}/>
+        <Route path="twitform/liked" element={<Twitformver />}/>
+        <Route  path="twitform"index element={<Twitformver/>}/>
+        <Route path="detail/:noticeid" element={<Noticedetailre/>}/>
+     </Route>
     
+
    <Route path="/" element={<Twitformex />}>
   <Route index element={<Twitformver />} />
 </Route>
@@ -135,13 +136,12 @@ const updatetime=()=>{
     <Route path="/oauthsuccess" element={<OauthSuccesspage/>}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
    
-    <Route path="notice" element={<CenterPage/>}/>
+  
     <Route path="userprofile" element={<Userimage/>}/>
       <Route path="main" element={<Twitformex/>}/>
       <Route path="noticeex/:page" element={<Noticemainex/>}/>
       <Route path="noticelogic" element={<NoticelistView/>}/>
       <Route path="noticecreate" element={<Noticecreate/>}/>
-      
       <Route path="noticeupdate/:num" element={<NoticeUpdate/>}/>
       <Route path="membercreate" element={<Membercreate/>}/>
       <Route path="login" element={<Loginpage/>}/>

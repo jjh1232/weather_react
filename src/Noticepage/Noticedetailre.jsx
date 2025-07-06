@@ -28,21 +28,24 @@ const Wrapper=styled.div`
 width:100%;
 //height:100%;
 overflow: hidden;
+
 `
 const Noticediv=styled.div`
     
 `
 const Header=styled.div`
-    border: 1px solid blue;
+   
     display: flex;
+    gap: 5px;
+    border-bottom: 1px solid gray;
 `
 
 const Profilediv=styled.div`
-    border: 1px solid red;
+   
 
 `
 const Headdatadiv=styled.div`
-    border: 1px solid green;
+  
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -54,14 +57,28 @@ const Userdiv=styled.div`
 `
 
 const Nickdiv=styled.div`
+     font-weight:bold;
+     font-size: 18px;
+      display: flex;
+    justify-content: center;   
+    align-items: center;  
       color: ${(props)=>props.theme.text};
 `
 const Usernamediv=styled.div`
+    
     display: flex;
+    justify-content: center;   
+    align-items: center;       
+    
+    font-size: 15px;
     color: gray;
 `
 const Timediv=styled.div`
+     display: flex;
+    justify-content: center;   
+    align-items: center;       
     
+    font-size: 15px;
 `
 const Weatherdiv=styled.div`
     margin-left: auto;
@@ -71,26 +88,26 @@ const Menudiv=styled.div`
 `
 const TitleTooldiv=styled.div`
     display: flex;
-    border: 1px solid gray;
+   
 `
 const Titlediv=styled.div`
-    border: 1px solid blue;
+    
     width: 80%;
 `
 const Tooldiv=styled.div`
     margin-left:auto;
     width: 19.8%;
-    border: 1px solid yellow;
+    
     display: flex;
     justify-content: flex-end;
-    
+   // border: 1px solid gray;
 
 
 `
 const Favoritediv=styled.div`
    
     display: flex;
-    border: 1px solid blue;
+   
     width: 50%;
     //여긴 텍스트마진줘서 
     //갭필요없는듯
@@ -113,7 +130,7 @@ const FavoriteText=styled.div`
 const Viewsdiv=styled.div`
        position: relative;
        display: flex;
-       border:1px solid red;
+      
         gap   : 5px;
        width: 50%;
 `
@@ -129,6 +146,8 @@ const Userprofile=styled.img`
     height: 40px;
     border: 1px solid black;
     background-color: white;
+    margin-top: 5px;
+    margin-left:4px;
 
     
 `

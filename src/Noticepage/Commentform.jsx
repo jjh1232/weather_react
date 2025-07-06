@@ -15,7 +15,7 @@ const Wrapper=styled.div`
   display: flex;
   min-height: 60px;
   max-height: fit-content;
-  border: 1px solid blue;
+  border: 1px solid black;
   word-break: break-all;
   overflow: hidden;
 `
@@ -23,29 +23,28 @@ const Imgdiv=styled.div`
   border: 1px solid black;
   flex-grow: 1;
   display: flex;
-  align-items: center;
-    justify-content: center;  /* 가로 중앙 정렬 */
+  padding-left: 5px;
+  padding-top: 5px;
 
 `
 const Img=styled.img`
   
   top:2px;
   left:0%;
-  width: 60px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
   display:inline-block;
   border: 1px solid black;
   background-color: white;
 `
 
 const Maindiv=styled.div`
-border: 1px solid yellow;
+border: 1px solid gray;
 flex-grow: 110;
 display: flex;
 flex-direction: column;
 `
 const Headerdiv=styled.div`
-border: 1px solid red;
 
 `
 const Username=styled.span`
@@ -59,7 +58,7 @@ const Username=styled.span`
 
 const Commentmaindiv=styled.div`
   display: flex;
-  border: 1px solid green;
+  
 `
 const Commentinput=styled.textarea`
 //position: relative;

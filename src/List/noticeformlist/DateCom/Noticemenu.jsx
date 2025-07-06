@@ -16,6 +16,7 @@ const Wrapper=styled.div`
     display: flex;
     background-color: gray;
     flex-direction: column;
+    z-index: 50;
 
 `
 const Innerdiv=styled.div`

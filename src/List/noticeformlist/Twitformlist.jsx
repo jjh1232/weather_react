@@ -116,9 +116,29 @@ const Overflowdiv=styled.div`
   text-align: center;
   vertical-align: middle;
 `
+//하단부
 const Noticefooter=styled.div`
+  display  :  flex;
+`
+//
+const Showreplediv=styled.div`
   
 `
+const Likeviewdiv=styled.div`
+  display: flex;
+  margin-left: auto;
+  gap: 20px;
+  border: 1px solid red;
+`
+const Likediv=styled.div`
+  display: flex;
+  border: 1px solid blue;
+`
+const Viewdiv=styled.div`
+  display: flex;
+  border: 1px solid blue;
+`
+
 export default function Twitformlist(props){
 
     const {post}=props;
@@ -394,6 +414,9 @@ const weatherData = weatherKeys.map(key=>({
 
         </>}
             <Noticefooter>
+              <Showreplediv>
+
+             
             <button onClick={()=>{
                 setIsreple(!isreple)
             }
@@ -402,16 +425,25 @@ const weatherData = weatherKeys.map(key=>({
             </button>
             {//----------------------여기좀수정하자
             }
+            </Showreplediv>
+            <Likeviewdiv>
+
+            <Likediv>
+
+           
             {islike?
             <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" fontSize={"20px"}/>
             :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red" fontSize={"20px"}/>
             }
-            {likenum}
+            {Viewtrans(likenum)}
+             </Likediv>
+             <Viewdiv>
+
             
             <FontAwesomeIcon icon={view}/>
             {Viewtrans(post.views)}            
-              수정수정대기//중
-            
+              </Viewdiv>
+              </Likeviewdiv>
             
             {isreple&&<>
                 <Twitcomment  noticeid={post.num} 

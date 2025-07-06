@@ -115,7 +115,7 @@ bottom: 100px;
  //width: auto;
   width:820px;
   max-width: 820px;
-  border: 1px solid red;
+  border: 1px solid black;
   
  // max-width: 0;
 `

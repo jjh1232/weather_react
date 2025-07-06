@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AuthCheck from "../customhook/authCheck";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
-import Twitform from "../List/noticeformlist/Twitform";
+
 import CreateAxios from "../customhook/CreateAxios";
 import { useLocation } from "react-router-dom";
 import Noticeformbutton from "./NoticePattern/Noticeformbutton";

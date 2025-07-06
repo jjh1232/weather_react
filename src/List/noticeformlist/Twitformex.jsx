@@ -18,7 +18,7 @@ position: relative;
 
 width:100%;
 height:100%;
-border: 1px solid blue;
+
  color:${props => props.theme.text};
  background:${props => props.theme.background};
  top: 8%;
@@ -46,8 +46,8 @@ background-color: #FFFFFF;
 //헤더
 const Headerdiv=styled.div`
     display: flex;
+    border: 1px solid gray;
     
-    border: 1px solid red;
 `
 const Creatediv=styled.div`
     
@@ -82,7 +82,7 @@ const Searchdiv=styled.div`
      width: 50%;
 `
 const Formdiv=styled.div`
-     border: 1px solid green;
+   //  border: 1px solid green;
      width: 50%;
 `
 const Maindatadiv=styled.div`

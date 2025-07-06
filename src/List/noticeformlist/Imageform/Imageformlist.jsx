@@ -152,6 +152,9 @@ export default function Imageformlist(props){
              //좋아요관련 데이터업데이트
              return {
                  ...oldData,
+                 //pages는 useinfinitequery의 여러페이지배열 
+                 //page는 배열내한페이지에 해당하는데이터객체 
+                 //content는 각페이지데이터객체안의실제아이템배열(서버응답구조에따라다름)
                  pages:oldData.pages.map(page=>({
                     ...page,
                     content:page.content.map(item=>
