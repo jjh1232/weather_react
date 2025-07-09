@@ -19,6 +19,7 @@ import Noticemenu from "./DateCom/Noticemenu";
 import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
 import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "./DateCom/Viewtrans";
+import { faComment as comimo } from "@fortawesome/free-regular-svg-icons";
 
 
 const Wrapper=styled.div`
@@ -160,6 +161,7 @@ export default function Twitformlist(props){
 
     const [textoverflow,setTextoverflow]=useState(false);
 
+    //클릭시 내용크게
     useEffect(()=>{
       if(Textref.current){
         setTextoverflow(Textref.current.scrollHeight>Textref.current.clientHeight)
@@ -185,9 +187,7 @@ export default function Twitformlist(props){
     },[])
     const showreply=()=>{
         console.log("쇼리플")
-        
-            
-            
+                               
         axios.get(`/open/comment/${post.num}`).then((res)=>{
             setComments(res.data)
             console.log(res.data)
@@ -414,15 +414,10 @@ const weatherData = weatherKeys.map(key=>({
 
         </>}
             <Noticefooter>
-              <Showreplediv>
-
-             
-            <button onClick={()=>{
-                setIsreple(!isreple)
-            }
-            }>
-            showreply
-            </button>
+              <Showreplediv  onClick={()=>{setIsreple(!isreple)}}>
+            <FontAwesomeIcon icon={ comimo} size="2x"/>
+             {post.commentcount}
+           
             {//----------------------여기좀수정하자
             }
             </Showreplediv>
@@ -444,18 +439,16 @@ const weatherData = weatherKeys.map(key=>({
             {Viewtrans(post.views)}            
               </Viewdiv>
               </Likeviewdiv>
-            
-            {isreple&&<>
-                <Twitcomment  noticeid={post.num} 
-               
-                />
-                </>}
-            
+      
               
             {isupdate&&<>
               <Twitformnoticeupdate noticeid={post.num} setIsupdate={setIsupdate}/>
               </>}
              
+              {isreple&&<>
+                <Twitcomment  noticeid={post.num}/>
+                </>}
+
               </Noticefooter>
             
            

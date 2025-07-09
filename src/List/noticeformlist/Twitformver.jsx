@@ -20,6 +20,7 @@ const Wrapper=styled.div`
 
 `
 
+//이게메인
 
 export default function Twitformver(props){
     //const {posts,onClickItem,noticecreate,querydatas
@@ -50,10 +51,10 @@ export default function Twitformver(props){
        //이거 어싱크함수로 밖에빼서 한번해볼까함 
        useEffect(()=>{
         console.log("노티스유즈이펙트실행!")
-        let apiurl="";
+        let apiurl="/open/twitformnoticelist";
         
         if(location.pathname==="/notice/twitform"||location.pathname==="/main"||location.pathname==="/"){
-            islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
+            //islogin?apiurl=`/noticeget`: apiurl=`/open/noticesearch`
             
           
         }else if(location.pathname==="/notice/twitform/liked"){
@@ -101,15 +102,16 @@ export default function Twitformver(props){
 
    //훅규칙때매 여기서만들고 함수안에서분기
 const axiosinstance= CreateAxios() ;
+
        const noticedata=(apiurl)=>{
         //외부에
         //함수안에서분기
-        const instance=islogin?axiosinstance:axios;
+        //const instance=islogin?axiosinstance:axios;
         //값없을시 막기
         if (!apiurl) return;
         console.log(query.get("keywords"))
        setIsloading(true)
-        instance.get(apiurl,{
+        axiosinstance.get(apiurl,{
           params:{
           option:query.get("selectoptions"),
           keyword:query.get("keywords"),
@@ -118,7 +120,7 @@ const axiosinstance= CreateAxios() ;
         }).then((res)=>{    
            const newcontent=res.data.content;
           
-            console.log("뉴");
+            console.log("뉴:",newcontent);
             if(newcontent===undefined){
                 console.log("자료가없어요!")
             }
