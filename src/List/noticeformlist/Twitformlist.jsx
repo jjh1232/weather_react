@@ -82,7 +82,7 @@ const TitleCss=styled.div`
 `
 const Title=styled.div`
   float: left;
-  font-size:20px;
+  font-size:16px;
   margin-left:7px;
  // border: 1px solid blue;
 `
@@ -92,6 +92,9 @@ const Weatherdata =styled.div`
     
     //border:1px solid yellow;
     margin-left: auto;
+`
+const NoticeMain=styled.div`
+  position: relative;
 `
 const Textarea=styled.div`
 border: 1px solid black;
@@ -108,36 +111,78 @@ const Blockcss=styled.div`
   overflow: hidden;
 `
 const Overflowdiv=styled.div`
-  position: relative;
+  position: absolute;
  background-color: rgba(243, 240, 240, 0.2);
- z-index: 10px;
+ z-index: 100px;
   width: 100%;
-  bottom: 50px;
+  bottom: 0px;
   height: 50px;
+  
   text-align: center;
   vertical-align: middle;
+  
+  
 `
 //하단부
 const Noticefooter=styled.div`
   display  :  flex;
+ gap: 150px;
+ border: 1px solid blue;
 `
 //
 const Showreplediv=styled.div`
+  position: relative;
   
+  padding-left: 40px;
 `
-const Likeviewdiv=styled.div`
+const Commentnumdiv=styled.span`
+position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  //min-width: 20px;
+  width: 20px;
   display: flex;
-  margin-left: auto;
-  gap: 20px;
-  border: 1px solid red;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0 6px;
+  box-sizing: border-box;
+  z-index: 1;
+
 `
+
 const Likediv=styled.div`
+ 
+  gap: 5px;
   display: flex;
-  border: 1px solid blue;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  
+ 
+`
+const Likeviewtextdiv=styled.div`
+  font-size: 20px;
+     display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 const Viewdiv=styled.div`
-  display: flex;
-  border: 1px solid blue;
+ 
+  gap: 5px;
+    display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  
 `
 
 export default function Twitformlist(props){
@@ -391,6 +436,9 @@ const weatherData = weatherKeys.map(key=>({
             {
         //게시글 헤더끝 메인시작=============================================
         }
+        <NoticeMain>
+
+ 
          {isblock?
             <Blockcss>
             <img src={process.env.PUBLIC_URL+"/front/Subimages/noticeblock.png"}
@@ -403,42 +451,56 @@ const weatherData = weatherKeys.map(key=>({
             {<Textarea ref={Textref} dangerouslySetInnerHTML={{__html:post.text}}
             over={expend} 
             >
-            
+
+                
               </Textarea>}
-              {textoverflow&&!expend&&<Overflowdiv onClick={()=>setExpend(!expend)}>
+          {textoverflow&&!expend&&<Overflowdiv onClick={()=>setExpend(!expend)}>
                 더보기
-                </Overflowdiv>}
+                </Overflowdiv>}  
             {
         //게시글메인끝 게시글푸터 =============================================
         }
 
         </>}
+               </NoticeMain>
             <Noticefooter>
               <Showreplediv  onClick={()=>{setIsreple(!isreple)}}>
+            
             <FontAwesomeIcon icon={ comimo} size="2x"/>
-             {post.commentcount}
-           
-            {//----------------------여기좀수정하자
+            {post.commentcount >0&&
+            <Commentnumdiv>
+                 {post.commentcount > 99 ? '99+' :post.commentcount}
+            </Commentnumdiv>
             }
+            
+        
+           
+            
             </Showreplediv>
-            <Likeviewdiv>
+            
 
             <Likediv>
 
            
             {islike?
-            <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" fontSize={"20px"}/>
-            :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red" fontSize={"20px"}/>
+            <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" size="xl" fontSize={"20px"}/>
+            :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red"  size="xl" fontSize={"20px"}/>
             }
-            {Viewtrans(likenum)}
+            <Likeviewtextdiv>
+               {Viewtrans(likenum)}
+            </Likeviewtextdiv>
+         
              </Likediv>
              <Viewdiv>
 
             
-            <FontAwesomeIcon icon={view}/>
-            {Viewtrans(post.views)}            
+            <FontAwesomeIcon icon={view} size="xl"/>
+            <Likeviewtextdiv>
+             {Viewtrans(post.views)}         
+            </Likeviewtextdiv>
+              
               </Viewdiv>
-              </Likeviewdiv>
+             
       
               
             {isupdate&&<>
@@ -452,7 +514,7 @@ const weatherData = weatherKeys.map(key=>({
               </Noticefooter>
             
            
-<br/>
+
 
 
 
