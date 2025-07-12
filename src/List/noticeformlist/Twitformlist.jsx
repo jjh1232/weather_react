@@ -132,26 +132,19 @@ const Noticefooter=styled.div`
 //
 const Showreplediv=styled.div`
   position: relative;
+  display: flex;
   
   padding-left: 40px;
 `
 const Commentnumdiv=styled.span`
-position: absolute;
-  top: -6px;
-  right: -6px;
-  background: red;
-  color: white;
-  border-radius: 50%;
-  //min-width: 20px;
-  width: 20px;
-  display: flex;
-  align-items: center;
+
+  padding-left: 7px;
+  font-size: 20px;
+     display: flex;
+  vertical-align: middle;
   justify-content: center;
-  font-size: 13px;
-  font-weight: bold;
-  padding: 0 6px;
-  box-sizing: border-box;
-  z-index: 1;
+  align-items: center;
+  text-align: center;
 
 `
 
@@ -469,7 +462,7 @@ const weatherData = weatherKeys.map(key=>({
             <FontAwesomeIcon icon={ comimo} size="2x"/>
             {post.commentcount >0&&
             <Commentnumdiv>
-                 {post.commentcount > 99 ? '99+' :post.commentcount}
+                 {Viewtrans(post.commentcount)}
             </Commentnumdiv>
             }
             
@@ -504,17 +497,19 @@ const weatherData = weatherKeys.map(key=>({
       
               
             {isupdate&&<>
-              <Twitformnoticeupdate noticeid={post.num} setIsupdate={setIsupdate}/>
+              <Twitformnoticeupdate noticeid={post.id} setIsupdate={setIsupdate}/>
               </>}
              
-              {isreple&&<>
-                <Twitcomment  noticeid={post.num}/>
-                </>}
+
+           
 
               </Noticefooter>
             
            
-
+                {isreple&&<>
+               
+                <Twitcomment  noticeid={post.id}/>
+                </>}
 
 
 
