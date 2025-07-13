@@ -6,6 +6,7 @@ import { faCloudRain } from "@fortawesome/free-solid-svg-icons";
 import { faTint } from "@fortawesome/free-solid-svg-icons";
 import { faTemperatureLow } from "@fortawesome/free-solid-svg-icons";
 import { faWind } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 
 const skyMap = {
@@ -49,9 +50,24 @@ const skyMap = {
       if (!iconInfo) return null;
 
       return (
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+        <Wrapper >
           <FontAwesomeIcon icon={iconInfo.icon} color={iconInfo.color} />
-          <span>{iconInfo.label}</span>
-        </span>
+          <Labeltext>{iconInfo.label}</Labeltext>
+        </Wrapper>
       );
   }
+
+  const Wrapper=styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+      display: flex;
+  justify-content: center;  /* 가로(주축) 중앙 정렬 */
+  align-items: center;      /* 세로(교차축) 중앙 정렬 */
+  `
+  const Labeltext=styled.span`
+    font-size: 14px;
+      display: flex;
+  justify-content: center;  /* 가로(주축) 중앙 정렬 */
+  align-items: center;      /* 세로(교차축) 중앙 정렬 */
+  `

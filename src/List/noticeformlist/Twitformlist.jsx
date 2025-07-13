@@ -70,10 +70,7 @@ const Timecss=styled.div`
    margin-left: 10px;
  
 `
-const Menucss=styled.div`
- //내부요소 오른쪽정렬
-  margin-left: auto;
-`
+
 const Weatherdiv=styled.div`
   
 `
@@ -86,13 +83,34 @@ const Title=styled.div`
   margin-left:7px;
  // border: 1px solid blue;
 `
+const HeaderTools=styled.div`
+  display: flex;
+   margin-left: auto;
+   gap: 12px;
+ 
+  justify-content: center;  /* 가로(주축) 중앙 정렬 */
+  align-items: center;      /* 세로(교차축) 중앙 정렬 */
+`
 const Weatherdata =styled.div`
     position: relative;
-    right:0px;
+  
     
     //border:1px solid yellow;
-    margin-left: auto;
+    display: flex;
+     display: flex;
+  justify-content: center;  /* 가로(주축) 중앙 정렬 */
+  align-items: center;      /* 세로(교차축) 중앙 정렬 */
+    
+    gap: 10px;
 `
+const Menucss=styled.div`
+ //내부요소 오른쪽정렬
+ // margin-left: auto;
+   display: flex;
+  justify-content: center;  /* 가로(주축) 중앙 정렬 */
+  align-items: center;      /* 세로(교차축) 중앙 정렬 */
+`
+
 const NoticeMain=styled.div`
   position: relative;
 `
@@ -377,12 +395,17 @@ const weatherData = weatherKeys.map(key=>({
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
+      <HeaderTools>
 
+     
      <Weatherdata>
                     
                     {weatherData.map((data,key)=>(
+                      
                       <NoticeWeathericon type={data.type} value={data.value} key={key}/>
+                      
                     ))}
+
                       </Weatherdata>    
                  
                     <Menucss ref={menuref}>
@@ -390,7 +413,7 @@ const weatherData = weatherKeys.map(key=>({
                     onClick={()=>{
                         setIsmenu(!ismenu)
                     }}
-                    style={{border:"1px solid black"}} icon={faEllipsis} fontSize={"25px"}/>
+                    icon={faEllipsis} fontSize={"25px"}/>
                    
                     {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
 
@@ -402,7 +425,7 @@ const weatherData = weatherKeys.map(key=>({
                 
                     
                     </Menucss>      
-              
+               </HeaderTools>
                  
             
      </Nameheader>

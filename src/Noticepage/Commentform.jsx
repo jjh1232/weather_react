@@ -131,7 +131,7 @@ const commentmutate=useMutation({
    mutationFn:Commentcreate,
    onSuccess:(data,variable)=>{
      setComment({text:""})
-     const noticenum=String(variable.noticenum);
+     const noticenum=Number(variable.noticenum);
      // alert("페이지타입:"+typeof page+"글번호:"+typeof noticenum)
     // alert("성공후아이디:"+noticenum+",페이지"+page)
     queryclient.invalidateQueries({queryKey:["comments",noticenum,page]})

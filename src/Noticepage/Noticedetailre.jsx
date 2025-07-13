@@ -195,7 +195,7 @@ export default function Noticedetailre(props){
    
     const {data:post,isLoading:noticeloading,error:noticeerror}=useQuery({queryKey:["post",Number(noticeid)],
         queryFn:async ()=>{
-            const res=await axiosinstance.get("/open/noticedetail/"+noticeid);
+            const res=await axiosinstance.get("/open/noticedetail/"+Number(noticeid));
             
             console.log("노티스:",res)
             return res.data;
@@ -203,7 +203,7 @@ export default function Noticedetailre(props){
     })
 
       const {data:comment,isLoading:commentloading,error:commenterror}=
-      useQuery({queryKey:["comments",noticeid,page],
+      useQuery({queryKey:["comments",Number(noticeid),Number(page)],
         queryFn:async ()=>{
             const res=await axiosinstance.get( "/open/commentshow/",{
                 params:{

@@ -95,7 +95,7 @@ export default function Imageform(){
                 {data.content.map((da,key)=>{
                     return (
                         
-                        <Imageformlist content={da} key={key} />
+                        <Imageformlist content={da} key={key} option={query.get("selectoptions")} keyword={query.get("keywords")}/>
                        
                         
                     )
