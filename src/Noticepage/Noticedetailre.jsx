@@ -48,6 +48,7 @@ const Headdatadiv=styled.div`
   
     display: flex;
     flex-direction: column;
+    
     width: 100%;
 `
 const Userdiv=styled.div`
@@ -63,6 +64,7 @@ const Nickdiv=styled.div`
     justify-content: center;   
     align-items: center;  
       color: ${(props)=>props.theme.text};
+     
 `
 const Usernamediv=styled.div`
     
@@ -77,11 +79,13 @@ const Timediv=styled.div`
      display: flex;
     justify-content: center;   
     align-items: center;       
-    
+
     font-size: 15px;
 `
 const Weatherdiv=styled.div`
     margin-left: auto;
+    display: flex;
+
 `
 const Menudiv=styled.div`
     

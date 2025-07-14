@@ -217,6 +217,7 @@ export default function Twitformlist(props){
 
     const [textoverflow,setTextoverflow]=useState(false);
 
+    const isDragging=useRef(false);
     //클릭시 내용크게
     useEffect(()=>{
       if(Textref.current){
@@ -344,11 +345,39 @@ const weatherData = weatherKeys.map(key=>({
   type:key,
   value:post?.[key]
 }))
+
+// =======이미지만 클릭시 핸들스탑하기 ====
+const Textimageclick=(e)=>{
+  const el=e.target;
+  //이미지클릭시
+  //이미지는 IMG로 알아서되네신기
+ 
+  if(el.tagName==='IMG'){
+    e.stopPropagation();
+    return
+  }
+}
+//드래그시 클릭멈추기
+const HandleMouseDown=()=>{
+  isDragging.current=false;
+}
+const HandleMouseMove=()=>{
+  isDragging.current=true;
+
+}
+const HandleMouseup=(e,postid)=>{
+  if(!isDragging.current){
+    //드래그가 아니면 이동
+    navigate(`/notice/detail/${postid}`)
+  }
+  //드래그였으면 아무동작안함
+}
+//필요하면 mouseup으로 다시false로
 //==========================렌더링==============================
     return (
       
     
-        <Wrapper>
+        <Wrapper onMouseDown={HandleMouseDown} onMouseMove={HandleMouseMove} onMouseUp={(e)=>HandleMouseup(e,post.id)}>
         {
         //유저프로필=============================================
         }
@@ -465,12 +494,15 @@ const weatherData = weatherKeys.map(key=>({
           
             :<>
             {<Textarea ref={Textref} dangerouslySetInnerHTML={{__html:post.text}}
-            over={expend} 
+            over={expend} onClick={(e)=>Textimageclick(e)}
             >
 
                 
               </Textarea>}
-          {textoverflow&&!expend&&<Overflowdiv onClick={()=>setExpend(!expend)}>
+          {textoverflow&&!expend&&
+          <Overflowdiv onClick={(e)=>{
+            e.stopPropagation()
+            setExpend(!expend)}}>
                 더보기
                 </Overflowdiv>}  
             {
