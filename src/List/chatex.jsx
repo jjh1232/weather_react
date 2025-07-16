@@ -248,30 +248,32 @@ function Chatex(props) {
             //유효성검증을위한 헤더 
             //이거 인터셉터에서 거르는 로직해야하는데 잘모르겟네 여기선안들어가고over에넣어야들어감
             Authorization: "Bearer " + loginuser.Acesstoken,
-            Refreshtoken: "Bearer " + loginuser.Refreshtoken
+            Refreshtoken: "Bearer " + loginuser.Refreshtoken,
+            roomid:roomid
 
         }, function () {//연결시 할행동
             console.log("연결")
 
             client.current.subscribe("/sub/channel/" + roomid,
                 function (response) {//메세지콜백
-                    console.log("응답:" + response.body)
+                    console.log("응답:" , response.body)
 
                     const res = JSON.parse(response.body)
-                    console.log("json파싱" + res) //json으로오기떄문에  자바스크립트로 변환해줘야한다!
+                    console.log("json파싱" , res) //json으로오기떄문에  자바스크립트로 변환해줘야한다!
                     //이거날자구분떄매변경
                     //const test=makeSection(res);
-                    console.log("챗데이터구조:" + JSON.stringify(chatdata))
+                   // console.log("챗데이터구조:" + JSON.stringify(chatdata))
 
                     //여기서다셋도하기때문에 필요없다
-                    liveSection(res);
-
-                    
-
-                  
-
-
+                    liveSection(res);              
                     scrollcontroller();
+                    //읽음처리
+                    
+                    client.current.send("/pub/read",{},JSON.stringify({
+                        roomid:res.roomid,
+                        messageid:res.chatid
+                    }))
+                        
                 },
                 { //유효성검증헤더넣을수있다네?
 
@@ -348,7 +350,7 @@ function Chatex(props) {
         queryFn:async ()=>{
             console.log("룸정보가져오기시작")
              const res=await axiosinstance.get(`/chatroomdata/info/${roomid}`)
-              console.log("룸인포",res.data)
+             // console.log("룸인포",res.data)
             return res.data
         }
     })
@@ -357,13 +359,16 @@ function Chatex(props) {
         queryFn:async ()=>{
                 console.log("챗팅가져오기시작")
               const res=await axiosinstance.get(`/chatroomdata/chatdata/${roomid}`)
-              console.log("챗리스트",res.data)
+            //  console.log("챗리스트",res.data)
             return res.data
         },    
          select:(data)=>{
-            
-           
-           return makeSection(data)
+            const Sectionchat=makeSection(data.chatdates)
+           console.log("select부분시작",data)
+           return {
+            chatList:Sectionchat,
+            lastchatid:data.lastchatid
+           }
            
            
         }   ,
@@ -371,18 +376,17 @@ function Chatex(props) {
     })
     //유즈이펙트쓰래 
     useEffect(()=>{
-        console.log("useEffect 실행! chatlist:", chatlist, "타입:", typeof chatlist, "keys:", chatlist && Object.keys(chatlist));
+        console.log("useEffect 실행! chatlist:", chatlist?.chatList, "타입:", typeof chatlist?.chatList, "keys:", chatlist?.chatList && Object.keys(chatlist?.chatList));
 
-        console.log("채팅셋유즈이펙트시작==============================================",chatlist)
+        console.log("채팅셋유즈이펙트시작==============================================",chatlist?.chatList)
       //데이터가 처음에없어서 에러난다 
-        if(chatlist  && Object.keys(chatlist).length > 0)setChatdata(chatlist)
+        if(chatlist  && chatlist.chatList&& Object.keys(chatlist.chatList).length > 0)setChatdata(chatlist.chatList)
             
-         
-           
         
     },[chatlist])
-console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:", chatlist && Object.keys(chatlist));
+console.log("채팅밖! chatlist:", chatlist?.chatList, "타입:", typeof chatlist?.chatList, "keys:", chatlist?.chatList && Object.keys(chatlist?.chatList));
     //섹션으로 날짜나누기
+
         //따로 이펙트만들어줬음..
         useEffect(() => {
             scrollcontroller();
@@ -401,7 +405,7 @@ console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:
         chatdata.map((chat) => {
 
             let monthDate = chat.red.substr(0, 10)
-            console.log("날짜" + monthDate)
+            //console.log("날짜" + monthDate)
             if (Array.isArray(chatmonth[monthDate])) {
                 chatmonth[monthDate].push(chat)
             } else {
@@ -422,7 +426,7 @@ console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:
         setChatdata(prev=>{
             
             const newMessagesdate={...prev}
-            console.log("이전:"+JSON.stringify(newMessagesdate))
+            //console.log("이전:"+JSON.stringify(newMessagesdate))
             if (!Array.isArray(prev[monthDate])) {
                 console.log("없는날짜라배열생성날짜이다")
                 
@@ -530,7 +534,7 @@ console.log("채팅밖! chatlist:", chatlist, "타입:", typeof chatlist, "keys:
                     :                   
                     chatdata &&
                         Object.entries(chatdata).map(([date, chats]) => {
-                                console.log("오브젝트date:",date,"오브젝트chats:",chats)
+                                //console.log("오브젝트date:",date,"오브젝트chats:",chats)
 
                             return (
                             
