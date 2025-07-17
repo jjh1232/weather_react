@@ -85,7 +85,7 @@ const Readdiv=styled.div`
 
 function Chatroomlistitem(props){
 
-    const {chatroomdata,onclick,inroom}=props;
+    const {chatroomdata,inroom}=props;
 
     const navigate=useNavigate();
 
@@ -101,18 +101,18 @@ function Chatroomlistitem(props){
 
     
     return (
-        <Wrapper onClick={()=>{movechatroom(chatroomdata)}}>
+        <Wrapper onClick={()=>{movechatroom(chatroomdata)}} key={chatroomdata.roomid}>
             
             <Imagediv>
             {/* 구지 사용자는알필요없는듯룸아이디
             룸아이디:{chatroomdata.roomid}
                 */}
-                {chatroomdata.memberlist.map((item,index)=>{
+                {chatroomdata.members.map((item,index)=>{
                   if(index<4){
-                    return <Profilelist itemCount={chatroomdata.memberlist.length}
+                    return <Profilelist itemCount={chatroomdata.membercount} key={index}
                         
                     >
-                         <Profilediv url={item.profileimg} />
+                         <Profilediv url={item.profileurl} />
                          
                 
                     </Profilelist>
@@ -124,28 +124,13 @@ function Chatroomlistitem(props){
             <MainContainer>
                 <MainTop>
                 
-                <Roomnamecss>{chatroomdata.roomname}</Roomnamecss>
-                <Roomlength>  {chatroomdata.memberlist.length}</Roomlength>
+                <Roomnamecss>{chatroomdata.roomtitle}</Roomnamecss>
+                <Roomlength>  {chatroomdata.membercount}</Roomlength>
         </MainTop>
-        {/* 유저목록구지필요한가싶어서
-        <MainMiddle>
-        유저목록:{chatroomdata.namelist.map((data,key)=>{
-            
-            return(
-                <>
-
-                {chatroomdata.namelist.length-1===key
-                ?<>{data.membernickname} </>
-                :<>{data.membernickname},</>}     
-                
-                </>
-            )
-        })}
-       </MainMiddle>
-       */}
+       
        
        <MainBottom>
-        {chatroomdata.latelychat}
+        {chatroomdata.lastMessageContent}
         </MainBottom>
         
        
@@ -154,10 +139,10 @@ function Chatroomlistitem(props){
 
         <Menudiv>
             <Timediv>
-        <Datefor inputdate={chatroomdata.time}/> 
+        <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
         </Timediv>
         <Readdiv>
-            3
+            {chatroomdata.unreadCount}
         </Readdiv>
         </Menudiv>
      

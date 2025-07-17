@@ -266,7 +266,7 @@ function Chatex(props) {
 
                     //여기서다셋도하기때문에 필요없다
                     liveSection(res);              
-                    scrollcontroller();
+                  // scrollcontroller();
                     //읽음처리
                     
                     client.current.send("/pub/read",{},JSON.stringify({
@@ -364,10 +364,10 @@ function Chatex(props) {
         },    
          select:(data)=>{
             const Sectionchat=makeSection(data.chatdates)
-           console.log("select부분시작",data)
+         
            return {
             chatList:Sectionchat,
-            lastchatid:data.lastchatid
+            lastchatid:data.lastreadchatid
            }
            
            
@@ -376,22 +376,16 @@ function Chatex(props) {
     })
     //유즈이펙트쓰래 
     useEffect(()=>{
-        console.log("useEffect 실행! chatlist:", chatlist?.chatList, "타입:", typeof chatlist?.chatList, "keys:", chatlist?.chatList && Object.keys(chatlist?.chatList));
-
-        console.log("채팅셋유즈이펙트시작==============================================",chatlist?.chatList)
+      
       //데이터가 처음에없어서 에러난다 
         if(chatlist  && chatlist.chatList&& Object.keys(chatlist.chatList).length > 0)setChatdata(chatlist.chatList)
             
         
     },[chatlist])
-console.log("채팅밖! chatlist:", chatlist?.chatList, "타입:", typeof chatlist?.chatList, "keys:", chatlist?.chatList && Object.keys(chatlist?.chatList));
+
     //섹션으로 날짜나누기
 
-        //따로 이펙트만들어줬음..
-        useEffect(() => {
-            scrollcontroller();
-        }, [chatdata])
-    
+ 
       
     const makeSection = (chatdata) => {
         //useeffect가 실행이안되는문제가
@@ -474,9 +468,37 @@ console.log("채팅밖! chatlist:", chatlist?.chatList, "타입:", typeof chatli
   useEffect(() => {
   // 방에 들어올 때마다 캐시 삭제 후 refetch
   //이게 렌더링만바뀌다보니 이전캐시가 남아있게되서 makesection을 안함;
+  if(roomid){
   queryclient.removeQueries(["chatlist", roomid]);
-}, []);
+  } //방첫진입시에만실행
+}, [roomid]);
 
+//유즈이펙트로 최근에읽은곳가기
+    //처음만실행하게
+    let didscrollref=useRef(false)
+    useEffect(()=>{
+           
+        const lastchatid=chatlist?.lastchatid
+       
+        if(!lastchatid || !chatdata || didscrollref.current) return;
+     setTimeout(()=>{
+     
+        const target=document.getElementById(`chatmessage_${lastchatid}`);
+        if(target){
+       
+            target.scrollIntoView({behavior:"smooth" , block:"center"})
+            didscrollref.current=true; //이후실행안함
+         }
+        },50)
+        
+    },[chatdata,chatlist])
+
+    //이건 새채팅나올시 스크롤
+        useEffect(() => {
+            if(!didscrollref.current) return; //false일시 안함
+            scrollcontroller();
+        }, [chatdata])
+    
     //뒤로가기
     const backpage = () => {
         console.log("실행")
@@ -545,10 +567,14 @@ console.log("채팅밖! chatlist:", chatlist?.chatList, "타입:", typeof chatli
                                         {prevhandler("")}
                                         </Datecss>
 
-                                    {chats.map((data) => {
-
+                                    {chats.map((data,key) => {
+                                            const islastRead=data.chatid===chatlist.lastchatid
+                                            const isnextunread=data.chatid !== chats[chats.length - 1]?.chatid; 
                                         return (
-                                            <Chatdiv >
+                                            <React.Fragment key={key}>
+                                              
+                                            <Chatdiv  id={`chatmessage_${data.chatid}`}>
+                                              
                                                 
                                                 {data.messagetype==="System"?<Systemchat>
                                                     
@@ -613,6 +639,11 @@ console.log("채팅밖! chatlist:", chatlist?.chatList, "타입:", typeof chatli
                                             </>
                                             }
                                             </Chatdiv>
+                                              {/* 여기까지읽었다 구분선 */}
+                                                {islastRead && isnextunread &&<div style={{ textAlign: "center", color: "#999", margin: "12px 0" }}>
+                                                    여기까지읽었음
+                                                    </div>}
+                                            </React.Fragment>
                                        
                                         )
 
