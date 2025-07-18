@@ -205,9 +205,8 @@ function Followlist(props){
     return (
         <Wrapper>
         <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
-            유저아이디:{usercookie.userinfo.userid}
-            유저아이디타입:{typeof usercookie.userinfo.userid}
-            <br/>
+            
+           
         목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}/> 
         </Searchdiv>
         <Userlistdiv>
@@ -234,7 +233,7 @@ function Followlist(props){
                >
                 
                     <Userprofileimage>
-                    <Profilediv url={data.profileurl}/>
+                    <Profilediv url={data.profileimg}/>
                     </Userprofileimage>
                     <Userprofilediv>
                     {data.nickname} <FollowButton onClick={()=>{unfollow(data.username)}}>unfollow</FollowButton>

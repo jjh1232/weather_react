@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useContext, useRef } from "react"
 import Button from "../UI/Button"
 import { useState } from "react";
 import axios  from "axios";
@@ -18,6 +18,7 @@ import Profilediv from "../UI/Modals/Profilediv";
 import CreateAxios from "../customhook/CreateAxios";
 import { useQuery } from "@tanstack/react-query";
 import UserNotification from "./UserNotification";
+import { SseContext } from "../Context/SseProvider";
 
 
 //로그인이전 css 
@@ -274,10 +275,9 @@ function Loginpage(props){
     password: ''
   });
   const [loginuser,Setloginuser,removeloginuser]=useCookies(['userinfo'])
-  const client=useRef(null)
-  const [menuover,Setmenuover]=useState(false)
+  
   const [isnotify,setisnotify]=useState(false);
-  const [alarmchatcount,Setalrmchatcount]=useState()
+  
   const axiosinstance=CreateAxios();
   const navigate=useNavigate();
   //const form = new FormData(); 폼데이터형식
@@ -287,18 +287,14 @@ function Loginpage(props){
 
   const logincheck=AuthCheck();
 
+  const {alarmChatCount,setAlarmChatCount}=useContext(SseContext);
 
-  let eventsource=null;
 
 
-    useEffect(()=>{
-    if(logincheck===true){
-      eventsource=sse();
-    }
-    else{
-      console.log("로그인안함")
-    }
-  },[logincheck])
+useEffect(()=>{
+  console.log("Alarm Refresh, new value:", alarmChatCount)
+}, [alarmChatCount])
+
 
 useEffect(()=>{
     console.log("실행")
@@ -320,56 +316,8 @@ useEffect(()=>{
 
 
  
-  //SSe실행
-  const sse=()=>{
+
   
-    console.log("sse시작")
-    //const eventSource = new EventSource('http://localhost:8081/ssetest')
-    // 위에는 일반 sse요청 헤더못넣음
-    const eventSource= new EventSourcePolyfill(
-      "http://localhost:8081/ssesub",{
-      headers:{
-        Authorization:"Bearer "+loginuser.Acesstoken,
-        Refreshtoken:"Bearer "+loginuser.Refreshtoken
-      },
-      withCredentials:true,
-    }
-   )
-  
-  
-   
-   eventSource.onopen=(res)=>{
-    console.log("sse연결성공"+res)
-    //removeLoginuser("Refreshtoken");
-          //removeLoginuser("Acesstoken");
-          //삭제해줘야함
-         // setLoginuser("Acesstoken",res.headers.get("Authorization"),{path:"/"})
-          //setLoginuser("Refreshtoken",res.headers.get("Refreshtoken"),{path:"/"})
-   }
-  
-   /*
-   eventSource.onopen=()=>{
-    console.log("연결성공!")
-  
-   
-  }
-    */
-  eventSource.onmessage= (e)=>{
-    console.log("알림메세지ex")
-    const res=e.data;
-    //const js=JSON.parse(res)
-    Setalrmchatcount((prev)=>prev+1)
-    console.log("알림메세지ex:"+res)
-    
-  
-  }
-  eventSource.onerror=(e)=>{
-    console.log("에러 ㅜ")
-    eventSource.close();
-    
-  }
-  return eventSource;
-  }
 
 
 
@@ -390,14 +338,7 @@ const naverlogin=()=>{
   let naverurl=`http://localhost:8081/oauth2/authorization/naver?state=${encodeURIComponent(prevpath)}`;
     document.location.href=naverurl;
 
-    
-    /* 각종 oauth서비스는 a태그로이동해야함 
-    axios.get(naverurl).then((res)=>{
-      console.log("정보전달성공?");
-     }).catch((error)=>{
-      console.log("에로")
-     });
-     */
+
      
   
 }
@@ -413,34 +354,19 @@ const naverlogin=()=>{
         
         }).then((result) => {
           alert("성공")
-       /* 
-        if(result.data.result===null){
-          alert("아이디를확인해주세요")
-        }
-        else if(result.data.result==="notpass"){
-          alert("비밀번호를확인해주세요")
-        }
-        */
-        //else{
-          //Setloginuser('loginuser',result.data.result)
-          //alert(`${result.data.result}님 환영합니다!`)
+  
             
             Setloginuser("Acesstoken",result.headers.get("Authorization"))
             Setloginuser("Refreshtoken",result.headers.get("Refreshtoken"))
             window.location.reload()
             
-           /* 
-           console.log(loginuser.member)
-            console.log(loginuser)
-         alert(`${result.data.member.name}환영합니다`)
-           Setislogin(true)
-       } */
+     
          
            
         
         
       }).catch((err) => {
-       // alert(`${loginform.email}`)
+       
        alert(err.response.data.msg)
        console.log(err)
       }, {withCredentials: true});
@@ -481,56 +407,13 @@ const naverlogin=()=>{
   }
 
 
-
-  //stomp 연결
-  const stopmgo=()=>{
-    console.log("흠")
+const ssetest=()=>{
+  axiosinstance.get("/emittercheck");
+}
  
-    console.log("스톰프")
-    if(islogin){
-  console.log("로그인유저있음");
-    client.current=new StompJS.Client({
-      brokerURL:"ws://localhost:8081/open/stomp",
-      //webSocketFactory:()=>SockJs,
-      //Authorization: "authoo",
-      //connectHeaders:{
-      //  auth:"auth",
-      //},
-      
+
   
-
-      onConnect:()=>{
-        console.log("구독함수시작")
-        subcribe(loginuser.userinfo["username"]);//연결시작시구독
-      }
-    })
-   
   
-    client.current.activate();
-  }
-    else{
-      console.log("로그인부터해줘");
-    }
-  }
-
-
-
-  const disconnect=()=>{
-    console.log("연결끊김")
-    client.current.deactivate();
-  }
-  
-  const subcribe=(username)=>{
-    console.log("구독함수")
-    console.log(username)
-    client.current.subscribe("/sub/"+username,(data)=>{
-      console.log(username)
-      console.log("구독시작")
-      //const js=JSON.parse(data.body)
-      //console.log(js)
-      Setalrmchat(data.body)
-    })
-  }
  
 
   return (
@@ -612,7 +495,7 @@ const naverlogin=()=>{
     </Profileview>
     
     <ProfileTextdiv>
-      {loginuser.userinfo["nickname"]}님환영합니다! 
+      {loginuser.userinfo["nickname"]}님
       <br/>
       {loginuser.userinfo["username"]} 
       </ProfileTextdiv>
@@ -620,7 +503,7 @@ const naverlogin=()=>{
       <Imoticondiv onClick={()=>{setisnotify(!isnotify)}}>
         <FontAwesomeIcon icon={bell} size="2x"/>
         <Imotebatge>
-         
+         {alarmChatCount}
         </Imotebatge>
         
         </Imoticondiv>
@@ -660,7 +543,12 @@ const naverlogin=()=>{
           <QuickButtonitem onClick={logout}>
           로그아웃
           </QuickButtonitem>
-      
+      <div onClick={ssetest}>
+      sse테스트
+      </div>
+      <div onClick={()=>setAlarmChatCount((prev)=>prev+1)}>
+        카운트 임시로올려보기
+      </div>
           
  
     </Quickbuttondiv>

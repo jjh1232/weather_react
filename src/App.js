@@ -56,6 +56,8 @@ import Imageform from "./List/noticeformlist/Imageform/Imageform";
 import Twitformver from "./List/noticeformlist/Twitformver";
 import Noticedetailre from "./Noticepage/Noticedetailre";
 import OauthSuccesspage from "./UI/Manyim/OauthSuccesspage";
+import { SseProvider } from "./Context/SseProvider";
+
 const GlobalStyle = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.background};
@@ -90,6 +92,8 @@ const updatetime=()=>{
 
 },[])
   return (
+       <SseProvider>
+        
     <QueryClientProvider client={queryClient}>
     
       <CookiesProvider>
@@ -100,6 +104,8 @@ const updatetime=()=>{
     
   
     
+ 
+
     
     <Routes>
    
@@ -161,8 +167,9 @@ const updatetime=()=>{
 
       </Route> 
       <Route path="manyimage" element={<Manyimage/>}/>
+        
     </Routes>
-   
+
     </BrowserRouter>
     </ThemeProvider>
     </CookiesProvider>
@@ -171,7 +178,7 @@ const updatetime=()=>{
      <ReactQueryDevtools initialIsOpen={true}/>
      
     </QueryClientProvider>
-     
+      </SseProvider>
   )
   
 }
