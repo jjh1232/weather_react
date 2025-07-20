@@ -26,7 +26,7 @@ export default function Twitformver(props){
     //const {posts,onClickItem,noticecreate,querydatas
         //로케이션으로 좋아요 와 일반게시글차이만들자
      
-   
+        
        // const axiosinstance=CreateAxios();
         let [query,setQuery]=useSearchParams({ //기초값일꺼임
             form:"twitform",
@@ -151,7 +151,7 @@ const axiosinstance= CreateAxios() ;
         
  
       }
-     
+ 
       const totalpageget=(totalpage)=>{
 
         const arr=[]
@@ -163,7 +163,7 @@ const axiosinstance= CreateAxios() ;
       }
 
    
-      
+  
      
        //==============렌더링!==============================================================
        return (
@@ -172,14 +172,16 @@ const axiosinstance= CreateAxios() ;
         
        
         <Wrapper>
+
         {notice&&
         <div>
         {notice.map((post,key)=>{
             return (
-                <React.Fragment key={key}>
-
+                <React.Fragment key={post.id}>
+                 
                 <Twitformlist
-                key={key} post={post} 
+                key={post.id} post={post} 
+           
             />
             
             <br/>

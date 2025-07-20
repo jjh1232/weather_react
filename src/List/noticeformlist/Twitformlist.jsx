@@ -20,11 +20,18 @@ import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
 import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "./DateCom/Viewtrans";
 import { faComment as comimo } from "@fortawesome/free-regular-svg-icons";
+import Testas from "./DateCom/Menumodal/Testas";
 
 
 const Wrapper=styled.div`
     border:3px solid black;
-    
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.13s;  //부드럽게
+&:hover{
+  background: rgba(137, 200, 224, 0.15); //호버시색변경
+ 
+  
+}
 `
 
 const Noticedata=styled.div`
@@ -61,6 +68,7 @@ const Username=styled.div`
  position: relative;
   color: gray;
   margin-left: 10px;
+  
  
  // border: 1px solid yellow;
 `
@@ -73,6 +81,10 @@ const Timecss=styled.div`
 
 const Weatherdiv=styled.div`
   
+`
+const ProfileTrigger=styled.span`
+  
+
 `
 const TitleCss=styled.div`
   display: flex;
@@ -109,6 +121,14 @@ const Menucss=styled.div`
    display: flex;
   justify-content: center;  /* 가로(주축) 중앙 정렬 */
   align-items: center;      /* 세로(교차축) 중앙 정렬 */
+border-radius: 50%; 
+  padding: 5px;
+     transition: background 0.15s, box-shadow 0.13s;  //부드럽게
+&:hover{
+  background: rgba(54, 93, 221, 0.7); //호버시색변경
+ 
+  
+}
 `
 
 const NoticeMain=styled.div`
@@ -153,6 +173,15 @@ const Showreplediv=styled.div`
   display: flex;
   
   padding-left: 40px;
+
+  border-radius: 50%; 
+       transition: background 0.15s, box-shadow 0.13s;  //부드럽게
+&:hover{
+  color: rgba(61, 105, 228, 0.7); //호버시색변경
+ 
+  
+}
+  
 `
 const Commentnumdiv=styled.span`
 
@@ -163,17 +192,27 @@ const Commentnumdiv=styled.span`
   justify-content: center;
   align-items: center;
   text-align: center;
-
+   
 `
 
 const Likediv=styled.div`
- 
+ position: relative;
+
+  
   gap: 5px;
   display: flex;
   vertical-align: middle;
   justify-content: center;
   align-items: center;
   text-align: center;
+
+          transition: background 0.15s, box-shadow 0.13s;  //부드럽게
+&:hover{
+  color: rgb(255, 196, 255); //호버시색변경
+ 
+  
+}
+  
   
  
 `
@@ -184,16 +223,119 @@ const Likeviewtextdiv=styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+
+
+ 
 `
 const Viewdiv=styled.div`
- 
+ position: relative;
   gap: 5px;
     display: flex;
   vertical-align: middle;
   justify-content: center;
   align-items: center;
   text-align: center;
+
   
+        transition: background 0.15s, box-shadow 0.13s;  //부드럽게
+&:hover{
+  color: rgba(68, 199, 166, 0.7); //호버시색변경
+ 
+  
+}
+
+  
+
+  
+  
+`
+//아이콘색깔 div를 따로하긴해야겠다
+const Commenticon=styled(FontAwesomeIcon)`
+  
+` 
+const CommentBack=styled.div`
+  border-radius: 50%;
+
+  /* 후광 배경용 ::after */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-35%, -50%);
+    width: 50%;       /* 기본 배경 원의 크기 (아이콘보다 큼) */
+    height: 120%;
+    border-radius: 50%;
+    background: #1976d2;
+    opacity: 0;
+    transition: opacity 0.17s;
+   // z-index: -1;       /* 아이콘 아래로! */
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    opacity: 0.4;    /* 밝은 후광 추천, 0.15~0.25 사이에서 조정 */
+  }
+    &:hover {
+    color: #fff;
+  }
+`
+const Hearticon=styled(FontAwesomeIcon)`
+ 
+`
+const Heartback=styled.div`
+    border-radius: 30%;
+
+  /* 후광 배경용 ::after */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-68%, -50%);
+    width: 100%;       /* 기본 배경 원의 크기 (아이콘보다 큼) */
+    height: 100%;
+    border-radius: 50%;
+    background: #e08c7d;
+    opacity: 0;
+    transition: opacity 0.17s;
+   // z-index: -1;       /* 아이콘 아래로! */
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    opacity: 0.4;    /* 밝은 후광 추천, 0.15~0.25 사이에서 조정 */
+  }
+    &:hover {
+    color: #fff;
+  }
+`
+const Viewicon=styled(FontAwesomeIcon)`
+
+`
+const Viewback=styled.div`
+   border-radius: 30%;
+
+  /* 후광 배경용 ::after */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-100%, -50%);
+    width: 60%;       /* 기본 배경 원의 크기 (아이콘보다 큼) */
+    height: 100%;
+    border-radius: 50%;
+    background: #32c256;
+    opacity: 0;
+    transition: opacity 0.17s;
+   // z-index: -1;       /* 아이콘 아래로! */
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    opacity: 0.4;    /* 밝은 후광 추천, 0.15~0.25 사이에서 조정 */
+  }
+    &:hover {
+    color: #fff;
+  }
 `
 
 export default function Twitformlist(props){
@@ -201,7 +343,6 @@ export default function Twitformlist(props){
     const {post}=props;
     const navigate=useNavigate();
     const [isreple,setIsreple]=useState(false);
-    const [ismenu,setIsmenu]=useState(false);
     const [comments,setComments]=useState();
     const axiosinstance=CreateAxios();
     const [loginuser,setloginuser,removeloginuser]=useCookies();
@@ -209,7 +350,6 @@ export default function Twitformlist(props){
     const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
     const [isblock,setIsblock]=useState(post.isblock)
-    const menuref=useRef();
      const [ishover,setIshover]=useState(false);
     const [onprepage,setOnprepage]=useState(false);
     const [expend,setExpend]=useState(false);
@@ -218,6 +358,8 @@ export default function Twitformlist(props){
     const [textoverflow,setTextoverflow]=useState(false);
 
     const isDragging=useRef(false);
+
+    
     //클릭시 내용크게
     useEffect(()=>{
       if(Textref.current){
@@ -230,24 +372,16 @@ export default function Twitformlist(props){
        // islikes(post.num);
       }
     },[])
-    useEffect(()=>{
-      const noticemenuoutside=(e)=>{
-       
-        if(menuref.current && !menuref.current.contains(e.target)){
-          setIsmenu(false);
-        }
-      }
-      document.addEventListener('mousedown', noticemenuoutside);
-  return () => {
-    document.removeEventListener('mousedown', noticemenuoutside);
-  };
-    },[])
+
+ 
+
     const showreply=()=>{
         console.log("쇼리플")
                                
         axios.get(`/open/comment/${post.num}`).then((res)=>{
             setComments(res.data)
-            console.log(res.data)
+           
+
         }).catch((err)=>{
             console.log(err)
 
@@ -310,22 +444,7 @@ export default function Twitformlist(props){
  }
 //마우스위치
  const [xy,setXY]=useState({x:-1000,y:-1000})
- //==========================로그인좋아요 여부체크?==========================
- /*
- const islikes=(num)=>{
-  
- console.log(num)
-  axiosinstance.get(`/noticelikecheck/${num}`)
-  .then((res)=>{
-    setIslike(res.data);
 
-  }).catch(()=>{
-    
-    
-  })
-  
-}
-  */
 const simpleprofile =(e)=>{
   if(ishover){
     
@@ -366,37 +485,61 @@ const HandleMouseMove=()=>{
 
 }
 const HandleMouseup=(e,postid)=>{
+
   if(!isDragging.current){
     //드래그가 아니면 이동
     navigate(`/notice/detail/${postid}`)
   }
   //드래그였으면 아무동작안함
 }
+//메뉴클릭시 페이지이동막기위해 다핸들러로 
+const Userpagenavigate=(e)=>{
+
+ navigate(`/userpage/${post.username}`);
+}
+const Detailpagenavigate=(e)=>{
+
+}
+
+
+const [ismenu,setismenu]=useState(false);
 //필요하면 mouseup으로 다시false로
 //==========================렌더링==============================
     return (
       
     
-        <Wrapper onMouseDown={HandleMouseDown} onMouseMove={HandleMouseMove} onMouseUp={(e)=>HandleMouseup(e,post.id)}>
+        <Wrapper onMouseDown={HandleMouseDown} onMouseMove={HandleMouseMove}
+         onMouseUp={(e)=>HandleMouseup(e,post.id)}
+         > 
+    
         {
+          
         //유저프로필=============================================
         }
         <Noticedata>
+                
+
+        <ProfileTrigger>
         <Profileview className={ishover?"profileover":"profile"}
         onMouseEnter={(e)=>simpleprofile(e)
         
          }
         onMouseOut={()=>{setIshover(false)}}
-        onClick={()=>{
-          navigate(`/userpage/${post.username}`);
-        }}>
+
+        onMouseUp={(e)=>{
+          e.stopPropagation();
+        }}
+         onClick={Userpagenavigate}
+      >
+       
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%",background:"white"}}
-  
+   
+
                 />
                 
      </Profileview>
-        <NoticeHeader >    
+     
         
 
         
@@ -406,9 +549,11 @@ const HandleMouseup=(e,postid)=>{
         
          }
         onMouseOut={()=>{setIshover(false)}}
-        onClick={()=>{
-          navigate(`/userpage/${post.username}`);
-        }}>
+               
+        onMouseUp={(e)=>{
+          e.stopPropagation();
+        }}
+        onClick={Userpagenavigate}>
         
           {post.nickname}
           
@@ -418,9 +563,15 @@ const HandleMouseup=(e,postid)=>{
         
          }
         onMouseOut={()=>{setIshover(false)}}
-        onClick={()=>{
-          navigate(`/userpage/${post.username}`);
-        }}>{post.username}</Username>
+     onMouseUp={(e)=>{
+          e.stopPropagation();
+        }}
+       onClick={Userpagenavigate}>
+      {post.username}
+      </Username>
+              
+     </Nameheader>
+      </ProfileTrigger>
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
@@ -437,27 +588,32 @@ const HandleMouseup=(e,postid)=>{
 
                       </Weatherdata>    
                  
-                    <Menucss ref={menuref}>
+                    <Menucss onMouseUp={(e)=>e.stopPropagation()}>
                     <FontAwesomeIcon 
-                    onClick={()=>{
-                        setIsmenu(!ismenu)
-                    }}
+                     onClick={(e)=>{
+                      e.stopPropagation();
+                      setismenu(!ismenu)}}  
+                      onMouseUp={(e)=>{
+                        e.stopPropagation();
+                      }}
                     icon={faEllipsis} fontSize={"25px"}/>
                    
-                    {ismenu&&     <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
-
+                    {ismenu&& 
+            <Noticemenu deletemethod={postDelete} updatemethod={postUpdate}
                      noticeuser={post.username}
-                     noticeid={post.num}
+                     noticeid={post.id}
                      setisblock={setIsblock}
-                     isclose={setIsmenu}
-                     />}
+                     closeisMenu={setismenu}
+                     />
+
+                    
+                    }
                 
                     
                     </Menucss>      
                </HeaderTools>
                  
-            
-     </Nameheader>
+    
 
      {onprepage?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
@@ -476,7 +632,7 @@ const HandleMouseup=(e,postid)=>{
             </TitleCss>
             
             
-            </NoticeHeader>
+            
             </Noticedata>
             {
         //게시글 헤더끝 메인시작=============================================
@@ -514,7 +670,12 @@ const HandleMouseup=(e,postid)=>{
             <Noticefooter>
               <Showreplediv  onClick={()=>{setIsreple(!isreple)}}>
             
-            <FontAwesomeIcon icon={ comimo} size="2x"/>
+            <CommentBack>
+
+           
+
+            <Commenticon icon={ comimo} size="xl"/>
+             </CommentBack>
             {post.commentcount >0&&
             <Commentnumdiv>
                  {Viewtrans(post.commentcount)}
@@ -529,11 +690,14 @@ const HandleMouseup=(e,postid)=>{
 
             <Likediv>
 
-           
+           <Heartback>
+
+         
             {islike?
-            <FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={full} color="red" size="xl" fontSize={"20px"}/>
-            :<FontAwesomeIcon onClick={()=>{onlike(post.num)}} icon={empty} color="red"  size="xl" fontSize={"20px"}/>
+            <Hearticon onClick={()=>{onlike(post.num)}} icon={full} color="red" size="xl" fontSize={"20px"}/>
+            :<Hearticon onClick={()=>{onlike(post.num)}} icon={empty} color="red"  size="xl" fontSize={"20px"}/>
             }
+              </Heartback>
             <Likeviewtextdiv>
                {Viewtrans(likenum)}
             </Likeviewtextdiv>
@@ -541,8 +705,11 @@ const HandleMouseup=(e,postid)=>{
              </Likediv>
              <Viewdiv>
 
-            
-            <FontAwesomeIcon icon={view} size="xl"/>
+            <Viewback>
+
+           
+            <Viewicon icon={view} size="xl"/>
+             </Viewback>
             <Likeviewtextdiv>
              {Viewtrans(post.views)}         
             </Likeviewtextdiv>

@@ -106,6 +106,7 @@ delay : 감지에 딜레이를 추가할 수 있다. 예를 들어, 요소가 �
 
 
     const navigate=useNavigate();
+    /*
   useEffect(()=>{
         document.addEventListener("mousedown",searchclose)
         
@@ -126,7 +127,7 @@ delay : 감지에 딜레이를 추가할 수 있다. 예를 들어, 요소가 �
           
                 
         }
-
+*/
     //유저검색
     const usersearch=(e)=>{
     console.log(e.target.value)

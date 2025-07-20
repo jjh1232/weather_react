@@ -55,7 +55,7 @@ const FollowButton=styled.button`
 `
 function Followerlist(props){
 
-    const {Onfollow,Onunfollow}=props;
+   
 
 
     const axiosinstance=CreateAxios();
@@ -190,7 +190,7 @@ function Followerlist(props){
                ref={modalref}
                 >
                     <Profilecss>
-                        <Profilediv url={data.profileurl}/>
+                        <Profilediv url={data.profileimg}/>
                     </Profilecss>
                     <Usernamediv>
                     {data.nickname}  
@@ -207,8 +207,8 @@ function Followerlist(props){
                 {data.followcheck
                     ?
                        
-                    <FollowButton onClick={()=>{
-                        
+                    <FollowButton onClick={(e)=>{
+                        e.stopPropagation();
                         unfollow(data.username);
                     //unfoll(data.username)
                 }}>unfollow</FollowButton>

@@ -14,19 +14,33 @@ const Wrapper=styled.div`
     right: 0px;
     width: 200px;
     display: flex;
-    background-color: gray;
+    
     flex-direction: column;
-    z-index: 50;
-
+    z-index: 1000;
 `
-const Innerdiv=styled.div`
-    border: 1px solid black;
+//투명오버레이를 만들어서 외부클릭을막기로함
+const Outclickdiv=styled.div`
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:transparent;
+    z-index: 999;
+    cursor: auto;
     
 `
+const Innerdiv=styled.div`
+    background-color: gray;
+    border: 1px solid black;
+    z-index: 1000;
+`
+
+
 
 
 export default function Noticemenu(props){
-    const {updatemethod,deletemethod,noticeuser,noticeid,setisblock,isclose}=props;
+    const {updatemethod,deletemethod,noticeuser,noticeid,setisblock,closeisMenu}=props;
     const navigate=useNavigate();
     const axiosinstance=CreateAxios();
     const queryClient=useQueryClient();
@@ -40,11 +54,12 @@ export default function Noticemenu(props){
    const username=cookies.userinfo?cookies.userinfo["username"]:"";
    const nickname=cookies.userinfo?cookies.userinfo["nickname"]:"";
 
+   const {usercookie}=useCookies();
 
    useEffect(()=>{
     if(!cookies.userinfo){
         alert("로그인후이용해주세요!")
-        isclose(false)
+       closeisMenu();
     }
 
    },[cookies.userinfo])
@@ -55,7 +70,7 @@ export default function Noticemenu(props){
     //한번에 데이터가져올경우 변경시 다른데이터까지 다시 가져옴
     //따로할경우 백과 연결이 잦아져서 기본적으로 비효율적이지만 변경시 좀더효율적이라보임    
     const {data : followcheck,isLoading,error}=useQuery({
-        queryKey:["followch"],
+        queryKey:["followch",noticeuser],
         queryFn:async ()=>{
             let res = await axiosinstance.get(`/followcheck?friendname=${noticeuser}`)
            console.log("유즈쿼리실행중"+res.data)
@@ -66,7 +81,7 @@ export default function Noticemenu(props){
     )
     //블록여부
     const {data : blockcheck}=useQuery({
-        queryKey:["blockcheck"],
+        queryKey:["blockcheck",Number(noticeid)],
         queryFn:async ()=>{
             let res = await axiosinstance.get(`/noticeblockcheck?noticeid=${noticeid}`)
            console.log("유즈쿼리실행중"+res.data)
@@ -77,7 +92,7 @@ export default function Noticemenu(props){
     )
      //신고여부
      const {data : declecheck}=useQuery({
-        queryKey:["declecheck"],
+        queryKey:["declecheck",Number(noticeid)],
         queryFn:async ()=>{
             let res = await axiosinstance.get(`/noticedelclecheck?noticeid=${noticeid}`)
            console.log("유즈쿼리실행중"+res.data)
@@ -86,7 +101,7 @@ export default function Noticemenu(props){
         }
     } 
     )
-    console.log("스크립트코드에선"+followcheck)
+    
     /*
     const followchecks=()=>{
         axiosinstance.get(`/followcheck?friendname=${noticeuser}`).then((res)=>{setFollowcheck(res.data)})
@@ -100,8 +115,8 @@ export default function Noticemenu(props){
     const userfollow= useMutation({
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
         ,onSuccess:()=>{
-            queryClient.invalidateQueries({queryKey:[`followch`]})
-            queryClient.invalidateQueries({queryKey:[`followlistdata`]})
+            queryClient.invalidateQueries({queryKey:[`followch`,noticeuser]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`,usercookie.userinfo?.userid]})
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
@@ -109,8 +124,8 @@ export default function Noticemenu(props){
     const deletefollow= useMutation({
         mutationFn:()=> axiosinstance.delete(`/followdelete/${noticeuser}`)
         ,onSuccess:()=>{//캐시업데이트
-            queryClient.invalidateQueries({queryKey:[`followch`]})
-            queryClient.invalidateQueries({queryKey:[`followlistdata`]})
+            queryClient.invalidateQueries({queryKey:[`followch`,noticeuser]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`,usercookie.userinfo?.userid]})
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
@@ -157,7 +172,7 @@ export default function Noticemenu(props){
           
         }
         ,onSuccess:()=>{//캐시업데이트
-            queryClient.invalidateQueries({queryKey:[`blockcheck`]})
+            queryClient.invalidateQueries({queryKey:[`blockcheck`,Number(noticeid)]})
             alert("게시글차단을취소했습니다")
             setisblock(false)
         },onError:()=>{
@@ -174,7 +189,7 @@ export default function Noticemenu(props){
         mutationFn:(noticeid)=>{
             axiosinstance.delete(`/noticedecle/delete/${noticeid}`)
         }  ,onSuccess:()=>{//캐시업데이트
-            queryClient.invalidateQueries({queryKey:[`declecheck`]})
+            queryClient.invalidateQueries({queryKey:[`declecheck`,Number(noticeid)]})
             alert("게시글신고를취소했습니다")
         },onError:()=>{
             alert("잠시후시도해주세요")
@@ -185,9 +200,14 @@ export default function Noticemenu(props){
             decleblock.mutate(noticeid)
         }
     }
+    
     return (
+       
         <Wrapper>
-            
+              <Outclickdiv onClick={()=>{
+                console.log('✅ Outclickdiv 클릭됨!');
+        closeisMenu();
+     }}></Outclickdiv>
                 <Innerdiv onClick={()=>{usermove()}}>
                       
                         
@@ -206,7 +226,7 @@ export default function Noticemenu(props){
                    게시글차단해제 
                    
                </Innerdiv>
-                   :<Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform)}}>
+                   :<Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform) }}>
                         게시글차단 
                         
                     </Innerdiv>}
@@ -224,12 +244,14 @@ export default function Noticemenu(props){
             </Innerdiv>
                 <Innerdiv onClick={()=>{updatemethod()}}>
                 게시글수정@{nickname}
-                
+               
             </Innerdiv>
+            
             </>
             }
                     {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid} setisblock={setisblock}/> }
                     {isdeclationform&&<Noticedeclmodal ismodal={setIsdeclationform} noticeid={noticeid}/>}
         </Wrapper>
+
     )
 }
