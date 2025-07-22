@@ -57,6 +57,7 @@ import Twitformver from "./List/noticeformlist/Twitformver";
 import Noticedetailre from "./Noticepage/Noticedetailre";
 import OauthSuccesspage from "./UI/Manyim/OauthSuccesspage";
 import { SseProvider } from "./Context/SseProvider";
+import Oauth2userextra from "./MemberPage/Oauth2userextra";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -122,7 +123,7 @@ const updatetime=()=>{
     </Route>
     
  <Route path="/" element={<MainLayout />}>
-    
+    <Route path="/signup/extrainfo" element={<Oauth2userextra/>}/>
     <Route path="test1" element={<Statetest/>}/>
     <Route path="/lifecycle" element={<Lifecycle/>}/>
    
@@ -141,7 +142,7 @@ const updatetime=()=>{
      
     <Route path="/oauthsuccess" element={<OauthSuccesspage/>}/>
     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
-   
+    
   
     <Route path="userprofile" element={<Userimage/>}/>
       <Route path="main" element={<Twitformex/>}/>

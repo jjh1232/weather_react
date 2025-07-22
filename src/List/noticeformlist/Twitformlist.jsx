@@ -20,7 +20,7 @@ import NoticeWeathericon from "../../UI/Noticetools/NoticeWeathericon";
 import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "./DateCom/Viewtrans";
 import { faComment as comimo } from "@fortawesome/free-regular-svg-icons";
-import Testas from "./DateCom/Menumodal/Testas";
+
 
 
 const Wrapper=styled.div`
@@ -82,9 +82,8 @@ const Timecss=styled.div`
 const Weatherdiv=styled.div`
   
 `
-const ProfileTrigger=styled.span`
-  
-
+const UsernameandEmaildiv=styled.div`
+  display: flex;
 `
 const TitleCss=styled.div`
   display: flex;
@@ -350,8 +349,8 @@ export default function Twitformlist(props){
     const [islike,setIslike]=useState(post.likeusercheck);
     const [likenum,setLikenum]=useState(post.likes)
     const [isblock,setIsblock]=useState(post.isblock)
-     const [ishover,setIshover]=useState(false);
-    const [onprepage,setOnprepage]=useState(false);
+     
+    const [isSimpleprofile,setIsSimpleprofile]=useState(false);
     const [expend,setExpend]=useState(false);
     const Textref=useRef();
 
@@ -445,15 +444,15 @@ export default function Twitformlist(props){
 //마우스위치
  const [xy,setXY]=useState({x:-1000,y:-1000})
 
-const simpleprofile =(e)=>{
-  if(ishover){
-    
-    
-  }else{
+const ProfileMouseEnter =(e)=>{
+
     setXY({x:e.clientX,y:e.clientY})
-    setIshover(true)
-    setOnprepage(true)
-  }
+    
+    setIsSimpleprofile(true);
+  
+}
+const ProfileMouseLeave=()=>{
+  setIsSimpleprofile(false)
 }
 //날씨=====================================================
 // 1. 날씨 관련 key만 모아둔 배열
@@ -517,61 +516,39 @@ const [ismenu,setismenu]=useState(false);
         //유저프로필=============================================
         }
         <Noticedata>
-                
-
-        <ProfileTrigger>
-        <Profileview className={ishover?"profileover":"profile"}
-        onMouseEnter={(e)=>simpleprofile(e)
         
-         }
-        onMouseOut={()=>{setIshover(false)}}
-
-        onMouseUp={(e)=>{
-          e.stopPropagation();
-        }}
-         onClick={Userpagenavigate}
-      >
+        <Profileview onClick={Userpagenavigate}>
        
     <img   src={process.env.PUBLIC_URL+"/userprofileimg"+post.userprofile}
    style={{objectFit:"fill",width:"100%",height:"100%",background:"white"}}
-   
-
-                />
+          onMouseEnter={(e)=>ProfileMouseEnter(e)}
+          onMouseLeave={(e)=>ProfileMouseLeave}
+          onMouseUp={(e)=>{e.stopPropagation();}} 
+          />
                 
      </Profileview>
-     
+        <NoticeHeader >    
         
 
         
      <Nameheader >
-      <Nickname className={ishover?"profileover":"profile"}
-        onMouseEnter={(e)=>simpleprofile(e)
-        
-         }
-        onMouseOut={()=>{setIshover(false)}}
-               
-        onMouseUp={(e)=>{
-          e.stopPropagation();
-        }}
-        onClick={Userpagenavigate}>
+      <UsernameandEmaildiv 
+           onMouseEnter={(e)=>ProfileMouseEnter(e)}
+          onMouseLeave={(e)=>ProfileMouseLeave}
+         
+          onMouseUp={(e)=>{e.stopPropagation();}} 
+      >
+
+    
+      <Nickname>
         
           {post.nickname}
           
         </Nickname>
-     <Username className={ishover?"profileover":"profile"}
-        onMouseEnter={(e)=>simpleprofile(e)
-        
-         }
-        onMouseOut={()=>{setIshover(false)}}
-     onMouseUp={(e)=>{
-          e.stopPropagation();
-        }}
-       onClick={Userpagenavigate}>
+     <Username >
       {post.username}
       </Username>
-              
-     </Nameheader>
-      </ProfileTrigger>
+        </UsernameandEmaildiv>
      <Timecss>
      <Datefor inputdate={post.red}/>
      </Timecss>
@@ -613,11 +590,12 @@ const [ismenu,setismenu]=useState(false);
                     </Menucss>      
                </HeaderTools>
                  
-    
+            
+     </Nameheader>
 
-     {onprepage?<><Simpleprofile
+     {isSimpleprofile?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
-      mousexy={xy} setprepage={setOnprepage}
+      mousexy={xy} onmouseEnter={ProfileMouseEnter} onmouseLeave={ProfileMouseLeave}
       /></>:""}
     
      
@@ -632,7 +610,7 @@ const [ismenu,setismenu]=useState(false);
             </TitleCss>
             
             
-            
+            </NoticeHeader>
             </Noticedata>
             {
         //게시글 헤더끝 메인시작=============================================
