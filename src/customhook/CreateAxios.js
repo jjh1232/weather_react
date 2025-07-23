@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
      const [loginuser,setLoginuser,removeLoginuser]=useCookies();
 
     const navigate=useNavigate();
- const instance= 
- //모든 api요청의 기본주소지정과 쿠키가포함되도록설정함
-axios.create({
+ const instance= axios.create({
     withCredentials:true,
     baseURL:"http://localhost:8081",
  
-})
+});
+ //모든 api요청의 기본주소지정과 쿠키가포함되도록설정함
+
 
 instance.interceptors.request.use(
     //요청전달전헤더에토큰넣기
@@ -26,6 +26,7 @@ instance.interceptors.request.use(
         
         if(config.headers.Authorization){
             //Authorization이 존재하는헤더의경우 
+            //아마 보통 재요청시
             console.log("헤더에 액세스잇는경우")
             return config;
         }
@@ -102,7 +103,7 @@ instance.interceptors.response.use(
                 
                 //다시설정한 토큰으로 재호출
 
-                //여기에 새액세스토큰이안담김..
+                //이게 axios.create 즉실행임 get,post도되고 설정으로 실행됨
                 return instance(err.config)
             }).catch((err)=>{
                 console.log("리프레쉬토큰도오류!")

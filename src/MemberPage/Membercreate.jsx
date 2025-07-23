@@ -7,13 +7,30 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Validators } from "../UI/Modals/Validators";
+import ParseJwt from "../customhook/ParseJwt";
+import { useCookies } from "react-cookie";
 const Wrapper=styled.div`
 position: relative;
 
 width:100%;
-height:700px;
+height:100vh;
  border: 1px solid red;
- top: 8%;
+display: flex;
+flex-direction: column;
+ 
+  align-items: center;   
+`
+const Headerdiv=styled.div`
+    position: relative;
+    margin-top:50px;
+    border: 1px solid red;
+    width: 600px;
+`
+const Maindiv=styled.div`
+    position: relative;
+    
+    width: 600px;
+    border: 1px solid blue;
 `
 const Formrow=styled.tr`
     height: 50px;
@@ -190,8 +207,13 @@ const handleSubmit=(e)=>{
     
 
 
+
 return(
 <Wrapper key="memberform">
+    <Headerdiv>
+        헤더
+    </Headerdiv>
+    <Maindiv>
    <form onSubmit={handleSubmit}>
         <table>
           <tbody>
@@ -290,7 +312,10 @@ return(
 
         <Button title="회원가입" type="submit" />
       </form>
- 
+                
+    </Maindiv>
+
+    
  
     </Wrapper>
 )

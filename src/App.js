@@ -43,7 +43,7 @@ import Commentmanage from "./admin/managepage/Commentmanage";
 import Membermanage from "./admin/managepage/Membermanage";
 import Noticemanage from "./admin/managepage/Noticemanage";
 import AdminLeft from "./admin/AdminLeft";
-import { PrivateRoute } from "./customhook/Admintools/PrivateRoute";
+import { LoginRoute, NoLoginRoute, PrivateRoute } from "./customhook/Admintools/PrivateRoute";
 import NoAccess from "./customhook/Admintools/NoAccess";
 import ChatroomDetail from "./admin/managepage/list/ChatroomDetail";
 import Adminnoticedetail from "./admin/managepage/list/Adminnoticedetail";
@@ -121,7 +121,20 @@ const updatetime=()=>{
       <Route path="notice/detail/:noticeid" element={<Adminnoticedetail/>}/>
       <Route path="loginhistory" element={<Adminloginhistory/>}/>
     </Route>
-    
+
+    {
+      //메인레아웃없는것
+    }
+    <Route element={<LoginRoute/>}>
+        <Route path="/oauthsuccess" element={<OauthSuccesspage/>}/>
+      
+    </Route>
+
+    <Route element={<NoLoginRoute/>}>
+     <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
+        
+        <Route path="membercreate" element={<Membercreate/>}/>
+    </Route>
  <Route path="/" element={<MainLayout />}>
     <Route path="/signup/extrainfo" element={<Oauth2userextra/>}/>
     <Route path="test1" element={<Statetest/>}/>
@@ -140,20 +153,27 @@ const updatetime=()=>{
 </Route>
     
      
-    <Route path="/oauthsuccess" element={<OauthSuccesspage/>}/>
-    <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
-    
+   
   
     <Route path="userprofile" element={<Userimage/>}/>
+        <Route element={<NoLoginRoute/>}>
+     
+        <Route path="memberidfind" element={<Memberidfind/>}/>
+      <Route path="memberpasswordfind" element={<Memberpasswordfind/>}/>
+   
+    </Route>
+       <Route element={<LoginRoute/>}>
+    
+          <Route path="noticecreate" element={<Noticecreate/>}/>
+      <Route path="noticeupdate/:num" element={<NoticeUpdate/>}/>
+    </Route>
       <Route path="main" element={<Twitformex/>}/>
       <Route path="noticeex/:page" element={<Noticemainex/>}/>
       <Route path="noticelogic" element={<NoticelistView/>}/>
-      <Route path="noticecreate" element={<Noticecreate/>}/>
-      <Route path="noticeupdate/:num" element={<NoticeUpdate/>}/>
-      <Route path="membercreate" element={<Membercreate/>}/>
+    
+    
       <Route path="login" element={<Loginpage/>}/>
-      <Route path="memberidfind" element={<Memberidfind/>}/>
-      <Route path="memberpasswordfind" element={<Memberpasswordfind/>}/>
+   
       <Route path="memberupdate" element={<MemberNicknameupdate/>}/>
       <Route path="memberdeletepage" element={<Memberdeletepage/>}/>
       <Route path="weatherregion" element={<Weatherregion/>}/>
