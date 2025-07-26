@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreateAxios from "../CreateAxios";
 import styled from "styled-components";
-import Pagenation from "../../UI/Pagenation";
+import Pagenation from "../../UI/WeatherPagenation";
 import HistoryPaging from "./HistoryPaging";
 
 const Headers=styled.div`

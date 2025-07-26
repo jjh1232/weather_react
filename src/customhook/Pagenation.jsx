@@ -73,6 +73,7 @@ export default function Pagenation(props){
                         {d}
                     </Button>
                     }
+                   
                  </Pagenumcss> 
                 )
             })}

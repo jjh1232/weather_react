@@ -54,7 +54,7 @@ const Formrow=styled.div`
     display: flex;
     width: 100%;
     flex-direction:column;
-  
+    
     
 `
 
@@ -64,30 +64,59 @@ const Inputcell=styled.div`
     text-align: left;
     gap: 6px;
       background-color: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid ${(props)=>props.hasError? "#f57676":"#ccc"} ;
+  color: ${(props)=>props.hasError? "#f55656":"#ccc"} ;
   border-radius: 4px;
   padding: 8px 12px;
+  
 
 `
 const SubButtondiv=styled.div`
     
-    margin-left: auto;
+     margin-left: auto;
+  display: flex;
+  align-items: center;
+  
+
+ 
 `
 const SubButton=styled.button`
-    
+     height: 25px;
+  padding: 0 12px;
+  border: 1px solid ${(props)=>(props.isChecked ==="success" ? "#88da78" :
+                                props.isChecked === "fail" ? "#ec4b35" :"#4d90fe"
+  )} ;
+  background-color: ${(props)=>(props.isChecked ==="success" ? "#88da78" :
+                                props.isChecked === "fail" ? "#ec4b35" :"#4d90fe")};
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #357ae8;
+  }
+
+  &:disabled {
+    background-color: #a5c6ff;
+    cursor: not-allowed;
+  }
 `
 //아이콘
 const StyledIcon=styled(FontAwesomeIcon)`
-    border: 1px solid blue;
+    
     margin-top: 4px;
-    color:black;
+    color:${(props)=>props.hasError? "#f55656":"#ccc"};
 `
 const Inputarea=styled.input`
     background-color: #fff;
-    border: none;
+    width: 100%;
+      border: none;
     outline: none;
    max-width: 400px;
     height: 22px;
+    color: ${(props)=>props.hasError? "#f55656":"black"};
 
     //pladceholder스타일
     &::placeholder{
@@ -135,8 +164,8 @@ function membercreate(){
         }
     );
 
-    const [isemailcheck,setisemailcheck]=useState(false);
-     const [isproflieidcheck,setIsprofileidcheck]=useState(false);
+    const [isemailcheck,setisemailcheck]=useState("idle");
+     const [isproflieidcheck,setIsprofileidcheck]=useState("idle");
       
     const [showregionpopup,setshowregionpopup]=useState(false)
     const [errors,seterrors]=useState({})
@@ -187,24 +216,32 @@ function membercreate(){
 //이메일체크
     const checkEmail=(e)=>{
         e.preventDefault();
-        
+        if(!form.username || form.username.trim()===""){
+            alert("이메일을 입력해주세요!")
+            return;
+        }
+        if(errors.username){
+            alert("이메일양식을확인해주세요")
+            return ;
+        }
         axios.get("/open/emailcheck",{
             params:{
             username:form.username
             }
         }).then((res)=>
-        {   console.log(res.data.check)
-            if(res.data.check==1){
+        {   console.log(res.data)
+            if(res.data){
                 alert("이미존재하는이메일입니다");
-                setisemail(false);
+                console.log("이메일체크",res.data)
+                setisemailcheck("fail");
             }
-            if(res.data.check==0){
+            else{
                 alert("가입가능한이메일입니다!")
-                setisemail(true);
+                setisemailcheck("success");
             }
         }).catch(
             (error)=>{
-                alert("올바른형식의이메일을입력해주십시오")
+                alert("서버에러입니다"+error)
             }
         )
 
@@ -213,6 +250,14 @@ function membercreate(){
     //프로필아이디체크
     const checkProfileId=(e)=>{
         e.preventDefault();
+         if(!form.profileid || form.profileid.trim()===""){
+            alert("프로필id를 입력해주세요!")
+            return;
+        }
+        if(errors.profileid){
+            alert("프로필양식을확인해주세요")
+            return ;
+        }
         axios.get("/open/profileidcheck",{
             params:{
                 profileid:form.profileid
@@ -220,11 +265,11 @@ function membercreate(){
         }).then((res)=>{
             if(res.data){
                 alert("이미존재하는아이디입니다")
-                  setIsprofileid(false)
+                  setIsprofileidcheck("fail")
             }
             else{
                 alert("사용가능한아이디입니다")
-                setIsprofileid(true)
+                setIsprofileidcheck("success")
             }
         }).catch(
             (error)=>{
@@ -246,10 +291,10 @@ const handleSubmit=(e)=>{
         if(error) newErrors[key]=error;
     })
 
-    if(!isemailcheck){
+    if(!isemailcheck==="success"){
         alert("이메일을중복검사를완료해주세요")
     }
-    if(!isproflieidcheck){
+    if(!isproflieidcheck==="success"){
         alert("프로필 id 중복확인이필요합니다")
     }
     const ispasswordConfirmed=form.password === form.confirmpassword;
@@ -295,17 +340,20 @@ return(
           <tbody>
             <Formrow>
             
-                <Inputcell>
-                <StyledIcon icon={usericon}/>
+                <Inputcell hasError={errors.username}>
+                <StyledIcon icon={usericon} hasError={errors.username}/>
                 <Inputarea
                   name="username"
                   value={form.username}
                   onChange={handleChange}
                   type="text"
                   placeholder="로그인이메일"
+                  hasError={errors.username}
                 />
                 <SubButtondiv>
-                     <SubButton onClick={checkEmail} >중복검사</SubButton>
+                     <SubButton onClick={checkEmail} isChecked={isemailcheck} >
+                       {isemailcheck==="success"? "V": "중복검사"} 
+                        </SubButton>
                 </SubButtondiv>
                
                 </Inputcell>
@@ -320,14 +368,15 @@ return(
 
             <Formrow>
              
-                 <Inputcell>
-                 <StyledIcon icon={passwordicon}/>
+                <Inputcell hasError={errors.password}>
+                 <StyledIcon icon={passwordicon} hasError={errors.password}/>
                 <Inputarea
                   name="password"
                   value={form.password}
                   onChange={handleChange}
                   type="password"
                   placeholder="비밀번호"
+                  hasError={errors.password}
                 />
                 </Inputcell>
                   <Errordiv>
@@ -338,21 +387,26 @@ return(
 
             <Formrow>
               
-                <Inputcell>
-                <StyledIcon icon={confirmicon}/>
+             <Inputcell hasError={errors.confirmpassword}>
+                <StyledIcon icon={confirmicon} hasError={errors.confirmpassword}/>
                 <Inputarea
                   name="confirmpassword"
                   value={form.confirmpassword}
                   type="password"
                   onChange={handleChange}
                   placeholder="비밀번호확인"
+                  hasError={errors.confirmpassword}
                 />
                 </Inputcell>
                     <Errordiv>
-                {!form.confirmpassword ||
+                {
+                    errors.confirmpassword &&<p>{errors.confirmpassword }</p>
+                /*!form.confirmpassword ||
                 form.password === form.confirmpassword ? null : (
                   <p>비밀번호가 일치하지 않습니다</p>
-                )}
+                )
+                */  
+                }
                     </Errordiv>
                
              
@@ -360,16 +414,19 @@ return(
 
             <Formrow>
              
-                 <Inputcell>
-                 <StyledIcon icon={profileicon}/>
+                <Inputcell hasError={errors.profileid}>
+                 <StyledIcon icon={profileicon} hasError={errors.profileid}/>
                 <Inputarea
                   name="profileid"
                   value={form.profileid}
                   onChange={handleChange}
                   placeholder="프로필id"
+                  hasError={errors.profileid}
                 />
                   <SubButtondiv>
-                               <SubButton onClick={checkProfileId} >중복검사</SubButton>
+                               <SubButton onClick={checkProfileId} isChecked={isproflieidcheck}>
+                                {isproflieidcheck==="success"?"V":"중복검사"}
+                                </SubButton>
                 </SubButtondiv>
      
                 </Inputcell>
@@ -382,13 +439,14 @@ return(
 
             <Formrow>
              
-                <Inputcell>
-                <StyledIcon icon={usericon}/>
+               <Inputcell hasError={errors.nickname}>
+                <StyledIcon icon={usericon} hasError={errors.nickname}/>
                 <Inputarea
                   name="nickname"
                   value={form.nickname}
                   onChange={handleChange}
                   placeholder="닉네임"
+                  hasError={errors.nickname}
                 />
                 </Inputcell>
                 <Errordiv>
