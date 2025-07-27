@@ -72,8 +72,9 @@ const SubButton=styled.button`
 `
 const Pagenationdiv=styled.div`
   position: relative;
-  border: 1px solid blue;
+  
   float: left;
+  height: 20px;
 `
 
 function weatherregion(props){
@@ -202,13 +203,14 @@ useDidMounteffect(()=>{
          </Maindiv>
          <Bottomdiv>
 
-         
-        <Pagenationdiv>
+        
+         {keyword.trim().length>=2 && totalpage>1 &&
+        (<Pagenationdiv>
 
         
         <WeatherPagenation currentpage={page} getpagedata={getpagedata} totalpages={totalpage} />
       </Pagenationdiv>
-      
+        )}
 
         <button onClick={()=>setModalIsOpen(false)}>확인</button>
       </Bottomdiv>
