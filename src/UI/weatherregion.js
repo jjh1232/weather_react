@@ -6,32 +6,118 @@ import styled from "styled-components";
 import Pagenation from "./WeatherPagenation";
 import useDidMounteffect from "../customhook/usdDidMountEffect";
 import WeatherPagenation from "./WeatherPagenation";
-
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareXmark as closeicon } from "@fortawesome/free-solid-svg-icons";
 const Modalin=styled.div`
 display: flex;
 flex-direction: column;
   position: fixed;
-  right: 100px;
+  bottom: 50px;
+  right: 220px;
 background-color: white;
   width: 400px;
-  height: 430px;
+  height: 450px;
+  border: 1px solid black;
   
 `
-const Wrapper=styled.div`
-  display :flex ;
-  flex-direction: column;
+
+const Headerdiv=styled.div`
+border-bottom: 1px solid gray;
+padding: 5px;
+display: flex;
+height: 13%;
 
 `
-const Headerdiv=styled.div`
-border: 1px solid red;
+const Headerdatadiv=styled.div`
+display: flex;
+flex-direction: column;
+padding-left: 3px;
+gap: 5px;
 `
+const Headerclosediv=styled.div`
+//border: 1px solid black;
+margin-left: auto;
+`
+const Headerclosebutton=styled.button`
+border: none;
+background: none;
+cursor: pointer;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  
+`
+const Closeimo=styled(FontAwesomeIcon)`
+//width와 height사용은가능하지만 권장안한다고함
+font-size: 30px;
+color: red;
+position: absolute;
+top: -2px;
+right: 0px;
+
+`
+const Headertextdiv=styled.div`
+  display: flex;
+  
+  gap: 5px;
+   align-items: center;  
+`
+const Title=styled.label`
+  color: #050000ff;
+  font-weight: 800;
+  font-size:18px;
+  
+
+`
+const Ex=styled.small`
+ color: #757575ff;
+  font-weight: 400;
+  font-size:14px;
+`
+const Searchinput=styled.input`
+   width: 100%;
+  padding: 2px 2px;
+  font-size: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: #4d90fe;
+    box-shadow: 0 0 6px rgba(77, 144, 254, 0.5);
+  }
+
+  &::placeholder {
+    color: #999;
+  }
+`
+
+
 const Maindiv=styled.div`
-border : 1px solid blue;
-height: 340px;
+
+border-bottom:1px solid black;
+height: 82%;
 `
+//각지역 배열들
+const RegionTap=styled.div`
+border-bottom:${({ noBorder }) => (noBorder ? 'none' : '0.3px solid gray')};
+padding:5px 10px;
+background-color: ${({isActive})=>(isActive? `#f0ece3` :`transparent`)};
+color:${({isActive})=>(isActive? `blue`: `black`)};
+cursor:pointer;
+
+:hover{
+    background-color:rgba(0,0,0,0.1);
+}
+
+//마지막은 주지않기
+ 
+`
+
+
 const Bottomdiv=styled.div`
-border: 1px solid green;
+  height: 5%;
 flex: 1;
 
   display: flex;
@@ -39,16 +125,6 @@ flex: 1;
   align-items: center;             /* 세로 가운데 정렬 */
   padding: 8px; 
 `
-
-//각지역 배열들
-const RegionTap=styled.div`
-border:none;
-padding:5px 10px;
-background-color: ${({isActive})=>(isActive? `#f0ece3` :`transparent`)};
-color:${({isActive})=>(isActive? `grey`: `black`)};
-cursor:pointer;
-`
-
 //첫 열기버튼
 const SubButton=styled.button`
      height: 28px;
@@ -75,6 +151,30 @@ const Pagenationdiv=styled.div`
   
   float: left;
   height: 20px;
+`
+const Confirmbutton=styled.button`
+  margin-left: auto;
+
+     height: 28px;
+  padding: 0 6px;
+  border: 1px solid #000000ff;
+  background-color: #3365eeff;
+  color: white;
+  border-radius: 4px;
+  font-size: 18px;
+  width: 60px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #4900f3ff;
+  }
+
+  &:disabled {
+    background-color: #196dffff;
+    cursor: not-allowed;
+  }
+
 `
 
 function weatherregion(props){
@@ -167,30 +267,44 @@ useDidMounteffect(()=>{
         <Modalin>
         <Headerdiv>
 
-        
-
-      	지역 입력 <br/>
-        <input type="text" value={keyword} onChange={(e)=>{setKeyword(e.target.value) 
+        <Headerdatadiv>
+     
+        <Headertextdiv>
+          <Title>	지역 입력</Title>
+          <Ex>ex)부산광역시 중구 영주제1동</Ex> 
+        </Headertextdiv>
+      
+        <Searchinput type="text" value={keyword} onChange={(e)=>{setKeyword(e.target.value) 
           setPage(1)}} />
        
        
        {
         //검색시 페이지는 1이 되야함
        }
+            
+        </Headerdatadiv>
+        <Headerclosediv>
+        <Headerclosebutton onClick={()=>{setModalIsOpen(false)}}>
+        <Closeimo icon={closeicon} />
+        </Headerclosebutton>
+        </Headerclosediv>
        </Headerdiv>
        <Maindiv>
 
       
         
         {regiondata.map(function(a,i){
-            
-        {
-            //이거왜 익명안썻지 ㅋ
-        }
+          //현재아이템이 10개인지 boolean
+            const isFullPage=regiondata.length===10;
+            //마지막인지
+            const islastitem=i===regiondata.length -1;
+            //마지막이고 전체가열개일때만 두조건만족시 true
+            const noBorder=isFullPage &&islastitem;
             return (
                 <RegionTap 
                     key={i}
-                    isActive={activeTab===i}             
+                    isActive={activeTab===i}    
+                    noBorder={noBorder}         
                   onClick={(e)=>{
                         regionda(i,e);
                         setActiveTab(i);
@@ -212,7 +326,7 @@ useDidMounteffect(()=>{
       </Pagenationdiv>
         )}
 
-        <button onClick={()=>setModalIsOpen(false)}>확인</button>
+        <Confirmbutton onClick={()=>setModalIsOpen(false)}>확인</Confirmbutton>
       </Bottomdiv>
         </Modalin>
       

@@ -28,13 +28,14 @@ flex-direction: column;
 `
 const Headerdiv=styled.div`
     position: relative;
-    margin-top:30px;
+    margin-top:50px;
     border: 1px solid gray;
     width: 600px;
     height: 80px;
     margin-bottom:30px;
 `
 const Maindiv=styled.div`
+    margin-top: 30px;
     display: flex;
     position: relative;
     
