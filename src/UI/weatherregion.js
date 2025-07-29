@@ -128,9 +128,9 @@ flex: 1;
 //첫 열기버튼
 const SubButton=styled.button`
      height: 28px;
-  padding: 0 6px;
-  border: 1px solid #000000ff;
-  background-color: #4d6b77ff;
+  padding: 0px 8px;
+  border: 1px solid #797979ff;
+  background-color: #25c1ffff;
   color: white;
   border-radius: 4px;
   font-size: 14px;
@@ -138,11 +138,11 @@ const SubButton=styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #35e84dff;
+    background-color: #4d59ffff;
   }
 
   &:disabled {
-    background-color: #196dffff;
+    background-color: #5392ffff;
     cursor: not-allowed;
   }
 `
@@ -244,10 +244,30 @@ useDidMounteffect(()=>{
 
     const regionda=(i,e)=>{
         console.log(regiondata[i])
-        onGetdata(regiondata[i])
+        Setselectlegion(regiondata[i])//선택위치상태저장
        
     }
+    const CloseHandler=()=>{
+
+      setModalIsOpen(false)
+      setKeyword("")
+        Setregiondata([])
+            setTotalPage(0)
+            setPage(1)
+            setActiveTab(-1)
+    }
    
+    const Confirmhandler=()=>{
+      if(selectlegion){
+      onGetdata(selectlegion)
+      }
+      setModalIsOpen(false)
+      setKeyword("")
+        Setregiondata([])
+            setTotalPage(0)
+             setPage(1)
+             setActiveTab(-1)
+    }
 
     return (
         <>
@@ -284,7 +304,7 @@ useDidMounteffect(()=>{
             
         </Headerdatadiv>
         <Headerclosediv>
-        <Headerclosebutton onClick={()=>{setModalIsOpen(false)}}>
+        <Headerclosebutton onClick={()=>{CloseHandler()}}>
         <Closeimo icon={closeicon} />
         </Headerclosebutton>
         </Headerclosediv>
@@ -326,7 +346,7 @@ useDidMounteffect(()=>{
       </Pagenationdiv>
         )}
 
-        <Confirmbutton onClick={()=>setModalIsOpen(false)}>확인</Confirmbutton>
+        <Confirmbutton onClick={()=>Confirmhandler()}>확인</Confirmbutton>
       </Bottomdiv>
         </Modalin>
       

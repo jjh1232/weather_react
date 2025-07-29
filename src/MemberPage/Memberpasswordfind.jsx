@@ -7,11 +7,41 @@ import styled from "styled-components";
 
 const Wrapper=styled.div`
 position: relative;
-left:28.5%;
-width:43%;
+display: flex;
+flex-direction: column;
+ border: 1px solid black;
+align-items: center;   
+width:100%;
 height:100%;
- border: 1px solid;
- top: 8%;
+`
+const Headerdiv=styled.div`
+  display:flex;
+  flex-direction:column;
+`
+const Logodiv=styled.div`
+  
+`
+const Headertext=styled.h3`
+  
+`
+const Maindiv=styled.div`
+   display:flex;
+  flex-direction:column;
+`
+const Idinput=styled.input`
+  
+`
+const Subbutton=styled.button`
+  
+`
+const Bottomdiv=styled.div`
+  display:flex;
+`
+const Guidetext=styled.h3`
+  
+`
+const Navitag=styled.a`
+  
 `
 function Memberpasswordfind(){
 const [email,Setemail]=useState();
@@ -33,12 +63,34 @@ const findpassword=()=>{
 
   return (
     <Wrapper>
+      <Headerdiv>
+        <Logodiv>
+   로고
+        </Logodiv>
+        <Headertext>
       비밀번호를찾으려는 이메일을 작성해 주십시오
-      <br/>
-      이메일:<input type="text" onChange={(e)=>Setemail(e.target.value)}/>
-      <Button title="확인" onClick={findpassword}/>
+        </Headertext>
+    
+      </Headerdiv>
+    
+      <Maindiv>
+       이메일: <Idinput type="text" onChange={(e)=>Setemail(e.target.value)}/>
 
-
+       <Subbutton onClick={findpassword}> 
+          확인
+       </Subbutton>
+    
+   
+      </Maindiv>
+      <Bottomdiv>
+        <Guidetext>
+  아이디가기억나지않으신다면?
+        </Guidetext>
+        <Navitag href="/memberidfind">
+          아이디찾기
+        </Navitag>
+     
+      </Bottomdiv>
     </Wrapper>
   
   )

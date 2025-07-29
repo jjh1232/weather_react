@@ -58,6 +58,7 @@ import Noticedetailre from "./Noticepage/Noticedetailre";
 import OauthSuccesspage from "./UI/Manyim/OauthSuccesspage";
 import { SseProvider } from "./Context/SseProvider";
 import Oauth2userextra from "./MemberPage/Oauth2userextra";
+import Logindetail from "./MemberPage/Logindetail";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -134,6 +135,9 @@ const updatetime=()=>{
      <Route path="/oauth2loginfailed" element={<Oauth2loginfailed/>}/>
         
         <Route path="membercreate" element={<Membercreate/>}/>
+         <Route path="memberidfind" element={<Memberidfind/>}/>
+      <Route path="memberpasswordfind" element={<Memberpasswordfind/>}/>
+      <Route path="Loginpage" element={<Logindetail/>}/>
     </Route>
  <Route path="/" element={<MainLayout />}>
     <Route path="/signup/extrainfo" element={<Oauth2userextra/>}/>
@@ -156,12 +160,7 @@ const updatetime=()=>{
    
   
     <Route path="userprofile" element={<Userimage/>}/>
-        <Route element={<NoLoginRoute/>}>
-     
-        <Route path="memberidfind" element={<Memberidfind/>}/>
-      <Route path="memberpasswordfind" element={<Memberpasswordfind/>}/>
-   
-    </Route>
+  
        <Route element={<LoginRoute/>}>
     
           <Route path="noticecreate" element={<Noticecreate/>}/>

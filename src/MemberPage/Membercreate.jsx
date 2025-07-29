@@ -14,13 +14,13 @@ import { faUnlockKeyhole as passwordicon } from "@fortawesome/free-solid-svg-ico
 import { faClipboardCheck as confirmicon } from "@fortawesome/free-solid-svg-icons";
 import { faIdCard as profileicon } from "@fortawesome/free-regular-svg-icons";
 import { faHouse as regionicon } from "@fortawesome/free-solid-svg-icons";
-
+import { faCircleXmark as xicon } from "@fortawesome/free-solid-svg-icons";
 const Wrapper=styled.div`
 position: relative;
 
 width:100%;
 height:100vh;
- border: 1px solid red;
+ 
 display: flex;
 flex-direction: column;
  
@@ -61,6 +61,7 @@ const Formrow=styled.div`
 
 
 const Inputcell=styled.div`
+position: relative;
     display: flex;
     text-align: left;
     gap: 6px;
@@ -112,10 +113,10 @@ const StyledIcon=styled(FontAwesomeIcon)`
 `
 const Inputarea=styled.input`
     background-color: #fff;
-    width: 100%;
-      border: none;
+    width:70%;
+    
     outline: none;
-   max-width: 400px;
+    border: none;
     height: 22px;
     color: ${(props)=>props.hasError? "#f55656":"black"};
 
@@ -128,6 +129,22 @@ const Inputarea=styled.input`
         opacity: 1;   
     }
 `
+const ClearButton=styled.button`
+    position: relative;
+    background: none;
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: ${(props)=>props.visible?"visable":"hidden"};
+    cursor: pointer;
+`
+const Clearicon=styled(FontAwesomeIcon)`
+    font-size: 20px;
+    color: red;
+`
 const Errordiv=styled.div`
 display: flex;
     text-align: center;
@@ -139,14 +156,26 @@ display: flex;
 `
 const Footerdiv=styled.div`
 margin-top: 30px;
- border: 1px solid blue;
+
  display:flex;
  justify-content: center;
 
 `
 const SubmitButton=styled.button`
+    margin-top: 20px;
     width: 400px;
     height: 50px;
+    border: none;
+    background: #4873ff;
+
+     cursor: pointer;
+  transition: background-color 0.2s ease;
+    color: white;
+    font-size:25px;
+
+  &:hover {
+    background-color: #357ae8;
+  }
 `
 
 
@@ -328,6 +357,16 @@ const handleSubmit=(e)=>{
     }
     
 
+    //주소클리어
+    const RegionClear=(e)=>{
+        e.preventDefault()
+        setform((prev)=>({
+            ...prev,
+            region:"",
+            gridx:"",
+            gridy:""
+        }));
+    }
 
 
 return(
@@ -463,6 +502,11 @@ return(
                  <Inputcell>
                  <StyledIcon icon={regionicon}/>
                 <Inputarea name="region" value={form.region} readOnly placeholder="지역" />
+                <ClearButton onClick={(e)=>{ RegionClear(e)}} visible={form.region.length>2}>
+                    <Clearicon icon={xicon}/>
+                </ClearButton>
+
+           
 
                 <SubButtondiv>
                      <Weatherregion title="지역 찾기" onGetdata={handleRegionSelect} />
