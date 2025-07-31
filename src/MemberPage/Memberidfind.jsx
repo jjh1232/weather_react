@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Validators } from "../UI/Modals/Validators";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper=styled.div`
 position: relative;
@@ -60,7 +62,7 @@ align-items: center;
 //justify-content: center;
 height: 20%;
 //max-height: 300px;
-border: 1px solid red;
+//border: 1px solid red;
 
 `
 
@@ -78,9 +80,9 @@ const Inputdiv=styled.input`
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 `
 const Validationdiv=styled.div`
-border: 1px solid black;
+
 width: 40%;
-min-height: 30px;
+min-height: 18px;
 color: red;
 font-size: 14px;
 `
@@ -95,17 +97,47 @@ const Bottomdiv=styled.div`
     position: relative;
 display: flex;
 
-align-items: center;
+//align-items: center;
 justify-content: center;
-height: 20%;
+height: 25%;
 `
 
 const Resultdiv=styled.div`
-  
+  display: flex;
+  flex-direction: column;
+
+`
+
+const Errortext=styled.h4`
+ 
+`
+const Errortreatdiv=styled.div`
+  display: flex;
+  width: 100%;
+  border: 1px solid blue;
+  text-align: center;
+  justify-content:center;
+  gap: 30px;
+   
+`
+const TreatButton=styled.button`
+    border: none; /* border 없애기 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 기본 그림자 */
+  cursor: pointer;
+  padding: 7px 7px;
+    transition: box-shadow 0.3s ease;
+  width: 100px;
+  height: 40px;
+  font-size: 18px;
+
+:hover{
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
 `
 function Memberidfind(){
 
   const [username,setUsername]=useState();
+  const [valierr,setvalierr]=useState();
   const [result,setResult]=useState(
     {
       error:'', //에러시문자열
@@ -113,19 +145,50 @@ function Memberidfind(){
       oauth:'' //oauth여부
     }
   );
-  
+  const [touched,setTouched]=useState(false)
+
+  const navigate=useNavigate();
+
   const Usernamefind=()=>{
-    console.log("유저네임파이늗")
+   if(!valierr){
     axios.get(`/open/usernamefind/${username}`).then((res)=>{
       console.log("요청",res)
       setResult({username:res.data.username,oauth:res.data.provider})
     }).catch((err)=>{
         console.log("err",err.response)
-        setResult({error:err.response.data.message})
+        setResult({error:username+"에 "+err.response.data.message})
     })
   }
+  else{
+    alert("이메일을확인해주세요")
+  }
+  }
+
+  const Inputhanlder=(e)=>{
+    setUsername(e.target.value)
+
+      if (touched) {
+    // 이미 input을 한번 blur 했으면, 입력시마다(실시간) 검사
+    const err = Validators("username", e.target.value);
+    setvalierr(err);
+  }
+   
 
 
+   
+  }
+
+  const handleBlur = (e) => {
+  // 입력값이 있을 때만 유효성 검사
+  if (username) {
+      const err=Validators("username",e.target.value)
+
+  setvalierr(err);
+  } else {
+    setvalierr(""); // 빈 값이면 에러 메시지도 숨김
+  }
+  setTouched(true)
+};
 
   return (
     <Wrapper>
@@ -140,9 +203,10 @@ function Memberidfind(){
       </Headerdiv>
     <Maindiv>
       
-        <Inputdiv type="email" onChange={(e)=>setUsername(e.target.value)} placeholder="이메일"/>
+        <Inputdiv type="email" onChange={(e)=>Inputhanlder(e)} onBlur={(e)=>handleBlur(e)} placeholder="이메일"/>
           <Validationdiv>
-    발리데이션
+    {valierr&&
+    <>{valierr}</>}
     </Validationdiv>
          <Findbutton onClick={()=>{Usernamefind()}}>제출</Findbutton>
      
@@ -153,20 +217,40 @@ function Memberidfind(){
      
     <Bottomdiv>
       <Resultdiv>
-      {result.error && <>{result.error}</>}
+      {result.error &&<>
+      <Errortext>
+        {result.error}
+      </Errortext>
+        <Errortreatdiv>
+          <TreatButton onClick={()=>{navigate("/")}}>홈으로</TreatButton>
+          <TreatButton onClick={()=>{navigate("/membercreate")}}>회원가입</TreatButton>
+        </Errortreatdiv>
+       </>}
+
       {!result.error && result.oauth && 
       <>
-      {result.oauth==="자사사이트" 
+      {result.oauth==="mypage" 
         ?(
         <>
+        <Errortext>
         {result.username}님은 자체회원가입한 사용자입니다! 
-        
-
+        </Errortext>
+              <Errortreatdiv>
+                <TreatButton onClick={()=>{navigate("/")}}>홈으로</TreatButton>
+          <TreatButton onClick={()=>{navigate("/memberpasswordfind")}}>비밀번호찾기</TreatButton>
+        </Errortreatdiv>
         </>
         )
         :
         (<>
-          {result.username}님은 {result.oauth}로그인유저입니다 해당로그인기능을 이용해주세요!
+        <Errortext>
+     
+          <strong>{result.username}</strong>님은 <strong>{result.oauth}</strong>로그인유저입니다 
+          <br/>해당로그인기능을 이용해주세요!
+            </Errortext>
+              <Errortreatdiv>
+          oauth
+        </Errortreatdiv>
         </>
         )
       }
