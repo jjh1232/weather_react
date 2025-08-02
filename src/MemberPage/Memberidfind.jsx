@@ -41,7 +41,7 @@ const Logodiv=styled.div`
   border: 1px solid blue;
 `
 const Headertext=styled.h3`
-  
+  padding-top: 20px;
   text-align: center;
   height: 40px;
   display: flex;
@@ -61,6 +61,7 @@ flex-direction: column;
 align-items: center;
 //justify-content: center;
 height: 20%;
+
 //max-height: 300px;
 //border: 1px solid red;
 
@@ -90,13 +91,22 @@ font-size: 14px;
 const Findbutton=styled.button`
   margin-top: 5px;
   width: 40%;
-  height: 27%;
+  height: 28%;
+  font-size: 20px;
+  color: white;
+  background-color: #3ca0fd;
+  cursor: pointer;
+    transition: background-color 0.3s; 
+
+  :hover{
+    background-color: #0082fc;
+  }
 `
 const Bottomdiv=styled.div`
-  border:1px solid blue;
+
     position: relative;
 display: flex;
-
+padding-top: 30px;
 //align-items: center;
 justify-content: center;
 height: 25%;
@@ -104,8 +114,13 @@ height: 25%;
 
 const Resultdiv=styled.div`
   display: flex;
+    border:1px solid #7cc0ff;;
+  height: 100%;
+  width: 60%;
+  padding-top: 30px;
   flex-direction: column;
-
+  align-items: center;
+  gap:5px;
 `
 
 const Errortext=styled.h4`
@@ -114,25 +129,62 @@ const Errortext=styled.h4`
 const Errortreatdiv=styled.div`
   display: flex;
   width: 100%;
-  border: 1px solid blue;
+ 
   text-align: center;
   justify-content:center;
   gap: 30px;
    
 `
+//변수 styled에 불편함
+const getColor=(variant)=>{
+  switch(variant){
+    case "home" : return "#00f165";
+    case "create": return "#0fdaf5";
+    case "password": return "#df5858fb";
+    //이건오아스이ㄴ함
+    default: return "#ccc";
+  }
+}
+//호버시색깔도
+const gethoverColor=(variant)=>{
+  switch(variant){
+    case "home" : return "#9382f0";
+    case "create": return "#444768";
+    case "password": return "#0078f5";
+    //이건오아스이ㄴ함
+    default: return "#ccc";
+  }
+}
 const TreatButton=styled.button`
-    border: none; /* border 없애기 */
+   background-color: white;       /* 내부 흰색 배경 */
+  color: black;
+  border-left: 5px solid ${({ variant }) => getColor(variant)}; 
+  border-top: 5px solid ${({ variant }) => getColor(variant)}; 
+  border-bottom:1px solid black;
+  border-right: 1px solid black;
+  border-radius:10%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 기본 그림자 */
   cursor: pointer;
-  padding: 7px 7px;
-    transition: box-shadow 0.3s ease;
+  padding: 1px 10px;
+    transition: box-shadow 0.3s ease,background-color 0.3s ease;
   width: 100px;
   height: 40px;
   font-size: 18px;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+
+  
+  
+  
+
+
+
+
 
 :hover{
    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+   background: #cacacad6;
 }
+
 `
 function Memberidfind(){
 
@@ -190,6 +242,8 @@ function Memberidfind(){
   setTouched(true)
 };
 
+
+
   return (
     <Wrapper>
     <Contentdiv>
@@ -222,8 +276,8 @@ function Memberidfind(){
         {result.error}
       </Errortext>
         <Errortreatdiv>
-          <TreatButton onClick={()=>{navigate("/")}}>홈으로</TreatButton>
-          <TreatButton onClick={()=>{navigate("/membercreate")}}>회원가입</TreatButton>
+          <TreatButton variant="home" onClick={()=>{navigate("/")}}>홈으로</TreatButton>
+          <TreatButton variant="create" onClick={()=>{navigate("/membercreate")}}>회원가입</TreatButton>
         </Errortreatdiv>
        </>}
 
@@ -236,8 +290,8 @@ function Memberidfind(){
         {result.username}님은 자체회원가입한 사용자입니다! 
         </Errortext>
               <Errortreatdiv>
-                <TreatButton onClick={()=>{navigate("/")}}>홈으로</TreatButton>
-          <TreatButton onClick={()=>{navigate("/memberpasswordfind")}}>비밀번호찾기</TreatButton>
+                <TreatButton variant="home" onClick={()=>{navigate("/")}}>홈으로</TreatButton>
+          <TreatButton variant="password" onClick={()=>{navigate("/memberpasswordfind")}}>비밀번호찾기</TreatButton>
         </Errortreatdiv>
         </>
         )
@@ -249,7 +303,8 @@ function Memberidfind(){
           <br/>해당로그인기능을 이용해주세요!
             </Errortext>
               <Errortreatdiv>
-          oauth
+         <TreatButton variant="home" onClick={()=>{navigate("/")}}>홈으로</TreatButton>
+          <TreatButton variant="password" onClick={()=>{navigate("/memberpasswordfind")}}>oauth</TreatButton>
         </Errortreatdiv>
         </>
         )
