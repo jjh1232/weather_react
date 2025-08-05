@@ -114,10 +114,10 @@ height: 25%;
 
 const Resultdiv=styled.div`
   display: flex;
-    border:1px solid #7cc0ff;;
+    border:1px solid #81a1be;;
   height: 100%;
   width: 60%;
-  padding-top: 30px;
+  padding-top: 15px;
   flex-direction: column;
   align-items: center;
   gap:5px;
@@ -135,6 +135,17 @@ const Errortreatdiv=styled.div`
   gap: 30px;
    
 `
+const Authimage=styled.img`
+width: 100px;
+height: 40px;
+cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.8);
+    transition: filter 0.3s ease;
+  }
+`
+
 //변수 styled에 불편함
 const getColor=(variant)=>{
   switch(variant){
@@ -242,7 +253,24 @@ function Memberidfind(){
   setTouched(true)
 };
 
+const googlelogin=()=>{
+  const prevpath=window.location.pathname;
 
+  localStorage.setItem("oauthbeforepath",window.location.pathname);
+  let googleurl= `http://localhost:8081/oauth2/authorization/google?state=${encodeURIComponent(prevpath)}`;
+  document.location.href=googleurl;
+}
+
+const naverlogin=()=>{
+  const prevpath=window.location.pathname;
+  localStorage.setItem("oauthbeforepath",window.location.pathname);
+  let naverurl=`http://localhost:8081/oauth2/authorization/naver?state=${encodeURIComponent(prevpath)}`;
+    document.location.href=naverurl;
+
+
+     
+  
+}
 
   return (
     <Wrapper>
@@ -262,7 +290,7 @@ function Memberidfind(){
     {valierr&&
     <>{valierr}</>}
     </Validationdiv>
-         <Findbutton onClick={()=>{Usernamefind()}}>제출</Findbutton>
+         <Findbutton onClick={()=>{Usernamefind()}}>아이디찾기</Findbutton>
      
   
   
@@ -304,7 +332,11 @@ function Memberidfind(){
             </Errortext>
               <Errortreatdiv>
          <TreatButton variant="home" onClick={()=>{navigate("/")}}>홈으로</TreatButton>
-          <TreatButton variant="password" onClick={()=>{navigate("/memberpasswordfind")}}>oauth</TreatButton>
+         {result&&result.oauth ==="Google"?<Authimage src={`${process.env.PUBLIC_URL}/img/google.png`} onClick={googlelogin}/> 
+         : <Authimage src={`${process.env.PUBLIC_URL}/img/NAVERBTG.png`} onClick={naverlogin}/>}
+            
+
+          
         </Errortreatdiv>
         </>
         )
