@@ -4,6 +4,7 @@ import Button from "../UI/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Validators } from "../UI/Modals/Validators";
 
 const Wrapper=styled.div`
 position: relative;
@@ -15,7 +16,7 @@ width:100%;
 height:100vh;
 `
 const Contentdiv=styled.div`
-     margin-top: 3%;
+     margin-top: 5%;
    position: relative;
    display: flex;
    flex-direction: column;
@@ -24,12 +25,13 @@ const Contentdiv=styled.div`
    min-width: 600px;
 
    height: 75%;
-   border: 1px solid black;
+
 `
 
 const Headerdiv=styled.div`
   display:flex;
   flex-direction:column;
+  
 `
 const Logodiv=styled.div`
     width: 100%;
@@ -38,14 +40,16 @@ const Logodiv=styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid blue;
+  margin-bottom:25px ;
 `
 const Headertext=styled.h3`
-    padding-top: 20px;
+    padding-top: 5px;
   text-align: center;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size:25px;
 `
 const Maindiv=styled.div`
 position: relative;
@@ -55,7 +59,7 @@ align-items: center;
 //justify-content: center;
 height: 30%;
 
-border: 1px solid green;
+
 `
 const Inputdiv=styled.input`
     width: 40%;
@@ -72,15 +76,17 @@ const Inputdiv=styled.input`
  
 `
 const Validationdiv=styled.div`
-
-width: 42%;
-min-height: 18px;
+padding-top:5px;
+width: 40%;
+display: flex;
+justify-content: center;
+min-height: 20px;
 color: red;
-font-size: 14px;
+font-size: 15px;
 `
 const Findbutton=styled.button`
 
-  margin-top: 30px;
+  margin-top: 7px;
   width: 42%;
   height: 20%;
   font-size: 20px;
@@ -94,19 +100,23 @@ const Findbutton=styled.button`
   }
 `
 const Resultdiv=styled.div`
-  margin-top: 10px;
-  border: 1px solid blue;
+  margin-top: 30px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40%;
-  height: 20%;
+  width: 75%;
+  font-size:18px;
+  height: 30%;
+  font-weight: 600;
+  color: white;
+  
 `
 const Bottomdiv=styled.div`
 
     position: relative;
 display: flex;
-//padding-top: 5px;
+padding-top: 50px;
 //align-items: center;
 justify-content: center;
 height: 25%;
@@ -137,10 +147,12 @@ const Navitag=styled.h4`
   color: green;
 `
 function Memberpasswordfind(){
+
 const [email,Setemail]=useState();
 const url=`/open/passwordfind`
 const navigate=useNavigate();
-
+const [valierr,setvalierr]=useState();
+ const [touched,setTouched]=useState(false)
 const [result,setResult]=useState({
    error: null,
   message: null,
@@ -149,8 +161,37 @@ const [result,setResult]=useState({
   provider: null,
 }
 );
+const Inputhanlder=(e)=>{
+    Setemail(e.target.value)
 
+      if (touched) {
+    // 이미 input을 한번 blur 했으면, 입력시마다(실시간) 검사
+    const err = Validators("username", e.target.value);
+    setvalierr(err);
+    
+  }
+   
+
+
+   
+  }
+
+  const handleBlur = (e) => {
+  // 입력값이 있을 때만 유효성 검사
+  if (email) {
+      const err=Validators("username",e.target.value)
+
+  setvalierr(err);
+  } else {
+    setvalierr(""); // 빈 값이면 에러 메시지도 숨김
+  }
+  setTouched(true)
+};
 const findpassword=()=>{
+  if(valierr){
+    alert("이메일형식을확인해주세요!")
+    return ;
+  }
   axios.get(url,{
     params:{
         email:email
@@ -204,8 +245,11 @@ const findpassword=()=>{
       </Headerdiv>
     
       <Maindiv>
-       <Inputdiv type="text" onChange={(e)=>Setemail(e.target.value)} placeholder="이메일"/>
+       <Inputdiv type="text" onChange={(e)=>Inputhanlder(e)} onBlur={(e)=>handleBlur(e)} placeholder="이메일"/>
 
+    <Validationdiv>
+      {valierr&&<>{valierr}</>}
+    </Validationdiv>
        <Findbutton onClick={findpassword}> 
           제출
        </Findbutton>
@@ -225,12 +269,12 @@ const findpassword=()=>{
     )}
      {!result.error&&result.status==="oauthuser" && (
       <>
-        {result.username} 님은 {result.provider} 사용자입니다 해당로그인기능을이용해주세요
+        {result.username} 님은 {result.provider} 사용자입니다 <br/>해당로그인기능을이용해주세요
       </>
     )}
      {!result.error&&result.status==="Success" && (
       <>
-        {result.username}님의 이메일로 임시비밀번호를 보냈습니다 해당 비밀번호로로그인해주세요
+        {result.username}님의 이메일로  임시비밀번호를 보냈습니다  <br/>해당 비밀번호로로그인해주세요
       </>
     )}
         </Resultdiv>

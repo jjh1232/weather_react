@@ -12,7 +12,7 @@ const Wrapper=styled.div`
 `
 const Imagediv=styled.div`
     display: flex;
-    border: 1px solid red;
+    
     width: 20%;
     flex-wrap: wrap;
     justify-content: center;
@@ -38,14 +38,14 @@ const Profilelist=styled.div`
 const MainContainer=styled.div`
     display: flex;
     flex-direction: column;
-    border: 1px solid blue;
+  
     width: 65%;
 `
 
 
 const MainTop=styled.div`
       display: flex;
-      border: 1px solid yellow;
+      border: 1px solid gray;
       height: 33%;
 `
 const Roomnamecss=styled.div`
@@ -61,26 +61,51 @@ const MainMiddle=styled.div`
 `
 */
 const MainBottom=styled.div`
-      border: 1px solid pink;
+      border: 1px solid gray;
       height: 66%;
 `
 const Menudiv=styled.div`
-    border: 1px solid green;
-    width: 15%;
+    border: 1px solid gray;
+    width: 18%;
     overflow: hidden;
     text-overflow:ellipsis;
-    font-size: 11px;
+    
     display:flex;
     flex-direction: column;
+    
 `
 const Timediv=styled.div`
-    height: 50%;
+    padding-top: 3px;
+    height: 30%;
     text-align: center;
     vertical-align: middle;
+    font-size: 11px;
+   
 `
 const Readdiv=styled.div`
-    text-align: center;
-     height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+    height:68%;
+    
+   
+    
+`
+const Circlediv=styled.div`
+       display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px; // pill 형태
+  border: 1px solid red;
+  font-size: 13px;
+  background: #eb5959;
+  color: white;
+  font-weight: bold;
+  box-sizing: border-box;
 `
 
 function Chatroomlistitem(props){
@@ -142,7 +167,9 @@ function Chatroomlistitem(props){
         <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
         </Timediv>
         <Readdiv>
+            <Circlediv>
             {chatroomdata.unreadCount}
+            </Circlediv>
         </Readdiv>
         </Menudiv>
      
