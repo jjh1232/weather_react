@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as useChatroomexit from "../customhook/useChatroomservice";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 import Datefor from "./noticeformlist/DateCom/Datefor";
 import Profilediv from "../UI/Modals/Profilediv";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis  } from "@fortawesome/free-solid-svg-icons";
+import Chatroomlistmenu from "./noticeformlist/DateCom/Chatlistmenu";
 const Wrapper=styled.div`
     display: flex;
-    border: 1px solid gray;
+    margin-top:5px;
     height: 70px;
 `
 const Imagediv=styled.div`
@@ -17,6 +20,10 @@ const Imagediv=styled.div`
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    border-radius: 12%;
+    margin-top:2px;
+    margin-bottom:2px;
+    border: 1px solid gray;
    
 `
 const Profilelist=styled.div`
@@ -33,27 +40,38 @@ const Profilelist=styled.div`
 
     height: ${props => (props.itemCount === 2 ? '55%' : '45%')};
     
-    border:1px solid gray;
+    
+    
 `
 const MainContainer=styled.div`
     display: flex;
     flex-direction: column;
-  
+  margin-top: 3px;
     width: 65%;
+     margin-left: 5px;
 `
 
 
 const MainTop=styled.div`
       display: flex;
-      border: 1px solid gray;
+      
+     
+     // border: 1px solid gray;
       height: 33%;
+      gap: 3px;
 `
 const Roomnamecss=styled.div`
     overflow: hidden;
     text-overflow:ellipsis;
+
 `
 const Roomlength=styled.div`
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3px;
+font-size:13px;
+    color: gray;
 `
 /*
 const MainMiddle=styled.div`
@@ -61,11 +79,18 @@ const MainMiddle=styled.div`
 `
 */
 const MainBottom=styled.div`
-      border: 1px solid gray;
+   //   border: 1px solid gray;
       height: 66%;
+      font-size: 15px;
+      color: gray;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
 `
-const Menudiv=styled.div`
-    border: 1px solid gray;
+const Optiondiv=styled.div`
+    //border: 1px solid gray;
     width: 18%;
     overflow: hidden;
     text-overflow:ellipsis;
@@ -74,31 +99,43 @@ const Menudiv=styled.div`
     flex-direction: column;
     
 `
-const Timediv=styled.div`
-    padding-top: 3px;
+const Menudiv=styled.div`
+    //padding-top: 3px;
     height: 30%;
-    text-align: center;
-    vertical-align: middle;
+    //text-align: center;
+    
     font-size: 11px;
+    position: relative;
+    
    
+`
+const Submenuicon=styled(FontAwesomeIcon)`
+    font-size: 23px;
+    margin-right: 9px;
+    margin-bottom: 20px;
+    float: right;
+
 `
 const Readdiv=styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-   
+  //  justify-content: center;
+
     height:68%;
-    
-   
+    font-size:11px;
+  
     
 `
+
 const Circlediv=styled.div`
        display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 5px;
   min-width: 20px;
   height: 20px;
-  padding: 0 6px;
+  padding: 0 4px;
   border-radius: 999px; // pill 형태
   border: 1px solid red;
   font-size: 13px;
@@ -112,11 +149,12 @@ function Chatroomlistitem(props){
 
     const {chatroomdata,inroom}=props;
 
-    const navigate=useNavigate();
+   const [menuopen,setMenuopen]=useState(false);
 
-
-    const axiosinstance=CreateAxios();
-
+   const [menupos,setMenupos]=useState({
+    x:0,
+    y:0
+   });
     
     const movechatroom=(chatroomdata)=>{
         //navigate("/chatex?roomid="+chatroomdata.roomid)
@@ -162,16 +200,31 @@ function Chatroomlistitem(props){
        
         </MainContainer>
 
-        <Menudiv>
-            <Timediv>
-        <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
-        </Timediv>
-        <Readdiv>
-            <Circlediv>
-            {chatroomdata.unreadCount}
-            </Circlediv>
-        </Readdiv>
+        <Optiondiv>
+            <Menudiv>
+                <Submenuicon icon={faEllipsis}
+                    onClick={(e)=>{
+                        e.stopPropagation();
+                        setMenuopen((prev=>!prev))
+                        setMenupos({x:e.clientX,y:e.clientY})
+                    }}
+                />
+                {menuopen&&<Chatroomlistmenu setmenuopen={setMenuopen} pos={menupos}/>}
         </Menudiv>
+        <Readdiv>
+                <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
+           
+            
+                 {chatroomdata&&chatroomdata.unreadCount!==0&&
+            
+            <Circlediv>
+                {chatroomdata.unreadCount>99?<>99+</>:chatroomdata.unreadCount}
+            
+            </Circlediv>
+}
+
+        </Readdiv>
+        </Optiondiv>
      
         </Wrapper>
     )

@@ -7,6 +7,7 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
+    overflow: auto;
     
 `
 

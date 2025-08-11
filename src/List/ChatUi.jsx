@@ -45,11 +45,11 @@ position:relative;
 border:1px solid;
 top:60px;
 
-width:290px;
+width:310px;
 height:570px;
 border: 8px solid black;
 border-radius: 4%;
-overflow: hidden;
+
 
 
 `
@@ -90,6 +90,7 @@ background-color:${(props)=>props.theme.background};
 position: relative;
 width: 99.9%;
 height:600px;
+overflow: auto;
 //border-bottom-left-radius: 4%;
 //border-end-end-radius: 4%;
 
@@ -192,7 +193,7 @@ function ChatUi(props){
     }
     return(
         
-        <Wrapper>
+        <Wrapper id="phone-ui">
        
         
         
