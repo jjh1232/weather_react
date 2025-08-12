@@ -333,10 +333,10 @@ function Userweather2(props){
 
         </Headers>
       
-        
+
           
             <WeatherContainer>
-            {weatherdata&&
+            {weatherdata?
               <>
               {timeindex>0&&
               <>
@@ -377,6 +377,10 @@ function Userweather2(props){
               </>}
           
             </>
+:<>
+<br/>
+서버와의연결을 확인해주세요
+</>
 }
             <br/>
 

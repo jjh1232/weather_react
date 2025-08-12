@@ -27,7 +27,7 @@ const BeforeWrapper=styled.div`
 float:left;
 top:7%;
 //width: 295px;
-width: 100%;
+width: 320px;
 height: 140px;
 max-height: 140px;
 
@@ -139,7 +139,7 @@ const Wrapper=styled.div`
 position:relative;
 float:left;
 top:7%;
-width: 295px;
+width: 320px;
 height: 140px;
 display: flex;
 flex-direction: column;
@@ -285,7 +285,7 @@ function Loginpage(props){
   //form.append("password","1234")
   const url="/login";
 
-  const logincheck=AuthCheck();
+  
 
   const {alarmChatCount,setAlarmChatCount}=useContext(SseContext);
 
@@ -297,10 +297,9 @@ useEffect(()=>{
 
 
 useEffect(()=>{
-    console.log("실행")
-    Setislogin(logincheck);
+     Setislogin(!!loginuser.userinfo); 
    
-  },[islogin])
+  },[loginuser])
 
   //알람메세지가져오기
   const {data:notificount,isLoading,error}=useQuery({
@@ -310,7 +309,7 @@ useEffect(()=>{
       Setalrmchatcount(res.data)
       return res.data;
     },
-    enabled:logincheck
+    enabled:!!loginuser.userinfo //!!연산자는 값이있으면 true 없으면 false로
   })
   
 

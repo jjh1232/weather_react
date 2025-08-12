@@ -6,12 +6,14 @@ import styled from "styled-components";
 import Datefor from "./noticeformlist/DateCom/Datefor";
 import Profilediv from "../UI/Modals/Profilediv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis  } from "@fortawesome/free-solid-svg-icons";
+import { faGear  } from "@fortawesome/free-solid-svg-icons";
 import Chatroomlistmenu from "./noticeformlist/DateCom/Chatlistmenu";
 const Wrapper=styled.div`
     display: flex;
     margin-top:5px;
     height: 70px;
+
+
 `
 const Imagediv=styled.div`
     display: flex;
@@ -63,7 +65,9 @@ const MainTop=styled.div`
 const Roomnamecss=styled.div`
     overflow: hidden;
     text-overflow:ellipsis;
-
+    max-width: 150px;
+    white-space: nowrap;
+     
 `
 const Roomlength=styled.div`
     display: flex;
@@ -72,6 +76,7 @@ const Roomlength=styled.div`
     margin-top: 3px;
 font-size:13px;
     color: gray;
+
 `
 /*
 const MainMiddle=styled.div`
@@ -88,32 +93,39 @@ const MainBottom=styled.div`
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+     
 `
 const Optiondiv=styled.div`
     //border: 1px solid gray;
-    width: 18%;
+    width: 23%;
     overflow: hidden;
     text-overflow:ellipsis;
     
     display:flex;
     flex-direction: column;
+   
     
 `
 const Menudiv=styled.div`
-    //padding-top: 3px;
+    padding-top: 7px;
     height: 30%;
     //text-align: center;
-    
+    display: flex;
+    gap: 1px;
     font-size: 11px;
     position: relative;
+    
     
    
 `
 const Submenuicon=styled(FontAwesomeIcon)`
-    font-size: 23px;
-    margin-right: 9px;
-    margin-bottom: 20px;
-    float: right;
+    font-size: 14px;
+    margin-left:auto;
+    margin-top: 2px;
+    position: relative;
+    right: 5px;
+    
+    
 
 `
 const Readdiv=styled.div`
@@ -202,17 +214,20 @@ function Chatroomlistitem(props){
 
         <Optiondiv>
             <Menudiv>
-                <Submenuicon icon={faEllipsis}
+                  <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
+                <Submenuicon icon={faGear}
                     onClick={(e)=>{
                         e.stopPropagation();
                         setMenuopen((prev=>!prev))
                         setMenupos({x:e.clientX,y:e.clientY})
                     }}
                 />
-                {menuopen&&<Chatroomlistmenu setmenuopen={setMenuopen} pos={menupos}/>}
+                {menuopen&&<Chatroomlistmenu setmenuopen={setMenuopen} 
+                        roomdata={chatroomdata}
+                />}
         </Menudiv>
         <Readdiv>
-                <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
+              
            
             
                  {chatroomdata&&chatroomdata.unreadCount!==0&&

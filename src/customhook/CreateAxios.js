@@ -78,7 +78,7 @@ instance.interceptors.response.use(
         return res;
     },(err)=>{
         
-        console.log("에러코드:"+err.response.status)//500을줌
+        //console.log("에러코드:"+err.response.status)//500을줌
         if(err.response.status===401){
             console.log("스태이터스에러")
             const refreshtoken=loginuser.Refreshtoken
@@ -114,6 +114,7 @@ instance.interceptors.response.use(
                 removeLoginuser("userinfo",{path:`/`});
                 removeLoginuser("weather",{path:`/`});
                 //로그아웃
+              //  window.location.reload();
             })  
 
             
