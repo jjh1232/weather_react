@@ -1,44 +1,91 @@
 import React from "react";
 import styled from "styled-components";
 import ReactDOM from "react-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDoorOpen as exit } from "@fortawesome/free-solid-svg-icons";
+
 const Outdiv=styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    
+      display: flex;
+
+    justify-content: center;
+    align-items: center;
 `
 const Menuwrapper=styled.div`
     background-color:blue;
     position: relative;
     width: 70%;
-    height: 100%;
+    height: 70%;
     z-index: 300;
     display: flex;
     flex-direction: column;
+    border-radius: 10%;
+     overflow: hidden;
    
 
 `
 const Header=styled.div`
     display: flex;
+    flex-direction: column;
     background-color: red;
-    height: 6%;
+    
+
 
 `
+const Nametag=styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 23px;
+    padding-top: 7px;
+`
 const Roomnamecss=styled.span`
+    padding-top: 5px;
     color: black;
     font-size: 18px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+   
 
 `
 const Roomnameupdate=styled.div`
     padding-left: 5px;
+    padding-top: 7px;
+    display: flex;
+    justify-content: end;
 `
 const Body=styled.div`
+display: flex;
+flex-direction: column;
     background-color: green;
-    height: 70%;
+    padding-top: 10px;
+    gap: 5px;
+    min-height: 60%;
+    overflow-y: auto;
+        /* 스크롤바 스타일 */
+    &::-webkit-scrollbar {
+        width: 8px; /* 스크롤바 너비 */
+    }
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1); /* 트랙 배경 */
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.5); /* 스크롤바 색 */
+        border-radius: 4px;
+        border: 2px solid transparent; /* 바깥쪽 여백 */
+        background-clip: padding-box;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.8); /* 호버 시 색 */
+    }
+`
+const Subtag=styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 `
 const Memberitem=styled.div`
     display: flex;
@@ -66,7 +113,14 @@ const MemberUsername=styled.div`
     font-size: 12px;
 `
 const Bottom=styled.div`
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 3px;
+`
+const Exiticon=styled(FontAwesomeIcon)`
+    color: red;
 `
 export default function Chatroomlistmenu({setmenuopen,roomdata}){
 
@@ -91,6 +145,9 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
         <Outdiv onClick={(e)=>{e.stopPropagation(), setmenuopen(false)}}>
         <Menuwrapper>
             <Header>
+                <Nametag>
+                    방정보
+                </Nametag>
                 <Roomnamecss>
                 {roomdata.roomtitle}
                 </Roomnamecss>
@@ -99,6 +156,7 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
                 </Roomnameupdate>
             </Header>
             <Body>
+                <Subtag>대화상대 {roomdata.members.length}</Subtag>
                 {roomdata.members.map((data)=>
                 <Memberitem>
                     <Memberprodiv>
@@ -122,10 +180,21 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
               
                 
                 </Memberitem>)}
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
+                <Memberitem>테스트</Memberitem>
             </Body>
             <Bottom>
-                나가기
-
+                채팅방나가기
+                <Exiticon icon={exit} />
             </Bottom>
         </Menuwrapper>
 </Outdiv>
