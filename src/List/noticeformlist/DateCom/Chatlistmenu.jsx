@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ReactDOM from "react-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDoorOpen as exit } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare as upda } from "@fortawesome/free-solid-svg-icons";
 
 const Outdiv=styled.div`
     position: absolute;
@@ -10,27 +11,28 @@ const Outdiv=styled.div`
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
       display: flex;
-
+    
     justify-content: center;
     align-items: center;
 `
 const Menuwrapper=styled.div`
-    background-color:blue;
+    background-color:#525e79;
     position: relative;
     width: 70%;
-    height: 70%;
+    height: 80%;
     z-index: 300;
     display: flex;
     flex-direction: column;
     border-radius: 10%;
      overflow: hidden;
+     border: 1px solid black;
    
 
 `
 const Header=styled.div`
     display: flex;
     flex-direction: column;
-    background-color: red;
+    
     
 
 
@@ -40,29 +42,37 @@ const Nametag=styled.div`
     justify-content: center;
     align-items: center;
     font-size: 23px;
-    padding-top: 7px;
+    padding-top: 1px;
+   
 `
 const Roomnamecss=styled.span`
+display: flex;
     padding-top: 5px;
-    color: black;
+    color: white;
     font-size: 18px;
+     justify-content: center;
+    align-items: center;
    
 
 `
-const Roomnameupdate=styled.div`
-    padding-left: 5px;
-    padding-top: 7px;
-    display: flex;
-    justify-content: end;
+
+const Nameupdateicon=styled(FontAwesomeIcon)`
+    cursor: pointer;
+    color:black;
+    padding-left: 8px;
 `
 const Body=styled.div`
 display: flex;
 flex-direction: column;
-    background-color: green;
+
     padding-top: 10px;
     gap: 5px;
     min-height: 60%;
-    overflow-y: auto;
+   `
+const ListTable=styled.div`
+display: flex;
+flex-direction: column;
+     overflow-y: auto;
         /* 스크롤바 스타일 */
     &::-webkit-scrollbar {
         width: 8px; /* 스크롤바 너비 */
@@ -81,6 +91,7 @@ flex-direction: column;
         background-color: rgba(255, 255, 255, 0.8); /* 호버 시 색 */
     }
 `
+
 const Subtag=styled.div`
     display: flex;
     justify-content: center;
@@ -114,10 +125,21 @@ const MemberUsername=styled.div`
 `
 const Bottom=styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
+    
+    justify-content: flex-end;
+    align-items: flex-end;
     height: 60px;
     gap: 3px;
+    padding-right: 12px;
+    padding-bottom: 15px;
+    margin-top: auto; /* 자동으로 맨 아래로 내려감 */
+    
+`
+const Outroomdiv=styled.div`
+
+    cursor: pointer;
+ 
+    
 `
 const Exiticon=styled(FontAwesomeIcon)`
     color: red;
@@ -150,13 +172,13 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
                 </Nametag>
                 <Roomnamecss>
                 {roomdata.roomtitle}
+                     <Nameupdateicon icon={upda}/>
                 </Roomnamecss>
-                <Roomnameupdate>
-                    변경
-                </Roomnameupdate>
+              
             </Header>
             <Body>
                 <Subtag>대화상대 {roomdata.members.length}</Subtag>
+                <ListTable>
                 {roomdata.members.map((data)=>
                 <Memberitem>
                     <Memberprodiv>
@@ -180,21 +202,16 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
               
                 
                 </Memberitem>)}
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
-                <Memberitem>테스트</Memberitem>
+                
+             
+                </ListTable>
             </Body>
             <Bottom>
+                <Outroomdiv>
+                    
                 채팅방나가기
                 <Exiticon icon={exit} />
+                </Outroomdiv>
             </Bottom>
         </Menuwrapper>
 </Outdiv>
