@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ReactDOM from "react-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDoorOpen as exit } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare as upda } from "@fortawesome/free-solid-svg-icons";
+import { useMutation } from "@tanstack/react-query";
+import Roomnamemodal from "./Roomnamemodal";
 
 const Outdiv=styled.div`
     position: absolute;
@@ -54,6 +56,9 @@ display: flex;
     align-items: center;
    
 
+`
+const Roomnameinput=styled.input`
+    
 `
 
 const Nameupdateicon=styled(FontAwesomeIcon)`
@@ -147,6 +152,7 @@ const Exiticon=styled(FontAwesomeIcon)`
 export default function Chatroomlistmenu({setmenuopen,roomdata}){
 
 
+    const [isroomname,setisroomname]=useState(false);
      const container = document.getElementById("phone-ui");
     
     const rect = container.getBoundingClientRect(); // phone-ui의 화면상 위치/크기
@@ -158,7 +164,6 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
 
   //멤버목록보기로직
 
- //방이름변경
 
  //채팅방나가기
 
@@ -171,10 +176,20 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
                     방정보
                 </Nametag>
                 <Roomnamecss>
-                {roomdata.roomtitle}
-                     <Nameupdateicon icon={upda}/>
+                   
+                   
+                    
+                     {roomdata.roomtitle}
+                    
+                    
+               
+                     <Nameupdateicon icon={upda} onClick={(e)=>{
+                        e.stopPropagation()
+                        setisroomname(true)}}/>
                 </Roomnamecss>
-              
+              {isroomname &&<Roomnamemodal beforename={roomdata.roomtitle} memberroomid={roomdata.memberroomid}
+                    setisroomname={setisroomname}
+              />}
             </Header>
             <Body>
                 <Subtag>대화상대 {roomdata.members.length}</Subtag>
