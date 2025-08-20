@@ -6,6 +6,7 @@ import { faDoorOpen as exit } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare as upda } from "@fortawesome/free-solid-svg-icons";
 import { useMutation } from "@tanstack/react-query";
 import Roomnamemodal from "./Roomnamemodal";
+import ChatExitmodal from "./Menumodal/ChatExitmodal";
 
 const Outdiv=styled.div`
     position: absolute;
@@ -157,7 +158,7 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
     
     const rect = container.getBoundingClientRect(); // phone-ui의 화면상 위치/크기
     //즉 뷰포트에서의 절대위치를 줌  이걸뺴면 마우스좌표가 화면내부기준이되는것
-    
+    const [isExitpopup,setIsexitpopup]=useState(false);
   // 아직 DOM이 없으면 렌더링하지 않음
   if (!container) return null;
 
@@ -166,7 +167,10 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
 
 
  //채팅방나가기
-
+    const exithandler=(e)=>{
+        e.stopPropagation()
+        setIsexitpopup(true)
+    }
 
     return ReactDOM.createPortal( //
         <Outdiv onClick={(e)=>{e.stopPropagation(), setmenuopen(false)}}>
@@ -222,10 +226,14 @@ export default function Chatroomlistmenu({setmenuopen,roomdata}){
                 </ListTable>
             </Body>
             <Bottom>
-                <Outroomdiv>
+                <Outroomdiv onClick={exithandler}>
                     
                 채팅방나가기
                 <Exiticon icon={exit} />
+
+                {isExitpopup &&<ChatExitmodal setisexitpopup={setIsexitpopup}
+                 setmenuopen={setmenuopen}
+                 roomid={roomdata.roomid}/>}
                 </Outroomdiv>
             </Bottom>
         </Menuwrapper>
