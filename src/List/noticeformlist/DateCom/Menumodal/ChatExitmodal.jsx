@@ -36,7 +36,7 @@ const Maintext=styled.div`
     
 `
 const Warningdiv=styled.div`
-    font-size: 15px;
+    font-size: 14px;
     color: red;
     padding-bottom: 12px;
 `
@@ -84,7 +84,7 @@ export default function ChatExitmodal(props){
             <Explaindiv>
                 <Maintext> 정말로나가시겠습니까?</Maintext>
                 <Warningdiv>
-                    (채팅방 정보가 완전히 삭제됩니다){cookie.userinfo.userid}
+                    (채팅방 정보가 완전히 삭제됩니다)
                 </Warningdiv>
              
 
