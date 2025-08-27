@@ -7,16 +7,18 @@ const Profilecss=styled.div`
     height: 100%;
     min-height: 20px;
     //margin: 3px;
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 `
 const Profile = styled.img`
     position: relative;
     border:1px solid black;
     background-color: white;
-    
-    width: 100%;
-    height: 100%;
+    width: ${(props) => props.width || "100%"};
+  height: ${(props) => props.height || "100%"};
+      
  
 
     

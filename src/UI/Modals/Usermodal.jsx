@@ -9,10 +9,10 @@ const Wrapper=styled.div`
 width:80px;
 height:90px;
 position:fixed; 
-justifyContent:center;
+justify-content:center;
 background:blue;
 top:${(props)=>props.modaly}px;
-left:${(props)=>props.modalx}px";
+left:${(props)=>props.modalx}px;
 
 `
 
