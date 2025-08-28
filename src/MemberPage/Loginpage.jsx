@@ -419,7 +419,7 @@ const ssetest=()=>{
     <>
    
   
-    {!islogin?  
+    {!loginuser.userinfo?  
     <BeforeWrapper>
         <Loginfromdiv>
         <Inputdiv>

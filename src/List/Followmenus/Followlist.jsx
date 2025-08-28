@@ -36,6 +36,7 @@ const Userlistdiv=styled.div`
 const Userlist=styled.div`
     display: flex;
     border :1px solid gray;
+    height: 50px;
     margin: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -55,7 +56,20 @@ const Userprofileimage=styled.div`
     
  
 `
+const Usernickdiv=styled.div`
+    display: flex;
+    
+`
+const Usernicknamediv=styled.div`
+    font-size: 17px;
+`
+const Usernamediv=styled.div`
+    font-size: 14px;
+    color: #d3d0d0;
+`
 const FollowButton=styled.button`
+    margin-left: 5px;
+    margin-top: 3px;
     border-radius: 15%;
     background-color: skyblue;
     color: black;
@@ -283,12 +297,21 @@ function Followlist(props){
                     <Profilediv width="40px" height="40px" url={data.profileimg}/>
                     </Userprofileimage>
                     <Userprofilediv>
-                    {data.nickname} <FollowButton onClick={(e)=>{
+                <Usernickdiv>
+
+               
+                    <Usernicknamediv>
+                 {data.nickname}
+                    </Usernicknamediv>
+                    <FollowButton onClick={(e)=>{
                         e.stopPropagation()
                         unfollow(data.username)}}>unfollow</FollowButton>
-               
-                <br/> 
-                    {data.username}
+                </Usernickdiv>
+            
+                    <Usernamediv>
+                     {data.username}
+                    </Usernamediv>
+                   
                     </Userprofilediv>    
                     {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 

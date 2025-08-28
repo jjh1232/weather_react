@@ -7,15 +7,23 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
 import { useCookies } from "react-cookie";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass as search } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper=styled.div`
 
 display: flex;
 flex-direction: column;
+overflow: hidden;
 `
 const Searchdiv=styled.div`
-    
+    display: flex;
+    position: relative;
+border: 1px solid gray;
+height: 60px;
+    align-items:center;
+    gap: 3px;
+    padding: 5px;
 `
 const Userlistdiv=styled.div`
     display: flex;
@@ -24,21 +32,32 @@ const Userlistdiv=styled.div`
 `
 const Userlist=styled.div`
    
-    display: flex;
-    border: 1px solid gray;
+        display: flex;
+    border :1px solid gray;
+    margin: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
-const Profilecss=styled.div`
- width: 40px;
-    height:40px;
-    margin-right: 4px;
-
+const Userprofilediv=styled.div`
+       margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+`
+const Userdatadiv=styled.div`
+    
 `
 const Usernamediv=styled.div`
     
-     width: 80%;
+      font-size: 14px;
+    color: #d3d0d0;
+`
+const Usernicknamediv=styled.div`
+ font-size: 17px;
 `
 const Followdiv=styled.div`
-    
+    margin-left: auto;
      display: flex;
      justify-content: center; /* 가로 방향 중앙 정렬 */
     align-items: center; /* 세로 방향 중앙 정렬 */
@@ -46,12 +65,49 @@ const Followdiv=styled.div`
 const FollowButton=styled.button`
     border-radius: 15%;
     height: 30px;
+    width: 70px;
     background-color: skyblue;
     color: black;
-
+    cursor: pointer;
+    font-size: 15px;
+    
     :hover{
         background-color: red;
     }
+
+`
+
+const Inputcss=styled.input`
+width: 85%;
+margin-left: 3px;
+border-radius: 5px;
+padding: 3px 3px 3px 26px;
+ border: 1px solid #ccc;
+ font-style: italic;
+   box-sizing: border-box; /* 패딩 포함 너비 계산 */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;          /* 기본 파란 윤곽선 제거 */
+    border-color: #4a90e2;  /* 파란색 테두리 */
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* 은은한 그림자 */
+  }
+
+  &::placeholder {
+    color: #aaa;            /* 연한 회색 플레이스홀더 */
+    font-style: italic;
+  }
+`
+const Searchicon=styled(FontAwesomeIcon)`
+    position: absolute;
+   color: black;
+    top: 51%;
+    margin-left: 9px;
+      transform: translateY(-50%);
+      
+  
+  pointer-events: none;  /* 클릭 이벤트가 input으로 가도록 함 */
+
 `
 function Followerlist(props){
 
@@ -162,11 +218,11 @@ function Followerlist(props){
     return (
         <Wrapper>
         <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
-        목록검색:<input onChange={(e)=>{Setsearchkeyword(e.target.value)}}
-        
-        
-        />
-         </Searchdiv>
+                    
+                <Searchicon icon={search} />
+                <Inputcss onChange={(e)=>{Setsearchkeyword(e.target.value)}} 
+                placeholder="닉네임이나 이메일을 입력해주세요"/> 
+                </Searchdiv>
          <Userlistdiv>
         {followerlist&&followerlist.filter((list)=>{
             if(searchkeyword==""){
@@ -189,15 +245,22 @@ function Followerlist(props){
                }}
                ref={modalref}
                 >
-                    <Profilecss>
-                        <Profilediv url={data.profileimg}/>
-                    </Profilecss>
-                    <Usernamediv>
-                    {data.nickname}  
-                    <br/>
+                    <Userprofilediv>
+                         <Profilediv width="40px" height="40px" url={data.profileimg}/>
+                       
+                    </Userprofilediv>
+                   <Userdatadiv>
+
                   
+                    <Usernicknamediv>
+                {data.nickname} 
+                    </Usernicknamediv>
+                    
+                  
+                   <Usernamediv>
                 {data.username}
                 </Usernamediv>
+                 </Userdatadiv>
                 {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
