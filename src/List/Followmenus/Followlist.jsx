@@ -21,7 +21,7 @@ const Wrapper=styled.div`
 const Searchdiv=styled.div`
     display: flex;
     position: relative;
-border: 1px solid gray;
+
     align-items:center;
     gap: 3px;
     padding: 5px;
@@ -323,14 +323,14 @@ function Followlist(props){
                  {data.favorite?<FontAwesomeIcon icon={favorite} onClick={(e)=>{
                     e.stopPropagation()
                     favoriteunfollow(data.username)}}
-                     style={{color:"black", }}
+                     style={{color:"white", }}
                     />
                     
                 
                 :<FontAwesomeIcon icon={unfavorite} onClick={(e)=>{
                     e.stopPropagation()
                     favoritefollow(data.username)}}
-                style={{color:"black"}}
+                style={{color:"white"}}
                 />
                 }
                 </Favoritediv>

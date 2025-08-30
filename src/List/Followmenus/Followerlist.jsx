@@ -19,7 +19,7 @@ overflow: hidden;
 const Searchdiv=styled.div`
     display: flex;
     position: relative;
-border: 1px solid gray;
+
 height: 60px;
     align-items:center;
     gap: 3px;
@@ -66,13 +66,18 @@ const FollowButton=styled.button`
     border-radius: 15%;
     height: 30px;
     width: 70px;
-    background-color: skyblue;
-    color: black;
+    background-color: ${(props)=>props.status==="follow"?"#499dec":"#ec2626"};
+    color: #c2c2c0;
     cursor: pointer;
     font-size: 15px;
-    
+    font-weight: 600;
+ display: flex;           /* Flex 컨테이너로 만듬 */
+  align-items: center;     /* 세로 중앙정렬 */
+  justify-content: center;
+
+
     :hover{
-        background-color: red;
+        background-color:  ${(props)=>props.status==="follow"?"#499dec9e":"#ec2626d5"};
     }
 
 `
@@ -273,13 +278,18 @@ function Followerlist(props){
                     <FollowButton onClick={(e)=>{
                         e.stopPropagation();
                         unfollow(data.username);
+                    
                     //unfoll(data.username)
-                }}>unfollow</FollowButton>
+                }}
+                status="unfollow"
+                >unfollow</FollowButton>
                     
                 :<FollowButton onClick={()=>{
                     //follow(data.username)
                     onfollow(data.username);
-                }}>follow</FollowButton>}
+                }}
+                 status="follow"
+                >follow</FollowButton>}
                 </Followdiv>
                 </Userlist>
                 
