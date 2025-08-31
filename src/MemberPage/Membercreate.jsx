@@ -315,10 +315,16 @@ function membercreate(){
 //인증확인및 가입요청
 const handleSubmit=(e)=>{
     e.preventDefault();
+    //전체검사
     const newErrors={};
+    //키값을 돌림 
     Object.keys(form).forEach((key)=>{
+        //발리데이션 컴펌패스워드때매 폼을 부름
         const error=Validators(key,form[key],form);
-        if(error) newErrors[key]=error;
+        //에러값이있을경우 뉴에러에 키값으로넣자
+        //"" 을리턴하는데 빈문자열이나 falsy한값(false,0 ,"",null,undefined,nan)은 반환안한다고함
+        //즉 if문을 통과못함
+        if(error) newErrors[key]=error; //에러존재할시 키와밸류추가
     })
 
     if(!isemailcheck==="success"){

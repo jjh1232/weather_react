@@ -269,6 +269,7 @@ function Followerlist(props){
                 {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
+                        setismodal={setIsmodal}
                         />}
 
                 <Followdiv>

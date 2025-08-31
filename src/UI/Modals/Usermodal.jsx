@@ -3,22 +3,35 @@ import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
 import AuthCheck from "../../customhook/authCheck";
-
+import ReactDom from "react-dom"
+const Outdiv=styled.div`
+position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    z-index: 30;
+`
 const Wrapper=styled.div`
+display: flex;
+flex-direction: column;
 
-width:80px;
-height:90px;
 position:fixed; 
 justify-content:center;
-background:blue;
+background:#6385c5;
 top:${(props)=>props.modaly}px;
 left:${(props)=>props.modalx}px;
-
+z-index: 40;
+`
+const Menulist=styled.div`
+padding: 3px;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 15px;
 `
 
 
 function Usermodal(props){
-    const {ModalX,ModalY,username, usernickname,chatroomdata}=props;
+    const {ModalX,ModalY,username, usernickname,chatroomdata,setismodal}=props;
     //const [modalref]=useRef();
     const axiosinstance=CreateAxios();
     const [followcheck,setFollowcheck]=useState();
@@ -103,15 +116,26 @@ function Usermodal(props){
     }
 
 
-    return (
+    return ReactDom.createPortal(
+        <Outdiv onClick={(e)=>{
+            e.stopPropagation()
+            setismodal(false)}}>
         <Wrapper modalx={ModalX} modaly={ModalY}>
-            {followcheck?<div onClick={(e)=>{onunfollow(e)}}>팔로우해제</div>
-            :<div onClick={(e)=>{onfollow(e)}}>팔로우</div>}
+            {followcheck?<Menulist onClick={(e)=>{
+                e.stopPropagation()
+                onunfollow(e)}}>팔로우해제</Menulist>
+            :<Menulist onClick={(e)=>{
+                e.stopPropagation()
+                onfollow(e)}}>팔로우</Menulist>}
             
-            <div onClick={(e)=>{makechatroom(e)}}>채팅하기</div>
-            <div>작성글검색</div>
+            <Menulist onClick={(e)=>{
+                e.stopPropagation()
+                makechatroom(e)}}>채팅하기</Menulist>
+            <Menulist>작성글검색</Menulist>
 
         </Wrapper>
-    )
+        </Outdiv>
+    ,document.getElementById('phone-ui')  
+)
 
 }export default Usermodal;
