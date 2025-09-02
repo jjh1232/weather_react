@@ -8,7 +8,8 @@ const Outdiv=styled.div`
 position: absolute;
     width: 100%;
     height: 100%;
-    
+    // background-color: white;
+     top: 22px;
     z-index: 30;
 `
 const Wrapper=styled.div`
@@ -31,7 +32,7 @@ padding: 3px;
 
 
 function Usermodal(props){
-    const {ModalX,ModalY,username, usernickname,chatroomdata,setismodal}=props;
+    const {ModalX,ModalY,username, usernickname,chatroomdata,setismodal,profileid}=props;
     //const [modalref]=useRef();
     const axiosinstance=CreateAxios();
     const [followcheck,setFollowcheck]=useState();
@@ -131,7 +132,7 @@ function Usermodal(props){
             <Menulist onClick={(e)=>{
                 e.stopPropagation()
                 makechatroom(e)}}>채팅하기</Menulist>
-            <Menulist>작성글검색</Menulist>
+            <Menulist onClick={()=>navigate(`/userpage/${profileid}`)}>유저페이지</Menulist>
 
         </Wrapper>
         </Outdiv>

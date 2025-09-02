@@ -13,6 +13,7 @@ width:43%;
 height:100%;
  border: 1px solid;
  top: 8%;
+
 `
 const Profileview=styled.div`
     border:1px solid;
@@ -36,7 +37,8 @@ export default function UserDetail(props){
     },[])
 
     const userdataget=()=>{
-        axios.get(`/open/userpage/${params.username}`)
+       
+        axios.get(`/open/userpage/${params.profileid}`)
         .then((res)=>{
             console.log(res.data)
             setUserdata(res.data.user)

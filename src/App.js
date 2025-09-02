@@ -182,7 +182,7 @@ const updatetime=()=>{
       <Route path="stompex" element={<Stompalrams/>}/>
      <Route path="chatui" element={<ChatUi/>}/>
       <Route path="userviewtest" element={<Userviewtest/>}/>
-      <Route path="/userpage/:username" element={<UserDetail/>}/>
+      <Route path="/userpage/:profileid" element={<UserDetail/>}/>
       <Route path="/noaccess" element={<NoAccess/>}/>
 
       </Route> 

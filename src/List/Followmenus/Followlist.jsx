@@ -317,6 +317,7 @@ function Followlist(props){
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
                         setismodal={setIsmodal}
+                        profileid={data.profileid}
                         />}
 
               
