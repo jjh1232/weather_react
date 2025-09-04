@@ -134,7 +134,7 @@ function Favoritelist(props){
         queryKey:["favoritelistdata",usercookie.userinfo.userid],
         queryFn:async ()=>{
             const res = await axiosinstance.get("/favoritelist")
-
+            console.log("패이볼:",res)
             return res.data
         }
         
@@ -240,6 +240,7 @@ function Favoritelist(props){
                         ModalX={modalcss.x} ModalY={modalcss.y} 
                         chatroomdata={chatroomdata}
                         setismodal={setIsmodal}
+                        profileid={data.profileid}
                         />}
                         </Userlist>
                     

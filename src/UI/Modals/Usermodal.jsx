@@ -134,6 +134,9 @@ function Usermodal(props){
                 makechatroom(e)}}>채팅하기</Menulist>
             <Menulist onClick={()=>navigate(`/userpage/${profileid}`)}>유저페이지</Menulist>
 
+<Menulist>
+    프로필아이디:{profileid}
+</Menulist>
         </Wrapper>
         </Outdiv>
     ,document.getElementById('phone-ui')  

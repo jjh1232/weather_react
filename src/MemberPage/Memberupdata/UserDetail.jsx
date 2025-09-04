@@ -37,7 +37,7 @@ export default function UserDetail(props){
     },[])
 
     const userdataget=()=>{
-       
+       console.log("유저페이지데이터:"+params.profileid)
         axios.get(`/open/userpage/${params.profileid}`)
         .then((res)=>{
             console.log(res.data)
