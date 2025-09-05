@@ -4,6 +4,7 @@ import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
 import axios from "axios";
 import Twitformlist from "../../List/noticeformlist/Twitformlist";
+import { useQuery } from "@tanstack/react-query";
 
 
 const Wrapper=styled.div`
@@ -32,56 +33,49 @@ export default function UserDetail(props){
 
     const [notice,setNotice]=useState();
 
-    useEffect(()=>{
-        userdataget();
-    },[])
+ 
 
-    const userdataget=()=>{
-       console.log("유저페이지데이터:"+params.profileid)
-        axios.get(`/open/userpage/${params.profileid}`)
-        .then((res)=>{
-            console.log(res.data)
-            setUserdata(res.data.user)
-            setNotice(res.data.notice.content)
-        })
-    }
-
+    const {data:userinfo,isLoading:userloading,error:usererror}=useQuery(
+        {queryKey:['userpageprofile',params.profileid],
+            queryFn:async ()=>{
+                const res=await axiosinstance.get(`/open/userpage/userdata/${params.profileid}`)
+                console.log("유저데이터:",res)
+                return res.data
+            }
+            
+        }
+        
+        
+    )
 
 
 
 
     return (<Wrapper>
-        {userdata&&
+        {userinfo&&
         
         <Usercss> 
         <Profileview>
-    <img src={process.env.PUBLIC_URL+"/userprofileimg"+userdata.profileimg}
+    <img src={process.env.PUBLIC_URL+"/userprofileimg"+userinfo.profileimg}
    style={{objectFit:"fill",width:"100%",height:"100%"}}/>
-          </Profileview>    <button>팔로우</button>
+          </Profileview>   {userinfo.followcheck?<>팔로우해제</>:<>팔로우</>}
           <h3>
-    {userdata.nickname}
+    {userinfo.nickname}
     </h3>
-    {userdata.username}
+    {userinfo.username}
     <br/>
-    {userdata.myintro}
+    {userinfo.myintro}
     <br/>
-    {userdata.regdate}
-
+    {userinfo.regdate}
+        팔로워수:{userinfo.follownum}
+        팔로워수:{userinfo.followernum}
     </Usercss>  
     }
            {
             //=======================게시글부분======================
            }    
     
-           {notice&&notice.map((data,key)=>{
-            return (
-                <div >
-                         <Twitformlist
-                                    key={key} post={data} 
-                                />
-                </div>
-            )
-           })}
+         
 
         
         
