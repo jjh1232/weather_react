@@ -9,22 +9,60 @@ import { useQuery } from "@tanstack/react-query";
 
 const Wrapper=styled.div`
 position: relative;
-left:28.5%;
-width:43%;
+
+width:100%;
 height:100%;
  border: 1px solid;
  top: 8%;
 
+`
+
+const Usercss=styled.div`
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    ` 
+const Userheaderdiv=styled.div`
+    border: 1px solid blue;
+    display: flex;
 `
 const Profileview=styled.div`
     border:1px solid;
     width:45px;
     height:45px;
 `
-const Usercss=styled.div`
-    border: 1px solid white;
-    ` 
+const Profilediv=styled.div`
+    display: flex;
+`
+const Menudiv=styled.div`
+    display: flex;
+`
+const Userinfodiv=styled.div`
+    display: flex;
+    flex-direction: column;
+`
+const Nicknamediv=styled.div`
+    
+`
+const Usernamediv=styled.div`
+    
+`
+const Userintrodiv=styled.div`
+    
+`
+const Userdate=styled.div`
+    
+`
+const Followdatadiv=styled.div`
+    display: flex;
 
+`
+const Follownumdiv=styled.div`
+    
+`
+const Followernumdiv=styled.div`
+    
+`
 export default function UserDetail(props){
     const params=useParams();
     const axiosinstance=CreateAxios();
@@ -47,6 +85,14 @@ export default function UserDetail(props){
         
         
     )
+    //유저작성글
+    const {data:userposts,isLoading:postloading,error:posterror}=useQuery({
+        queryKey:["userposts",userinfo.userid],
+        queryFn:async()=>{
+            const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`)
+            return res.data;
+        },enabled:!!userinfo.userid //userid있을때만
+    })
 
 
 
@@ -55,20 +101,51 @@ export default function UserDetail(props){
         {userinfo&&
         
         <Usercss> 
+            <Userheaderdiv>
+
+           
+        <Profilediv>
+
+       
         <Profileview>
     <img src={process.env.PUBLIC_URL+"/userprofileimg"+userinfo.profileimg}
    style={{objectFit:"fill",width:"100%",height:"100%"}}/>
-          </Profileview>   {userinfo.followcheck?<>팔로우해제</>:<>팔로우</>}
-          <h3>
-    {userinfo.nickname}
-    </h3>
-    {userinfo.username}
-    <br/>
-    {userinfo.myintro}
-    <br/>
-    {userinfo.regdate}
-        팔로워수:{userinfo.follownum}
-        팔로워수:{userinfo.followernum}
+          </Profileview>  
+           </Profilediv>
+           <Menudiv>
+           {userinfo.followcheck?<>팔로우해제</>:<>팔로우</>}
+       </Menudiv>
+ </Userheaderdiv>
+       <Userinfodiv>
+
+         <Nicknamediv>
+            {userinfo.nickname}
+         </Nicknamediv>
+        <Usernamediv>
+            {userinfo.username}
+        </Usernamediv>
+    
+    
+    < Userintrodiv>
+     {userinfo.myintro}
+    </Userintrodiv>
+   
+    <Userdate>
+            {userinfo.regdate}
+    </Userdate>
+    
+    <Followdatadiv>
+        <Follownumdiv>
+             팔로우수:{userinfo.follownum}
+        </Follownumdiv>
+    
+        <Followernumdiv>
+                팔로워수:{userinfo.followernum}
+        </Followernumdiv>   
+       
+    
+        </Followdatadiv>
+          </Userinfodiv>
     </Usercss>  
     }
            {
