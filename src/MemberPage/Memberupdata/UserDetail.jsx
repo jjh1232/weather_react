@@ -5,7 +5,8 @@ import CreateAxios from "../../customhook/CreateAxios";
 import axios from "axios";
 import Twitformlist from "../../List/noticeformlist/Twitformlist";
 import { useQuery } from "@tanstack/react-query";
-
+import {format} from "date-fns"
+import Viewtrans from "../../List/noticeformlist/DateCom/Viewtrans";
 
 const Wrapper=styled.div`
 position: relative;
@@ -40,15 +41,16 @@ const Menudiv=styled.div`
 const Userinfodiv=styled.div`
     display: flex;
     flex-direction: column;
+    //border: 1px solid red;
 `
 const Nicknamediv=styled.div`
-    
+    font-size: 30px;
 `
 const Usernamediv=styled.div`
-    
+    color: gray;
 `
 const Userintrodiv=styled.div`
-    
+    border: 1px solid red;
 `
 const Userdate=styled.div`
     
@@ -87,14 +89,18 @@ export default function UserDetail(props){
     )
     //유저작성글
     const {data:userposts,isLoading:postloading,error:posterror}=useQuery({
-        queryKey:["userposts",userinfo.userid],
+        queryKey:["userposts",userinfo?.userid],
         queryFn:async()=>{
             const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`)
             return res.data;
-        },enabled:!!userinfo.userid //userid있을때만
+        },enabled:!!userinfo?.userid //userid있을때만
     })
 
-
+    //가입날짜포맷
+    const JoinDate=(joindate)=>{
+        const formatted=format(joindate,'yyyy MMMM d')
+        return <>{formatted}</>
+    }
 
 
     return (<Wrapper>
@@ -131,16 +137,16 @@ export default function UserDetail(props){
     </Userintrodiv>
    
     <Userdate>
-            {userinfo.regdate}
+            {JoinDate(userinfo.regdate)}
     </Userdate>
     
     <Followdatadiv>
         <Follownumdiv>
-             팔로우수:{userinfo.follownum}
+            팔로우수:{Viewtrans(userinfo.follownum)}
         </Follownumdiv>
     
         <Followernumdiv>
-                팔로워수:{userinfo.followernum}
+                팔로워수:{Viewtrans(userinfo.followernum)}
         </Followernumdiv>   
        
     
