@@ -7,13 +7,14 @@ import Twitformlist from "../../List/noticeformlist/Twitformlist";
 import { useQuery } from "@tanstack/react-query";
 import {format} from "date-fns"
 import Viewtrans from "../../List/noticeformlist/DateCom/Viewtrans";
+import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
 position: relative;
 
 width:100%;
 height:100%;
- border: 1px solid;
+ border: 1px solid red;
  top: 8%;
 
 `
@@ -22,29 +23,87 @@ const Usercss=styled.div`
     border: 1px solid white;
     display: flex;
     flex-direction: column;
+    
     ` 
+const UserBackground=styled.div`
+    background: #d8f6ff;
+    display: flex;
+    width: 100%;
+    border: 1px solid green;
+    height: 180px;
+`
 const Userheaderdiv=styled.div`
     border: 1px solid blue;
     display: flex;
 `
 const Profileview=styled.div`
-    border:1px solid;
-    width:45px;
-    height:45px;
+    border:1px solid black;
+    width:100%;
+    height:100%;
 `
 const Profilediv=styled.div`
     display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    
+    width: 90px;
+    height: 90px;
+    bottom:120px;
+    left: 35px;
+`
+const Profileimg=styled.img`
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+    background: white;
 `
 const Menudiv=styled.div`
     display: flex;
+    margin-left:auto;
+    padding: 5px;
+    
+`
+//버튼사이즈 
+const sizes = {
+  follow: { height: '30px', fontSize: '16px', padding: '0 20px',background:'#111111d1'},
+  unfollow: { height: '30px', fontSize: '16px', padding: '0 20px',background:'#ce3333d1'},
+  edit: { height: '30px', fontSize: '16px', padding: '0 20px',background:'#88ecf3d1'},
+};
+const MenuButton=styled.button`
+    border: 1px solid white;
+    border-radius: 30px;
+
+    margin-right: 10px;
+    color: white;
+    cursor: pointer;
+
+     ${({ size = 'follow' }) => `
+    height: ${sizes[size].height};
+    font-size: ${sizes[size].fontSize};
+    padding: ${sizes[size].padding};
+    background:${sizes[size].background};
+  `};
+
+  :hover{
+         ${({ size = 'follow' }) => `
+    height: ${sizes[size].height};
+    font-size: ${sizes[size].fontSize};
+    padding: ${sizes[size].padding};
+    background:${sizes[size].background};
+  `};
+  }
 `
 const Userinfodiv=styled.div`
     display: flex;
     flex-direction: column;
-    //border: 1px solid red;
+     position: relative;
+    
+    border: 1px solid red;
 `
 const Nicknamediv=styled.div`
     font-size: 30px;
+   
 `
 const Usernamediv=styled.div`
     color: gray;
@@ -72,7 +131,7 @@ export default function UserDetail(props){
     const [userdata,setUserdata]=useState();
 
     const [notice,setNotice]=useState();
-
+    const [usercookie,setUsercookie]=useCookies();
  
 
     const {data:userinfo,isLoading:userloading,error:usererror}=useQuery(
@@ -107,6 +166,9 @@ export default function UserDetail(props){
         {userinfo&&
         
         <Usercss> 
+            <UserBackground>
+
+            </UserBackground>
             <Userheaderdiv>
 
            
@@ -114,12 +176,12 @@ export default function UserDetail(props){
 
        
         <Profileview>
-    <img src={process.env.PUBLIC_URL+"/userprofileimg"+userinfo.profileimg}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}/>
+    <Profileimg src={process.env.PUBLIC_URL+"/userprofileimg"+userinfo.profileimg}/>
           </Profileview>  
            </Profilediv>
            <Menudiv>
-           {userinfo.followcheck?<>팔로우해제</>:<>팔로우</>}
+           
+           {usercookie.userinfo?.userid===userinfo.userid?<MenuButton size="edit">EDIT</MenuButton>:userinfo.followcheck?<MenuButton size="unfollow">Unfollow</MenuButton>:<MenuButton>Follow</MenuButton>}
        </Menudiv>
  </Userheaderdiv>
        <Userinfodiv>
@@ -137,7 +199,7 @@ export default function UserDetail(props){
     </Userintrodiv>
    
     <Userdate>
-            {JoinDate(userinfo.regdate)}
+            {JoinDate(userinfo.regdate)} 가입
     </Userdate>
     
     <Followdatadiv>
