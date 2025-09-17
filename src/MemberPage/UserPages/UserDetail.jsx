@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
 import axios from "axios";
@@ -146,14 +146,7 @@ export default function UserDetail(props){
         
         
     )
-    //유저작성글
-    const {data:userposts,isLoading:postloading,error:posterror}=useQuery({
-        queryKey:["userposts",userinfo?.userid],
-        queryFn:async()=>{
-            const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`)
-            return res.data;
-        },enabled:!!userinfo?.userid //userid있을때만
-    })
+ 
 
     //가입날짜포맷
     const JoinDate=(joindate)=>{
@@ -219,8 +212,7 @@ export default function UserDetail(props){
            {
             //=======================게시글부분======================
            }    
-    
-         
+        <Outlet context={{userinfo}}/>
 
         
         

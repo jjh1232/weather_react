@@ -36,7 +36,7 @@ import Manyimage from "./UI/Manyim/Manyimage";
 import FavoriteNotice from "./List/noticeformlist/Favoritenotice";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import UserDetail from "./MemberPage/Memberupdata/UserDetail";
+import UserDetail from "./MemberPage/UserPages/UserDetail";
 import Adminmain from "./admin/Adminmain";
 import Chatroommanage from "./admin/managepage/Chatroommanage";
 import Commentmanage from "./admin/managepage/Commentmanage";
@@ -59,6 +59,8 @@ import OauthSuccesspage from "./UI/Manyim/OauthSuccesspage";
 import { SseProvider } from "./Context/SseProvider";
 import Oauth2userextra from "./MemberPage/Oauth2userextra";
 import Logindetail from "./MemberPage/Logindetail";
+import Userposts from "./MemberPage/UserPages/Userposts";
+import UserPhotos from "./MemberPage/UserPages/UserPhotos";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -182,7 +184,11 @@ const updatetime=()=>{
       <Route path="stompex" element={<Stompalrams/>}/>
      <Route path="chatui" element={<ChatUi/>}/>
       <Route path="userviewtest" element={<Userviewtest/>}/>
-      <Route path="/userpage/:profileid" element={<UserDetail/>}/>
+      {/*유저페이지 */}
+      <Route path="/userpage/:profileid" element={<UserDetail/>}>
+      <Route index element={<Userposts/>}/>
+      <Route path="photo" element={<UserPhotos/>}/>
+      </Route>
       <Route path="/noaccess" element={<NoAccess/>}/>
 
       </Route> 
