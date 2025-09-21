@@ -17,9 +17,10 @@ const axiosinstance=CreateAxios();
         status//상태코드
     }=useInfiniteQuery({
         queryKey:["userposts",userinfo?.userid],
-        queryFn:async({pageParam=0})=>{
+        queryFn:async({pageParam=1})=>{
+            console.log("현재페이지:"+pageParam)
             const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`,{
-                page:pageParam
+              params:{page:pageParam}
             })
             console.log("포스트데이터:",res)
             return res.data;
@@ -28,7 +29,8 @@ const axiosinstance=CreateAxios();
           getNextPageParam:(lastPage,allPages)=>{
                 //올페이지는 지금까지 fetchNextPage로받아온 모든응답데이터가 배열로쌓여서 들어옴
                 //그래서 allPages.length로 페이징도가능
-             
+                console.log("라스트페이지",lastPage)
+                console.log("올페이지스",allPages)
                 if(lastPage.last) return undefined;
 
                 //number는 서버가 마지막으로반환한값 1로처리했지만 0시작임으로 0이들어옴 때문에
@@ -43,6 +45,7 @@ const axiosinstance=CreateAxios();
         }
     },[inView,hasNextPage,isFetchingNextPage,fetchNextPage])
     
+    //배열형태로 받아야한다함 
     const posts = userposts?.pages?.flatMap(page => page.content || []) || [];
 
     return (<>
@@ -54,8 +57,16 @@ const axiosinstance=CreateAxios();
       </div>
     
     ))}
+    {posts &&
        <div ref={ref}>
-                마지막
+                 {isFetchingNextPage&&<>...로딩중..</>}
     </div>
+    
+}
+    {!hasNextPage && !isFetchingNextPage && (
+        <div style={{ textAlign: "center", color: "#888", margin: "20px 0" }}>
+          마지막입니다!
+        </div>
+      )}
     </>);
 }

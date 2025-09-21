@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import {format} from "date-fns"
 import Viewtrans from "../../List/noticeformlist/DateCom/Viewtrans";
 import { useCookies } from "react-cookie";
+import Userpageformtool from "./Userpageformtool";
 
 const Wrapper=styled.div`
 position: relative;
@@ -209,6 +210,8 @@ export default function UserDetail(props){
           </Userinfodiv>
     </Usercss>  
     }
+    <Userpageformtool profileid={params.profileid}/>
+    
            {
             //=======================게시글부분======================
            }    
