@@ -17,6 +17,8 @@ width:100%;
 height:100%;
  border: 1px solid red;
  top: 8%;
+  color:${props => props.theme.text};
+ background:${props => props.theme.background};
 
 `
 

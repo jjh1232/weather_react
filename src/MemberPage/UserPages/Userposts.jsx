@@ -1,14 +1,25 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
-import { useOutlet, useOutletContext } from "react-router-dom";
+import { useOutlet, useOutletContext, useSearchParams } from "react-router-dom";
 import CreateAxios from "../../customhook/CreateAxios";
 import Twitformlist from "../../List/noticeformlist/Twitformlist";
 import { useInView } from "react-intersection-observer";
+import styled from "styled-components";
+
+
+const Wrapper=styled.div`
+ 
+`
 
 export default function Userposts(){
 const {userinfo} =useOutletContext();
 const axiosinstance=CreateAxios();
- 
+
+const [searchParams]=useSearchParams();
+const option=searchParams.get("option") ||"title";
+const keyword=searchParams.get("query")|| "";
+
+
    //유저작성글
     const {data:userposts,
         fetchNextPage,//다음페이지를불러오는함수
@@ -20,7 +31,7 @@ const axiosinstance=CreateAxios();
         queryFn:async({pageParam=1})=>{
             console.log("현재페이지:"+pageParam)
             const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`,{
-              params:{page:pageParam}
+              params:{page:pageParam,option:option,query:keyword}
             })
             console.log("포스트데이터:",res)
             return res.data;
@@ -50,11 +61,11 @@ const axiosinstance=CreateAxios();
 
     return (<>
              {posts.map((post, key) => (
-      <div key={key}>
+      <Wrapper key={key}>
         <Twitformlist post={post} />
 
  
-      </div>
+      </Wrapper>
     
     ))}
     {posts &&
