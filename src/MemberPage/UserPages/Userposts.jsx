@@ -27,11 +27,11 @@ const keyword=searchParams.get("query")|| "";
         isFetchingNextPage,//다음페이지불러오는중인지여부
         status//상태코드
     }=useInfiniteQuery({
-        queryKey:["userposts",userinfo?.userid],
+        queryKey:["userposts",userinfo?.userid,option,keyword],
         queryFn:async({pageParam=1})=>{
-            console.log("현재페이지:"+pageParam)
+            
             const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`,{
-              params:{page:pageParam,option:option,query:keyword}
+              params:{page:pageParam,option:option,keyword:keyword}
             })
             console.log("포스트데이터:",res)
             return res.data;

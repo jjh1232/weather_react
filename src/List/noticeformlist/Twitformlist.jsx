@@ -346,7 +346,7 @@ export default function Twitformlist(props){
     const axiosinstance=CreateAxios();
     const [loginuser,setloginuser,removeloginuser]=useCookies();
     const [isupdate,setIsupdate]=useState(false)
-    const [islike,setIslike]=useState(post.likeusercheck);
+    const [islike,setIslike]=useState(post.likely);
     const [likenum,setLikenum]=useState(post.likes)
     const [isblock,setIsblock]=useState(post.isblock)
      
