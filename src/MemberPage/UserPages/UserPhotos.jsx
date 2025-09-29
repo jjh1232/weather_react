@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useInView } from "react-intersection-observer";
 import Imageformlist from "../../List/noticeformlist/Imageform/Imageformlist";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 
@@ -23,14 +23,16 @@ gap: 5px;
 
 export default function UserPhotos(){
 const {userinfo} =useOutletContext();
-
+const [searchParams]=useSearchParams();
+const option=searchParams.get("option") ||"";
+const keyword=searchParams.get("query")|| "";
 const axiosinstance=CreateAxios();
 
     const {data:imagelist,fetchNextPage,hasNextPage,isFetchingNextPage,status}=useInfiniteQuery({
-        queryKey:["userpageimage",userinfo?.userid],
+        queryKey:["userpageimage",userinfo?.userid,keyword,option],
         queryFn:async ({pageParam=1})=>{
             const res=await axiosinstance.get(`/open/userpage/userimagepost/${userinfo.userid}`,{
-                params:{page:pageParam}
+                params:{page:pageParam,keyword:keyword,option:option,}
             })
             return res.data;
         },
