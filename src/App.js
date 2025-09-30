@@ -61,6 +61,7 @@ import Oauth2userextra from "./MemberPage/Oauth2userextra";
 import Logindetail from "./MemberPage/Logindetail";
 import Userposts from "./MemberPage/UserPages/Userposts";
 import UserPhotos from "./MemberPage/UserPages/UserPhotos";
+import UserHighlight from "./MemberPage/UserPages/UserHighlight";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -188,6 +189,7 @@ const updatetime=()=>{
       <Route path="/userpage/:profileid" element={<UserDetail/>}>
       <Route index element={<Userposts/>}/>
       <Route path="photo" element={<UserPhotos/>}/>
+      <Route path="highlight" element={<UserHighlight/>}/>
       </Route>
       <Route path="/noaccess" element={<NoAccess/>}/>
 

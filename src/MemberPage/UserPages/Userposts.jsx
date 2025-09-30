@@ -18,7 +18,7 @@ const axiosinstance=CreateAxios();
 const [searchParams]=useSearchParams();
 const option=searchParams.get("option") ||"title";
 const keyword=searchParams.get("query")|| "";
-
+const Sortoption="date"
 
    //유저작성글
     const {data:userposts,
@@ -31,7 +31,7 @@ const keyword=searchParams.get("query")|| "";
         queryFn:async({pageParam=1})=>{
             
             const res=await axiosinstance.get(`/open/userpage/userpost/${userinfo.userid}`,{
-              params:{page:pageParam,option:option,keyword:keyword}
+              params:{page:pageParam,option:option,keyword:keyword,sortoption:Sortoption}
             })
             console.log("포스트데이터:",res)
             return res.data;
