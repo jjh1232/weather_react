@@ -80,18 +80,22 @@ export default function Userpageformtool({profileid}){
       search:`?${params.toString()}`
     })
   }
+  const handlechange=()=>{
+    setSearchOption("title")
+    setSearchtext("")
+  }
       return (
     <MenuDiv>
       <Buttontool>
 
      
-      <ActiveLink to={`/userpage/${profileid}`} Active={isPostsActive}end>
+      <ActiveLink to={`/userpage/${profileid}`} Active={isPostsActive}end onClick={handlechange}>
         Posts
       </ActiveLink>
-      <ActiveLink to={`/userpage/${profileid}/photo`} Active={isPhotoActive}>
+      <ActiveLink to={`/userpage/${profileid}/photo`} Active={isPhotoActive} onClick={handlechange}>
         Image
       </ActiveLink>
-      <ActiveLink to={`/userpage/${profileid}/highlight`} Active={isHighlightActive}>
+      <ActiveLink to={`/userpage/${profileid}/highlight`} Active={isHighlightActive} onClick={handlechange}>
         Highlight
       </ActiveLink>
        </Buttontool>

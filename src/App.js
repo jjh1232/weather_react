@@ -186,7 +186,7 @@ const updatetime=()=>{
      <Route path="chatui" element={<ChatUi/>}/>
       <Route path="userviewtest" element={<Userviewtest/>}/>
       {/*유저페이지 */}
-      <Route path="/userpage/:profileid" element={<UserDetail/>}>
+      <Route path="/userpage/:profileid" element={<UserDetail key={window.location.pathname}/>}>
       <Route index element={<Userposts/>}/>
       <Route path="photo" element={<UserPhotos/>}/>
       <Route path="highlight" element={<UserHighlight/>}/>
