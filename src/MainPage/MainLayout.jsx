@@ -190,7 +190,8 @@ export default function MainLayout(props){
       return ()=>clearInterval(interval) //
     },[])
     return (
-        <Wrapper>
+        <Wrapper id="Maindiv">
+          
           <BackgroundLayer>
             <ThemeProvider theme={currentthema}>
             <Background>

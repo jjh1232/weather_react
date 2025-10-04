@@ -31,17 +31,34 @@ const Searchdiv=styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1px;
+  //border: 1px solid blue;
 `
 const Searchform=styled.input`
-
-
+ padding: 2px 2px;
+ width: 65%;
+font-size: 15px;
 `
 const Searchbox=styled.select`
+  padding: 1px 1px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 15px;
 
+  &:focus {
+    border-color: #40a9ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  option {
+    padding: 10px;
+  }
 `
 const Submitdiv=styled.div`
   display: flex;
   align-items: center;
+  margin-left:5px;
   justify-content: center;
 
   background-color: ${props=>props.theme.text};//검-화
@@ -49,7 +66,8 @@ const Submitdiv=styled.div`
   cursor: pointer;
 `
 const Searchicon=styled(FontAwesomeIcon)`
-  
+   padding: 3px 3px;
+   
 `
 
 export default function Userpageformtool({profileid}){
@@ -83,6 +101,7 @@ export default function Userpageformtool({profileid}){
   const handlechange=()=>{
     setSearchOption("title")
     setSearchtext("")
+    
   }
       return (
     <MenuDiv>

@@ -51,7 +51,7 @@ import Adminloginhistory from "./customhook/Admintools/Adminloginhistory";
 import MainLayout from "./MainPage/MainLayout";
 import theme from "./UI/Manyim/Themecss";
 import { createGlobalStyle } from "styled-components";
-import Mainout from "./UI/Manyim/Mainout";
+
 import Imageform from "./List/noticeformlist/Imageform/Imageform";
 import Twitformver from "./List/noticeformlist/Twitformver";
 import Noticedetailre from "./Noticepage/Noticedetailre";

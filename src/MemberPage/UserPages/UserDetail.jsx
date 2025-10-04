@@ -9,6 +9,7 @@ import {format} from "date-fns"
 import Viewtrans from "../../List/noticeformlist/DateCom/Viewtrans";
 import { useCookies } from "react-cookie";
 import Userpageformtool from "./Userpageformtool";
+import UserProfileEditmodal from "./UserProfileEditmodal";
 
 const Wrapper=styled.div`
 position: relative;
@@ -26,7 +27,7 @@ const Usercss=styled.div`
     border: 1px solid white;
     display: flex;
     flex-direction: column;
-    
+    position: relative;
     ` 
 const UserBackground=styled.div`
     background: #d8f6ff;
@@ -43,23 +44,25 @@ const Profileview=styled.div`
     border:1px solid black;
     width:100%;
     height:100%;
+    
 `
 const Profilediv=styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    
+    border: 1px solid black;
     width: 90px;
     height: 90px;
-    bottom:120px;
-    left: 35px;
+    bottom:125px;
+    left: 20px;
 `
 const Profileimg=styled.img`
     object-fit: fill;
     width: 100%;
     height: 100%;
     background: white;
+    
 `
 const Menudiv=styled.div`
     display: flex;
@@ -136,6 +139,7 @@ export default function UserDetail(props){
     const [notice,setNotice]=useState();
     const [usercookie,setUsercookie]=useCookies();
  
+    const [isEdit,setIsEdit]=useState(false)
 
     const {data:userinfo,isLoading:userloading,error:usererror}=useQuery(
         {queryKey:['userpageprofile',params.profileid],
@@ -162,6 +166,7 @@ export default function UserDetail(props){
         {userinfo&&
         
         <Usercss> 
+            {isEdit&&<UserProfileEditmodal />}
             <UserBackground>
 
             </UserBackground>
@@ -172,13 +177,21 @@ export default function UserDetail(props){
 
        
         <Profileview>
+            
     <Profileimg src={process.env.PUBLIC_URL+"/userprofileimg"+userinfo.profileimg}/>
           </Profileview>  
            </Profilediv>
            <Menudiv>
            
-           {usercookie.userinfo?.userid===userinfo.userid?<MenuButton size="edit">EDIT</MenuButton>:userinfo.followcheck?<MenuButton size="unfollow">Unfollow</MenuButton>:<MenuButton>Follow</MenuButton>}
+           {usercookie.userinfo?.userid===userinfo.userid?
+           <MenuButton size="edit" onClick={()=>setIsEdit(true)}>EDIT</MenuButton>
+          
+           :userinfo.followcheck
+           ?<MenuButton size="unfollow">Unfollow</MenuButton>
+           :<MenuButton>Follow</MenuButton>}
+            {isEdit?<>true</>:<>false</>}
        </Menudiv>
+            
  </Userheaderdiv>
        <Userinfodiv>
 
