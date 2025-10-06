@@ -166,7 +166,7 @@ export default function UserDetail(props){
         {userinfo&&
         
         <Usercss> 
-            {isEdit&&<UserProfileEditmodal />}
+            {isEdit&&<UserProfileEditmodal setisedit={setIsEdit}/>}
             <UserBackground>
 
             </UserBackground>
@@ -189,7 +189,7 @@ export default function UserDetail(props){
            :userinfo.followcheck
            ?<MenuButton size="unfollow">Unfollow</MenuButton>
            :<MenuButton>Follow</MenuButton>}
-            {isEdit?<>true</>:<>false</>}
+          
        </Menudiv>
             
  </Userheaderdiv>
