@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark as exiticon } from "@fortawesome/free-solid-svg-icons";
 import { faCameraRetro as photoicon } from "@fortawesome/free-solid-svg-icons";
+import ImageEditor from "./ImageEditor";
 
 const Outdiv=styled.div`
     position: fixed;
@@ -89,10 +90,13 @@ const Bodydiv=styled.div`
 `
 const Backgrounddiv=styled.div`
     height: 150px;
-    border: 1px solid gray;
+    width: 550px;
+    background-color: rgba(92, 92, 92, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 3px;
+    margin-left: 12px;
 `
 const PhotoButton=styled.button`
       background-color: rgba(51, 51, 51, 0.8);
@@ -118,7 +122,9 @@ const Profilediv=styled.div`
     height: 85px;
     top: 112px;
       transform: translateX(30%);
-    border: 1px solid red;
+    border: 3px solid white;
+    
+    background-color: rgba(46, 46, 46, 0.8);
 `
 
 const Userdatadiv=styled.div`
@@ -176,13 +182,48 @@ position: absolute;
 `
 export default function UserProfileEditmodal(props) {
     console.log("에딧모달실행")
-   
+    const Backgroundref=useRef(null) ;
+    const Profileref=useRef(null);  
+
+    const [Profile,setProfile]=useState();
+    const [Backgroundfile,setBackgroundfile]=useState();
+    const HandleBackClick=()=>{
+      Backgroundref.current.click();
+    }
+    const HandleProfileclick=()=>{
+      Profileref.current.click()
+    }
+    const handleBackground=(e)=>{
+      const file=e.target.files[0];
+      if(file){
+        setBackgroundfile(file)
+      }
+    }
+        const handleProfile=(e)=>{
+      const file=e.target.files[0];
+      if(file){
+        setProfile(file)
+      }
+    }
+    //업데이트용
+    const handleBackchange=(updatefile)=>{
+      setBackgroundfile(updatefile)
+    }
+    const handleProfilechange=(updatefile)=>{
+      setProfile(updatefile)
+     
+    }
+    //내부 에 모두포함되서 클릭과 현재 디브가같을시만종료
   return (
-    <Outdiv onClick={()=>props.setisedit(false)}>
+    <Outdiv onClick={(e)=>
+    {if(e.target===e.currentTarget){
+    props.setisedit(false);
+    }
+    }}>
       <Indiv>
         <Headerdiv>
             <Exitdiv>
-              <ExitButton>
+              <ExitButton onClick={()=>props.setisedit(false)}>
                 <Exiticon icon={exiticon}/>
               </ExitButton>
             </Exitdiv>
@@ -197,14 +238,20 @@ export default function UserProfileEditmodal(props) {
         </Headerdiv>
         <Bodydiv>
             <Backgrounddiv>
-              <PhotoButton >
+              <PhotoButton onClick={HandleBackClick}>
                     <Photoicon icon={photoicon}/>
               </PhotoButton>
+              <input type="file" ref={Backgroundref} style={{display:"none"}} 
+              accept="image/*" onChange={handleBackground}/>
+              {Backgroundfile&&<ImageEditor file={Backgroundfile} onupdate={handleBackchange} />}
             </Backgrounddiv>
             <Profilediv>
-                 <PhotoButton >
+                 <PhotoButton onClick={HandleProfileclick}>
                     <Photoicon icon={photoicon}/>
                 </PhotoButton>
+                <input type="file" ref={Profileref} style={{display:"none"}} 
+              accept="image/*" onChange={handleProfile}/>
+              {Profile&&<ImageEditor file={Profile} onupdate={handleProfilechange}/>}
             </Profilediv>
             <Userdatadiv>
               <Nicknamediv>
