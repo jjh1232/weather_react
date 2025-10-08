@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark as exiticon } from "@fortawesome/free-solid-svg-icons";
@@ -134,6 +134,8 @@ export default function ImageEditor(props){
 
     const [Imagedata,setImagedata]=useState();
 
+    //꾹누르기용 
+    const intervalid=useRef(null);
     //줌세팅
     const [zoom,setZoom]=useState(1)
     useEffect(()=>{
@@ -145,6 +147,34 @@ export default function ImageEditor(props){
         onupdate(file)
     }
 
+    const gagemousedown=(delta)=>{
+        if(intervalid.current) return; //중복방지
+        
+        intervalid.current=setInterval(()=>{
+           
+            setZoom(prev=>
+            { const newzoom=prev+delta
+            return Math.min(newzoom,100)
+            });
+        },100) //0.1초마다
+        
+    }
+    const gageplusmouseup=()=>{
+        if(intervalid.current){
+            clearInterval(intervalid.current);
+            intervalid.current=null;
+        }
+    }
+    //핸들로
+    const handleWheel=(e)=>{
+        e.preventDefault();
+        const delta=-e.deltaY || e.wheelDelta; //휠방향감지
+
+        setZoom(prev=>{
+            let newZoom=prev+(delta>0?1:-1);
+            return Math.min(Math.max(newZoom,1),100);//줌제한
+        })
+    }
     return (
         <Outdiv>
            
@@ -163,14 +193,18 @@ export default function ImageEditor(props){
                     <SaveButtoncss>Apply</SaveButtoncss>
                 </Buttondiv>
             </Headerdiv>
-            <Body>
+            <Body onWheel={handleWheel}>
                  {Imagedata && <Preimage src={Imagedata} alt="preview" />}
       
                 <Focusdiv />
             </Body>
        
         <Bottom>
-            <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -1,1))}>
+            <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -1,1))}
+                  onMouseDown={()=>gagemousedown(-1)}
+                onMouseLeave={gageplusmouseup}
+                onMouseUp={gageplusmouseup}
+                >
             <Gageicon icon= {minusicon} />
             </Minusdiv>
             <Rangegage type="range" 
@@ -180,7 +214,11 @@ export default function ImageEditor(props){
              onChange={(e)=>setZoom(parseFloat(e.target.value))} 
              step="1"
              />
-            <Plusdiv onClick={()=>setZoom(prevZoom=>Math.min(prevZoom +1,100))}>
+            <Plusdiv onClick={()=>setZoom(prevZoom=>Math.min(prevZoom +1,100))}
+                onMouseDown={()=>gagemousedown(1)}
+                onMouseLeave={gageplusmouseup}
+                onMouseUp={gageplusmouseup}
+                >
             <Gageicon icon={plusicon} />
             </Plusdiv>
         </Bottom>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -213,13 +213,32 @@ export default function UserProfileEditmodal(props) {
       setProfile(updatefile)
      
     }
+    
+    //힐막기 
+    const handleWheel=(e)=>e.preventDefault(); 
+    const outdivRef=useRef(null)
+    useEffect(()=>{
+    const node = outdivRef.current;
+    if (node) {
+      node.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (node) {
+        node.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
+
     //내부 에 모두포함되서 클릭과 현재 디브가같을시만종료
   return (
     <Outdiv onClick={(e)=>
     {if(e.target===e.currentTarget){
     props.setisedit(false);
     }
-    }}>
+    }} 
+    ref={outdivRef}
+    >
       <Indiv>
         <Headerdiv>
             <Exitdiv>
