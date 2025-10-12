@@ -97,11 +97,14 @@ const Preimage=styled.img`
     height: 100%;
     display: block;
   object-fit: cover;
+  transform: ${props => `translate(${props.offsetX}px, ${props.offsetY}px) scale(${props.zoom})`};
+ transition: ${props => (props.isDragging ? 'none' : 'transform 0.3s ease')};
+  cursor:grab;
 `
 const Focusdiv=styled.div`
     position: absolute;
-     height: 150px;
-    width: 550px;
+     width: 550px;
+  height: 150px;
     border: 2px solid #2068c5;
     transform: translate(-50%, -50%);
      top: 50%;
@@ -136,6 +139,26 @@ export default function ImageEditor(props){
 
     //꾹누르기용 
     const intervalid=useRef(null);
+
+    //드래그 조정
+    const [imgoffset,setImgoffset]=useState({x:0,y:0})
+    const dragstartref=useRef({x:0,y:0});
+    const isdraggingref=useRef(false);
+
+    const handlemousedown=(e)=>{
+        isdraggingref.current=true;
+        dragstartref.current={x:e.clientX,y:e.clientY};
+    };
+    const handlemousemove=(e)=>{
+        if(!isdraggingref.current) return;
+        const dx=e.clientX - dragstartref.current.x;
+        const dy=e.clientY - dragstartref.current.y;
+        dragstartref.current={x:e.clientX,y:e.clientY};
+        setImgoffset(prev=>({x:prev.x+dx,y:prev.y+dy}));
+    }
+    const handlemouseup=()=>{
+        isdraggingref.current=false
+    }
     //줌세팅
     const [zoom,setZoom]=useState(1)
     useEffect(()=>{
@@ -147,14 +170,26 @@ export default function ImageEditor(props){
         onupdate(file)
     }
 
-    const gagemousedown=(delta)=>{
+    const gagemousedownplus=(delta)=>{
         if(intervalid.current) return; //중복방지
         
         intervalid.current=setInterval(()=>{
            
             setZoom(prev=>
             { const newzoom=prev+delta
-            return Math.min(newzoom,100)
+            return Math.min(newzoom,3)
+            });
+        },100) //0.1초마다
+        
+    }
+      const gagemousedownminus=(delta)=>{
+        if(intervalid.current) return; //중복방지
+        
+        intervalid.current=setInterval(()=>{
+           
+            setZoom(prev=>
+            { const newzoom=prev+delta
+            return Math.max(newzoom,1)
             });
         },100) //0.1초마다
         
@@ -171,9 +206,10 @@ export default function ImageEditor(props){
         const delta=-e.deltaY || e.wheelDelta; //휠방향감지
 
         setZoom(prev=>{
-            let newZoom=prev+(delta>0?1:-1);
-            return Math.min(Math.max(newZoom,1),100);//줌제한
+            let newZoom=prev+(delta>0?0.2:-0.2);
+            return Math.min(Math.max(newZoom,1),3);//줌제한
         })
+
     }
     return (
         <Outdiv>
@@ -193,15 +229,25 @@ export default function ImageEditor(props){
                     <SaveButtoncss>Apply</SaveButtoncss>
                 </Buttondiv>
             </Headerdiv>
-            <Body onWheel={handleWheel}>
-                 {Imagedata && <Preimage src={Imagedata} alt="preview" />}
+            <Body onWheel={handleWheel}
+                  onMouseMove={handlemousemove}
+                  onMouseUp={handlemouseup}
+                  onMouseLeave={handlemouseup}
+                   onMouseDown={handlemousedown}
+                   isDragging={isdraggingref.current}
+                    >
+                 {Imagedata && <Preimage src={Imagedata} alt="preview" zoom={zoom}
+                  offsetX={imgoffset.x}
+                   offsetY={imgoffset.y}
+                
+                 />}
       
                 <Focusdiv />
             </Body>
        
         <Bottom>
-            <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -1,1))}
-                  onMouseDown={()=>gagemousedown(-1)}
+            <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -0.1,1))}
+                  onMouseDown={()=>gagemousedownminus(-0.1)}
                 onMouseLeave={gageplusmouseup}
                 onMouseUp={gageplusmouseup}
                 >
@@ -210,12 +256,12 @@ export default function ImageEditor(props){
             <Rangegage type="range" 
             value={zoom}
              min="1"
-             max="100"
+             max="3"
              onChange={(e)=>setZoom(parseFloat(e.target.value))} 
-             step="1"
+             step="0.1"
              />
-            <Plusdiv onClick={()=>setZoom(prevZoom=>Math.min(prevZoom +1,100))}
-                onMouseDown={()=>gagemousedown(1)}
+            <Plusdiv onClick={()=>setZoom(prevZoom=>Math.min(prevZoom +0.1,3))}
+                onMouseDown={()=>gagemousedownplus(0.1)}
                 onMouseLeave={gageplusmouseup}
                 onMouseUp={gageplusmouseup}
                 >
