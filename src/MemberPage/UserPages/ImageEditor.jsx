@@ -103,8 +103,8 @@ const Preimage=styled.img`
 `
 const Focusdiv=styled.div`
     position: absolute;
-     width: 550px;
-  height: 150px;
+     width: ${props => (props.mode === "profile" ? "550px" : "550px")};
+    height: ${props => (props.mode === "profile" ? "550px" : "150px")};
     border: 2px solid #2068c5;
     transform: translate(-50%, -50%);
      top: 50%;
@@ -133,7 +133,7 @@ const Gageicon=styled(FontAwesomeIcon)`
     color: gray;
 `
 export default function ImageEditor(props){
-    const {file,onupdate}=props;
+    const {file,onupdate,mode}=props;
 
     const [Imagedata,setImagedata]=useState();
 
@@ -144,21 +144,62 @@ export default function ImageEditor(props){
     const [imgoffset,setImgoffset]=useState({x:0,y:0})
     const dragstartref=useRef({x:0,y:0});
     const isdraggingref=useRef(false);
+    const bodyref=useRef(null);
+    const imgref=useRef(null);
 
     const handlemousedown=(e)=>{
+        e.preventDefault();
         isdraggingref.current=true;
         dragstartref.current={x:e.clientX,y:e.clientY};
     };
-    const handlemousemove=(e)=>{
+    //드래그 이펙트 이거 tag보다 useeffect가 벗어낫을떄같은데 유동적이고좋음
+    useEffect(()=>{
+         const handlemousemove=(e)=>{
         if(!isdraggingref.current) return;
+
+        //확대배율 제한을위해
+        const bodyRect=bodyref.current.getBoundingClientRect();
+        const imgRect=imgref.current.getBoundingClientRect();
+
+        //확대배율 반영 실제이미지크기
+        const actualImgWidth = imgRect.width * zoom;
+      const actualImgHeight = imgRect.height * zoom;
+
         const dx=e.clientX - dragstartref.current.x;
         const dy=e.clientY - dragstartref.current.y;
         dragstartref.current={x:e.clientX,y:e.clientY};
-        setImgoffset(prev=>({x:prev.x+dx,y:prev.y+dy}));
-    }
+        setImgoffset(prev=>{
+
+              let newX = prev.x + dx;
+        let newY = prev.y + dy;
+               // Body 크기
+        const bodyWidth = bodyRect.width;
+        const bodyHeight = bodyRect.height;
+
+        // 이미지 실제 확대 크기를 기반으로 최대 이동 가능한 거리 계산
+        const limitX = Math.max((actualImgWidth - bodyWidth) / 2, 0);
+        const limitY = Math.max((actualImgHeight - bodyHeight) / 2, 0);
+
+        // 오프셋 범위 제한 (clamp)
+        newX = Math.min(Math.max(newX, -limitX), limitX);
+        newY = Math.min(Math.max(newY, -limitY), limitY);
+             return { x: newX, y: newY };
+        
+         });
+        }
+
     const handlemouseup=()=>{
-        isdraggingref.current=false
+        isdraggingref.current=false;
     }
+    document.addEventListener("mousemove", handlemousemove);
+  document.addEventListener("mouseup", handlemouseup);
+
+  return () => {
+    document.removeEventListener("mousemove", handlemousemove);
+    document.removeEventListener("mouseup", handlemouseup);
+  };
+    },[]);
+   
     //줌세팅
     const [zoom,setZoom]=useState(1)
     useEffect(()=>{
@@ -230,19 +271,17 @@ export default function ImageEditor(props){
                 </Buttondiv>
             </Headerdiv>
             <Body onWheel={handleWheel}
-                  onMouseMove={handlemousemove}
-                  onMouseUp={handlemouseup}
-                  onMouseLeave={handlemouseup}
+                    ref={bodyref}
                    onMouseDown={handlemousedown}
                    isDragging={isdraggingref.current}
                     >
                  {Imagedata && <Preimage src={Imagedata} alt="preview" zoom={zoom}
                   offsetX={imgoffset.x}
                    offsetY={imgoffset.y}
-                
+                    ref={imgref}
                  />}
       
-                <Focusdiv />
+                <Focusdiv mode={mode} />
             </Body>
        
         <Bottom>
