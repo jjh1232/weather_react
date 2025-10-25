@@ -87,9 +87,10 @@ const SaveButtoncss=styled.button`
 }
 `
 const Body=styled.div`
-    border: 1px solid blue;
+    border: 1px solid red;
     position: relative;
     height: 80%;
+    width: 100%;
       overflow: hidden;
 `
 const Preimage=styled.img`
@@ -136,7 +137,7 @@ export default function ImageEditor(props){
     const {file,onupdate,mode}=props;
 
     const [Imagedata,setImagedata]=useState();
-
+    const [zoom,setZoom]=useState(1)
     //꾹누르기용 
     const intervalid=useRef(null);
 
@@ -152,56 +153,68 @@ export default function ImageEditor(props){
         isdraggingref.current=true;
         dragstartref.current={x:e.clientX,y:e.clientY};
     };
+    const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
     //드래그 이펙트 이거 tag보다 useeffect가 벗어낫을떄같은데 유동적이고좋음
     useEffect(()=>{
-         const handlemousemove=(e)=>{
-        if(!isdraggingref.current) return;
+         const handlemousemove = (e) => {
+    if (!isdraggingref.current) return;
 
-        //확대배율 제한을위해
-        const bodyRect=bodyref.current.getBoundingClientRect();
-        const imgRect=imgref.current.getBoundingClientRect();
+    const bodyRect = bodyref.current.getBoundingClientRect();
+    const img = imgref.current;
 
-        //확대배율 반영 실제이미지크기
-        const actualImgWidth = imgRect.width * zoom;
-      const actualImgHeight = imgRect.height * zoom;
+    const naturalWidth = img.naturalWidth;
+    const naturalHeight = img.naturalHeight;
 
-        const dx=e.clientX - dragstartref.current.x;
-        const dy=e.clientY - dragstartref.current.y;
-        dragstartref.current={x:e.clientX,y:e.clientY};
-        setImgoffset(prev=>{
+    const aspectRatio = naturalWidth / naturalHeight;
+    const bodyAspect = bodyRect.width / bodyRect.height;
 
-              let newX = prev.x + dx;
-        let newY = prev.y + dy;
-               // Body 크기
-        const bodyWidth = bodyRect.width;
-        const bodyHeight = bodyRect.height;
+    let displayedWidth, displayedHeight;
 
-        // 이미지 실제 확대 크기를 기반으로 최대 이동 가능한 거리 계산
-        const limitX = Math.max((actualImgWidth - bodyWidth) / 2, 0);
-        const limitY = Math.max((actualImgHeight - bodyHeight) / 2, 0);
-
-        // 오프셋 범위 제한 (clamp)
-        newX = Math.min(Math.max(newX, -limitX), limitX);
-        newY = Math.min(Math.max(newY, -limitY), limitY);
-             return { x: newX, y: newY };
-        
-         });
-        }
-
-    const handlemouseup=()=>{
-        isdraggingref.current=false;
+    // object-fit: cover 보정
+    if (aspectRatio > bodyAspect) {
+      displayedWidth = bodyRect.width * zoom;
+      displayedHeight = (bodyRect.width / aspectRatio) * zoom;
+    } else {
+      displayedHeight = bodyRect.height * zoom;
+      displayedWidth = (bodyRect.height * aspectRatio) * zoom;
     }
-    document.addEventListener("mousemove", handlemousemove);
+
+    const dx = e.clientX - dragstartref.current.x;
+    const dy = e.clientY - dragstartref.current.y;
+
+    dragstartref.current = { x: e.clientX, y: e.clientY };
+
+    setImgoffset(prev => {
+      let newX = prev.x + dx;
+      let newY = prev.y + dy;
+
+      // Body 안에서만 이동 가능하도록 제한
+          // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
+      const limitX = (bodyRect.width * (zoom - 1)) / 2;
+      const limitY = (bodyRect.height * (zoom - 1)) / 2;
+
+      newX = Math.min(Math.max(newX, -limitX), limitX);
+      newY = Math.min(Math.max(newY, -limitY), limitY);
+
+      return { x: newX, y: newY };
+    });
+  };
+
+  const handlemouseup = () => {
+    isdraggingref.current = false;
+  };
+
+  document.addEventListener("mousemove", handlemousemove);
   document.addEventListener("mouseup", handlemouseup);
 
   return () => {
     document.removeEventListener("mousemove", handlemousemove);
     document.removeEventListener("mouseup", handlemouseup);
   };
-    },[]);
+    },[zoom]);
    
     //줌세팅
-    const [zoom,setZoom]=useState(1)
+    
     useEffect(()=>{
         const url=URL.createObjectURL(file);
         setImagedata(url);
