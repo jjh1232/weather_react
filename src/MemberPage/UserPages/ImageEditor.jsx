@@ -97,6 +97,7 @@ const Preimage=styled.img`
     width: 100%;
     height: 100%;
     display: block;
+    border: 3px solid blue;
   object-fit: cover;
   transform: ${props => `translate(${props.offsetX}px, ${props.offsetY}px) scale(${props.zoom})`};
  transition: ${props => (props.isDragging ? 'none' : 'transform 0.3s ease')};
@@ -153,7 +154,7 @@ export default function ImageEditor(props){
         isdraggingref.current=true;
         dragstartref.current={x:e.clientX,y:e.clientY};
     };
-    const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+   
     //드래그 이펙트 이거 tag보다 useeffect가 벗어낫을떄같은데 유동적이고좋음
     useEffect(()=>{
          const handlemousemove = (e) => {
@@ -161,24 +162,9 @@ export default function ImageEditor(props){
 
     const bodyRect = bodyref.current.getBoundingClientRect();
     const img = imgref.current;
-
-    const naturalWidth = img.naturalWidth;
-    const naturalHeight = img.naturalHeight;
-
-    const aspectRatio = naturalWidth / naturalHeight;
-    const bodyAspect = bodyRect.width / bodyRect.height;
-
-    let displayedWidth, displayedHeight;
-
-    // object-fit: cover 보정
-    if (aspectRatio > bodyAspect) {
-      displayedWidth = bodyRect.width * zoom;
-      displayedHeight = (bodyRect.width / aspectRatio) * zoom;
-    } else {
-      displayedHeight = bodyRect.height * zoom;
-      displayedWidth = (bodyRect.height * aspectRatio) * zoom;
-    }
-
+     const imgRect=img.getBoundingClientRect();
+   
+      
     const dx = e.clientX - dragstartref.current.x;
     const dy = e.clientY - dragstartref.current.y;
 
@@ -190,11 +176,9 @@ export default function ImageEditor(props){
 
       // Body 안에서만 이동 가능하도록 제한
           // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
-      const limitX = (bodyRect.width * (zoom - 1)) / 2;
-      const limitY = (bodyRect.height * (zoom - 1)) / 2;
-
-      newX = Math.min(Math.max(newX, -limitX), limitX);
-      newY = Math.min(Math.max(newY, -limitY), limitY);
+      
+      //newX = Math.min(0,Math.max(bodyRect.width-(imgRect.width*zoom), prev.x));
+      //newY = Math.min(0,Math.max(bodyRect.height-(imgRect.height*zoom), prev.y));
 
       return { x: newX, y: newY };
     });
