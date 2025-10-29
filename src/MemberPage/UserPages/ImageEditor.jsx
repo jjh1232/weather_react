@@ -169,16 +169,21 @@ export default function ImageEditor(props){
     const dy = e.clientY - dragstartref.current.y;
 
     dragstartref.current = { x: e.clientX, y: e.clientY };
-
+            const focusHeight=150;
+            const focusWidth=550;
     setImgoffset(prev => {
       let newX = prev.x + dx;
       let newY = prev.y + dy;
 
+      const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
+      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
+      let minlimitY=(imgRect.height-focusHeight)/2;//아래최대
+      let maxlimitY=(imgRect.height-focusHeight)/2*-1;//위최대
       // Body 안에서만 이동 가능하도록 제한
           // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
       
-      //newX = Math.min(0,Math.max(bodyRect.width-(imgRect.width*zoom), prev.x));
-      //newY = Math.min(0,Math.max(bodyRect.height-(imgRect.height*zoom), prev.y));
+      newX = Math.min(maxlimitX,Math.max(newX, minlimitX));
+      newY = Math.min(minlimitY,Math.max(newY, maxlimitY));
 
       return { x: newX, y: newY };
     });
