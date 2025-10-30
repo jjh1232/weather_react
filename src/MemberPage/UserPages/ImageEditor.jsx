@@ -149,6 +149,8 @@ export default function ImageEditor(props){
     const bodyref=useRef(null);
     const imgref=useRef(null);
 
+    const [previmgaesrc,setpreviewsrc]=useState(null)
+
     const handlemousedown=(e)=>{
         e.preventDefault();
         isdraggingref.current=true;
@@ -254,12 +256,46 @@ export default function ImageEditor(props){
         })
 
     }
+    //포커스디브저장
+    const saveFocusArea=()=>{
+        console.log("이미지저장")
+        const canvas=document.createElement('canvas');
+        const focusWidth=550;
+        const focusheight=150;
+        canvas.width=focusWidth;
+        canvas.height=focusheight;
+        const ctx=canvas.getContext('2d');
+        console.log("이미지저장2")
+        //임시
+        const sWidth=550;
+        const sHeight=150;
+        //이미지객체생성
+        const img= new window.Image();
+        img.src=Imagedata;
+        console.log("이미지저장3")
+        img.onload=()=>{
+            //전체이미지에서 값구해야할듯
+console.log("이미지저장4")
+            ctx.drawImage(img,//원본
+                0,0,sWidth,sHeight,//원본이미지자를위치와크기 focus존
+                0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
+                ,focusWidth,focusheight //dx,dy위치에 지정한크기로그림
+            );
+            //결과저장
+            //canvas.toBlob(blob=>{//blob이나 url로저장
+              //          })
+        const dataurl=canvas.toDataURL("image/png");
+        setpreviewsrc(dataurl)
+            }
+
+    }
     return (
         <Outdiv>
            
       
         <EditorWrapper>
              <Headerdiv>
+                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" />}
                 <Exitdiv>
                     <ExitButton onClick={handleEdit}>
                         <Exiticon icon={exiticon}/>
@@ -269,7 +305,7 @@ export default function ImageEditor(props){
                     Edit Media
                 </Textdiv>
                 <Buttondiv>
-                    <SaveButtoncss>Apply</SaveButtoncss>
+                    <SaveButtoncss onClick={saveFocusArea}>Apply</SaveButtoncss>
                 </Buttondiv>
             </Headerdiv>
             <Body onWheel={handleWheel}
