@@ -262,8 +262,30 @@ export default function ImageEditor(props){
         const canvas=document.createElement('canvas');
         const focusWidth=550;
         const focusheight=150;
+        //랜더된 이미지와 바디중간값
+        const body=bodyref.current.getBoundingClientRect();
+        const cxbody=body.width /2;
+        const cybody=body.height/2;
+        const cximg=cxbody+imgoffset.x;
+        const cyimg=cybody+imgoffset.y;
+        //좌표 역산
+        //렌더링된 이미지기준 focusdiv의 좌상단
+        const focusleft=(body.width-550)/2;
+        const focustop=(body.height-150)/2;
+
+        //화면상에서 이미지 실제위치
+        const imgleft=cxbody-(imgref.width/2)+imgoffset.x;
+        const imgtop=cybody-(imgref.height/2)+imgoffset.y;
+        //포커스디브의 좌상단이 이미지에서 며떨어진지
+        const sxdisplay=focusleft-imgleft;
+        const sydisplay=focustop-imgtop;
+
+        //원본 이미지 기준좌표
+        const sx=sxdisplay *(imgref.width/450);
+        const sy=sydisplay *(imgref.height/150);
         canvas.width=focusWidth;
         canvas.height=focusheight;
+        
         const ctx=canvas.getContext('2d');
         console.log("이미지저장2")
         //임시
@@ -277,7 +299,7 @@ export default function ImageEditor(props){
             //전체이미지에서 값구해야할듯
 console.log("이미지저장4")
             ctx.drawImage(img,//원본
-                0,0,sWidth,sHeight,//원본이미지자를위치와크기 focus존
+                sx,sy,sWidth,sHeight,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 ,focusWidth,focusheight //dx,dy위치에 지정한크기로그림
             );
