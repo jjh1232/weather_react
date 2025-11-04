@@ -184,9 +184,12 @@ export default function UserProfileEditmodal(props) {
     console.log("에딧모달실행")
     const Backgroundref=useRef(null) ;
     const Profileref=useRef(null);  
-
+  
     const [Profile,setProfile]=useState();
     const [Backgroundfile,setBackgroundfile]=useState();
+    const inputRef=useRef(null)
+
+
     const HandleBackClick=()=>{
       Backgroundref.current.click();
     }
@@ -198,6 +201,12 @@ export default function UserProfileEditmodal(props) {
       if(file){
         setBackgroundfile(file)
       }
+      //같은파일시에도 값을 초기화해줘야함
+      //e.target.value = '';
+        // input ref로 직접 초기화 ,리액트문제라는데 ref로직접초기화
+  if (Backgroundref.current) {
+    Backgroundref.current.value = null;
+  }
     }
         const handleProfile=(e)=>{
       const file=e.target.files[0];
@@ -220,9 +229,10 @@ export default function UserProfileEditmodal(props) {
     useEffect(()=>{
     const node = outdivRef.current;
     if (node) {
-      node.addEventListener('wheel', handleWheel, { passive: false });
+      node.addEventListener('wheel', handleWheel, { passive: false });//passive설정을 직접하는게중요
+      //passive는 기본동작을 true일시 호출하지 않을거라고 미리말해 렌더링최적화시키기떄뭉네 false로 설저앻줘야함
     }
-
+      //종료후 다시실행
     return () => {
       if (node) {
         node.removeEventListener('wheel', handleWheel);
@@ -262,7 +272,7 @@ export default function UserProfileEditmodal(props) {
               </PhotoButton>
               <input type="file" ref={Backgroundref} style={{display:"none"}} 
               accept="image/*" onChange={handleBackground}/>
-              {Backgroundfile&&<ImageEditor file={Backgroundfile} onupdate={handleBackchange} />}
+              {Backgroundfile&&<ImageEditor file={Backgroundfile} onupdate={handleBackchange} mode="Background" setback={setBackgroundfile}/>}
             </Backgrounddiv>
             <Profilediv>
                  <PhotoButton onClick={HandleProfileclick}>

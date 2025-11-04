@@ -135,7 +135,7 @@ const Gageicon=styled(FontAwesomeIcon)`
     color: gray;
 `
 export default function ImageEditor(props){
-    const {file,onupdate,mode}=props;
+    const {file,onupdate,mode,setback}=props;
 
     const [Imagedata,setImagedata]=useState();
     const [zoom,setZoom]=useState(1)
@@ -290,7 +290,7 @@ export default function ImageEditor(props){
         console.log("이미지저장2")
         //임시
         const sWidth=550;
-        const sHeight=150;
+        const sHeight=200;
         //이미지객체생성
         const img= new window.Image();
         img.src=Imagedata;
@@ -299,7 +299,7 @@ export default function ImageEditor(props){
             //전체이미지에서 값구해야할듯
 console.log("이미지저장4")
             ctx.drawImage(img,//원본
-                sx,sy,sWidth,sHeight,//원본이미지자를위치와크기 focus존
+                0,0,sWidth,sHeight,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 ,focusWidth,focusheight //dx,dy위치에 지정한크기로그림
             );
@@ -317,9 +317,9 @@ console.log("이미지저장4")
       
         <EditorWrapper>
              <Headerdiv>
-                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" />}
+                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" style={{border:"1px solid red",objectFit:"cover"}}/>}
                 <Exitdiv>
-                    <ExitButton onClick={handleEdit}>
+                    <ExitButton onClick={()=>setback(null)}>
                         <Exiticon icon={exiticon}/>
                     </ExitButton>
                 </Exitdiv>
