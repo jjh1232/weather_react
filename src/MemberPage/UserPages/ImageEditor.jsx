@@ -289,19 +289,21 @@ export default function ImageEditor(props){
         const ctx=canvas.getContext('2d');
         console.log("이미지저장2")
         //임시
-        const sWidth=550;
-        const sHeight=200;
+        const sWidth=450;
+        const sHeight=150;
         //이미지객체생성
         const img= new window.Image();
         img.src=Imagedata;
         console.log("이미지저장3")
+        const imgsize=imgref.current.getBoundingClientRect();
+        const stsy=imgsize.height/2+30;
         img.onload=()=>{
             //전체이미지에서 값구해야할듯
 console.log("이미지저장4")
             ctx.drawImage(img,//원본
-                0,0,sWidth,sHeight,//원본이미지자를위치와크기 focus존
+                0,stsy,800,sHeight,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
-                ,focusWidth,focusheight //dx,dy위치에 지정한크기로그림
+                ,450,150 //dx,dy위치에 지정한크기로그림
             );
             //결과저장
             //canvas.toBlob(blob=>{//blob이나 url로저장
@@ -317,7 +319,7 @@ console.log("이미지저장4")
       
         <EditorWrapper>
              <Headerdiv>
-                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" style={{border:"1px solid red",objectFit:"cover"}}/>}
+                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" style={{border:"1px solid red",objectFit:"contain"}}/>}
                 <Exitdiv>
                     <ExitButton onClick={()=>setback(null)}>
                         <Exiticon icon={exiticon}/>
