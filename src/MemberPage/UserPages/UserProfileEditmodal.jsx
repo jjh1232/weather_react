@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark as exiticon } from "@fortawesome/free-solid-svg-icons";
 import { faCameraRetro as photoicon } from "@fortawesome/free-solid-svg-icons";
 import ImageEditor from "./ImageEditor";
+import FileResizer from "react-image-file-resizer";
 
 const Outdiv=styled.div`
     position: fixed;
@@ -196,10 +197,27 @@ export default function UserProfileEditmodal(props) {
     const HandleProfileclick=()=>{
       Profileref.current.click()
     }
-    const handleBackground=(e)=>{
+    const resizefile= (file) =>
+  new Promise((resolve) => {
+    FileResizer.imageFileResizer(
+      file,          // 리사이징할 원본 파일(Blob)
+      450,           // 최대 너비
+      150,           // 최대 높이
+      "JPEG",        // 이미지 포맷
+      100,           // 품질 (0 ~ 100)
+      0,             // 회전 (0~360)
+      (uri) => {
+        resolve(uri); // 리사이즈된 결과(base64) 반환
+      },
+      "file"       // 출력 타입(base64, blob, file 중 선택)
+    );
+  });
+    const handleBackground=async (e)=>{
       const file=e.target.files[0];
       if(file){
-        setBackgroundfile(file)
+        //Promise써야함
+        const resizeimage=await resizefile(file);
+        setBackgroundfile(resizeimage)
       }
       //같은파일시에도 값을 초기화해줘야함
       //e.target.value = '';

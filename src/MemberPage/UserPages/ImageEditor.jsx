@@ -296,12 +296,12 @@ export default function ImageEditor(props){
         img.src=Imagedata;
         console.log("이미지저장3")
         const imgsize=imgref.current.getBoundingClientRect();
-        const stsy=imgsize.height/2+30;
+        const stsy=imgsize.height/2;
         img.onload=()=>{
             //전체이미지에서 값구해야할듯
 console.log("이미지저장4")
             ctx.drawImage(img,//원본
-                0,stsy,800,sHeight,//원본이미지자를위치와크기 focus존
+                0,stsy,400,150,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 ,450,150 //dx,dy위치에 지정한크기로그림
             );
