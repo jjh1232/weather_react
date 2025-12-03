@@ -201,8 +201,8 @@ export default function UserProfileEditmodal(props) {
   new Promise((resolve) => {
     FileResizer.imageFileResizer(
       file,          // 리사이징할 원본 파일(Blob)
-      450,           // 최대 너비
-      150,           // 최대 높이
+      1080,           // 최대 너비
+      1080,           // 최대 높이
       "JPEG",        // 이미지 포맷
       100,           // 품질 (0 ~ 100)
       0,             // 회전 (0~360)
