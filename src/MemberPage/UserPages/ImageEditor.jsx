@@ -89,13 +89,18 @@ const SaveButtoncss=styled.button`
 const Body=styled.div`
     border: 1px solid red;
     position: relative;
+      display: flex;
+  justify-content: center;
+  align-items: center;
     height: 80%;
     width: 100%;
       overflow: hidden;
 `
 const Preimage=styled.img`
-    width: 100%;
-    height: 100%;
+    position: relative;
+    width: 550px;
+    height: 99%;
+    
     display: block;
     border: 3px solid blue;
   object-fit: cover;
@@ -150,6 +155,13 @@ export default function ImageEditor(props){
     const imgref=useRef(null);
 
     const [previmgaesrc,setpreviewsrc]=useState(null)
+    //크롭기준영역
+    const [crop,setCrop]=useState({
+        x:0,
+        y:0,
+        w:0,
+        h:0
+    })
 
     const handlemousedown=(e)=>{
         e.preventDefault();
@@ -188,7 +200,28 @@ export default function ImageEditor(props){
       newY = Math.min(minlimitY,Math.max(newY, maxlimitY));
 
       return { x: newX, y: newY };
+
+       
+
     });
+    //크롭값
+      setCrop(prev => {
+      let newX = prev.x + dx;
+      let newY = prev.y + dy;
+
+      const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
+      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
+      let minlimitY=(imgRect.height-focusHeight)/2;//아래최대
+      let maxlimitY=(imgRect.height-focusHeight)/2*-1;//위최대
+      // Body 안에서만 이동 가능하도록 제한
+          // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
+      
+      newX = Math.min(maxlimitX,Math.max(newX, minlimitX));
+      newY = Math.min(minlimitY,Math.max(newY, maxlimitY));
+            console.log("셋크롭설정값 x",newX,"y:",newY)
+      return { ...prev,x: newX, y: newY };
+    });
+
   };
 
   const handlemouseup = () => {
@@ -211,6 +244,30 @@ export default function ImageEditor(props){
         setImagedata(url);
         return ()=> URL.revokeObjectURL(url);
     },[file])
+    //받은 파일이미지 들어올시
+    const handleimageload=(e)=>{
+        const img=e.currentTarget;
+        const natw=img.naturalWidth;
+        const nath=img.naturalHeight;
+
+        const focusw=mode==="profile"?550:550;
+        const focush=mode==="profile"?550:150;
+
+         const initW = Math.min(focusw, natw);
+    const initH = Math.min(focush, nath);
+
+    const initX = (natw - initW) / 2;       // 가운데
+    const initY = nath / 3 - initH / 2;     // 세로 1/3 지점 근처
+        setCrop({
+            x:0,
+            y:nath/3,
+            w:natw,
+            h:nath/3
+        })
+        //초기화
+            setImgoffset({ x: 0, y: 0 });
+             setZoom(1);
+    }
     const handleEdit=()=>{
         onupdate(file)
     }
@@ -263,46 +320,30 @@ export default function ImageEditor(props){
         const focusWidth=550;
         const focusheight=150;
         //랜더된 이미지와 바디중간값
-        const body=bodyref.current.getBoundingClientRect();
-        const cxbody=body.width /2;
-        const cybody=body.height/2;
-        const cximg=cxbody+imgoffset.x;
-        const cyimg=cybody+imgoffset.y;
-        //좌표 역산
-        //렌더링된 이미지기준 focusdiv의 좌상단
-        const focusleft=(body.width-550)/2;
-        const focustop=(body.height-150)/2;
-
-        //화면상에서 이미지 실제위치
-        const imgleft=cxbody-(imgref.width/2)+imgoffset.x;
-        const imgtop=cybody-(imgref.height/2)+imgoffset.y;
-        //포커스디브의 좌상단이 이미지에서 며떨어진지
-        const sxdisplay=focusleft-imgleft;
-        const sydisplay=focustop-imgtop;
-
-        //원본 이미지 기준좌표
-        const sx=sxdisplay *(imgref.width/450);
-        const sy=sydisplay *(imgref.height/150);
+       
+       
+        
+     
         //캔버스의 크기 
         canvas.width=focusWidth;
         canvas.height=focusheight;
         
         const ctx=canvas.getContext('2d');
-        console.log("이미지저장2")
-        //임시
-        const sWidth=450;
-        const sHeight=150;
+       
         //이미지객체생성
         const img= new window.Image();
+
         img.src=Imagedata;
+
         console.log("이미지저장3")
-        const imgsize=imgref.current.getBoundingClientRect();
-        const stsy=imgsize.height/3;
+         const acturex=img.naturalWidth+imgoffset.x;
+        const acturey=img.naturalHeight/3+imgoffset.y;
+       
         img.onload=()=>{
             //전체이미지에서 값구해야할듯
-console.log("이미지저장실제크기:",img.naturalWidth,"x",img.naturalHeight,"y")
+console.log("y값:",img.naturalHeight,"acturey값:",acturey)
             ctx.drawImage(img,//원본
-                0,10,img.naturalWidth,img.naturalHeight/3,//원본이미지자를위치와크기 focus존
+                crop.x,crop.y,crop.w,crop.h,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 , canvas.width, canvas.height //dx,dy위치에 지정한크기로그림
             );
@@ -343,6 +384,7 @@ console.log("이미지저장실제크기:",img.naturalWidth,"x",img.naturalHeigh
                   offsetX={imgoffset.x}
                    offsetY={imgoffset.y}
                     ref={imgref}
+                    onLoad={handleimageload}
                  />}
       
                 <Focusdiv mode={mode} />
