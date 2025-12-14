@@ -146,7 +146,7 @@ export default function ImageEditor(props){
     const [zoom,setZoom]=useState(1)
     //꾹누르기용 
     const intervalid=useRef(null);
-
+    const [dragoffset,setdragoffset]=useState({x:0,y:0});
     //드래그 조정
     const [imgoffset,setImgoffset]=useState({x:0,y:0})
     const dragstartref=useRef({x:0,y:0});
@@ -185,14 +185,15 @@ export default function ImageEditor(props){
     dragstartref.current = { x: e.clientX, y: e.clientY };
             const focusHeight=150;
             const focusWidth=550;
+     const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
+      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
+      let minlimitY=(imgRect.height-focusHeight)/2*-1;//아래최대
+      let maxlimitY=(imgRect.height-focusHeight)/2;//위최대
     setImgoffset(prev => {
       let newX = prev.x + dx;
       let newY = prev.y + dy;
 
-      const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
-      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
-      let minlimitY=(imgRect.height-focusHeight)/2;//아래최대
-      let maxlimitY=(imgRect.height-focusHeight)/2*-1;//위최대
+  
       // Body 안에서만 이동 가능하도록 제한
           // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
       
@@ -204,26 +205,21 @@ export default function ImageEditor(props){
        
 
     });
-    //크롭값
-      setCrop(prev => {
-      let newX = prev.x + dx;
-      let newY = prev.y + dy;
-
-      const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
-      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
-      let minlimitY=(imgRect.height-focusHeight)/2;//아래최대
-      let maxlimitY=(imgRect.height-focusHeight)/2*-1;//위최대
-      // Body 안에서만 이동 가능하도록 제한
-          // Body 크기 기준 이동 제한 (transform 기반으로 직접 계산)
-      
-      newX = Math.min(maxlimitX,Math.max(newX, minlimitX));
-      newY = Math.min(minlimitY,Math.max(newY, maxlimitY));
-            console.log("셋크롭설정값 x",newX,"y:",newY)
-      return { ...prev,x: newX, y: newY };
-    });
-
-  };
-
+    //dx,dy저장
+    setdragoffset(prev => {
+    let dragNewX = prev.x + dx ;/// zoom;
+    let dragNewY = prev.y + dy ;/// zoom;
+    
+    
+   
+      console.log("dragx:",dragNewX);
+     console.log("dragy:",dragNewY,);
+  dragNewX = Math.min(maxlimitX, Math.max(dragNewX, minlimitX));
+  dragNewY = Math.min(maxlimitY, Math.max(dragNewY, minlimitY));
+    
+    return { x: dragNewX, y: dragNewY };
+  });
+};
   const handlemouseup = () => {
     isdraggingref.current = false;
   };
@@ -336,14 +332,16 @@ export default function ImageEditor(props){
         img.src=Imagedata;
 
         console.log("이미지저장3")
-         const acturex=img.naturalWidth+imgoffset.x;
-        const acturey=img.naturalHeight/3+imgoffset.y;
+         
        
+        const cropX=(dragoffset.x*-1)+crop.x;
+        const cropY=(dragoffset.y*-1)+crop.y;
+
         img.onload=()=>{
             //전체이미지에서 값구해야할듯
-console.log("y값:",img.naturalHeight,"acturey값:",acturey)
+console.log("y값:",img.naturalHeight,"acturey값:",cropY)
             ctx.drawImage(img,//원본
-                crop.x,crop.y,crop.w,crop.h,//원본이미지자를위치와크기 focus존
+                cropX,cropY,crop.w,crop.h,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 , canvas.width, canvas.height //dx,dy위치에 지정한크기로그림
             );
@@ -391,6 +389,8 @@ console.log("y값:",img.naturalHeight,"acturey값:",acturey)
             </Body>
        
         <Bottom>
+         <div style={{color:"black"}}>imgOffset x:{imgoffset.x}, y:{imgoffset.y}</div>
+  <div style={{color:"black"}}>dragOffset x:{dragoffset.x}, y:{dragoffset.y}</div>
             <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -0.1,1))}
                   onMouseDown={()=>gagemousedownminus(-0.1)}
                 onMouseLeave={gageplusmouseup}
@@ -405,6 +405,7 @@ console.log("y값:",img.naturalHeight,"acturey값:",acturey)
              onChange={(e)=>setZoom(parseFloat(e.target.value))} 
              step="0.1"
              />
+
             <Plusdiv onClick={()=>setZoom(prevZoom=>Math.min(prevZoom +0.1,3))}
                 onMouseDown={()=>gagemousedownplus(0.1)}
                 onMouseLeave={gageplusmouseup}
