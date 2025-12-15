@@ -146,7 +146,7 @@ export default function ImageEditor(props){
     const [zoom,setZoom]=useState(1)
     //꾹누르기용 
     const intervalid=useRef(null);
-    const [dragoffset,setdragoffset]=useState({x:0,y:0});
+   
     //드래그 조정
     const [imgoffset,setImgoffset]=useState({x:0,y:0})
     const dragstartref=useRef({x:0,y:0});
@@ -154,6 +154,15 @@ export default function ImageEditor(props){
     const bodyref=useRef(null);
     const imgref=useRef(null);
 
+    //포커스존 사이즈객체형식으로해봄 
+    const focus_size={
+        Profile:{width:550,height:550},
+        Background:{width:550,height:150},
+        default:{width:550,height:150}
+    }
+    //형식사용
+    const focussize=focus_size[mode]||focus_size.default;
+    
     const [previmgaesrc,setpreviewsrc]=useState(null)
     //크롭기준영역
     const [crop,setCrop]=useState({
@@ -183,12 +192,11 @@ export default function ImageEditor(props){
     const dy = e.clientY - dragstartref.current.y;
 
     dragstartref.current = { x: e.clientX, y: e.clientY };
-            const focusHeight=150;
-            const focusWidth=550;
-     const minlimitX = (imgRect.width - focusWidth) / 2*-1;  // 왼쪽 끝까지 이동
-      const maxlimitX = (imgRect.width - focusWidth) / 2;       // 오른쪽 끝까지 이동
-      let minlimitY=(imgRect.height-focusHeight)/2*-1;//아래최대
-      let maxlimitY=(imgRect.height-focusHeight)/2;//위최대
+           
+     const minlimitX = (imgRect.width - focussize.width) / 2*-1;  // 왼쪽 끝까지 이동
+      const maxlimitX = (imgRect.width - focussize.width) / 2;       // 오른쪽 끝까지 이동
+      let minlimitY=(imgRect.height-focussize.height)/2;//아래최대
+      let maxlimitY=(imgRect.height-focussize.height)/2*-1;//위최대
     setImgoffset(prev => {
       let newX = prev.x + dx;
       let newY = prev.y + dy;
@@ -206,19 +214,7 @@ export default function ImageEditor(props){
 
     });
     //dx,dy저장
-    setdragoffset(prev => {
-    let dragNewX = prev.x + dx ;/// zoom;
-    let dragNewY = prev.y + dy ;/// zoom;
     
-    
-   
-      console.log("dragx:",dragNewX);
-     console.log("dragy:",dragNewY,);
-  dragNewX = Math.min(maxlimitX, Math.max(dragNewX, minlimitX));
-  dragNewY = Math.min(maxlimitY, Math.max(dragNewY, minlimitY));
-    
-    return { x: dragNewX, y: dragNewY };
-  });
 };
   const handlemouseup = () => {
     isdraggingref.current = false;
@@ -240,20 +236,18 @@ export default function ImageEditor(props){
         setImagedata(url);
         return ()=> URL.revokeObjectURL(url);
     },[file])
+
     //받은 파일이미지 들어올시
     const handleimageload=(e)=>{
         const img=e.currentTarget;
         const natw=img.naturalWidth;
         const nath=img.naturalHeight;
 
-        const focusw=mode==="profile"?550:550;
-        const focush=mode==="profile"?550:150;
+    
 
-         const initW = Math.min(focusw, natw);
-    const initH = Math.min(focush, nath);
+         
 
-    const initX = (natw - initW) / 2;       // 가운데
-    const initY = nath / 3 - initH / 2;     // 세로 1/3 지점 근처
+   
         setCrop({
             x:0,
             y:nath/3,
@@ -301,6 +295,7 @@ export default function ImageEditor(props){
     //핸들로
     const handleWheel=(e)=>{
         e.preventDefault();
+        //wheeldelta는 구버전호환 이건위로스크롤시 +,deltaY는 위로스크롤시 e.deltay는 음수 
         const delta=-e.deltaY || e.wheelDelta; //휠방향감지
 
         setZoom(prev=>{
@@ -313,16 +308,15 @@ export default function ImageEditor(props){
     const saveFocusArea=()=>{
         console.log("이미지저장")
         const canvas=document.createElement('canvas');
-        const focusWidth=550;
-        const focusheight=150;
+    
         //랜더된 이미지와 바디중간값
        
        
         
      
         //캔버스의 크기 
-        canvas.width=focusWidth;
-        canvas.height=focusheight;
+        canvas.width=focussize.width;
+        canvas.height=focussize.height;
         
         const ctx=canvas.getContext('2d');
        
@@ -332,16 +326,26 @@ export default function ImageEditor(props){
         img.src=Imagedata;
 
         console.log("이미지저장3")
-         
-       
-        const cropX=(dragoffset.x*-1)+crop.x;
-        const cropY=(dragoffset.y*-1)+crop.y;
+        //쿰에따라 자를위치 
+        
 
         img.onload=()=>{
             //전체이미지에서 값구해야할듯
-console.log("y값:",img.naturalHeight,"acturey값:",cropY)
+        const cropW=crop.w/zoom;
+        const cropH=crop.h/zoom;
+        //줌변화로 인환 시작점이동
+        const zoomOffsetX=(crop.w-cropW)/2;//원본기준 시작점 우측
+        const zoomOffsetY=(crop.h-cropH)/2; //원본기준 시작점하단
+
+        //드래그이동반영
+        const dragOffsetX = (imgoffset.x * -1) / zoom;
+        const dragOffsetY = (imgoffset.y * -1) / zoom;
+        // 4. 최종 시작점 = 초기 + zoom 변화 + drag 이동
+        const cropX = crop.x + zoomOffsetX + dragOffsetX;
+        const cropY = crop.y + zoomOffsetY + dragOffsetY;
+
             ctx.drawImage(img,//원본
-                cropX,cropY,crop.w,crop.h,//원본이미지자를위치와크기 focus존
+                cropX,cropY,cropW,cropH,//원본이미지자를위치와크기 focus존
                 0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
                 , canvas.width, canvas.height //dx,dy위치에 지정한크기로그림
             );
@@ -390,7 +394,7 @@ console.log("y값:",img.naturalHeight,"acturey값:",cropY)
        
         <Bottom>
          <div style={{color:"black"}}>imgOffset x:{imgoffset.x}, y:{imgoffset.y}</div>
-  <div style={{color:"black"}}>dragOffset x:{dragoffset.x}, y:{dragoffset.y}</div>
+ 
             <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -0.1,1))}
                   onMouseDown={()=>gagemousedownminus(-0.1)}
                 onMouseLeave={gageplusmouseup}
