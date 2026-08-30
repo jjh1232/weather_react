@@ -6,14 +6,55 @@ import "react-image-crop/dist/ReactCrop.css"
 import styled from "styled-components";
 
 const Wrapper=styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
 `
-const Preview=styled.div`
-    border:1px solid;
-    width:45px;
-    height:45px;
+const Filefield=styled.label`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 38px;
+    cursor: pointer;
+
+    border: 1px dashed ${(props)=>props.theme.borderStrong};
+    border-radius: ${(props)=>props.theme.radius};
+    background: ${(props)=>props.theme.surfaceAlt};
+    color: ${(props)=>props.theme.textMuted};
+    font-size: 12.5px;
+    font-weight: 650;
+    transition: border-color ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    &:hover {
+        border-color: ${(props)=>props.theme.accent};
+        color: ${(props)=>props.theme.accent};
+    }
+
+    input { display: none; }
 `
-export default function ReactCrpooer(){
+const Hint=styled.div`
+    width: 100%;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: ${(props)=>props.theme.textFaint};
+`
+const Cropbox=styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: ${(props)=>props.theme.radius};
+    background: ${(props)=>props.theme.surfaceAlt};
+
+    img { max-width: 100%; }
+`
+export default function ReactCrpooer(props){
+
+    const {onResult}=props;
 
     const [imagesrc,setImagesrc]=useState();
     const [crop,SetCrop]=useState({
@@ -86,6 +127,8 @@ export default function ReactCrpooer(){
 
             
             setCropsrc(crooppedImageUrl)
+            //자체 저장 버튼 대신 부모(Userimage)가 미리보기와 적용을 담당한다
+            if(onResult) onResult(crooppedImageUrl)
         }
     }
     const getCropimg=(image,crop,filename)=>{
@@ -136,60 +179,33 @@ export default function ReactCrpooer(){
     }
 return (
     <Wrapper>
-    <div>
-     
-    <input
-    type="file"
-    accept="image/jpeg, image/png, image/jpg"
-    onChange={Selectfilehandler}
-    
-    />
 
-    </div>
-    <div>
-        {//imagesrc&&<img src={imagesrc}/>
-        }<br/>
-       
-    </div>
+    <Filefield>
+        사진 선택하기
+        <input
+            type="file"
+            accept="image/jpeg, image/png, image/jpg"
+            onChange={Selectfilehandler}
+        />
+    </Filefield>
+
     {imagesrc&&
     <>
-    원하는부분을 드래그해주세요<br/>
+    <Hint>원하는 부분을 드래그해주세요</Hint>
+    <Cropbox>
     <ReactCrop
         src={imagesrc}
-        
         crop={crop}
         onChange={(e)=>{SetCrop(e)}}
         onComplete={OnCropComplete}
         onImageLoaded={imageloaded(imagesrc,crop)}
-        
-        
-    /*
-        src={}
-        crop={}
-
-        onComplete={}
-        onChange={}
-        */
         >
-        {//
-        
-}
-
-<img src={imagesrc} ref={imageref}/> 
-</ReactCrop>
-        
-        <br/>
-        {cropsrc &&
-        <>
-        미리보기<br/>
-        <Preview>
-        <img src={cropsrc} style={{objectFit:"fill",width:"100%",height:"100%"}}/>
-        </Preview>
-        </>}
-        </>
+        <img src={imagesrc} ref={imageref} alt="원본"/>
+    </ReactCrop>
+    </Cropbox>
+    </>
     }
 
-    <button onClick={parentdev}>프로필이미지저장</button>
     </Wrapper>
 
 )

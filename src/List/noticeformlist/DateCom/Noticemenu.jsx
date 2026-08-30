@@ -9,14 +9,29 @@ import { useState } from "react";
 import Noticeblockmodal from "./Menumodal/Noticeblockmodal";
 import Noticedeclmodal from "./Menumodal/Noticedeclmodal";
 import { useCookies } from "react-cookie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faUserMinus } from "@fortawesome/free-solid-svg-icons";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faFlag } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 const Wrapper=styled.div`
     position: absolute;
     right: 0px;
+    top: 32px;
     width: 200px;
     display: flex;
     
     flex-direction: column;
     z-index: 1000;
+
+    overflow: hidden;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radius};
+    background: ${(props)=>props.theme.surface};
+    box-shadow: ${(props)=>props.theme.shadowLg};
 `
 //투명오버레이를 만들어서 외부클릭을막기로함
 const Outclickdiv=styled.div`
@@ -30,10 +45,53 @@ const Outclickdiv=styled.div`
     cursor: auto;
     
 `
+// 메뉴 항목.
+// 아이콘 자리를 고정폭으로 두어 글자가 세로로 맞아떨어지게 한다.
+// $danger 는 신고/삭제처럼 되돌리기 어려운 동작에만 쓴다.
 const Innerdiv=styled.div`
-    background-color: gray;
-    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: ${(props)=>props.$danger?props.theme.warning:props.theme.text};
+    background-color: ${(props)=>props.theme.surface};
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    cursor: pointer;
     z-index: 1000;
+    white-space: nowrap;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    &:last-child { border-bottom: none; }
+
+    /* 내용이 없는 항목은 빈 줄로 보이므로 감춘다 */
+    &:empty { display: none; }
+
+    &:hover {
+        background-color: ${(props)=>props.$danger
+            ?"rgba(255, 82, 82, 0.12)"
+            :props.theme.accentSoft};
+        color: ${(props)=>props.$danger?props.theme.warning:props.theme.accent};
+    }
+`
+// 아이콘 칸 - 라벨 시작점을 맞춰준다
+const Iconslot=styled.span`
+    flex-shrink: 0;
+    width: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    opacity: .85;
+`
+// 팔로우/차단·신고 를 성격별로 나누는 얇은 구분선
+const Groupline=styled.div`
+    height: 5px;
+    background: ${(props)=>props.theme.surfaceAlt};
+    border-bottom: 1px solid ${(props)=>props.theme.border};
 `
 
 
@@ -53,8 +111,6 @@ export default function Noticemenu(props){
    const isowner=cookies.userinfo?noticeuser===cookies.userinfo["username"]?true:false:false;
    const username=cookies.userinfo?cookies.userinfo["username"]:"";
    const nickname=cookies.userinfo?cookies.userinfo["nickname"]:"";
-
-   const {usercookie}=useCookies();
 
    useEffect(()=>{
     if(!cookies.userinfo){
@@ -116,7 +172,8 @@ export default function Noticemenu(props){
         mutationFn:()=>axiosinstance.get(`/follow?friendname=${noticeuser}`)
         ,onSuccess:()=>{
             queryClient.invalidateQueries({queryKey:[`followch`,noticeuser]})
-            queryClient.invalidateQueries({queryKey:[`followlistdata`,usercookie.userinfo?.userid]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`,cookies.userinfo?.userid]})
+            alert("유저를팔로우했습니다")
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
@@ -125,25 +182,24 @@ export default function Noticemenu(props){
         mutationFn:()=> axiosinstance.delete(`/followdelete/${noticeuser}`)
         ,onSuccess:()=>{//캐시업데이트
             queryClient.invalidateQueries({queryKey:[`followch`,noticeuser]})
-            queryClient.invalidateQueries({queryKey:[`followlistdata`,usercookie.userinfo?.userid]})
+            queryClient.invalidateQueries({queryKey:[`followlistdata`,cookies.userinfo?.userid]})
+            alert("유저를팔로우해제했습니다")
         },onError:()=>{
             alert("잠시후시도해주세요")
         }
     })
 
     const usermove=()=>{
-        navigate(`/userpage/${username}`)
+        navigate(`/userpage/${cookies.userinfo?.profileid||username}`)
     }
    
+    //알림은 onSuccess 로 옮겼다. 여기서 부르면 요청이 끝나기도 전에,
+    //그리고 실패했을 때도 "팔로우했습니다" 가 떠버린다.
     const followhandler=()=>{
         userfollow.mutate();
-      //  setFollowcheck(true)
-        alert("유저를팔로우했습니다")
     }
     const unfollowhandler=()=>{
         deletefollow.mutate();
-        //setFollowcheck(false)
-        alert("유저를팔로우해제했습니다")
     }
  
    
@@ -214,39 +270,46 @@ export default function Noticemenu(props){
                     </Innerdiv>
                   
                     {followcheck?<Innerdiv onClick={()=>{unfollowhandler()}}>
-                        언팔로우@{nickname}
-                        
+                        <Iconslot><FontAwesomeIcon icon={faUserMinus}/></Iconslot>
+                        팔로우 해제
                     </Innerdiv>
                      :<Innerdiv onClick={()=>{followhandler()}}>
-                        팔로우@{nickname}
-                        
+                        <Iconslot><FontAwesomeIcon icon={faUserPlus}/></Iconslot>
+                        팔로우
                     </Innerdiv>}
-                   {blockcheck? 
+
+                    <Groupline/>
+
+                   {blockcheck?
                    <Innerdiv onClick={()=>{blockcancel(noticeid)}}>
-                   게시글차단해제 
-                   
-               </Innerdiv>
+                       <Iconslot><FontAwesomeIcon icon={faEye}/></Iconslot>
+                       차단 해제
+                   </Innerdiv>
                    :<Innerdiv onClick={()=>{setIsnoticeblockform(!isnoticeblockform) }}>
-                        게시글차단 
-                        
+                        <Iconslot><FontAwesomeIcon icon={faBan}/></Iconslot>
+                        이 게시글 차단
                     </Innerdiv>}
-                    {declecheck? <Innerdiv onClick={()=>{declecancel(noticeid)}}>
-                        게시글신고해제
-                        
-                    </Innerdiv>: <Innerdiv onClick={()=>{setIsdeclationform(!isdeclationform)}}>
-                        게시글신고
-                        
+
+                    {declecheck?
+                    <Innerdiv onClick={()=>{declecancel(noticeid)}}>
+                        <Iconslot><FontAwesomeIcon icon={faFlag}/></Iconslot>
+                        신고 취소
+                    </Innerdiv>
+                    :<Innerdiv $danger onClick={()=>{setIsdeclationform(!isdeclationform)}}>
+                        <Iconslot><FontAwesomeIcon icon={faFlag}/></Iconslot>
+                        이 게시글 신고
                     </Innerdiv>}
+
                    {isowner&&<>
-                <Innerdiv onClick={()=>{deletemethod()}}>
-                게시글삭제@{nickname}
-                
-            </Innerdiv>
+                    <Groupline/>
                 <Innerdiv onClick={()=>{updatemethod()}}>
-                게시글수정@{nickname}
-               
+                <Iconslot><FontAwesomeIcon icon={faPen}/></Iconslot>
+                게시글 수정
             </Innerdiv>
-            
+                <Innerdiv $danger onClick={()=>{deletemethod()}}>
+                <Iconslot><FontAwesomeIcon icon={faTrash}/></Iconslot>
+                게시글 삭제
+            </Innerdiv>
             </>
             }
                     {isnoticeblockform&&<Noticeblockmodal ismodal={setIsnoticeblockform} noticeid={noticeid} setisblock={setisblock}/> }

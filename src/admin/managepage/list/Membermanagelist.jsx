@@ -1,43 +1,20 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import AdminUpdateform from "../../../customhook/Admintools/AdminUpdateform";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faImages} from "@fortawesome/free-solid-svg-icons"
 import {faComment} from "@fortawesome/free-regular-svg-icons"
 import {faComments} from "@fortawesome/free-regular-svg-icons"
 import {faSheetPlastic} from "@fortawesome/free-solid-svg-icons"
+import { Tr, Td, Button, Iconbutton, Badge, Countcell, Mono, Clamp } from "../../AdminUI";
+import UserMenu from "../../UserMenu";
 
-
-const Button=styled.button`
-position: relative;
-display: inline-block;
-width: 32%;
-height: 90%;
-font-size: 15px;
-//padding: 30px 4px;
-color: white;
-margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 20px; //모서리
-text-align: center;
-transition: top .04s linear;
-text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-background-color: ${(props)=>props.backcolor};
-`
-
-const Tbody=styled.tbody`
-   height: 10%;
-`
-const Tr=styled.tr`
-    height: 10%;
-    
-`
-const Line=styled.td`
-    height: 50px;
-    border: 1px solid gray;
-`
+//회원 한 줄.
+//예전엔 이 컴포넌트가 <tbody> 를 통째로 만들어서 회원 수만큼 tbody 가 생겼고,
+//수정 모달(div)이 <table> 안에 형제로 끼어 있어 마크업이 깨졌다.
+//지금은 <tr> 하나만 돌려주고, 모달은 body 로 포털한다(모달은 position:fixed 다).
 export default function Membermanagelist(props){
-    const {data,key,deletemember}=props
+    const {data,deletemember}=props
 
     const [isupdate,setIsupdate]=useState(false);
     const navigate=useNavigate();
@@ -53,58 +30,76 @@ export default function Membermanagelist(props){
     }
 
     const userhistoryon=(username)=>{
-   
-
         window.open(`/admin/loginhistory?username=${username}`,"로그인기록",
             "noopener,noreferreor,location=no,menubar=no,toolbar=no,scrollbars=no,width=600px,height=500px")
     }
+
     return(<>
-        {isupdate?<AdminUpdateform 
-        setIsupdate={setIsupdate} currentdata={data}/>:""}
-        <Tbody key={key}>
-            <Tr>
-                
-                <Line>{data.id} </Line>
-                <Line>{data.username} </Line>
-                <Line>{data.nickname} </Line>
-                
-                <Line>{data.provider}</Line>
-                <Line>{data.role}</Line>
-                <Line>{data.homeaddress.juso}</Line>
-                <Line>{data.usernotice}
-                    <br/>
-                    <FontAwesomeIcon icon={faSheetPlastic} onClick={()=>{noticesearch(data.username)}}
-                                                               style={{cursor:"pointer"}} />
-                                                           
-                </Line>
-                <Line>{data.usercomments}
-                <br/>
-                    <FontAwesomeIcon icon={faComment} onClick={()=>{commentsearch(data.username)}}
-                                                               style={{cursor:"pointer"}} />
-                                                          
-                </Line>
-                <Line>{data.userchatroom}
-                <br/>
-                    <FontAwesomeIcon icon={faComments} onClick={()=>{roomsearch(data.username)}}
-                                                               style={{cursor:"pointer"}}/>
-                </Line>
-                <Line>{data.red} </Line>
-               
-                <Line style={{width:"15%"}}>
+        {isupdate && ReactDOM.createPortal(
+            <AdminUpdateform setIsupdate={setIsupdate} currentdata={data}/>,
+            document.body)}
 
-                    
-                <Button backcolor="green" onClick={()=>{userhistoryon(data.username);}}>로그인<br/>기록</Button>
-                <Button backcolor="blue"
-                onClick={()=>{setIsupdate(true)}}>정보<br/>수정</Button> 
-                <Button  backcolor="red"
-                onClick={()=>{deletemember(data.id)}}>회원<br/>삭제</Button>
-              
+        <Tr>
+            <Td $align="center"><Mono>{data.id}</Mono></Td>
+            <Td>
+                <UserMenu email={data.username} nickname={data.nickname}>
+                    <Clamp as="span" $lines={1}>{data.username}</Clamp>
+                </UserMenu>
+            </Td>
+            <Td>
+                <UserMenu email={data.username} nickname={data.nickname}>
+                    <Clamp as="span" $lines={1}>{data.nickname}</Clamp>
+                </UserMenu>
+            </Td>
 
-                </Line>
-                </Tr>
-              
-                </Tbody>
-               
-                </>
-    )
+            <Td $align="center"><Badge>{data.provider||"local"}</Badge></Td>
+            <Td $align="center">
+                <Badge $tone={data.role==="ROLE_Admin"?"accent":undefined}>
+                    {data.role==="ROLE_Admin"?"관리자":"회원"}
+                </Badge>
+            </Td>
+            <Td><Clamp $lines={1}>{data.homeaddress?.juso}</Clamp></Td>
+
+            <Td $align="center">
+                <Countcell>
+                    {data.usernotice}
+                    <Iconbutton type="button" title="이 회원의 게시글 보기"
+                        onClick={()=>noticesearch(data.username)}>
+                        <FontAwesomeIcon icon={faSheetPlastic}/>
+                    </Iconbutton>
+                </Countcell>
+            </Td>
+            <Td $align="center">
+                <Countcell>
+                    {data.usercomments}
+                    <Iconbutton type="button" title="이 회원의 댓글 보기"
+                        onClick={()=>commentsearch(data.username)}>
+                        <FontAwesomeIcon icon={faComment}/>
+                    </Iconbutton>
+                </Countcell>
+            </Td>
+            <Td $align="center">
+                <Countcell>
+                    {data.userchatroom}
+                    <Iconbutton type="button" title="이 회원의 채팅방 보기"
+                        onClick={()=>roomsearch(data.username)}>
+                        <FontAwesomeIcon icon={faComments}/>
+                    </Iconbutton>
+                </Countcell>
+            </Td>
+
+            <Td><Mono>{data.red}</Mono></Td>
+
+            <Td $align="center">
+                <Countcell>
+                    <Button type="button" $small
+                        onClick={()=>userhistoryon(data.username)}>기록</Button>
+                    <Button type="button" $small
+                        onClick={()=>setIsupdate(true)}>수정</Button>
+                    <Button type="button" $small $variant="danger"
+                        onClick={()=>deletemember(data.id)}>삭제</Button>
+                </Countcell>
+            </Td>
+        </Tr>
+    </>)
 }

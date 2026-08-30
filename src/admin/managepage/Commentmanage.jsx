@@ -1,144 +1,108 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useState } from "react";
+import { useToast } from "../../UI/Feedback/FeedbackProvider";
 import { useSearchParams } from "react-router-dom";
 import CommentList from "./list/CommentList";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
-import Pagenation from "../../customhook/Pagenation";
-import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
-const Wrapper=styled.div`
-  position: absolute;
-    top: 0%;
-    left:18%;
-    width: 80%;
-    height: 99%;
-    border: 1px solid black;
-    text-align: center;
-    
-`
-const Header=styled.div`
-    background-color: black;
-    color: white;
-`
-
-const Commentsearch=styled.div`
-    position: relative;
-    float: right;
-    right: 0%;
-   
-`
-const Maintable=styled.table`
-position: relative;
-width:100%;
-bottom: 21px;
-vertical-align: top;
-float   :left ;
-background-color: white;
-border-spacing: 0px;
-border-collapse: collapse;
-font-size: 15px;
-`
-const TableHeader=styled.thead`
-    background-color:rgb(44,44,44);
-`
-const Thcss=styled.th`
-    color: white;
-    height: 5px;
-`
+import { Page, Pagehead, Pagetitle, Pagemeta, Headright, Panel,
+         Tablewrap, Table, Th, Emptyrow, Adminpaging } from "../AdminUI";
 
 export default function Commentmanage(){
 
-const axiosinstance=CreateAxios();
-const [comments,setComments]=useState();
-const [totalpage,setTotalpage]=useState();
+    const axiosinstance=CreateAxios();
+    const toast=useToast();
+    const [comments,setComments]=useState();
+    const [totalpage,setTotalpage]=useState();
+    const [totalelement,setTotalelement]=useState();
 
+    const [query]=useSearchParams();
+    const querydata={
+        page:parseInt(query.get("page")) || 1,
+        option:query.get("option") ,
+        keyword:query.get("keyword")
+    }
 
-const [query,setQuery]=useSearchParams();
-            
-            const querydata={
-                page:parseInt(query.get("page")) || 1,
-                option:query.get("option") ,
-                keyword:query.get("keyword") 
-        
+    const options = [
+        {value:"email",name:"이메일"},
+        {value:"nickname",name:"닉네임"},
+        {value:"noticenum",name:"게시글 번호"}
+    ]
+
+    useEffect(()=>{
+        commentget()
+    },[querydata.page,querydata.option,querydata.keyword])
+
+    const commentget=()=>{
+        axiosinstance.get(`/admin/commentmanage`,{
+            params:{
+                page:querydata.page,
+                option:querydata.option,
+                searchtext:querydata.keyword
             }
-
-            const options = [
-                {value:"email",name:"이메일"}, 
-                {value:"nickname",name:"닉네임"},
-                {value:"noticenum",name:"작성된게시글"} 
-                
-              ]
-
-useEffect(()=>{
-    commentget()
-},[querydata.page,querydata.option,querydata.keyword])
-
-const commentget=()=>{
-    axiosinstance.get(`/admin/commentmanage`,{
-        params:{
-            page:querydata.page,
-            option:querydata.option,
-            searchtext:querydata.keyword
-                }
-    }).then((res)=>{
-        setComments(res.data.content)
-        setTotalpage(res.data.totalPages)
-    })
-}
+        }).then((res)=>{
+            setComments(res.data.content)
+            setTotalpage(res.data.totalPages)
+            setTotalelement(res.data.totalElements)
+        })
+    }
 
     const deletecomment=(commentid)=>{
-        console.log("코멘트아이디"+commentid)
         axiosinstance.delete(`/admin/commentdelete/${commentid}`)
         .then((res)=>{
-            alert("삭제완료되었습니다")
+            toast.success("삭제완료되었습니다")
             commentget()
         }).catch((err)=>{
-            alert(err)
+            toast.error(err)
         })
     }
 
     return (
-        <Wrapper>
-            <AdminHeader>
-                <h3>회원댓글관리</h3>
-                
-            <Commentsearch>
-            <AdminSearchtools
-                                searchdatas={querydata}
-                                options={options}
-                                url={"/admin/comment"}
-                                />
-            </Commentsearch>
-            </AdminHeader>
+        <Page>
+            <Pagehead>
+                <Pagetitle>댓글 관리</Pagetitle>
+                <Pagemeta>총 {totalelement??0}건 · {totalpage??1}페이지</Pagemeta>
 
-                 <Maintable>
-                    <TableHeader>
-                <tr>
-                    <Thcss style={{width:"3%"}}>번호</Thcss>
-                    <Thcss style={{width:"5%"}}>댓글작성자이메일</Thcss>
-                    <Thcss style={{width:"4%"}}>댓글작성자닉네임</Thcss>
-                    <Thcss style={{width:"20%"}}>댓글작성내용</Thcss>
-                    <Thcss style={{width:"3%"}}>작성한게시글</Thcss>
-                    <Thcss style={{width:"2%"}}>댓글작성날짜</Thcss>
-                    <Thcss style={{width:"3%"}}>회원댓글관리</Thcss>
-                    
-                    
+                <Headright>
+                    <AdminSearchtools
+                        searchdatas={querydata}
+                        options={options}
+                        url={"/admin/comment"}
+                    />
+                </Headright>
+            </Pagehead>
 
-                </tr>
-                </TableHeader>
-                {comments&&comments.map((data,key)=>{
-                    return (
-                        <CommentList data={data} key={key} deletemethod={deletecomment}/>
-                    )
-                })}
+            <Panel>
+                <Tablewrap>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <Th $align="center">번호</Th>
+                                <Th>작성자 이메일</Th>
+                                <Th>닉네임</Th>
+                                <Th>내용</Th>
+                                <Th $align="center">게시글</Th>
+                                <Th>작성일</Th>
+                                <Th $align="center">관리</Th>
+                            </tr>
+                        </thead>
 
-                </Maintable>
-                <br/>
-                <Pagenation  totalpage={totalpage}
-                                      url={"/admin/comment"}
-                                        querydata={querydata}
-                                      />
-        </Wrapper>
+                        {comments && comments.length>0
+                            ? <tbody>
+                                {comments.map((data)=>(
+                                    <CommentList key={data.id} data={data}
+                                        deletemethod={deletecomment}
+                                        onchanged={commentget}/>
+                                ))}
+                              </tbody>
+                            : <Emptyrow colspan={7}>
+                                {querydata.keyword?"검색 결과가 없습니다":"댓글이 없습니다"}
+                              </Emptyrow>}
+                    </Table>
+                </Tablewrap>
+            </Panel>
+
+            <Adminpaging totalpage={totalpage} url={"/admin/comment"} querydata={querydata}/>
+        </Page>
     )
 }

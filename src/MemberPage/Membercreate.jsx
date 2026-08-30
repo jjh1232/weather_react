@@ -15,63 +15,118 @@ import { faClipboardCheck as confirmicon } from "@fortawesome/free-solid-svg-ico
 import { faIdCard as profileicon } from "@fortawesome/free-regular-svg-icons";
 import { faHouse as regionicon } from "@fortawesome/free-solid-svg-icons";
 import { faCircleXmark as xicon } from "@fortawesome/free-solid-svg-icons";
+import BrandMark from "../UI/BrandMark";
+import { useToast, messageFromError } from "../UI/Feedback/FeedbackProvider";
+import { API_BASE } from "../config/api";
+import { oauthredirect } from "../UI/Authmarks";
 const Wrapper=styled.div`
-position: relative;
-
-width:100%;
-height:100vh;
- 
-display: flex;
-flex-direction: column;
- 
-  align-items: center;   
-`
-const Headerdiv=styled.div`
     position: relative;
-    margin-top:50px;
-    border: 1px solid gray;
-    width: 600px;
-    height: 80px;
-    margin-bottom:30px;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 16px 64px;
+    background: ${(props)=>props.theme.page};
+    color: ${(props)=>props.theme.text};
+
+    @media (max-width: 620px) {
+      padding: 28px 14px 48px;
+    }
 `
+//예전에는 "헤더" 라는 글자가 회색 네모 안에 그대로 남아 있었다.
+const Headerdiv=styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 26px;
+    user-select: none;
+`
+const Brandrow=styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+`
+const Wordmark=styled.span`
+    font-size: 20px;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    background-image: linear-gradient(
+        120deg,
+        ${(props)=>props.theme.accent},
+        ${(props)=>props.theme.accentHover}
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+`
+const Headertitle=styled.h3`
+    margin: 12px 0 0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+`
+const Headersub=styled.p`
+    margin: 0;
+    font-size: 13.5px;
+    color: ${(props)=>props.theme.textMuted};
+`
+//폼 카드. 600px 고정이라 모바일에서 가로로 삐져나갔다.
 const Maindiv=styled.div`
-    margin-top: 30px;
     display: flex;
     position: relative;
-    
-    width: 600px;
-   align-items: center;
-   justify-content: center;
+    width: min(560px, 100%);
+    padding: 26px 26px 22px;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusLg};
+    background: ${(props)=>props.theme.surface};
+    box-shadow: ${(props)=>props.theme.shadowLg};
 
+    @media (max-width: 620px) {
+      padding: 20px 18px 18px;
+    }
 `
 const StyledForm=styled.form`
     width: 100%;
 `
-const StyledTable=styled.table`
+//예전에는 <table><tbody> 안에 div(Formrow)를 넣고 있어서
+//브라우저가 DOM 중첩 경고를 냈다. 표가 아니라 세로 스택이 맞다.
+const Fieldstack=styled.div`
+    display: flex;
+    flex-direction: column;
     width: 100%;
 `
 const Formrow=styled.div`
-    min-height: 50px;
     display: flex;
     width: 100%;
-    flex-direction:column;
-    
-    
+    flex-direction: column;
 `
 
 
 const Inputcell=styled.div`
-position: relative;
+    position: relative;
     display: flex;
+    align-items: center;
     text-align: left;
-    gap: 6px;
-      background-color: #fff;
-  border: 1px solid ${(props)=>props.hasError? "#f57676":"#ccc"} ;
-  color: ${(props)=>props.hasError? "#f55656":"#ccc"} ;
-  border-radius: 4px;
-  padding: 8px 12px;
-  
+    gap: 8px;
+    height: ${(props)=>props.theme.fieldHeight};
+    padding: 0 10px 0 ${(props)=>props.theme.fieldPadX};
+    background: ${(props)=>props.theme.surfaceAlt};
+    border: 1px solid ${(props)=>props.hasError?props.theme.warning:props.theme.border};
+    border-radius: ${(props)=>props.theme.radius};
+    transition: border-color ${(props)=>props.theme.transition},
+                box-shadow ${(props)=>props.theme.transition};
 
+    /* 포커스 링은 칸 전체에 준다. input 이 테두리 없이 안에 얹혀 있어서
+       입력창 자체에 걸면 화면에 아무 표시도 나지 않는다. */
+    &:focus-within {
+        border-color: ${(props)=>props.hasError?props.theme.warning:props.theme.accent};
+        box-shadow: 0 0 0 3px ${(props)=>props.hasError
+            ?"rgba(255, 82, 82, 0.14)"
+            :props.theme.accentSoft};
+    }
 `
 const SubButtondiv=styled.div`
     
@@ -82,52 +137,57 @@ const SubButtondiv=styled.div`
 
  
 `
+//통과 / 실패 / 아직 안함 세 상태를 색으로 구분한다.
+const subtone=(props)=>{
+  if(props.isChecked==="success") return props.theme.toneSuccess;
+  if(props.isChecked==="fail") return props.theme.warning;
+  return props.theme.accent;
+}
 const SubButton=styled.button`
-     height: 25px;
-  padding: 0 12px;
-  border: 1px solid ${(props)=>(props.isChecked ==="success" ? "#88da78" :
-                                props.isChecked === "fail" ? "#ec4b35" :"#4d90fe"
-  )} ;
-  background-color: ${(props)=>(props.isChecked ==="success" ? "#88da78" :
-                                props.isChecked === "fail" ? "#ec4b35" :"#4d90fe")};
-  color: white;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+    flex: none;
+    height: 30px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    background: ${subtone};
+    color: #fff;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: filter ${(props)=>props.theme.transition},
+                background ${(props)=>props.theme.transition};
 
-  &:hover {
-    background-color: #357ae8;
-  }
-
-  &:disabled {
-    background-color: #a5c6ff;
-    cursor: not-allowed;
-  }
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+    &:active:not(:disabled) { filter: brightness(0.94); }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+    &:focus-visible {
+        outline: 2px solid ${(props)=>props.theme.accent};
+        outline-offset: 2px;
+    }
 `
 //아이콘
 const StyledIcon=styled(FontAwesomeIcon)`
-    
-    margin-top: 4px;
-    color:${(props)=>props.hasError? "#f55656":"#ccc"};
+    flex: none;
+    font-size: 15px;
+    color: ${(props)=>props.hasError?props.theme.warning:props.theme.textFaint};
 `
 const Inputarea=styled.input`
-    background-color: #fff;
-    width:70%;
-    
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
     outline: none;
     border: none;
-    height: 22px;
-    color: ${(props)=>props.hasError? "#f55656":"black"};
+    font-size: ${(props)=>props.theme.fieldFont};
+    color: ${(props)=>props.theme.text};
 
-    //pladceholder스타일
     &::placeholder{
-        
-        color:#999;
-        font-style: italic; 
-         font-size: 14px; 
-        opacity: 1;   
+        color: ${(props)=>props.theme.textFaint};
+        font-size: 14px;
+        opacity: 1;
     }
+    &:read-only { cursor: default; }
 `
 const ClearButton=styled.button`
     position: relative;
@@ -138,46 +198,156 @@ const ClearButton=styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    visibility: ${(props)=>props.visible?"visable":"hidden"};
+        /* "visable" 오타 때문에 지금까지 지우기 버튼이 항상 보이는 상태였다 */
+    visibility: ${(props)=>props.visible?"visible":"hidden"};
     cursor: pointer;
+    flex: none;
 `
 const Clearicon=styled(FontAwesomeIcon)`
-    font-size: 20px;
-    color: red;
+    font-size: 17px;
+    color: ${(props)=>props.theme.textFaint};
+
+    &:hover { color: ${(props)=>props.theme.warning}; }
 `
+//메시지가 없을 때도 자리를 잡아둬야 아래 칸들이 위아래로 튀지 않는다.
 const Errordiv=styled.div`
-display: flex;
-    text-align: center;
+    display: flex;
     align-items: center;
+    min-height: 26px;
+    padding: 4px 2px 0;
+    font-size: 12.5px;
+    color: ${(props)=>props.theme.warning};
+
+    p { margin: 0; }
+`
+//이미 가입된 이메일일 때, 어떤 방식으로 가입했는지 알려주는 줄.
+//"이미 가입된 이메일입니다" 만으로는 구글로 가입해 둔 걸 모르고 계속 시도하게 된다.
+const Takennotice=styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2px 0 6px;
+    padding: 10px 12px;
+    border: 1px solid ${(props)=>props.theme.warning};
+    border-radius: ${(props)=>props.theme.radius};
+    background: rgba(255, 82, 82, 0.07);
+    font-size: 13px;
+    line-height: 1.5;
+    color: ${(props)=>props.theme.text};
+`
+const Takentext=styled.span`
+    flex: 1;
+    min-width: 150px;
+`
+const Takenbutton=styled.button`
+    flex: none;
     height: 30px;
-     font-size:15px;
-    color: red;
-    
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.accent};
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter ${(props)=>props.theme.transition};
+
+    &:hover { filter: brightness(1.08); }
+    &:focus-visible {
+        outline: 2px solid ${(props)=>props.theme.accent};
+        outline-offset: 2px;
+    }
+`
+//동의 영역. 개인정보 보호법상 수집·이용 동의는 가입 전에 받아야 한다.
+const Agreebox=styled.div`
+    margin-top: 14px;
+    padding: 12px 14px;
+    border: 1px solid ${(props)=>props.$invalid?props.theme.warning:props.theme.border};
+    border-radius: ${(props)=>props.theme.radius};
+    background: ${(props)=>props.theme.surfaceAlt};
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+`
+const Agreerow=styled.label`
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 2px;
+    font-size: 13.5px;
+    cursor: pointer;
+    user-select: none;
+    color: ${(props)=>props.theme.text};
+    border-bottom: ${(props)=>props.$divider?`1px solid ${props.theme.border}`:"none"};
+    font-weight: ${(props)=>props.$strong?600:400};
+
+    input {
+        width: 17px;
+        height: 17px;
+        flex: none;
+        accent-color: ${(props)=>props.theme.accent};
+        cursor: pointer;
+    }
+`
+const Requiredtag=styled.span`
+    flex: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: ${(props)=>props.theme.accent};
+`
+const Viewlink=styled.a`
+    margin-left: auto;
+    flex: none;
+    font-size: 12.5px;
+    color: ${(props)=>props.theme.textMuted};
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover { color: ${(props)=>props.theme.accent}; }
 `
 const Footerdiv=styled.div`
-margin-top: 30px;
-
- display:flex;
- justify-content: center;
-
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
 `
 const SubmitButton=styled.button`
-    margin-top: 20px;
-    width: 400px;
-    height: 50px;
+    margin-top: 8px;
+    width: 100%;
+    height: ${(props)=>props.theme.fieldHeight};
     border: none;
-    background: #4873ff;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.accent};
+    color: #fff;
+    font-size: ${(props)=>props.theme.fieldFont};
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: filter ${(props)=>props.theme.transition};
 
-     cursor: pointer;
-  transition: background-color 0.2s ease;
-    color: white;
-    font-size:25px;
-
-  &:hover {
-    background-color: #357ae8;
-  }
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+    &:active:not(:disabled) { filter: brightness(0.94); }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+    &:focus-visible {
+        outline: 2px solid ${(props)=>props.theme.accent};
+        outline-offset: 2px;
+    }
 `
 
+
+//provider 는 자체가입이면 "mypage", 소셜이면 "Google"/"Naver" 로 온다.
+const providerlabel=(provider)=>{
+    const v=(provider||"").toLowerCase();
+    if(v==="google") return "구글";
+    if(v==="naver") return "네이버";
+    return "";
+}
+const takenmessage=(provider)=>{
+    const v=(provider||"").toLowerCase();
+    if(v==="mypage") return "이미 가입된 이메일입니다. 로그인해주세요.";
+    if(v==="google"||v==="naver") return providerlabel(provider)+" 계정으로 가입된 이메일입니다.";
+    return "이미 가입된 이메일입니다.";
+}
 
 function membercreate(){
  
@@ -198,11 +368,17 @@ function membercreate(){
      const [isproflieidcheck,setIsprofileidcheck]=useState("idle");
       
     const [showregionpopup,setshowregionpopup]=useState(false)
+    //중복인 이메일이 어떤 방식으로 가입됐는지("mypage"/"Google"/"Naver"/"unknown")
+    const [takenprovider,setTakenprovider]=useState("")
+    //필수 동의 두 가지. 둘 다 체크해야 가입 요청을 보낸다.
+    const [agree,setAgree]=useState({terms:false,privacy:false,age:false})
+    const [agreeerror,setAgreeerror]=useState(false)
     const [errors,seterrors]=useState({})
 
 
     
     const navigate=useNavigate();
+    const toast=useToast();
 
     //이벤트핸들링
     const handleChange=(e)=>{
@@ -215,7 +391,7 @@ function membercreate(){
         setform(updatedForm);
 
         //reset:이메일아이디중복체크 입력변경시 다시확인
-        if(name==="username") setisemailcheck(false);
+        if(name==="username"){ setisemailcheck(false); setTakenprovider(""); }
         if(name==="profileid") setIsprofileidcheck(false);
 
         //validation 이거통과해도 ""이가는데 별문제없다는듯?>
@@ -247,31 +423,41 @@ function membercreate(){
     const checkEmail=(e)=>{
         e.preventDefault();
         if(!form.username || form.username.trim()===""){
-            alert("이메일을 입력해주세요!")
+            toast.info("이메일을 입력해주세요.")
             return;
         }
         if(errors.username){
-            alert("이메일양식을확인해주세요")
+            toast.info("이메일 형식을 확인해주세요.")
             return ;
         }
-        axios.get("/open/emailcheck",{
+        axios.get(`${API_BASE}/open/emailcheck`,{
             params:{
             username:form.username
             }
         }).then((res)=>
         {   console.log(res.data)
             if(res.data){
-                alert("이미존재하는이메일입니다");
                 console.log("이메일체크",res.data)
                 setisemailcheck("fail");
+                //중복이면 어떤 방식으로 가입한 계정인지 이어서 확인한다.
+                //아이디찾기가 쓰는 엔드포인트가 {username, provider} 를 그대로 돌려준다.
+                axios.get(`${API_BASE}/open/usernamefind/${form.username}`).then((r)=>{
+                    const provider=r.data?.provider||"unknown";
+                    setTakenprovider(provider);
+                    toast.error(takenmessage(provider));
+                }).catch(()=>{
+                    setTakenprovider("unknown");
+                    toast.error("이미 가입된 이메일입니다.");
+                })
             }
             else{
-                alert("가입가능한이메일입니다!")
+                toast.success("사용할 수 있는 이메일입니다.")
                 setisemailcheck("success");
+                setTakenprovider("");
             }
         }).catch(
             (error)=>{
-                alert("서버에러입니다"+error)
+                toast.error(messageFromError(error,"이메일을 확인하지 못했습니다."))
             }
         )
 
@@ -281,29 +467,29 @@ function membercreate(){
     const checkProfileId=(e)=>{
         e.preventDefault();
          if(!form.profileid || form.profileid.trim()===""){
-            alert("프로필id를 입력해주세요!")
+            toast.info("프로필 아이디를 입력해주세요.")
             return;
         }
         if(errors.profileid){
-            alert("프로필양식을확인해주세요")
+            toast.info("프로필 아이디 형식을 확인해주세요.")
             return ;
         }
-        axios.get("/open/profileidcheck",{
+        axios.get(`${API_BASE}/open/profileidcheck`,{
             params:{
                 profileid:form.profileid
             }
         }).then((res)=>{
             if(res.data){
-                alert("이미존재하는아이디입니다")
+                toast.error("이미 사용 중인 아이디입니다.")
                   setIsprofileidcheck("fail")
             }
             else{
-                alert("사용가능한아이디입니다")
+                toast.success("사용할 수 있는 아이디입니다.")
                 setIsprofileidcheck("success")
             }
         }).catch(
             (error)=>{
-                alert(error)
+                toast.error(messageFromError(error,"아이디를 확인하지 못했습니다."))
             }
         )
     }
@@ -327,11 +513,15 @@ const handleSubmit=(e)=>{
         if(error) newErrors[key]=error; //에러존재할시 키와밸류추가
     })
 
-    if(!isemailcheck==="success"){
-        alert("이메일을중복검사를완료해주세요")
+    //!isemailcheck === "success" 는 !isemailcheck(불린) 을 문자열과 비교하는 꼴이라
+//항상 false 였다. 즉 중복검사를 안 해도 가입 요청이 그대로 나갔다.
+    if(isemailcheck!=="success"){
+        toast.info("이메일 중복검사를 먼저 해주세요.")
+        return;
     }
-    if(!isproflieidcheck==="success"){
-        alert("프로필 id 중복확인이필요합니다")
+    if(isproflieidcheck!=="success"){
+        toast.info("프로필 아이디 중복확인을 먼저 해주세요.")
+        return;
     }
     const ispasswordConfirmed=form.password === form.confirmpassword;
     if(!ispasswordConfirmed){
@@ -339,29 +529,52 @@ const handleSubmit=(e)=>{
     }
     seterrors(newErrors);
     if(Object.keys(newErrors).length>0){
-        return alert("입력값을 확인해주세요!")
+        toast.error("입력값을 확인해주세요.")
+        return;
+    }
+
+    //동의를 받지 않고 개인정보를 수집하면 안 된다. 마지막 관문으로 둔다.
+    if(!agree.terms || !agree.privacy || !agree.age){
+        setAgreeerror(true)
+        toast.info("필수 항목에 모두 동의해주세요.")
+        return;
     }
 
     
     
-        axios.post("/open/membercreate",{
+        axios.post(`${API_BASE}/open/membercreate`,{
             username:form.username,
             password:form.password,
             profileid:form.profileid,
             nickname:form.nickname,
             region:form.region,
             gridx:form.gridx,
-            gridy:form.gridy
+            gridy:form.gridy,
+            //서버도 동의 여부를 다시 확인하고, 동의 시각을 서버 시계로 기록한다.
+            agreeterms:agree.terms,
+            agreeprivacy:agree.privacy,
+            agreeage:agree.age
         }).then((res)=>{
-            alert("회원님의 이메일로 인증메일을보냈습니다! 인증후 사용해주세요")
+            toast.success("인증메일을 보냈습니다. 메일에서 인증을 마치면 로그인할 수 있습니다.",{duration:6000})
             navigate("/main")
         }).catch((err)=>{
-            console.log(err.response.data);
-            
+            //예전에는 콘솔에만 찍혀서, 가입이 실패해도 화면은 아무 반응이 없었다.
+            console.log(err.response?.data);
+            toast.error(messageFromError(err,"가입하지 못했습니다. 잠시 후 다시 시도해주세요."))
         })
     
     }
     
+
+    //가입 방식 안내에서 바로 로그인으로 보낸다.
+    const gotologin=()=>{
+        const v=(takenprovider||"").toLowerCase();
+        if(v==="google"||v==="naver"){
+            oauthredirect(v);
+            return;
+        }
+        navigate("/login");
+    }
 
     //주소클리어
     const RegionClear=(e)=>{
@@ -378,12 +591,16 @@ const handleSubmit=(e)=>{
 return(
 <Wrapper key="memberform">
     <Headerdiv>
-        헤더
+        <Brandrow onClick={()=>navigate("/")} title="홈으로">
+          <BrandMark size={26}/>
+          <Wordmark>Weave</Wordmark>
+        </Brandrow>
+        <Headertitle>회원가입</Headertitle>
+        <Headersub>오늘의 하늘을 함께 나눌 준비를 합니다.</Headersub>
     </Headerdiv>
     <Maindiv>
    <StyledForm onSubmit={handleSubmit}>
-        <StyledTable>
-          <tbody>
+        <Fieldstack>
             <Formrow>
             
                 <Inputcell hasError={errors.username}>
@@ -398,16 +615,25 @@ return(
                 />
                 <SubButtondiv>
                      <SubButton onClick={checkEmail} isChecked={isemailcheck} >
-                       {isemailcheck==="success"? "V": "중복검사"} 
+                       {isemailcheck==="success"? "확인됨": "중복검사"} 
                         </SubButton>
                 </SubButtondiv>
                
                 </Inputcell>
                 <Errordiv>
 
-              
                 {errors.username && <p>{errors.username}</p>}
                   </Errordiv>
+
+                {takenprovider &&
+                <Takennotice role="status">
+                  <Takentext>{takenmessage(takenprovider)}</Takentext>
+                  <Takenbutton type="button" onClick={gotologin}>
+                    {providerlabel(takenprovider)
+                      ? providerlabel(takenprovider)+"로 로그인"
+                      : "로그인하러 가기"}
+                  </Takenbutton>
+                </Takennotice>}
              
 
             </Formrow>
@@ -471,7 +697,7 @@ return(
                 />
                   <SubButtondiv>
                                <SubButton onClick={checkProfileId} isChecked={isproflieidcheck}>
-                                {isproflieidcheck==="success"?"V":"중복검사"}
+                                {isproflieidcheck==="success"?"확인됨":"중복검사"}
                                 </SubButton>
                 </SubButtondiv>
      
@@ -520,12 +746,72 @@ return(
                
              </Inputcell>
             </Formrow>
-          </tbody>
-        </StyledTable>
+        </Fieldstack>
+        <Agreebox $invalid={agreeerror}>
+          <Agreerow $divider $strong>
+            <input
+              type="checkbox"
+              checked={agree.terms&&agree.privacy&&agree.age}
+              onChange={(e)=>{
+                const on=e.target.checked;
+                setAgree({terms:on,privacy:on,age:on});
+                if(on) setAgreeerror(false);
+              }}
+            />
+            전체 동의
+          </Agreerow>
+
+          <Agreerow>
+            <input
+              type="checkbox"
+              checked={agree.terms}
+              onChange={(e)=>{
+                setAgree((prev)=>({...prev,terms:e.target.checked}));
+                if(e.target.checked) setAgreeerror(false);
+              }}
+            />
+            <Requiredtag>[필수]</Requiredtag>
+            이용약관 동의
+            <Viewlink href="/terms" target="_blank" rel="noreferrer"
+              onClick={(e)=>e.stopPropagation()}>보기</Viewlink>
+          </Agreerow>
+
+          <Agreerow>
+            <input
+              type="checkbox"
+              checked={agree.privacy}
+              onChange={(e)=>{
+                setAgree((prev)=>({...prev,privacy:e.target.checked}));
+                if(e.target.checked) setAgreeerror(false);
+              }}
+            />
+            <Requiredtag>[필수]</Requiredtag>
+                        개인정보 수집·이용 동의
+            <Viewlink href="/privacy" target="_blank" rel="noreferrer"
+              onClick={(e)=>e.stopPropagation()}>보기</Viewlink>
+          </Agreerow>
+
+          {/* 만 14세 미만은 법정대리인 동의가 필요하다. 받을 방법이 없으므로 가입을 막는다. */}
+          <Agreerow>
+            <input
+              type="checkbox"
+              checked={agree.age}
+              onChange={(e)=>{
+                setAgree((prev)=>({...prev,age:e.target.checked}));
+                if(e.target.checked) setAgreeerror(false);
+              }}
+            />
+            <Requiredtag>[필수]</Requiredtag>
+            만 14세 이상입니다
+          </Agreerow>
+        </Agreebox>
+        <Errordiv>
+          {agreeerror && <p>필수 항목에 동의해야 가입할 수 있습니다.</p>}
+        </Errordiv>
+
         <Footerdiv>
 
-       
-        <SubmitButton  type="submit" >회원가입</SubmitButton>
+        <SubmitButton type="submit" >회원가입</SubmitButton>
          </Footerdiv>
       </StyledForm>
                 

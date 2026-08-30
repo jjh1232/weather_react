@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import CreateAxios from "../customhook/CreateAxios";
 import axios from "axios";
 import Userweatheritem from "./UserweatherItem";
+import { API_BASE } from "../config/api";
 
 const Headers=styled.div`
   
@@ -29,7 +30,7 @@ function Userweather(props){
     useEffect(()=>{
         if(loginuser.userinfo){
           console.log("유저주소있음"+loginuser.userinfo.region)
-          axios.get("http://localhost:8081/open/weatherdata",{
+          axios.get(`${API_BASE}/open/weatherdata`,{
             params:{
                 region:loginuser.userinfo.region.replaceAll("+"," ")
                
@@ -47,7 +48,7 @@ function Userweather(props){
         else{
 
           //유저주소없음
-            axios.get("http://localhost:8081/open/weatherdata")
+            axios.get(`${API_BASE}/open/weatherdata`)
             .then((res)=>{
                 console.log("날씨데이터"+res)
                 setWeatherdata(res.data)

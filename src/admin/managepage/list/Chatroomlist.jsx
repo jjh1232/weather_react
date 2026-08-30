@@ -1,71 +1,79 @@
-
 import React from "react";
 import CreateAxios from "../../../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { Tr, Td, Button, Badge, Countcell, Mono, Clamp, Linkcell } from "../../AdminUI";
+import { useConfirm, useToast } from "../../../UI/Feedback/FeedbackProvider";
 
-
-const Button=styled.button`
-position: relative;
-display: inline-block;
-width: 65px;
-height: 45px;
-font-size: 15px;
-
-color: white;
-margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 5px; //모서리
-text-align: center;
-transition: top .04s linear;
-text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-background-color: ${(props)=>props.backcolor};
-`
-const Tr=styled.tr`
-    border: 1px solid gray;
-`
-const Td=styled.td`
-    border: 1px solid gray;
-   
-    height: 45px;
-`
 export default function Chatroomlist(props){
 
     const queryclient=useQueryClient();
-    const {data,key}=props;
+    const {data}=props;
     const axiosinstance=CreateAxios();
     const navigate=useNavigate();
-    const deletechatroom=(roomid)=>{
-        if(confirm("정말로지우시겠습니까")){
+    const confirm=useConfirm();
+    const toast=useToast();
+
+    /* 예전 주석에 "이 화면엔 확인창 provider 가 없다"고 적혀 있었지만,
+       FeedbackProvider 는 App.js 에서 라우트 전체를 감싸고 있어 여기서도 쓸 수 있다. */
+    const deletechatroom=async(roomid)=>{
+        const ok=await confirm({
+            title:"이 채팅방을 삭제할까요?",
+            description:"방에 오간 대화가 모두 사라집니다. 되돌릴 수 없습니다.",
+            confirmText:"삭제",
+            danger:true,
+        })
+        if(!ok) return;
+
         axiosinstance.delete(`/admin/roomdelete/${roomid}`)
         .then((res)=>{
-            alert(res.data)
-            queryclient.invalidateQueries(["adminchatroomlist"]);
+            toast.success(res.data||"삭제되었습니다.")
+            queryclient.invalidateQueries({ queryKey: ["adminchatroomlist"] });
         }).catch((err)=>{
-            alert(err)
+            toast.error(err)
         })
     }
-    else{
 
-    }
-    }
+    const members=data.namelist||[];
 
-    return (<Tr>
-        <Td style={{textAlign:"center"}}>{data.roomid}</Td>
-        <Td style={{verticalAlign:"top"}}>{data.roomname}</Td>
-        <Td style={{verticalAlign:"top"}}>{data.namelist.map((name)=>{return(<>{name.membernickname},</>)})}</Td>
-        <Td style={{verticalAlign:"top"}} 
-        onClick={()=>{
-            navigate(`/admin/room/${data.roomid}`)
-        }}>{data.latelychat}</Td>
-        <Td style={{textAlign:"center"}}>{data.chatnum}</Td>
-        <Td style={{textAlign:"center"}}>{data.lastchatred}</Td>
-        <Td style={{textAlign:"center"}}>{data.red}</Td>
-        <Td>
-                            
-                            <Button backcolor="red"
-                            onClick={()=>{deletechatroom(data.roomid)}}>채팅방삭제</Button>
-                            </Td>
-    </Tr>)
+    return (
+        <Tr>
+            <Td $align="center"><Mono>{data.roomid}</Mono></Td>
+
+            <Td style={{minWidth:"140px"}}>
+                <Linkcell onClick={()=>navigate(`/admin/room/${data.roomid}`)}>
+                    <Clamp $lines={1}>{data.roomname}</Clamp>
+                </Linkcell>
+            </Td>
+
+            {/* 예전엔 닉네임을 쉼표로 이어붙여 한 줄로 흘렸다. 뱃지로 끊어야 눈에 들어온다 */}
+            <Td style={{minWidth:"180px",maxWidth:"280px"}}>
+                <Countcell style={{flexWrap:"wrap",gap:"4px"}}>
+                    {members.slice(0,4).map((name)=>(
+                        <Badge key={name.id||name.membernickname}>{name.membernickname}</Badge>
+                    ))}
+                    {members.length>4 && <Badge $tone="accent">+{members.length-4}</Badge>}
+                </Countcell>
+            </Td>
+
+            <Td style={{minWidth:"200px",maxWidth:"360px"}}>
+                <Linkcell onClick={()=>navigate(`/admin/room/${data.roomid}`)}>
+                    <Clamp $lines={2}>{data.latelychat}</Clamp>
+                </Linkcell>
+            </Td>
+
+            <Td $align="center">{data.chatnum}</Td>
+            <Td><Mono>{data.lastchatred}</Mono></Td>
+            <Td><Mono>{data.red}</Mono></Td>
+
+            <Td $align="center">
+                <Countcell>
+                    <Button type="button" $small
+                        onClick={()=>navigate(`/admin/room/${data.roomid}`)}>보기</Button>
+                    <Button type="button" $small $variant="danger"
+                        onClick={()=>deletechatroom(data.roomid)}>삭제</Button>
+                </Countcell>
+            </Td>
+        </Tr>
+    )
 }

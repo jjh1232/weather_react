@@ -9,25 +9,19 @@ import Userdata from "../UI/Modals/Userdata";
 import Loginpage from "../MemberPage/Loginpage";
 import ChatUi from "../List/ChatUi";
 import { useLocation } from "react-router-dom";
+import { API_BASE } from "../config/api";
 
 const Wrapper=styled.div`
 
-width:300px;
-// max-width: 20vw;
-height:800px;
-position: fixed;
+// 위치는 MainLayout 의 grid(Rightcss)가 정한다.
+width:100%;
 
-right: 12vw;
-top:1px;
-
-
-@media (max-width:1710px){
-    display: none;
-}
-@media (max-width:1900px){
-    right:8vw;
-}
-
+/* 로그인 카드와 폰 패널이 겹치지 않도록 세로로 쌓는다.
+   (예전엔 로그인 카드가 float:left 라 흐름에서 빠져 폰에 덮였다) */
+display: flex;
+flex-direction: column;
+align-items: stretch;
+gap: 14px;
 
 `
 
@@ -116,7 +110,7 @@ if(window.location.pathname==="/noticecreate"){
     //유저검색
     const usersearch=(e)=>{
     console.log(e.target.value)
-    axios.get("/open/usersearch?nickname="+e.target.value).then((res)=>{
+    axios.get(`${API_BASE}/open/usersearch?nickname=`+e.target.value).then((res)=>{
         console.log(res.data)
         setSearchdata(res.data)
     }).catch((err)=>{

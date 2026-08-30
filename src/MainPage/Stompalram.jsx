@@ -1,6 +1,7 @@
 import React, { useEffect, useRef,useState } from "react";
 import * as StompJs from "@stomp/stompjs"
 import SockJS from "sockjs-client";
+import { WS_BASE } from "../config/api";
 
 function Stompalrams(){
 
@@ -15,7 +16,7 @@ function Stompalrams(){
       
         //sockjs사용하지 않은버전 sockjs는나중에써보자
     client.current= new StompJs.Client({
-        brokerURL:"ws://localhost:8081/open/stomp",
+        brokerURL:`${WS_BASE}/open/stomp/websocket`,
         //Authorization:"accesstoken",
         //Refreshtoken:"refreshtoken",
         //connectHeaders:{

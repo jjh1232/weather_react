@@ -4,61 +4,103 @@ import styled from "styled-components";
 import { useCookies } from "react-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { handletext } from "../customhook/Userhandle";
 import CommentMenu from "./Buttonlist/CommentMenu";
+import { API_BASE } from "../config/api";
 
-
-
+/* ─────────────────────────────────────────────────────────────
+   대댓글 한 줄(읽기 모드)
+   - 원댓글(Commentview)과 같은 구성이되 한 단계씩 작게 잡아서
+     시각적으로 "아래 단계"라는 게 크기만으로도 읽히게 했다.
+   ───────────────────────────────────────────────────────────── */
 
 const Profilediv=styled.div`
-
-  position: relative;
-  min-height: 55px;
+  flex-shrink: 0;
   display: flex;
-  
-  margin-left: 3px;
-  top: 2px;
 `
 const Profileimg=styled.img`
-  width: 50px;
-  height: 50px;
-  background-color: white;
-  border: 1px solid black;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   object-fit: cover;
-   flex-shrink: 0;    // flex item이 줄어들거나 늘어나지 않게 고정
+  display: block;
+  flex-shrink: 0;    // flex item이 줄어들거나 늘어나지 않게 고정
   flex-grow: 0;
-    display: block;    
+  border: 1px solid ${(props)=>props.theme.border};
+  background: ${(props)=>props.theme.surfaceAlt};
+  transition: box-shadow ${(props)=>props.theme.transition};
+
+  &:hover {
+    box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+  }
 `
 const Maindiv=styled.div`
   display: flex;
   flex-direction:column;
-  width: 100%;
- 
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 `
 const Headerdiv=styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
-  gap:5px;
-  
+  gap: 6px;
+  min-height: 24px;
 `
 const Usernamediv=styled.div`
-   color:gray;
-   position: relative;
-   font-size: 13px;
-   top: 2px;
+   color: ${(props)=>props.theme.textMuted};
+   font-size: 12.5px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   min-width: 0;
 `
 const Nicknamediv=styled.div`
-  color:${(props)=>props.theme.text}  ;
+  color: ${(props)=>props.theme.text};
+  font-size: 13.5px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
 `
 const Timediv=styled.div`
- 
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: ${(props)=>props.theme.textFaint};
+  white-space: nowrap;
+
+  &::before { content: "·"; }
 `
 const Usermenudiv=styled.div`
+  position: relative;
   margin-left: auto;
-  margin-right:5px;
-  
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: ${(props)=>props.theme.textFaint};
+  transition: background ${(props)=>props.theme.transition},
+              color ${(props)=>props.theme.transition};
+
+  &:hover {
+    background: ${(props)=>props.theme.accentSoft};
+    color: ${(props)=>props.theme.accent};
+  }
 `
 const Maintextdiv=styled.div`
   white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.6;
+  color: ${(props)=>props.theme.text};
 `
 
 export default function ReplyShowUI(props){
@@ -107,7 +149,7 @@ export default function ReplyShowUI(props){
     return (
           <>
                 <Profilediv>
-                <Profileimg src={process.env.PUBLIC_URL+"/userprofileimg/"+data.userprofile}/>
+                <Profileimg src={API_BASE+"/userprofileimg/"+data.userprofile}/>
                 
               </Profilediv>
               <Maindiv>
@@ -116,19 +158,19 @@ export default function ReplyShowUI(props){
               {data.nickname}
               </Nicknamediv> 
               <Usernamediv>
-                {data.username}
+                {handletext(data.profileid,data.username)}
               </Usernamediv>
               
               <Timediv>
-               <Datefor inputdate={data.redtime } colors={"gray"}/>
+               <Datefor inputdate={data.redtime } colors={"inherit"}/>
                
               </Timediv>
               
              <Usermenudiv ref={menuref} onClick={(e)=>{e.stopPropagation(),setIsmenu(!ismenu)}}>
-              <FontAwesomeIcon icon={faEllipsis} size="xl" />
+              <FontAwesomeIcon icon={faEllipsis} size="lg" />
               {ismenu&&
               <CommentMenu commentid={data.id} noticeid={noticeid} page={page} 
-                ismenu={setIsmenu} isupdate={Setisupdate} cid={data.cid} cusername={data.username}
+                ismenu={setIsmenu} isupdate={Setisupdate} cid={data.cid} cusername={data.username} cprofileid={data.profileid}
                 textcopy={textcopy}
               />}
         

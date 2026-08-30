@@ -5,14 +5,249 @@ import CreateAxios from "../../customhook/CreateAxios";
 import styled from "styled-components";
 import * as Weatherpa from "../../UI/Noticetools/Weatherpar"
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun } from "@fortawesome/free-solid-svg-icons";
+import { faCloud } from "@fortawesome/free-solid-svg-icons";
+import { faCloudRain } from "@fortawesome/free-solid-svg-icons";
+import { faTemperatureLow } from "@fortawesome/free-solid-svg-icons";
+import { faDroplet } from "@fortawesome/free-solid-svg-icons";
+import { faWind } from "@fortawesome/free-solid-svg-icons";
+import { handletext } from "../../customhook/Userhandle";
+import profileimage from "../../UI/profileimage";
+import { API_BASE } from "../../config/api";
+/* ─────────────────────────────────────────────────────────────
+   글쓰기 모달.
+   원래 개발용 뼈대 그대로였다 - 날씨는 "30,강수없음,맑음,없음 ,75,2" 처럼
+   값을 쉼표로 이어붙여 찍었고, 제목은 맨살 input, 화면 아래엔
+   절대경로/파일인덱스/본문HTML 같은 디버그 출력이 그대로 노출돼 있었다.
+   ───────────────────────────────────────────────────────────── */
+
 const Wrapper=styled.div`
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     width:100%;
     height: 100%;
+    color: ${(props)=>props.theme.text};
 `
+/* 작성자 + 날씨 한 줄. 날씨는 오른쪽 위. */
+const Topbar=styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+`
+const Writerimg=styled.img`
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid ${(props)=>props.theme.border};
+    background: ${(props)=>props.theme.surfaceAlt};
+`
+const Writertext=styled.div`
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+`
+const Writername=styled.div`
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+`
+const Writerhandle=styled.div`
+    font-size: 12.5px;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`
+/* 지금 날씨가 글에 자동으로 붙는다는 걸 보여주는 자리 */
 const Weathercss=styled.div`
-    text-align: right;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+`
+const Weatherlabel=styled.div`
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: ${(props)=>props.theme.textFaint};
+`
+const Weatherchips=styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 5px 10px;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.surfaceAlt};
+`
+const Chip=styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
 
+    b{
+        color: ${(props)=>props.theme.text};
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* 칩 사이 가운뎃점 */
+    & + &::before{
+        content: "·";
+        color: ${(props)=>props.theme.borderStrong};
+        margin-right: 2px;
+    }
+`
+const Chipicon=styled(FontAwesomeIcon)`
+    font-size: 11px;
+    color: ${(props)=>props.theme.accent};
+`
+
+const Field=styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+`
+const Label=styled.label`
+    font-size: 12.5px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: ${(props)=>props.theme.textMuted};
+`
+const Titleinput=styled.input`
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid ${(props)=>props.theme.border};
+    background: ${(props)=>props.theme.surfaceAlt};
+    color: ${(props)=>props.theme.text};
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    outline: none;
+    transition: border-color ${(props)=>props.theme.transition},
+                box-shadow ${(props)=>props.theme.transition};
+
+    &::placeholder{
+        color: ${(props)=>props.theme.textFaint};
+        font-weight: 400;
+    }
+    &:focus{
+        border-color: ${(props)=>props.theme.accent};
+        box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+    }
+`
+/* Quill 은 자기 색을 갖고 있어서 테마에 맞게 덮어써야 한다 */
+const Editorbox=styled.div`
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: 10px;
+    overflow: hidden;
+    background: ${(props)=>props.theme.surfaceAlt};
+
+    .ql-toolbar{
+        border: none;
+        border-bottom: 1px solid ${(props)=>props.theme.border};
+        background: ${(props)=>props.theme.surface};
+    }
+    .ql-container{
+        border: none;
+        font-size: 14.5px;
+        font-family: inherit;
+    }
+    .ql-editor{
+        min-height: 260px;
+        color: ${(props)=>props.theme.text};
+    }
+    .ql-editor.ql-blank::before{
+        color: ${(props)=>props.theme.textFaint};
+        font-style: normal;
+    }
+    /* 툴바 아이콘/글씨도 테마색으로 */
+    .ql-stroke{ stroke: ${(props)=>props.theme.textMuted}; }
+    .ql-fill{ fill: ${(props)=>props.theme.textMuted}; }
+    .ql-picker-label{ color: ${(props)=>props.theme.textMuted}; }
+    .ql-picker-options{
+        background: ${(props)=>props.theme.surface};
+        border-color: ${(props)=>props.theme.border};
+    }
+`
+const Filelistbox=styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+`
+const Fileitem=styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: 8px;
+    background: ${(props)=>props.theme.surfaceAlt};
+    font-size: 12.5px;
+    color: ${(props)=>props.theme.textMuted};
+`
+const Filename=styled.span`
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: ${(props)=>props.theme.text};
+`
+const Fileremove=styled.button`
+    flex-shrink: 0;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusPill};
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: ${(props)=>props.theme.textMuted};
+    background: ${(props)=>props.theme.surface};
+    cursor: pointer;
+    transition: color ${(props)=>props.theme.transition},
+                border-color ${(props)=>props.theme.transition};
+
+    &:hover{
+        color: ${(props)=>props.theme.warning};
+        border-color: ${(props)=>props.theme.warning};
+    }
+`
+const Footer=styled.div`
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 4px;
+`
+const Submitbutton=styled.button`
+    border: none;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    padding: 10px 26px;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: #fff;
+    background: ${(props)=>props.theme.accent};
+    cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                opacity ${(props)=>props.theme.transition};
+
+    &:hover:not(:disabled){ background: ${(props)=>props.theme.accentHover}; }
+    &:disabled{ opacity:.45; cursor: not-allowed; }
 `
 
 export default function Twitnoticecreate(props){
@@ -114,7 +349,7 @@ const imagehandler=()=>{
             const result = await axiosinstance.post('/contentimage', formdata)
             
             
-            const imgurl =process.env.PUBLIC_URL+"/noticeimages/"+result.data;
+            const imgurl =API_BASE+"/noticeimages/"+result.data;
            //절대경로가안됨..
             console.log("절대경로"+imgurl)
             //ref를이용해 에디터구함
@@ -191,9 +426,12 @@ const createtwitnotice=()=>{
         files:filelist
     }).then((res)=>{
         alert("글작성성공")
-        //사실어차피리로드해야해서리..
         props.setIscreate(false)
-        //props.redataget();
+        //목록 새로고침. 안 넘겨준 화면도 있어서 있을 때만 부른다.
+        //(예전엔 여기가 주석 처리돼 있어서 새 글이 목록에 안 나타났다)
+        if(props.redataget){
+            props.redataget();
+        }
         
         
         
@@ -201,53 +439,81 @@ const createtwitnotice=()=>{
 
 }
 
+    //하늘 상태에 맞는 아이콘 하나만 고른다(비/눈이면 비구름)
+    const skyicon = (pty!=="0"&&pty!==0) ? faCloudRain : (sky==="1"?faSun:faCloud);
+
     return (
         <Wrapper>
-         <Weathercss> {//날씨css
-         }       
-        {temp},{rain},{Weatherpa.getsky(sky)},{Weatherpa.getpty(pty)} ,{reh},{wsd}
-        </Weathercss>
-        이메일:{cookie.userinfo["username"]}
-        <br/>
-        닉네임:{cookie.userinfo["nickname"]}
-        <br/>
-        제목:<input onChange={(e)=>{setTitle(e.target.value)}}/>
-        <br/>
-        
-        내용:<ReactQuill
-        style={{width:"99%",height:"70%"}}//스타일
-        modules={modules}
-        onChange={setContent}
-        ref={quillref}
-        />
-        <br/>
-        <br/>
-        
-        첨부목록:{filelist&&filelist.map((list,index)=>{
-            console.log("첨부파일:"+list)
-                if(index==0){
 
-                }else{
-            return (
-                <>
-                <span key={index}>
-                    {index}
-                    {list.filename}
-                    <button onClick={()=>{filedelete(list.id,list.range)}}>제거</button>
-                </span>
-                <br/>
-                </>
-                
-            )
-                }
-        })}
-    
-        <br/>
-        절대경로:{process.env.PUBLIC_URL}
-        파일인덱스:{fileindex.current} 
-        확인할내용2:{content} 
-        <br/>
-        <button onClick={createtwitnotice}>제출</button>
+            {/* 작성자 + 지금 날씨 */}
+            <Topbar>
+                <Writerimg src={profileimage(cookie.userinfo["profileimg"])} alt=""/>
+                <Writertext>
+                    <Writername>{cookie.userinfo["nickname"]}</Writername>
+                    <Writerhandle>
+                        {handletext(cookie.userinfo["profileid"],cookie.userinfo["username"])}
+                    </Writerhandle>
+                </Writertext>
+
+                <Weathercss>
+                    <Weatherlabel>글에 함께 기록되는 지금 날씨</Weatherlabel>
+                    <Weatherchips>
+                        <Chip>
+                            <Chipicon icon={skyicon}/>
+                            {Weatherpa.getsky(sky)}
+                            {Weatherpa.getpty(pty)&&Weatherpa.getpty(pty)!=="없음"
+                                ? ` · ${Weatherpa.getpty(pty)}` : ""}
+                        </Chip>
+                        <Chip><Chipicon icon={faTemperatureLow}/><b>{temp}</b>°C</Chip>
+                        <Chip><Chipicon icon={faDroplet}/><b>{reh}</b>%</Chip>
+                        <Chip><Chipicon icon={faWind}/><b>{wsd}</b>m/s</Chip>
+                    </Weatherchips>
+                </Weathercss>
+            </Topbar>
+
+            <Field>
+                <Label htmlFor="noticetitle">제목</Label>
+                <Titleinput id="noticetitle"
+                    value={title||""}
+                    placeholder="제목을 입력하세요"
+                    onChange={(e)=>{setTitle(e.target.value)}}/>
+            </Field>
+
+            <Field>
+                <Label>내용</Label>
+                <Editorbox>
+                    <ReactQuill
+                        modules={modules}
+                        onChange={setContent}
+                        ref={quillref}
+                        placeholder="무슨 일이 있었나요?"
+                    />
+                </Editorbox>
+            </Field>
+
+            {/* 첨부는 있을 때만 보여준다 */}
+            {filelist&&filelist.length>1&&
+            <Field>
+                <Label>첨부</Label>
+                <Filelistbox>
+                {filelist.map((list,index)=>{
+                    if(index===0) return null;
+                    return (
+                        <Fileitem key={index}>
+                            <Filename>{list.filename}</Filename>
+                            <Fileremove onClick={()=>{filedelete(list.id,list.range)}}>제거</Fileremove>
+                        </Fileitem>
+                    )
+                })}
+                </Filelistbox>
+            </Field>
+            }
+
+            <Footer>
+                <Submitbutton
+                    disabled={!title||!title.trim()}
+                    onClick={createtwitnotice}>등록</Submitbutton>
+            </Footer>
         </Wrapper>
     )
 }

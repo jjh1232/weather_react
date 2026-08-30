@@ -23,6 +23,11 @@ const skyMap = {
   };
 
   export default function NoticeWeathericon({type,value}){
+    /* 값이 없으면 아무것도 그리지 않는다.
+       예전엔 그대로 문자열에 끼워 넣어서 "null%", "nullm/s" 가 찍혔다.
+       (관리자 글작성이 습도/풍속을 안 보내던 글에서 그렇게 보였다) */
+    if(value===null||value===undefined||String(value).trim()==="") return null;
+
     let iconInfo=null;
     switch (type) {
         case 'sky':
@@ -35,7 +40,11 @@ const skyMap = {
           iconInfo = { icon: faTemperatureLow, color: 'tomato', label: `${value}°C` };
           break;
         case 'rain':
-          iconInfo = { icon: faTint, color: 'blue', label: value==="강수없음"?`${value}`:`${value}mm` };
+          /* 저장된 값에 이미 단위가 붙어 오는 경우가 있다("0mm 미만").
+             그때도 뒤에 "mm" 를 또 붙여서 "mm 미만mm" 처럼 나왔다. */
+          iconInfo = { icon: faTint, color: 'blue',
+            label: String(value).includes("mm")||value==="강수없음"
+              ? `${value}` : `${value}mm` };
           break;
         case 'reh':
           iconInfo = { icon: faTint, color: 'deepskyblue', label: `${value}%` };

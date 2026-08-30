@@ -20,6 +20,8 @@ import { faHeart as heart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "../List/noticeformlist/DateCom/Viewtrans";
 import AuthCheck from "../customhook/authCheck";
+import { useConfirm } from "../UI/Feedback/FeedbackProvider";
+import { API_BASE } from "../config/api";
 
 const Wrapper=styled.div`
    position: relative;
@@ -30,14 +32,19 @@ width:100%;
 overflow: hidden;
 
 `
+/* 글 한 편이 들어가는 카드.
+   예전엔 여백이 한 군데도 없어서 작성자줄·제목·본문이 서로 붙어 찍혔다. */
 const Noticediv=styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px 20px;
 `
 const Header=styled.div`
-   
     display: flex;
-    gap: 5px;
-    border-bottom: 1px solid gray;
+    gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
 `
 
 const Profilediv=styled.div`
@@ -85,6 +92,10 @@ const Timediv=styled.div`
 const Weatherdiv=styled.div`
     margin-left: auto;
     display: flex;
+    /* gap 이 없어서 날씨 값들이 "흐림mm미만맑음26°C" 처럼 붙어 찍혔다 */
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 
 `
 const Menudiv=styled.div`
@@ -92,11 +103,19 @@ const Menudiv=styled.div`
 `
 const TitleTooldiv=styled.div`
     display: flex;
-   
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 6px;
 `
 const Titlediv=styled.div`
-    
     width: 80%;
+    /* 제목은 본문보다 커야 한다. 예전엔 본문과 같은 크기라 어디까지가 제목인지
+       구분이 안 됐다. */
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.4;
+    word-break: break-word;
 `
 const Tooldiv=styled.div`
     margin-left:auto;
@@ -157,12 +176,26 @@ const Userprofile=styled.img`
 `
 const NoticeMaindiv=styled.div`
    overflow: hidden;
+
+   /* 본문이 한 줄이어도 글 한 편으로 보이게 최소 높이를 준다.
+      "그렇습니당" 한 줄짜리 글이 제목에 딱 붙어 찍히던 문제. */
+   min-height: 160px;
+   padding: 4px 2px;
+   font-size: 15px;
+   line-height: 1.75;
+   color: ${(props)=>props.theme.text};
+   word-break: break-word;
+
       img {
     max-width: 100%;
     
     height: auto;
     display: block;
+    margin: 10px 0;
+    border-radius: ${(props)=>props.theme.radiusSm};
   }
+      p { margin: 0 0 10px; }
+      p:last-child { margin-bottom: 0; }
 `
 const Pagenationcss=styled.div`
 
@@ -186,6 +219,7 @@ export default function Noticedetailre(props){
     const [ismenu,setIsmenu]=useState(false);
     const [isupdate,setIsupdate]=useState(false);
     let axiosinstance=CreateAxios();
+    const confirm=useConfirm();
     const pageref=useRef(null)
     console.log("노티스디테일")
     let logincheck=AuthCheck();
@@ -246,8 +280,14 @@ export default function Noticedetailre(props){
 
  }
 
- const postDelete=()=>{
-    if(window.confirm("정말로삭제하시겠습니까?")){
+ const postDelete=async()=>{
+    const ok=await confirm({
+      title:"이 글을 삭제할까요?",
+      description:"글에 달린 댓글도 함께 사라집니다. 되돌릴 수 없습니다.",
+      confirmText:"삭제",
+      danger:true,
+    })
+    if(ok){
       axiosinstance.delete(`/noticedelete/${post.id}`)
       .then((res)=>{
         alert("정상적으로삭제되었습니다")
@@ -322,7 +362,7 @@ const LikeButtonhandler=(noticeid)=>{
            
       
         <Profilediv>
-       <Userprofile src={process.env.PUBLIC_URL+"/userprofileimg/"+post.userprofile }/>
+       <Userprofile src={API_BASE+"/userprofileimg/"+post.userprofile }/>
        </Profilediv>
        <Headdatadiv>
             <Userdiv>
@@ -395,7 +435,7 @@ const LikeButtonhandler=(noticeid)=>{
         </Noticediv>
 
         }
-        <Commentform noticenum={post?.id} depth={0} cnum={0} page={page} />
+        <Commentform noticenum={post?.id} depth={0} cnum={0} page={page} setPage={setPage} />
         {commentloading&&<>댓글불러오는중....</>}
         {comment&&<>
             <Commentlist comments={comment.content} noticeid={post.id} page={page} ref={pageref} />

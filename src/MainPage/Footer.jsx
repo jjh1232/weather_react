@@ -4,8 +4,11 @@ import styled from "styled-components";
 
 const Wrapper=styled.div`
 position:relative;
-left:15.5%;
-border:1px solid;
+
+border-top:1px solid ${(props)=>props.theme.border};
+color:${(props)=>props.theme.textMuted};
+font-size:13px;
+letter-spacing:-0.01em;
 
 transform : translateY(0%);
 

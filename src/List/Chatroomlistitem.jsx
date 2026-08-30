@@ -8,74 +8,79 @@ import Profilediv from "../UI/Modals/Profilediv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear  } from "@fortawesome/free-solid-svg-icons";
 import Chatroomlistmenu from "./noticeformlist/DateCom/Chatlistmenu";
+// 채팅방 목록 한 줄. 팔로우/팔로워 목록과 같은 규격으로 맞춘다.
 const Wrapper=styled.div`
     display: flex;
-    margin-top:5px;
-    height: 70px;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    transition: background ${(props)=>props.theme.transition};
 
-
+    &:last-child { border-bottom: none; }
+    &:hover { background: ${(props)=>props.theme.surfaceHover}; }
 `
+// 참여자 프로필 모음 (최대 4개 타일)
 const Imagediv=styled.div`
     display: flex;
-    
-    width: 20%;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    border-radius: 12%;
-    margin-top:2px;
-    margin-bottom:2px;
-    border: 1px solid gray;
-   
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid ${(props)=>props.theme.border};
+    background: ${(props)=>props.theme.surfaceAlt};
 `
 const Profilelist=styled.div`
     flex-grow: 0;
     flex-shrink: 0;
-   
+    overflow: hidden;
    
     flex-basis: ${props => {
     if (props.itemCount === 1) return '100%';
-    if (props.itemCount === 2) return '45%';
-    if (props.itemCount === 3 || props.itemCount === 4) return '45%';
-    return '25%'; // 4개 초과일 경우
+    if (props.itemCount === 2) return '50%';
+    if (props.itemCount === 3 || props.itemCount === 4) return '50%';
+    return '50%'; // 4개 초과일 경우
   }};
 
-    height: ${props => (props.itemCount === 2 ? '55%' : '45%')};
-    
-    
-    
+    height: ${props => (props.itemCount === 1 ? '100%' : '50%')};
 `
 const MainContainer=styled.div`
     display: flex;
     flex-direction: column;
-  margin-top: 3px;
-    width: 65%;
-     margin-left: 5px;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
 `
 
 
 const MainTop=styled.div`
       display: flex;
-      
-     
-     // border: 1px solid gray;
-      height: 33%;
-      gap: 3px;
+      align-items: baseline;
+      gap: 6px;
+      min-width: 0;
 `
 const Roomnamecss=styled.div`
     overflow: hidden;
     text-overflow:ellipsis;
-    max-width: 150px;
     white-space: nowrap;
-     
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: ${(props)=>props.theme.text};
 `
+// 참여 인원수
 const Roomlength=styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 3px;
-font-size:13px;
-    color: gray;
+    flex-shrink: 0;
+    font-size:11px;
+    color: ${(props)=>props.theme.textFaint};
 
 `
 /*
@@ -83,11 +88,11 @@ const MainMiddle=styled.div`
       border: 1px solid rosybrown;
 `
 */
+// 마지막 메시지 미리보기
 const MainBottom=styled.div`
-   //   border: 1px solid gray;
-      height: 66%;
-      font-size: 15px;
-      color: gray;
+      font-size: 12px;
+      line-height: 1.4;
+      color: ${(props)=>props.theme.textMuted};
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -96,64 +101,61 @@ const MainBottom=styled.div`
      
 `
 const Optiondiv=styled.div`
-    //border: 1px solid gray;
-    width: 23%;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    
+    flex-shrink: 0;
     display:flex;
     flex-direction: column;
-   
-    
+    align-items: flex-end;
+    gap: 4px;
 `
 const Menudiv=styled.div`
-    padding-top: 7px;
-    height: 30%;
-    //text-align: center;
     display: flex;
-    gap: 1px;
-    font-size: 11px;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    color: ${(props)=>props.theme.textFaint};
     position: relative;
-    
-    
-   
+    /* 톱니에 padding 을 줬으니 오른쪽 여백을 그만큼 당긴다 */
+    margin-right: -7px;
 `
+//톱니가 13px 이라 눌러야 할 자리인지 잘 보이지 않았다.
+//아이콘을 키우고, 손가락/마우스가 닿을 원형 영역을 따로 준다.
 const Submenuicon=styled(FontAwesomeIcon)`
-    font-size: 14px;
-    margin-left:auto;
-    margin-top: 2px;
-    position: relative;
-    right: 5px;
-    
-    
+    font-size: 16px;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 50%;
+    box-sizing: content-box;
+    color: ${(props)=>props.theme.textMuted};
+    transition: color ${(props)=>props.theme.transition},
+                background ${(props)=>props.theme.transition};
 
+    &:hover {
+        background: ${(props)=>props.theme.surfaceHover};
+        color: ${(props)=>props.theme.accent};
+    }
 `
 const Readdiv=styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
-  //  justify-content: center;
-
-    height:68%;
+    align-items: flex-end;
     font-size:11px;
   
     
 `
 
+// 안 읽은 메시지 뱃지
 const Circlediv=styled.div`
        display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 5px;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
   border-radius: 999px; // pill 형태
-  border: 1px solid red;
-  font-size: 13px;
-  background: #eb5959;
+  font-size: 11px;
+  background: #e04545;
   color: white;
-  font-weight: bold;
+  font-weight: 700;
   box-sizing: border-box;
 `
 

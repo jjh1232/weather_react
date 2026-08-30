@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import "react-quill/dist/quill.snow.css"
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
+import { API_BASE } from "../config/api";
 
 const Wrapper=styled.div`
 color:"white"
@@ -114,11 +115,11 @@ axiosinstance.put(`/noticeupdate/${num}`,{
           //백엔드 multer라우터에 이미지를보냄
           try{
   
-              const result = await axiosinstance.post('http://localhost:8081/contentimage', formData
+              const result = await axiosinstance.post(`${API_BASE}/contentimage`, formData
                 
               );
               console.log('성공 시, 백엔드가 보내주는 데이터', result);
-              const IMG_URL = process.env.PUBLIC_URL+"/noticeimages/"+result.data;
+              const IMG_URL = API_BASE+"/noticeimages/"+result.data;
               //src를 절대경로로 이해하기위해 위와같이핸들링
               console.log(IMG_URL)
               // 이 URL을 img 태그의 src에 넣은 요소를 현재 에디터의 커서에 넣어주면 에디터 내에서 이미지가 나타난다

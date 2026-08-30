@@ -21,231 +21,223 @@ import { faTemperatureLow as temper } from "@fortawesome/free-solid-svg-icons";
 import { faSnowflake as snow} from "@fortawesome/free-regular-svg-icons";
 import { faCloudRain as smallrain } from "@fortawesome/free-solid-svg-icons";
 
+// 온도 구간별 색. 카드 전체를 채우던 진한 색 대신
+// 아주 옅은 틴트(tint) + 숫자/포인트에 쓰는 강조색(accent) 두 가지로 나눈다.
 const Weathercolor={
+    //accent 는 이제 글자색이 아니라 "왼쪽 띠 + 온도계 아이콘" 전용이라
+    //밝은 카드/어두운 카드 양쪽에서 모두 보이는 중간 밝기로 잡았다.
     //30도이상
-    veryhot:" rgba(250, 96, 96, 0.8)",
+    veryhot:{ tint:"rgba(240, 105, 98, 0.15)",  accent:"#e2574a" },
     //20도이상
-    hot:" rgba(252, 226, 166, 0.979)",
+    hot:    { tint:"rgba(243, 169, 90, 0.16)",  accent:"#e8912e" },
     //10도이상
-    warm:" rgba(123, 223, 253, 0.8)",
+    warm:   { tint:"rgba(94, 191, 220, 0.16)",  accent:"#31a6c6" },
     //0도이상
-    cool:" rgba(98, 200, 248, 0.8)",
+    cool:   { tint:"rgba(92, 148, 246, 0.15)",  accent:"#4a88e8" },
     //영하
-    cold:" rgba(67,29,180,0.8)"
-
-    
-
+    cold:   { tint:"rgba(122, 110, 228, 0.17)", accent:"#6a61d8" }
 }
 
+// 크기(250x110, margin 10px)는 건드리지 않는다.
+// Userweather2 의 슬라이드 keyframes 가 170/340/476px 같은 고정값을 쓰고 있어서
+// 카드 높이가 바뀌면 애니메이션이 어긋난다.
 const WeatherContainer=styled.div`
     width: 250px;
     height:110px;
-    border: 1px solid black;
-
-    //background-color: #9fd1fa; //마지막두자리가투명도 16진수임
-    visibility: ${props=>props.visi?"hidden" :"visable"};
-    margin: 10px;
+    /* 세로 간격은 Weatheritemwrapper(CARD_PITCH)가 만든다.
+       여기에 margin 을 주면 형제간 겹침으로 실제 간격이 달라진다. */
+    margin: 0;
+    visibility: ${props=>props.visi?"hidden" :"visible"};
     display: flex;
     flex-direction: column;
-    background-color:${(props) => props.tempcolor};
-    border-radius: 12%;
-    
-  
+    overflow: hidden;
+
+    position: relative;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: 16px;
+    box-shadow: ${(props)=>props.theme.shadow};
+    color: ${(props)=>props.theme.text};
+
+    /* 바탕은 패널 표면, 그 위에 온도 틴트를 옅게 얹는다 */
+    background-color: ${(props)=>props.theme.surface};
+    background-image: radial-gradient(
+        120% 90% at 100% 0%,
+        ${(props)=>props.tempcolor?.tint || "transparent"} 0%,
+        transparent 65%
+    );
+
+    /* 왼쪽 온도색 띠.
+       온도를 글자색으로 표현하면 대비가 부족해지므로, 색은 여기로 빼고
+       숫자는 항상 진한 본문색을 쓴다. */
+    &::before{
+        content:"";
+        position:absolute;
+        left:0;
+        top:14px;
+        bottom:14px;
+        width:4px;
+        border-radius: 0 4px 4px 0;
+        background:${(props)=>props.tempcolor?.accent || "transparent"};
+    }
 `
 const WeatherHeader=styled.div`
     display: flex;
-    
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
     width: 100%;
-    color: black;
-    height: 50%;
-   
-    text-align: center;
+    height: 58%;
 `
 const WeatherDate=styled.div`
-    width: 35%;
-   
-    
-
+    flex-shrink: 0;
 `
 const WeatherBody=styled.div`
     width: 100%;
     display: flex;
-    
-   height: 50%;
+    height: 42%;
 `
 const Skyandtempdiv=styled.div`
- 
-    width: 65%;
+    flex: 1;
+    min-width: 0;
     display: flex;
-    
+    align-items: center;
 `
 const Skyicon=styled.div`
-    width: 50%;
-    height: 100%;
-    
-   
-    
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
 `
 const Icondiv=styled.div`
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
-top: 2px;
-  position: relative;
-  left: 13px;
-  width: 70%;
-     
-  height: 55%; /* Set a height for the container */
 `
 const Skytext=styled.div`
-    position: relative;
     display: flex;
-    top: 2px;
-    width: 190%;
-    
-   
-    left:15px;
-   //border-top: 1px solid gray;
-   //border-left: 1px solid gray;
-    height: 40%;
- 
+    justify-content: center;
+    width: 100%;
 `
 //내부텍스트위치 ㅜ
 const Text=styled.div`
-
-    max-width: 150px;
-    font-weight: 700;
-    font-size: 15px;
-    
+    /* "구름많음,빗방울,눈날림" 처럼 긴 문구는 두 줄로 접는다 */
+    max-width: 100%;
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    word-break: keep-all;
+    color: ${(props)=>props.theme.textMuted};
     text-align: center;
 `
 
 
 const Tempcss=styled.div`
     display: flex;
-    width: 50%;
-    position: relative;
-  
-    overflow: hidden;
-    
-    padding-top:5px;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
 `
 const Tempicon=styled.div`
     display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
-  //border: 1px solid blue;
-  position: relative;
-  right: 0%;
-  height: 70%; /* Set a height for the container */
 `
 const Temptext=styled.div`
-    position: relative;
-    width: 60px;
-    text-align: center;
-    top:12%;
-    right: 6%;
-    font-weight: bold; 
-    height: 70%;
-    font-size: 25px;
-    color: ${(props)=>props.textcolor};
-    //border: 1px solid blue;
+    display: flex;
+    align-items: baseline;
+    gap: 1px;
+    font-weight: 750;
+    font-size: 24px;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    /* 카드가 밝든 어둡든 항상 읽히도록 본문색을 쓴다 */
+    color: ${(props)=>props.theme.text};
+    /* 카드마다 숫자 폭이 흔들리지 않게 */
+    font-variant-numeric: tabular-nums;
+`
+//온도 단위(°C)는 숫자보다 작고 흐리게
+const Degree=styled.span`
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0;
+    color: ${(props)=>props.theme.textMuted};
 `
 
+// 하단 지표 줄 (습도 / 강수 / 바람)
 const Etc=styled.div`
     display: flex;
-    
+    align-items: center;
     width: 100%;
-    border: 1px solid black;
+    padding: 0 10px 6px;
+    border-top: 1px solid ${(props)=>props.theme.border};
 `
 const Humidity=styled.div`
-    width: 25%;
+    flex: 1;
+    min-width: 0;
     display: flex;
-    
-    flex-direction: column;
-    
+    justify-content: center;
 `
 const Basecss=styled.div`
     display: flex;
-    flex-direction: column;
-    //background-color: white;
-    border-radius: 20%;
-    width: 70px;
-    margin: 3px;
-    
-    
+    align-items: center;
+    gap: 5px;
+    padding-top: 5px;
 `
 const Raindrop=styled.div`
-     width: 48%;
+     flex: 1.4;
+     min-width: 0;
      display: flex;
-     align-items: center;
- 
-     flex-direction: column;
+     justify-content: center;
 `
 const Windblow=styled.div`
-     width: 25%;
-   
+     flex: 1;
+     min-width: 0;
      display: flex;
-     flex-direction: column;
+     justify-content: center;
 `
 //지금필요없을듯
 const Etcheader=styled.div`
     text-align: center;
-    background-color: white;
- 
 `
 //
 const Etcicon=styled.div`
-     text-align: center;
-     //background-color:white;
-     color:${(props)=>props.color}  
-          
-    
+     display: flex;
+     align-items: center;
+     font-size: 11px;
+     color:${(props)=>props.color};
 `
 const Etcresult=styled.div`
-     text-align: center;
-    // background-color: white;
-    color: black;
-        white-space: nowrap;
-       
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
 `
 const TimeContainer=styled.div`
      display: flex;
-     //height: 71px;
- // border:1px solid blue;
-    width: 100px;
+    width: 54px;
    flex-direction: column;
-  align-items: center; /* 가로 중앙 정렬 */
-  justify-content: center; /* 세로 중앙 정렬 */
-  font-family: Arial, sans-serif;
- // border: 1px solid black;
+  align-items: flex-start;
+  justify-content: center;
 `
 const Perioddiv=styled.div`
-    position: relative;
-    //top:1px;
   font-weight: 600; 
-    font-size: 15px; 
-  color: black; 
-  //margin-bottom: 5px;
- /* font-weight    :bold ;
- margin-top:auto;
-  margin-bottom: 20px;
-  margin-left: 4px;
-  margin-right:1px;
-  */
- 
+    font-size: 11px; 
+  color: ${(props)=>props.theme.textFaint};
+  letter-spacing: -0.02em;
 `
 const Hourdiv=styled.div`
-    text-align: center;
-    align-items: center;
-    position: relative;
-    //top:2px;
-   bottom: 10px;
-    margin-bottom: 25px;
-     font-size: 30px; 
-  font-weight: bold; 
-  color: black;      
+     font-size: 22px; 
+  font-weight: 750; 
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: ${(props)=>props.theme.text};      
 `
+
 function Userweatheritem2(props){
 
     const {dates}=props;
@@ -287,7 +279,9 @@ function Userweatheritem2(props){
     //다음부턴 객체로 따로 조건만들어서하자.
     const Weatherimo=(sky,pty,hour,t1h)=>{
         let isnight=parseInt(hour)>=2000 ||parseInt(hour) <600?true:false
-        let iscolor=sky==="1"?"white":"dimgray"
+        //카드 배경이 밝아져서 흰색 아이콘은 보이지 않는다.
+        //맑음은 해=주황/달=남보라, 구름·흐림은 회색으로 구분한다.
+        let iscolor=sky==="1"?(isnight?"#6f78d8":"#eda32c"):"#7d8a97"
 
         if(sky==="1"){//맑음
             if(pty==="0") return (isnight?<><Icondiv><FontAwesomeIcon size={"2x"} color={iscolor} icon={moon}/></Icondiv><Skytext><Text>맑음</Text></Skytext></>:<><Icondiv><FontAwesomeIcon  color={iscolor} size={"2x"} icon={sun}/></Icondiv><Skytext><Text>맑음</Text></Skytext></>)
@@ -342,12 +336,14 @@ function Userweatheritem2(props){
        )
     }
 
+    const temptheme=tempthema(data.t1h);
+
     return (
     <>
     
     {data.time!==""?
         
-    <WeatherContainer tempcolor={tempthema(data.t1h)}>
+    <WeatherContainer tempcolor={temptheme}>
         <WeatherHeader>
         <WeatherDate>
         {timepar(data.time)}
@@ -371,16 +367,11 @@ function Userweatheritem2(props){
     </Skyicon>
    
     <Tempcss>
-        {parseInt(data.t1h)<0
-        ?<><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="blue"/></Tempicon> <Temptext textcolor="blue">{data.t1h+"\u2103" } </Temptext> 
-        
-        </> 
-        : <><Tempicon><FontAwesomeIcon icon={temper} size={"xl"} color="red"/> </Tempicon><Temptext textcolor="red">{data.t1h+"\u2103" } </Temptext>
-       
-        </>}
-   
-    
-    
+        {/* 색은 왼쪽 띠와 온도계 아이콘이 맡고, 숫자는 본문색으로 또렷하게 */}
+        <Tempicon>
+            <FontAwesomeIcon icon={temper} size={"sm"} color={temptheme.accent}/>
+        </Tempicon>
+        <Temptext>{data.t1h}<Degree>°C</Degree></Temptext>
     </Tempcss>
     </Skyandtempdiv>
         </WeatherHeader>
@@ -392,8 +383,8 @@ function Userweatheritem2(props){
     <Humidity>
         <Basecss>
         
-        <Etcicon color="blue">
-        <FontAwesomeIcon icon={droplet} size="xl" />  
+        <Etcicon color="#3d7ede">
+        <FontAwesomeIcon icon={droplet} />  
         </Etcicon>
         <Etcresult>
         {data.reh}% 
@@ -407,8 +398,8 @@ function Userweatheritem2(props){
     <Raindrop>
     <Basecss>
   
-            <Etcicon color="navy">
-            <FontAwesomeIcon icon={umbrella} size="xl"/>
+            <Etcicon color="#5a6fa8">
+            <FontAwesomeIcon icon={umbrella} />
             </Etcicon>
             <Etcresult>
             {data.rn1}
@@ -421,8 +412,8 @@ function Userweatheritem2(props){
     <Windblow>
     <Basecss>
     
-            <Etcicon color="black">
-            <FontAwesomeIcon icon={wind} size="xl"/>  
+            <Etcicon color="#7d8a97">
+            <FontAwesomeIcon icon={wind} />  
             </Etcicon>
             <Etcresult>
             {data.wsd}m/s

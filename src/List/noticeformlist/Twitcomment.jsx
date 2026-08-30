@@ -11,14 +11,43 @@ import Commentlist from "../Commentlist"
 import CommentPagination from "../../Noticepage/CommentPagination"
 
 
+/* 댓글 영역 전체.
+   작성창 / 목록 / 페이지네이션을 하나의 세로 흐름으로 묶는다. */
 const Wrapper=styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 12px;
+    scroll-margin-top: 70px;   // 페이지 이동 시 헤더에 가려지지 않게
+`
+/* "댓글 12" 같은 제목 줄 */
+const Sectionheader=styled.div`
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 2px 2px 0;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: ${(props)=>props.theme.text};
+`
+const Countbadge=styled.span`
+    font-size: 13px;
+    font-weight: 600;
+    color: ${(props)=>props.theme.accent};
+`
+const Loadingdiv=styled.div`
+    padding: 24px 16px;
+    text-align: center;
+    font-size: 13.5px;
+    color: ${(props)=>props.theme.textFaint};
 `
 const Pagenationcss=styled.div`
 
     display: flex;
     align-items: center;         // 세로 중앙정렬
     justify-content: center;     // 가로 중앙정렬
+    padding: 4px 0 8px;
 `
 
 export default function Twitcomment(props){
@@ -48,27 +77,30 @@ const axiosinstance=CreateAxios();
     const queryclient=useQueryClient();
 
      useEffect(() => {
-            setTimeout(() => {
-         
-       
-      
-     
-       // 최초가 아니라면(즉, page가 바뀌어서 useEffect가 재실행된 경우)
+            //데이터가 갈아끼워진 뒤에 스크롤해야 위치가 맞는다
+            const timer=setTimeout(() => {
        if (ref.current) {
-         ref.current.scrollIntoView({ behavior: 'smooth' });
+         ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
        }
-         }, 1500);
+         }, 200);
+         return ()=>clearTimeout(timer);
      }, [page]);
     
 
     return (
-        <>
+        <Wrapper ref={ref}>
   
-        <Commentform noticenum ={noticeid} depth="0" cnum="" ref={ref} page={page}/>
+        <Commentform noticenum ={noticeid} depth="0" cnum="" page={page} setPage={setPage}/>
     
-        
+        {commentsloading&&<Loadingdiv>댓글을 불러오는 중...</Loadingdiv>}
+
         {comments?.content&&
                 <>
+                <Sectionheader>
+                    댓글
+                    <Countbadge>{comments.totalElements ?? comments.content.length}</Countbadge>
+                </Sectionheader>
+
                <Commentlist comments={comments.content} noticeid={noticeid} page={page}   />
                  <Pagenationcss>
                              <CommentPagination currentpage={page} totalpage={comments?.totalPages} setpage={setPage}/>
@@ -79,6 +111,6 @@ const axiosinstance=CreateAxios();
        
 
 
-</>
+</Wrapper>
     )
 }

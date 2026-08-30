@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState,useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
+import { API_BASE } from "../config/api";
 
 function Userviewtest(){
 
@@ -14,7 +15,7 @@ function Userviewtest(){
     //ref는자동 안움직이면자동으로리렌더링이안되서 ;스태이트로..
     useEffect(()=>{
         console.log(statenum)
-        axios.get("http://localhost:8081/open/notice?page="+statenum)
+        axios.get(`${API_BASE}/open/notice?page=`+statenum)
         .then((res)=>{
             console.log(res.data.content)
             setNotice(notice.concat(res.data.content))//객체는 concat으로해야하나봄

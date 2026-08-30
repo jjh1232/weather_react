@@ -5,6 +5,7 @@ import { useRef } from "react";
 import authCheck from "../../customhook/authCheck";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config/api";
 
 function Userdata(props){
     const {username, usernickname}=props
@@ -97,7 +98,7 @@ function Userdata(props){
         console.log(tousername)
         console.log(tousernickname)
         if(logincheck){
-        axiosinstance.post(`http://localhost:8081/createchatroom`,{
+        axiosinstance.post(`${API_BASE}/createchatroom`,{
             
         usernickname:tousernickname,
         memberlist:tousername

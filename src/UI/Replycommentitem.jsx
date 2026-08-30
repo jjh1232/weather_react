@@ -19,23 +19,40 @@ import ReplyUpdateUI from "./ReplyUpdateUI";
 import ReplyShowUI from "./ReplyShowUI";
 
 
-
+/* 대댓글 줄.
+   예전엔 padding-left 를 %로 줘서 화면 폭에 따라 들여쓰기가 들쭉날쭉했다.
+   px 로 고정하고, 왼쪽에 세로선을 그어 "어느 댓글에 달린 답글인지" 보이게 한다. */
 const Wrapper=styled.div`
-   padding-left: 5%;
+  position: relative;
   display: flex;
-//border-bottom:1px solid gray;
-//gap: 5px;
-//padding-top: 5px;
-//padding-bottom: 8px;
+  padding: 4px 0 4px 44px;
 
+  /* 부모 댓글의 프로필 중앙(약 28px)에 맞춘 스레드 라인 */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 27px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    border-radius: 2px;
+    background: ${(props)=>props.theme.border};
+  }
 `
 const ChildWrapper=styled.div`
-  border: 1px solid gray;
   width: 100%;
   display: flex;
-  gap: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
- 
+  gap: 10px;
+  padding: 10px 12px;
+  background: ${(props)=>props.theme.surfaceAlt};
+  border: 1px solid ${(props)=>props.theme.border};
+  border-radius: ${(props)=>props.theme.radius};
+  transition: background ${(props)=>props.theme.transition},
+              border-color ${(props)=>props.theme.transition};
+
+  &:hover {
+    border-color: ${(props)=>props.theme.borderStrong};
+  }
 `
 
 function Replycommentitem(props){

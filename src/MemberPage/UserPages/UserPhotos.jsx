@@ -11,14 +11,21 @@ const Wrapper=styled.div`
 position: relative;
 
 width:100%;
-height:100%;
-display: flex;
-flex-wrap: wrap;
+/* 고정폭 타일 + flex-wrap 이라 화면마다 줄이 달라지고 남는 자리가 생겼다.
+   auto-fill 로 칸 수를 브라우저가 정하게 한다. (top:8% 는 옛 보정값) */
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 10px;
+padding: 12px;
+
  color:${props => props.theme.text};
- background:${props => props.theme.background};
- top: 8%;
-// border: 1px solid red;
-gap: 5px;
+ background: transparent;
+
+@media (max-width: 620px) {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
 `
 
 export default function UserPhotos(){

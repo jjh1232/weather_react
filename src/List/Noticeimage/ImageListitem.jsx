@@ -1,27 +1,42 @@
 import React from "react";
 import styled from "styled-components";
+import { API_BASE } from "../../config/api";
 
-
+//미리보기 격자의 한 칸.
+//예전에는 200px 고정 + object-fit:fill 이라 사진이 늘어나 찌그러졌다.
+//칸은 정사각형으로 두고 이미지는 cover 로 잘라서 채운다.
 const Wrapper=styled.div`
-    width: 200px;
-    height: 200px;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radius};
+    background: ${(props)=>props.theme.surfaceAlt};
 `
 const Prev=styled.img`
-     width:200px;
-    //  flex: 0 0 calc((100% - 16px * 3) / 4);
-    height: 200px;
-    object-fit: fill;
-    border: 1px solid black;
-`
-export default function ImageListitem(props){
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ${(props)=>props.theme.ease};
 
-    
+    ${Wrapper}:hover & {
+        transform: scale(1.04);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+        ${Wrapper}:hover & { transform: none; }
+    }
+`
+
+export default function ImageListitem(props){
 
     return (
         <Wrapper>
-            <Prev src={process.env.PUBLIC_URL+props.data.path}/>
-
+            <Prev src={API_BASE+props.data.path}
+                  alt={props.data.filename||"첨부 이미지"}
+                  loading="lazy"/>
         </Wrapper>
     )
-
 }

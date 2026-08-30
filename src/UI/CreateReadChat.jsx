@@ -1,6 +1,7 @@
 import { useRef,useState,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs"
+import { WS_BASE } from "../config/api";
 
 function CreateReadChat(){
 const [chatList,setChatList]=useState([]);
@@ -13,7 +14,7 @@ const client=useRef({});//userref로 속성값이변경되도재랜더링하지�
 const connect=()=>{
     //연결할때
 client.current=new StompJs.Client({
-    brokerURL: `wss://localhost:8081/open/ws/stomp/chat`,
+    brokerURL: `${WS_BASE}/open/ws/stomp/chat`,
     onConnect: ()=>{
         console.log('연결성공')
         subscribe(); //연결성공시 구독하는로직실행

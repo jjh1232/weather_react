@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { API_BASE } from "../config/api";
 
 function Detachlistitem(props){
 
@@ -7,7 +8,7 @@ function Detachlistitem(props){
 
     const detachdown=()=>{
         console.log("첨부다운")
-        axios.post("http://localhost:8081/open/getdetach",{
+        axios.post(`${API_BASE}/open/getdetach`,{
    
         uri:detach.path,
         filename:detach.filename
@@ -37,7 +38,9 @@ function Detachlistitem(props){
     }
     //리액트에서 만 다운
     const downloadfiles=async(path,filename)=>{
-        const url= process.env.PUBLIC_URL+path;
+        //업로드된 첨부파일은 프론트 정적 자산이 아니라 백엔드가 내보내는 파일이다.
+        //PUBLIC_URL 을 쓰면 배포했을 때 프론트 도메인을 가리켜 404 가 난다.
+        const url= API_BASE+path;
         const download=document.createElement(`a`);
 
         download.href=url;
@@ -51,7 +54,7 @@ function Detachlistitem(props){
         {detach.filename}
         </a>
 
-        <a href={`http://localhost:8081/open/atagdown?path=${detach.path}`}>
+        <a href={`${API_BASE}/open/atagdown?path=${detach.path}`}>
             고정태그{detach.filename}
             </a>
         <button onClick={detachdown}>axios다운</button>

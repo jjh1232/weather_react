@@ -154,8 +154,8 @@ export default function Roomnamemodal(props){
         },onSuccess:(data)=>{
             console.log("성공:",data)
             //두개다하는게 좋다함
-            queryClient.invalidateQueries(["chatroommeta",cookie.userinfo.userid])
-             queryClient.invalidateQueries(["chatroominfo",cookie.userinfo.userid])
+            queryClient.invalidateQueries({ queryKey: ["chatroommeta",cookie.userinfo.userid] })
+             queryClient.invalidateQueries({ queryKey: ["chatroominfo",cookie.userinfo.userid] })
              setisroomname(false)
         },onError:(error)=>{
             console.log("에러:",error.response)

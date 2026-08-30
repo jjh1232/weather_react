@@ -87,7 +87,6 @@ const SaveButtoncss=styled.button`
 }
 `
 const Body=styled.div`
-    border: 1px solid red;
     position: relative;
       display: flex;
   justify-content: center;
@@ -99,10 +98,9 @@ const Body=styled.div`
 const Preimage=styled.img`
     position: relative;
     width: 550px;
-    height: 99%;
+    height: 550px;
     
     display: block;
-    border: 3px solid blue;
   object-fit: cover;
   transform: ${props => `translate(${props.offsetX}px, ${props.offsetY}px) scale(${props.zoom})`};
  transition: ${props => (props.isDragging ? 'none' : 'transform 0.3s ease')};
@@ -110,9 +108,12 @@ const Preimage=styled.img`
 `
 const Focusdiv=styled.div`
     position: absolute;
-     width: ${props => (props.mode === "profile" ? "550px" : "550px")};
-    height: ${props => (props.mode === "profile" ? "550px" : "150px")};
-    border: 2px solid #2068c5;
+    /* 크기는 ImageEditor 가 계산한 focussize 를 그대로 받는다.
+       예전엔 여기서 mode==="profile" 로 비교했는데 부모가 넘기는 값은
+       "Background"/"Profile" 이라 항상 150px 로 떨어졌다. */
+     width: ${props => props.boxw}px;
+    height: ${props => props.boxh}px;
+    border: 1px solid #2068c5;
     transform: translate(-50%, -50%);
      top: 50%;
   left: 50%;
@@ -153,6 +154,8 @@ export default function ImageEditor(props){
     const isdraggingref=useRef(false);
     const bodyref=useRef(null);
     const imgref=useRef(null);
+    const focusdivref=useRef(null);
+
 
     //포커스존 사이즈객체형식으로해봄 
     const focus_size={
@@ -163,14 +166,10 @@ export default function ImageEditor(props){
     //형식사용
     const focussize=focus_size[mode]||focus_size.default;
     
-    const [previmgaesrc,setpreviewsrc]=useState(null)
-    //크롭기준영역
-    const [crop,setCrop]=useState({
-        x:0,
-        y:0,
-        w:0,
-        h:0
-    })
+    //화면에 그려지는 정사각 표시 상자 한 변(Preimage 의 width/height)
+    const VIEW=550;
+    //원본 픽셀 크기. crop 계산은 전부 여기서 출발한다.
+    const [natural,setNatural]=useState({w:0,h:0})
 
     const handlemousedown=(e)=>{
         e.preventDefault();
@@ -183,20 +182,19 @@ export default function ImageEditor(props){
          const handlemousemove = (e) => {
     if (!isdraggingref.current) return;
 
-    const bodyRect = bodyref.current.getBoundingClientRect();
-    const img = imgref.current;
-     const imgRect=img.getBoundingClientRect();
-   
-      
     const dx = e.clientX - dragstartref.current.x;
     const dy = e.clientY - dragstartref.current.y;
 
     dragstartref.current = { x: e.clientX, y: e.clientY };
            
-     const minlimitX = (imgRect.width - focussize.width) / 2*-1;  // 왼쪽 끝까지 이동
-      const maxlimitX = (imgRect.width - focussize.width) / 2;       // 오른쪽 끝까지 이동
-      let minlimitY=(imgRect.height-focussize.height)/2;//아래최대
-      let maxlimitY=(imgRect.height-focussize.height)/2*-1;//위최대
+    //object-fit:cover 라 이미지는 항상 VIEW x VIEW 를 채운다.
+      //줌을 걸면 VIEW*zoom 이 되고, 그 안에서 포커스 박스가 빠져나가지 않을 만큼만 움직인다.
+      const limitX = Math.max(0,(VIEW*zoom - focussize.width) / 2);
+      const limitY = Math.max(0,(VIEW*zoom - focussize.height) / 2);
+      const minlimitX = -limitX;
+      const maxlimitX =  limitX;
+      let minlimitY =  limitY;
+      let maxlimitY = -limitY;
     setImgoffset(prev => {
       let newX = prev.x + dx;
       let newY = prev.y + dy;
@@ -248,12 +246,7 @@ export default function ImageEditor(props){
          
 
    
-        setCrop({
-            x:0,
-            y:nath/3,
-            w:natw,
-            h:nath/3
-        })
+        setNatural({w:natw,h:nath})
         //초기화
             setImgoffset({ x: 0, y: 0 });
              setZoom(1);
@@ -304,67 +297,70 @@ export default function ImageEditor(props){
         })
 
     }
-    //포커스디브저장
-    const saveFocusArea=()=>{
-        console.log("이미지저장")
-        const canvas=document.createElement('canvas');
-    
-        //랜더된 이미지와 바디중간값
-       
-       
-        
-     
-        //캔버스의 크기 
-        canvas.width=focussize.width;
-        canvas.height=focussize.height;
-        
-        const ctx=canvas.getContext('2d');
-       
-        //이미지객체생성
-        const img= new window.Image();
+    /* ── 잘라내기 ─────────────────────────────────────────────
+       예전 계산은 "표시된 이미지 = 원본 전체" 라고 가정했다.
+       하지만 Preimage 는 550x550 에 object-fit:cover 라 원본의 가운데만 보인다.
+       (가로로 긴 지도라면 좌우가 잘려 나간다)
+       그래서 crop.w 에 원본 전체 너비를 넣으면, 화면에 보이지도 않는 좌우까지
+       550x150 캔버스에 눌러 담게 된다. 미리보기가 파란 박스보다 넓게 나온 이유다.
 
+       올바른 대응:
+         s = max(VIEW/natw, VIEW/nath)   // cover 배율
+         k = s * zoom                    // 화면 1px == 원본 1/k px
+       그리고 transform: translate(T) scale(z) 는 "가운데 기준 확대 후 이동" 이므로
+         원본좌표 = 원본중심 - (포커스박스절반 + 이동량) / k
+       ───────────────────────────────────────────────────── */
+    const saveFocusArea=()=>{
+        if(!Imagedata||!natural.w||!natural.h) return;
+
+        const img=new window.Image();
         img.src=Imagedata;
 
-        console.log("이미지저장3")
-        //쿰에따라 자를위치 
-        
-
         img.onload=()=>{
-            //전체이미지에서 값구해야할듯
-        const cropW=crop.w/zoom;
-        const cropH=crop.h/zoom;
-        //줌변화로 인환 시작점이동
-        const zoomOffsetX=(crop.w-cropW)/2;//원본기준 시작점 우측
-        const zoomOffsetY=(crop.h-cropH)/2; //원본기준 시작점하단
+            const natw=img.naturalWidth;
+            const nath=img.naturalHeight;
 
-        //드래그이동반영
-        const dragOffsetX = (imgoffset.x * -1) / zoom;
-        const dragOffsetY = (imgoffset.y * -1) / zoom;
-        // 4. 최종 시작점 = 초기 + zoom 변화 + drag 이동
-        const cropX = crop.x + zoomOffsetX + dragOffsetX;
-        const cropY = crop.y + zoomOffsetY + dragOffsetY;
+            const cover=Math.max(VIEW/natw, VIEW/nath);
+            const k=cover*zoom;
 
-            ctx.drawImage(img,//원본
-                cropX,cropY,cropW,cropH,//원본이미지자를위치와크기 focus존
-                0,0 //캔버스에 이미지를 위치에그림 공백쓸건아니니0,0으로
-                , canvas.width, canvas.height //dx,dy위치에 지정한크기로그림
+            let cropW=focussize.width/k;
+            let cropH=focussize.height/k;
+            let cropX=natw/2-(focussize.width/2+imgoffset.x)/k;
+            let cropY=nath/2-(focussize.height/2+imgoffset.y)/k;
+
+            //드래그 제한이 있어 보통은 안 넘지만, 반올림으로 삐져나가면 투명이 섞인다
+            cropW=Math.min(cropW,natw);
+            cropH=Math.min(cropH,nath);
+            cropX=Math.min(Math.max(cropX,0),natw-cropW);
+            cropY=Math.min(Math.max(cropY,0),nath-cropH);
+
+            const canvas=document.createElement('canvas');
+            canvas.width=focussize.width;
+            canvas.height=focussize.height;
+            const ctx=canvas.getContext('2d');
+
+            ctx.drawImage(img,
+                cropX,cropY,cropW,cropH,   //원본에서 잘라낼 영역
+                0,0,canvas.width,canvas.height //캔버스에 채우기
             );
-            //결과저장
-            //canvas.toBlob(blob=>{//blob이나 url로저장
-              //          })
-        const dataurl=canvas.toDataURL("image/png");
-        setpreviewsrc(dataurl)
-            }
 
+            /* 서버가 MultipartFile 로 받으므로 base64(dataURL)가 아니라 Blob 이 필요하다.
+               미리보기용 objectURL 도 같이 넘겨서 화면에는 바로 보이게 한다. */
+            canvas.toBlob((blob)=>{
+                if(!blob) return;
+                const previewurl=URL.createObjectURL(blob);
+                onupdate({blob:blob,preview:previewurl});
+            },"image/png");
+        }
     }
+
     return (
         <Outdiv>
            
       
         <EditorWrapper>
              <Headerdiv>
-                {previmgaesrc&&<img src={previmgaesrc} alt="미리보기" style={{width: "200px",
-  height: "50px",border:"1px solid red",objectFit:"fill"}}/>}
+               
                 <Exitdiv>
                     <ExitButton onClick={()=>setback(null)}>
                         <Exiticon icon={exiticon}/>
@@ -388,13 +384,12 @@ export default function ImageEditor(props){
                     ref={imgref}
                     onLoad={handleimageload}
                  />}
-      
-                <Focusdiv mode={mode} />
+              
+                <Focusdiv boxw={focussize.width} boxh={focussize.height} ref={focusdivref}/>
+                
             </Body>
        
         <Bottom>
-         <div style={{color:"black"}}>imgOffset x:{imgoffset.x}, y:{imgoffset.y}</div>
- 
             <Minusdiv onClick={()=>setZoom(prevZoom=>Math.max(prevZoom -0.1,1))}
                   onMouseDown={()=>gagemousedownminus(-0.1)}
                 onMouseLeave={gageplusmouseup}

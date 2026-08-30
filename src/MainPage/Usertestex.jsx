@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
+import { API_BASE } from "../config/api";
 
 function UserTest(){
 const [loginuser,Setloginuser]=useCookies("userinfo");
@@ -12,7 +13,7 @@ const [loginuser,Setloginuser]=useCookies("userinfo");
     })
 
     const userteston=()=>{
-    axios.get("/usertest",{
+    axios.get(`${API_BASE}/usertest`,{
         headers:{
             Authorization:  loginuser.Acesstoken,
             Refreshtoken: loginuser.Refreshtoken

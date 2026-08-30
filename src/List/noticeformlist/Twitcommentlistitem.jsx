@@ -9,6 +9,8 @@ import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown as downbutton } from "@fortawesome/free-solid-svg-icons";
 import { faCaretUp as upbutton } from "@fortawesome/free-solid-svg-icons";
+import { useConfirm } from "../../UI/Feedback/FeedbackProvider";
+import profileimage from "../../UI/profileimage";
 
 const Wrapper=styled.div`
     display: flex;
@@ -111,6 +113,7 @@ const [isreple,setIsreple]=useState(false);
 const [isupdate,setIsupdate]=useState(false);
 const [isusercheck,setIsusercheck]=useState(false);
 const [loginuser,setloginuser,removeLoginuser]=useCookies();
+const confirm=useConfirm();
 const [updatecomment,Setupdatecomment]=useState();
 
 //접기늘리기버튼
@@ -147,7 +150,7 @@ return (
     <br/>
     {isupdate?<>
         <Profileview>
-    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
+    <img   src={profileimage(comment.userprofile)}
    style={{objectFit:"fill",width:"100%",height:"100%"}}
   
                 />
@@ -176,7 +179,7 @@ return (
   
     <Profilediv>
         <Profileview>
-    <img   src={process.env.PUBLIC_URL+"/userprofileimg"+comment.userprofile}
+    <img   src={profileimage(comment.userprofile)}
    style={{objectFit:"fill",width:"100%",height:"100%",backgroundColor:"white"}}
   
                 />
@@ -205,10 +208,14 @@ return (
     <Button title="수정" onClick={()=>{
                     setIsupdate(true)
             }}/>
-             <Button title="삭제" onClick={()=>{
-              if(window.confirm("정말로삭제하시겠습니까")){
-              commentdelete(comment.id);
-              }
+             <Button title="삭제" onClick={async()=>{
+              const ok=await confirm({
+                title:"댓글을 삭제할까요?",
+                description:"삭제하면 되돌릴 수 없습니다.",
+                confirmText:"삭제",
+                danger:true,
+              })
+              if(ok) commentdelete(comment.id);
             }}/>
             </>:<>
             

@@ -5,144 +5,127 @@ import CreateAxios from "../../customhook/CreateAxios";
 import axios from "axios";
 import Userweatheritem2 from "./Userweatheritem2";
 import { css } from "styled-components";
+import { API_BASE } from "../../config/api";
 
 const Headers=styled.div`
-  
-  
   text-align: center;
-  font-size: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: ${(props)=>props.theme.textMuted};
 `
 
 const Datediv=styled.div`
 
 width: 100%;
 text-align: center;
-  font-size: 30px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: ${(props)=>props.theme.text};
 `
 const Wrapper=styled.div`
   position: relative;
   overflow: hidden;
-  top: 10px;
-  background-color: ${(props)=>props.theme.background};
-  
-
-  
+  /* top 오프셋은 높이를 만들지 않아 그만큼 아래가 잘린다. 패딩으로 준다. */
+  padding: 12px 0 4px;
+  /* 배경은 바깥 사이드바 패널이 갖는다 */
+  background-color: transparent;
+  color: ${(props)=>props.theme.text};
 `
 const WeathercardConatiner=styled.div`
   overflow: hidden;
-  border: 1px solid black;
+  border-top: 1px solid ${(props)=>props.theme.border};
   height: 400px;
 `
 //슬라이드애니메이션
+//====================================================================
+// 카드 한 칸의 높이. Weatheritemwrapper 가 이 높이를 강제하므로
+// margin 겹침 같은 변수 없이 "이동거리 = 한 칸"이 항상 정확히 맞는다.
+// (예전엔 카드가 실제로 120px 남짓 간격인데 애니메이션은 170px 를 움직여서,
+//  슬라이드가 끝나고 상태가 바뀌는 순간 그 차이만큼 카드가 튀었다)
+const CARD_PITCH=130;
+// 넘김 1회 소요시간. 아래 setTimeout 과 반드시 같아야 한다.
+const SLIDE_MS=380;
+// 끝에서 부드럽게 감속
+const SLIDE_EASE="cubic-bezier(0.22, 1, 0.36, 1)";
+//====================================================================
+
+// 가장자리 -> 가운데 (커지며 선명해진다)
 const Slideup=keyframes`
   from{
-    transform: translateY(0) scale(0.9) ;
+    transform: translateY(0) scale(0.9);
     opacity: 0.5;
-    }
+  }
   to{
-    transform: translateY(-170px) scale(1) ;
+    transform: translateY(-${CARD_PITCH}px) scale(1);
     opacity: 1;
-    }
+  }
 `
 const Slidedown=keyframes`
-    from{
-    transform: translateY(0)  scale(0.9) ;
+  from{
+    transform: translateY(0) scale(0.9);
     opacity: 0.5;
-   }
+  }
   to{
-    transform: translateY(170px)  scale(1) ;
+    transform: translateY(${CARD_PITCH}px) scale(1);
     opacity: 1;
-    }
+  }
 `
+// 가운데 -> 가장자리 (작아지며 흐려진다)
 const mainSlideup=keyframes`
   from{
-    transform: translateY(0) scale(1) ;
+    transform: translateY(0) scale(1);
     opacity: 1;
-    }
+  }
   to{
-    transform: translateY(-170px) scale(0.9) ;
+    transform: translateY(-${CARD_PITCH}px) scale(0.9);
     opacity: 0.5;
-    }
+  }
 `
 const mainSlidedown=keyframes`
-    from{
-    transform: translateY(0)  scale(1) ;
+  from{
+    transform: translateY(0) scale(1);
     opacity: 1;
-   }
+  }
   to{
-    transform: translateY(170px)  scale(0.9) ;
+    transform: translateY(${CARD_PITCH}px) scale(0.9);
     opacity: 0.5;
-    }
+  }
 `
+// 가장자리 -> 화면 밖.
+// 예전에는 10%씩 끊어서 옮긴 뒤 476px 로 순간이동시켰는데,
+// 그 구간이 등속이라 뚝뚝 끊겨 보였고 어차피 55% 부터 투명해서 보이지도 않았다.
+// 그냥 한 칸 밀려나며 사라지게 한다.
 const turnup=keyframes`
-    0%{
-    transform: translateY(0)  scale(0.9);
-  
-  }10%{
-    transform: translateY(-34px)  scale(0.9);
-  }20%{
-    transform: translateY(-68px)  scale(0.9);
-  }30%{
-    transform: translateY(-102px)  scale(0.9);
-  }40%{
-    transform: translateY(-136px)  scale(0.9);
-  }50%{
-    transform: translateY(-170px)  scale(0.9);
+  from{
+    transform: translateY(0) scale(0.9);
+    opacity: 0.5;
   }
-  55%  { opacity: 0; }
-  60%{
-    transform: translateY(476px) scale(0.9) ;
-  }70%{
-    transform: translateY(452px) scale(0.9) ;
-  }80%{
-    transform: translateY(408px)  scale(0.9);
-  }90%{
-    transform: translateY(374px)  scale(0.9);
-  }
-  100%{
-    transform: translateY(340px)  scale(0.9);
-   
+  to{
+    transform: translateY(-${CARD_PITCH}px) scale(0.82);
+    opacity: 0;
   }
 `
 const turndown=keyframes`
-        0%{
-    transform: translateY(0)  scale(0.9);
-  
-  }10%{
-    transform: translateY(34px)  scale(0.9);
-  }20%{
-    transform: translateY(68px)  scale(0.9);
-  }30%{
-    transform: translateY(102px) scale(0.9) ;
-  }40%{
-    transform: translateY(136px)  scale(0.9);
-  }50%{
-    transform: translateY(170px)  scale(0.9);
+  from{
+    transform: translateY(0) scale(0.9);
+    opacity: 0.5;
   }
-  55%  { opacity: 0; }
-  60%{
-    transform: translateY(-476px)  scale(0.74);
-  }70%{
-    transform: translateY(-452px)  scale(0.78);
-  }80%{
-    transform: translateY(-408px)  scale(0.82);
-  }90%{
-    transform: translateY(-374px)  scale(0.86);
-  }
-  100%{
-    transform: translateY(-340px)  scale(0.9);
-   
+  to{
+    transform: translateY(${CARD_PITCH}px) scale(0.82);
+    opacity: 0;
   }
 `
+// 끝(첫/마지막 시각)이라 넘어갈 카드가 없을 때는 제자리에서 사라진다
 const fadeout=keyframes`
   from{
     opacity: 0.5;
     transform: scale(0.9);
   }
   to{
-    
-    opacity: 0.0;
-    transform: scale(0.5);
+    opacity: 0;
+    transform: scale(0.82);
   }
 `
 
@@ -150,13 +133,20 @@ const Arrow=styled.div`
    position: relative;
     margin: 10px;
     content: '';
-    width: 30px; //화살표 크기
-    height: 30px; //화살표 크기
-   
-    color:${(props)=>props.theme.text};
-    border-top: 5px solid ${(props)=>props.theme.text}; //화살표 선
-    border-right: 5px solid ${(props)=>props.theme.text}; //화살표 선
+    width: 14px; //화살표 크기
+    height: 14px; //화살표 크기
+    cursor: pointer;
+
+    color:${(props)=>props.theme.textMuted};
+    border-top: 2px solid ${(props)=>props.theme.textMuted}; //화살표 선
+    border-right: 2px solid ${(props)=>props.theme.textMuted}; //화살표 선
     transform:${props=>props.rota?'rotate(-45deg)':'rotate(135deg)'} ; //다음 화살표
+    transition: border-color ${(props)=>props.theme.transition};
+
+    &:hover {
+      border-top-color: ${(props)=>props.theme.accent};
+      border-right-color: ${(props)=>props.theme.accent};
+    }
 `
 //컨테이너스타일
 const WeatherContainer=styled.div`
@@ -231,15 +221,24 @@ return null;
 
 }
 const Weatheritemwrapper=styled.div`
-  //transition: all 0.3s ease;
+  /* 한 칸 높이를 여기서 확정한다. 카드의 margin 에 맡기면
+     형제간 margin 겹침 때문에 실제 간격이 애니메이션 이동거리와 어긋난다. */
+  height: ${CARD_PITCH}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   opacity: ${props=>props.isCurrent?1:0.5}; //투명도
-  //border: 1px solid red;
   transform: scale(${props => props.isCurrent ? 1 : 0.9}); //크기
-  ${({index,any,isindex})=>css`
-    animation:${getAnimation({index,any,isindex})} 1s ease-in-out forwards;
-  `}
-  
-  
+  will-change: transform, opacity;
+
+  ${({index,any,isindex})=>{
+    const name=getAnimation({index,any,isindex});
+    //넘기는 중이 아닐 때는 animation 속성을 아예 넣지 않는다
+    return name?css`
+      animation:${name} ${SLIDE_MS}ms ${SLIDE_EASE} forwards;
+    `:"";
+  }}
 `
 function Userweather2(props){
     
@@ -259,25 +258,28 @@ function Userweather2(props){
     const [animationeff,setAnimation]=useState(null);
     
     const handlerSlideup=()=>{
+        //넘기는 도중에 또 누르면 인덱스가 어긋나므로 막는다
+        if(animationeff) return;
         setAnimation("up")
         setTimeout(()=>{
           setTimeindex(previndex=>previndex-1)
           setAnimation(null)//초기화
-        },1000)//애니메이션지속시간
+        },SLIDE_MS)//애니메이션지속시간과 동일해야 한다
     }
     const handlerSlidedown=()=>{
+      if(animationeff) return;
       setAnimation("down")
       setTimeout(()=>{
         setTimeindex(previndex=>previndex+1)
         setAnimation(null)//초기화
-      },1000)//애니메이션지속시간
+      },SLIDE_MS)//애니메이션지속시간과 동일해야 한다
   }
 
     //========================================
     useEffect(()=>{
         if(loginuser.userinfo){
           console.log("유저주소있음"+loginuser.userinfo.gridy)
-          axios.get("http://localhost:8081/open/weatherdata",{
+          axios.get(`${API_BASE}/open/weatherdata`,{
             params:{
                 region:loginuser.userinfo.region.replaceAll("+"," "),
                 gridx:loginuser.userinfo.gridx,
@@ -296,7 +298,7 @@ function Userweather2(props){
         else{
 
           //유저주소없음
-            axios.get("http://localhost:8081/open/weatherdata")
+            axios.get(`${API_BASE}/open/weatherdata`)
             .then((res)=>{
                 console.log("날씨데이터"+res)
                 setWeatherdata(res.data)

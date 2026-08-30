@@ -1,195 +1,175 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import styled from "styled-components";
 import CreateAxios from "../CreateAxios";
-import Pagenation from "../Pagenation";
 import SimplePagenation from "./AdminCss/SimplePagenation";
-import { useState } from "react";
+import { Badge } from "../../admin/AdminUI";
+import { Modalout, Modalin, Head, Headtitle, Headsub, Closebutton, Body, Emptybox }
+    from "../../admin/AdminModal";
 
-const Modalout=styled.div`
-justify-content: center;
-align-items: center;
-width: 40%;
-height: 50%;
-top: 15%;
-left :55%;
-position: fixed;
-background:rgba(0,0,0,0.5);
-z-index: 10;
+//=====================================================================
+// 게시글 신고 내역.
+//
+// 예전엔 Modalout 이 width:40%; height:50%; top:15%; left:55% 로 화면
+// 오른쪽 아래 귀퉁이에 고정돼 있었다(그것도 반투명 검정 배경째로).
+// 창 크기가 달라지면 표가 잘리거나 화면 밖으로 나갔다.
+// 다른 관리자 모달과 같은 껍데기(AdminModal)를 쓴다.
+//=====================================================================
 
-`
-
-const ModalIn=styled.div`
-
-padding: 10px;
-width: 90%;
-height: 80%;
-left:4%;
-top:8%;
-position: relative;
-background-color: #FFFFFF;
-//overflow: auto;
-`
-const Exitbutton  =styled.div`
-position: absolute;
-top: 15px;
-left:0%;
-
-z-index: 10;
-
-display: inline-block;
-
-
- &::before {
-    content: "";
-    width: 40px;
-    top: 0%;
-    left: 0%;
-    position: absolute;
-    border-bottom: 10px solid black;
-    transform:  rotate(45deg);
-  }
-
-  &::after {
-    top: 0%;
-    
-    content: "";
-    width: 40px;
-    left:0%;
-    position: absolute;
-    border-bottom: 10px solid black;
-    transform:  rotate(-45deg);
-  }
-`
-const DecleTable=styled.table`
-    border: 1px solid black;
-    width: 700px;
-    max-height:250px;
-`
-const Decleth=styled.thead`
+const Table=styled.table`
     width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
 `
-const Decletd=styled.td`
-    
+const Th=styled.th`
+    padding: 8px 10px;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: ${(props)=>props.theme.textFaint};
+    background: ${(props)=>props.theme.surfaceAlt};
+    border-bottom: 1px solid ${(props)=>props.theme.border};
 `
-const Decledatath=styled.tr`
-    
+const Td=styled.td`
+    padding: 9px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    color: ${(props)=>props.theme.text};
+    word-break: break-all;
 `
-const DecleList=styled.td`
-   
-    border:1px solid gray;
-    height: 9.2%;
+const Tablewrap=styled.div`
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radius};
+    overflow-x: auto;
 `
-const Headers=styled.div`
-display: flex;
-border: 1px solid green;
+//사유는 여러 개가 붙어 오므로 알약으로 끊어 읽기 쉽게
+const Reasons=styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
 `
-const Title=styled.div`
-    
-    width: 60%;
-    text-align: right;
-    font-size:20px;
-    
+const Reason=styled.span`
+    padding: 1px 8px;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: rgba(255, 82, 82, 0.12);
+    color: ${(props)=>props.theme.warning};
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
 `
-const Count=styled.div`
-       
-       width: 40%;
-       text-align: right;
-       color: gray;
-       font-size: 15px;
-       padding-top: 10px;
-       padding-right: 5px;
+const Mono=styled.span`
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
 `
+const Statebox=styled.div`
+    padding: 40px 12px;
+    text-align: center;
+    font-size: 13px;
+    color: ${(props)=>props.theme.textMuted};
+`
+
+//이유 단어 문자열 각각변경
+const DICTIONARY={
+    spam:"스팸 및 광고",
+    discomfort:"불쾌감",
+    violent:"폭력적",
+    nsfw:"선정적",
+    baduser:"잘못된 유저",
+    etc:"기타"
+}
+const translatereason=(reason)=>DICTIONARY[reason.toLowerCase()]||reason;
+
+//"[spam, nsfw]" 처럼 들어오는 문자열을 알약 목록으로
+const Reasonlist=({text})=>{
+    const list=String(text||"")
+        .replace(/[\[\]]/g,'')     //정규식으로대괄호제거
+        .split(',')                //스플릿으로단어나누기
+        .map(w=>w.trim())          //공백제거해야 뒤에것도 인식함
+        .filter(Boolean)
+        .map(translatereason);
+
+    if(list.length===0) return <Mono>-</Mono>;
+    return <Reasons>{list.map((r,i)=><Reason key={i}>{r}</Reason>)}</Reasons>;
+}
+
 export default function AdminDeclesdata(props){
-const {noticeid,isdecles}=props;
+    const {noticeid,isdecles}=props;
     const axiosinstance=CreateAxios();
     const [currentpage,setCurrentpage]=useState(1);
+
     const {isLoading,error,data}=useQuery({
-        queryKey:[`decledata`,currentpage],
-        queryFn: async ()=> { 
-            
-            let res=await axiosinstance.get(`/admin/noticedecle/${noticeid}?page=${currentpage}`).then((res)=>{
-                return res.data
+        queryKey:[`decledata`,noticeid,currentpage],
+        queryFn: async ()=> {
+            const res=await axiosinstance.get(`/admin/noticedecle/${noticeid}`,{
+                params:{page:currentpage}
             })
-        
-            return res;
+            return res.data;
         }
     })
 
-    if(isLoading){
-        return <>Loading...</>
-    }
+    const close=()=>isdecles(false);
 
-    if(error){
-        return <>에러입니다!: {error.message}</>
-    }
+    //ESC 로 닫기
+    useEffect(()=>{
+        const onkey=(e)=>{ if(e.key==="Escape") close() }
+        document.addEventListener("keydown",onkey)
+        return ()=>document.removeEventListener("keydown",onkey)
+    },[])
 
-    //이유 단어 문자열 각각변경
-    const translatereason=(reason)=>{
-        console.log("단어"+reason)
-        const dictionary={
-            spam:"스팸및광고",
-            discomfort:"불쾌감",
-            violent:"폭력적",
-            nsfw:"선정적",
-            baduser:"잘못된유저",
-            etc:"기타"
-        }
-        return dictionary[reason.toLowerCase()]||reason;
-    }
-    const Translated=({text})=>{
-        const transarray=text.replace(/[\[\]]/g,'') //정규식으로대괄호제거
-                            .split(',')  //스플릿으로단어나누기
-                            .map(word=>word.trim()) //공백제거해야 뒤에것도 인식함
-                            .map(translatereason); //반복하며함수실행
-                
-                            return <>{transarray.join(`,`)}</>//구분을위해 다시 ,추가
-    }
+    const total=data?.totalElements??0;
+
     return (
-        <Modalout>
-            <Exitbutton onClick={()=>{isdecles(false)}}/>
-            <ModalIn>
-                {data.totalElements!==0?<> 
-                <Headers>
-                    <Title>  게시글신고사유  </Title>
-              
-              <Count> 총신고수:{data.totalElements}</Count> 
-                </Headers>
-            {data&&<DecleTable>
-                <Decleth>
-                    <Decletd>글번호</Decletd>
-                    <Decletd>이메일</Decletd>
-                    <Decletd>사유</Decletd>
-                    <Decletd>신고날짜</Decletd>
-                </Decleth>
-            {data.content.map((decle,key)=>{
-                return (
-                    <Decledatath>
-                    <DecleList style={{width:"45px"}}>
-                    {decle.noticeid}
-                    </DecleList>
-                     <DecleList style={{textAlign:"left",width:"200px"}}>
-                    {decle.username}
-                    </DecleList>
-                    <DecleList style={{width:"200px"}}>
-                    <Translated text={decle.reason} />
-                    </DecleList>
-                    <DecleList style={{width:"130px"}}>
-                    {decle.datetime}
-                    </DecleList>
-                    </Decledatath>
-                    
-                )
-            })}
-            </DecleTable>}
-            {data.totalPages}
-            <SimplePagenation setcurrent={setCurrentpage} currentpage={currentpage} totalpage={data.totalPages}/></>:
-                <>
-              데이터가없습니다!
-           
-            </>
-                }
-            </ModalIn>
+        <Modalout onMouseDown={close}>
+        <Modalin onMouseDown={(e)=>e.stopPropagation()}>
+
+            <Head>
+                <Headtitle>게시글 신고 내역</Headtitle>
+                <Headsub>{noticeid}번 글</Headsub>
+                {!isLoading && !error && total>0 && <Badge>총 {total}건</Badge>}
+                <Closebutton type="button" onClick={close} title="닫기(Esc)">×</Closebutton>
+            </Head>
+
+            <Body>
+                {isLoading
+                    ? <Statebox>불러오는 중…</Statebox>
+                    : error
+                    ? <Statebox>신고 내역을 불러오지 못했습니다. {error.message}</Statebox>
+                    : total===0
+                    ? <Emptybox>신고된 내역이 없습니다.</Emptybox>
+                    : <>
+                        <Tablewrap>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <Th>글번호</Th>
+                                        <Th>신고한 회원</Th>
+                                        <Th>사유</Th>
+                                        <Th>신고일</Th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data.content.map((decle,key)=>(
+                                        <tr key={key}>
+                                            <Td><Mono>{decle.noticeid}</Mono></Td>
+                                            <Td>{decle.username}</Td>
+                                            <Td><Reasonlist text={decle.reason}/></Td>
+                                            <Td><Mono>{decle.datetime}</Mono></Td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </Tablewrap>
+
+                        <SimplePagenation setcurrent={setCurrentpage}
+                            currentpage={currentpage} totalpage={data.totalPages}/>
+                      </>}
+            </Body>
+
+        </Modalin>
         </Modalout>
     )
 }

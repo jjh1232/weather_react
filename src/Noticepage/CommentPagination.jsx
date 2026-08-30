@@ -4,85 +4,92 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 
+/* 페이지 번호 줄.
+   예전엔 hover 마다 2px 테두리가 생겨 글자가 흔들렸다(레이아웃 시프트).
+   테두리는 항상 투명하게 깔아두고 색만 바꾼다. */
 const PagenationWrapper=styled.div`
-    
-    //width: 30%;
     display: flex;
-    gap: 15px;
-      cursor: pointer;
-      padding: 3px;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.surfaceAlt};
+    border: 1px solid ${(props)=>props.theme.border};
 `
+/* 처음/끝으로 건너뛰기 */
 const Lastmovediv=styled.div`
-
-    flex:1;
-    text-align: center;
-      font-size: 20px;
-      cursor: pointer;
-
-       &:hover{
-       border: 2px solid #a8a8a8;
-    }
-`
-const Arrowdiv=styled.div`
-   
-    flex:1;
-      text-align: center;
-        cursor: pointer;
-          font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 30px;
+    padding: 0 6px;
+    border-radius: ${(props)=>props.theme.radiusSm};
+    font-size: 13px;
+    color: ${(props)=>props.theme.textFaint};
+    cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
 
     &:hover{
-       border: 2px solid #a8a8a8;
+        background: ${(props)=>props.theme.accentSoft};
+        color: ${(props)=>props.theme.accent};
+    }
+`
+/* 이전/다음 화살표 */
+const Arrowdiv=styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 13px;
+    color: ${(props)=>props.theme.textMuted};
+    cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    &:hover{
+        background: ${(props)=>props.theme.accentSoft};
+        color: ${(props)=>props.theme.accent};
     }
 `
 const CountWrapper=styled.div`
     display: flex;
-   
-    flex:6;
-      cursor: pointer;
-      gap: 10px;
-      //align-items: center;
-       align-items: center;         /* 세로 중앙 */
-justify-content: center;     /* 가로 중앙 */
-
-    
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 `
 const Counttab=styled.div`
-width: 20px;
-height: 20px;
-display: flex;               /* 추가! */
-align-items: center;         /* 세로 중앙 */
-justify-content: center;     /* 가로 중앙 */
-text-align: center;
-  width: 20px;
-  height: 20px;
-    color: ${({isactive,theme})=>isactive?"#fa6e37":theme.text};
-    flex:1;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 13.5px;
     cursor: pointer;
-  
-      
-    font-size: 18px;
-    border: 2px solid ${(props)=>(props.isactive?"#a8a8a8":"rgba(0,0,0,0.07)")};
-    box-shadow: ${(props)=>props.isactive?'#fff0f0':'white'};
-    font-weight: ${(props) => (props.isactive ? 'bold' : 'normal')};
-    
-  transition: all 0.2s;
-    //클릭아닐시 효과
-  ${(props) =>
+    user-select: none;
+
+    /* 테두리는 자리만 잡아두고 색으로만 상태를 표현한다 */
+    border: 1px solid transparent;
+    font-weight: ${(props)=>props.isactive?700:500};
+    color: ${({isactive,theme})=>isactive?"#fff":theme.textMuted};
+    background: ${({isactive,theme})=>isactive?theme.accent:"transparent"};
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    ${(props)=>
     !props.isactive &&
     `
       &:hover {
-        border: 2px solid #a8a8a8;
-        box-shadow: 0 2px 8px rgba(255,77,79,0.15);
-        color: #f55d37;
-        
-        font-weight: bold;
+        background: ${props.theme.accentSoft};
+        color: ${props.theme.accent};
       }
     `
     }
 `;
-
-
 
 export default function CommentPagination(props){
     const {currentpage,totalpage,setpage}=props;

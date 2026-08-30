@@ -3,7 +3,7 @@ import Chatroomlistitem from "./Chatroomlistitem"
 import { useState,useEffect } from "react";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
@@ -18,6 +18,8 @@ function Chatroomlist(props){
     
     const axiosinstance=CreateAxios();
     
+    
+
 
     const {data:chatroominfo}=useQuery({
         queryKey:["chatroominfo",cookie.userinfo.userid],

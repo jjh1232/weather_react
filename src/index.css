@@ -1,13 +1,80 @@
+/* Pretendard - 한글 자간/굵기가 시스템 폰트보다 안정적이다. 네트워크가 없으면 아래 폴백으로 떨어진다. */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+/* ===== 기본 리셋 ==========================================
+   색은 여기서 정하지 않는다. 다크모드가 시간대 기반(ThemeProvider)이라
+   색 관련 전역 규칙은 App.js 의 GlobalStyle 에 모아뒀다.
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", Roboto,
+    "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: -0.003em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 폼 요소가 body 폰트를 물려받게 한다(브라우저 기본은 별도 폰트) */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: "JetBrains Mono", source-code-pro, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
+  font-size: 0.92em;
+}
+
+/* 스크롤바 - 두께/모양만. 색은 GlobalStyle 에서 테마별로 얹는다. */
+* {
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -18,70 +18,90 @@ const Wrapper=styled.div`
   //float: right;
   display: flex;
   position: relative;
-  top: 6px;
+  /* top:6px 때문에 같은 줄의 버튼/탭보다 혼자 6px 내려가 있었다 */
+  width: 100%;
+  gap: 6px;
   align-items: center;      /* 세로(수직) 중앙정렬 */
-  /* 필요하다면 가로(수평) 정렬도 추가 */
-  justify-content: center;  /* 가로 중앙정렬 */
-  
- 
+  justify-content: flex-end;
 `
 const SearchSelect=styled.select`
- // padding: 0 12px;
-  border: 1.5px solid #bdbdbd;
-  border-radius: 3px;
-  background: #fff;
-    height: 24px;
-  color: #222;
-  font-size: 16px;
-  //appearance: none; /* 브라우저 기본 스타일 제거 */
+  flex-shrink: 0;
+  /* 글작성하기 버튼(2.25rem=36px)과 탭 높이에 맞춘다 */
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid ${(props)=>props.theme.border};
+  border-radius: ${(props)=>props.theme.radiusSm};
+  background: ${(props)=>props.theme.surfaceAlt};
+  color: ${(props)=>props.theme.text};
+  font-size: 13px;
+  font-weight: 500;
   outline: none;
   cursor: pointer;
-  transition: border 0.2s;
- 
-  &:hover, &:focus {
-    border: 1.5px solid #4caf50;
-    background: #f5fff5;
+  transition: border-color ${(props)=>props.theme.transition},
+              box-shadow ${(props)=>props.theme.transition};
+
+  &:hover {
+    border-color: ${(props)=>props.theme.borderStrong};
+  }
+  &:focus {
+    border-color: ${(props)=>props.theme.accent};
+    box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
   }
 `
 const Searchinput=styled.input`
 
-  width: 100%;
-  height: 20px;
-  border: 1.5px solid #cfd8dc;
-  border-radius: 3px;
-  font-size: 16px;
-  background: #f5f7fa;
-  color: #222;
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid ${(props)=>props.theme.border};
+  border-radius: ${(props)=>props.theme.radiusPill};
+  font-size: 14px;
+  background: ${(props)=>props.theme.surfaceAlt};
+  color: ${(props)=>props.theme.text};
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition: border-color ${(props)=>props.theme.transition},
+              box-shadow ${(props)=>props.theme.transition},
+              background ${(props)=>props.theme.transition};
 
   &::placeholder {
-    color: #90a4ae;
+    color: ${(props)=>props.theme.textFaint};
     opacity: 1;
     font-size: 0.95em;
   }
 
   &:focus {
-    border-color: #228be6;
-    box-shadow: 0 2px 8px rgba(34, 139, 230, 0.12);
-    background: #fff;
+    border-color: ${(props)=>props.theme.accent};
+    box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+    background: ${(props)=>props.theme.surface};
   }
 `;
 
 const SearchButton=styled.button`
-  height: 27px;
-  cursor:pointer;
-  background-color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid ${(props)=>props.theme.border};
+  border-radius: ${(props)=>props.theme.radiusPill};
+  cursor: pointer;
+  background-color: ${(props)=>props.theme.surfaceAlt};
+  color: ${(props)=>props.theme.textMuted};
+  transition: background ${(props)=>props.theme.transition},
+              color ${(props)=>props.theme.transition},
+              border-color ${(props)=>props.theme.transition};
 
-    &:hover {
-   color: #339af0;
-   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    background-color: rgba(128,128,128,0.6); /* 회색, 60% 불투명 */
+  &:hover {
+    color: ${(props)=>props.theme.accent};
+    border-color: ${(props)=>props.theme.accent};
+    background-color: ${(props)=>props.theme.accentSoft};
   }
   &:active {
-    color: #1c7ed6;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-     background-color: rgba(128,128,128,0.5); /* 회색, 50% 불투명 */
+    color: #fff;
+    background-color: ${(props)=>props.theme.accentActive};
+    border-color: ${(props)=>props.theme.accentActive};
   }
 `
 export default function Searchtool(props){
@@ -158,7 +178,7 @@ export default function Searchtool(props){
         })}
 
     </SearchSelect>
-    <Searchinput type="text" value={searchdatas.keyword} onChange={(e)=>{
+    <Searchinput type="text" placeholder="검색어를 입력하세요" value={searchdatas.keyword} onChange={(e)=>{
          setSearchdatas((prev)=>({...prev,keyword:e.target.value}))
     }}/>
     <SearchButton onClick={search}>

@@ -53,5 +53,9 @@ export const LoginRoute=()=>{
     return <div>...유저확인중</div>;
   }
 
-    return role === "ROLE_User" || "ROLE_Admin"?<Outlet/> :<Navigate to ="/"/>
+    /* 예전엔 role === "ROLE_User" || "ROLE_Admin" 이었다.
+       이건 (role === "ROLE_User") || "ROLE_Admin" 으로 묶이는데
+       뒤의 문자열이 항상 truthy 라 조건 전체가 늘 참이었다.
+       즉 비로그인 상태에서도 로그인 전용 라우트가 그대로 열렸다. */
+    return ["ROLE_User","ROLE_Admin"].includes(role) ?<Outlet/> :<Navigate to ="/"/>
 }

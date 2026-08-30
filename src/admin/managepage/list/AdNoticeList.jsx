@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import AdminNoticeupdate from "../../../customhook/Admintools/AdminNoticeupdate";
 import Imagebook from "../../../customhook/Imagebook";
 import styled from "styled-components";
@@ -8,110 +9,127 @@ import {faImages} from "@fortawesome/free-solid-svg-icons"
 import {faComment} from "@fortawesome/free-regular-svg-icons"
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import AdminDeclesdata from "../../../customhook/Admintools/AdminDeclesdata";
-const Button=styled.button`
-position: relative;
-display: inline-block;
-width: 40px;
-height:50px;
-font-size: 14px;
-padding: 2% 2%;
-color: white;
-//margin: 1px 1px 1px;//위옆아래 마진
-border-radius: 10px; //모서리
-text-align: center;
-transition: top .04s linear;
-text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-background-color: ${(props)=>props.backcolor};
-`
-const Tr=styled.tr`
-  
-`
-const Td=styled.td`
-    
-    height: 40px;
-    border: 1px solid gray;
-    
-    text-align: left;
-`
-export default  function AdNoticeList(props) {
+import { useConfirm } from "../../../UI/Feedback/FeedbackProvider";
+import { Tr, Td, Button, Iconbutton, Countcell, Mono, Clamp, Linkcell } from "../../AdminUI";
+import UserMenu from "../../UserMenu";
+import profileimage from "../../../UI/profileimage";
 
-    const {data,key,deletemethod}=props;
+//목록의 작은 프로필. 예전엔 width/height 100% 라 칸 크기에 따라 제멋대로 늘어났다.
+const Profile=styled.img`
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid ${(props)=>props.theme.border};
+    background: ${(props)=>props.theme.surfaceAlt};
+`
+export default function AdNoticeList(props) {
+
+    const {data,deletemethod}=props;
     const navigate=useNavigate();
-    const [isupdate,setIsupdate]=useState();
+    const [isupdate,setIsupdate]=useState(false);
     const [isimagebook,setIsimagebook]=useState(false);
     const [isdecledata,setIsdecledata]=useState(false);
+    const confirm=useConfirm();   //window.confirm 을 가린다. 여기서는 이쪽이 맞다.
+
     const commentsearch=(noticenum)=>{
         navigate(`/admin/comment?page=1&option=noticenum&keyword=${noticenum}`)
     }
 
-    const deletes=(num)=>{
-        if(confirm("정말삭제하시겠습니까?")){
-            deletemethod(num)
-        }
+    //window.confirm 과 달리 확인창은 실행을 멈추지 않는다. 답을 await 로 받는다.
+    const deletes=async(num)=>{
+        const ok=await confirm({
+            title:"이 게시글을 삭제할까요?",
+            description:"삭제하면 되돌릴 수 없습니다.",
+            confirmText:"삭제",
+            danger:true,
+        })
+        if(ok) deletemethod(num)
     }
     const noticedetail=(noticeid)=>{
         navigate(`/admin/notice/detail/${noticeid}`)
     }
-    
-    const imagebookon=()=>{
-      
-        setIsimagebook(!isimagebook)
-    }
-    const declehandler=()=>{
-        setIsdecledata(!isdecledata)
-    }
 
-        return (<>
-        {isupdate?<><AdminNoticeupdate noticeid={data.num} setisupdate={setIsupdate}/></>:""}
-        
-        {isimagebook&&
-                                    <Imagebook images={data.detachfiles} 
-                                    setisimage={setIsimagebook}
-                                    userdata={{username:data.username,nickname:data.nickname,profileimg:data.userprofile}}
-                                    noticedata={{title:data.title,likes:data.likes,red:data.red}}
-                                    />}
+    const filecount=data.detachfiles?.length||0;
+
+    //모달들은 전부 position:fixed 다. <table> 안에 두면 마크업이 깨지므로 body 로 포털한다.
+    const overlays=(<>
+        {isupdate && <AdminNoticeupdate noticeid={data.num} setisupdate={setIsupdate}/>}
+        {isimagebook &&
+            <Imagebook images={data.detachfiles}
+                setisimage={setIsimagebook}
+                userdata={{username:data.username,nickname:data.nickname,profileimg:data.userprofile}}
+                noticedata={{title:data.title,likes:data.likes,red:data.red}}
+            />}
+        {isdecledata && <AdminDeclesdata noticeid={data.num} isdecles={setIsdecledata}/>}
+    </>)
+
+    return (<>
+        {(isupdate||isimagebook||isdecledata) && ReactDOM.createPortal(overlays,document.body)}
 
         <Tr>
-                            <Td style={{width:"3%"}}>{data.num} </Td>
-                            <Td style={{width:"5%"}}>
-                                 <img   src={process.env.PUBLIC_URL+"/userprofileimg"+data.userprofile}
-   style={{objectFit:"fill",width:"100%",height:"100%"}}
-  
-                /></Td>
-                            <Td style={{width:"13%",wordBreak:"break-all"}}>{data.username} </Td>
-                            <Td style={{width:"8%",wordBreak:"break-all"}}>{data.nickname} </Td>
-                           
-                            <Td style={{width:"40%",textOverflow:"ellipsis"}} onClick={()=>{noticedetail(data.num)}}>{data.title}</Td>
-                           
-                            
-                            <Td style={{width:"11%"}}>{data.red}</Td>
-                            <Td style={{width:"3%",textAlign:"center"}}>{data.likes} </Td>
-                            <Td style={{width:"3%",textAlign:"center"}}>{data.commentcount}
-                            <br/>
-                            <FontAwesomeIcon icon={faComment} onClick={()=>{commentsearch(data.num)}}
-                                            style={{cursor:"pointer",}}
-                                        />
-                            </Td>
-                            <Td style={{width:"3%",textAlign:"center"}}>{data.detachfiles.length}
-                                <br/>
-                                {!data.detachfiles.length==0&&
-                            
-                                <FontAwesomeIcon icon={faImages} onClick={()=>{imagebookon()}}
-                                            style={{cursor:"pointer"}}
-                                        />
-                                }
-                            </Td>
-                            <Td style={{width:"4%",textAlign:"center"}}>{data.declaircount}<br/>
-                            <FontAwesomeIcon icon={faMagnifyingGlass}  style={{cursor:"pointer"}} onClick={()=>{
-                                declehandler()
-                            }}/>
-                                 </Td>
-                           
-                            <Td >
-                            <Button backcolor="blue" onClick={()=>{setIsupdate(true)}}>수정</Button>
-                            <Button backcolor="red" onClick={()=>{deletes(data.num)}}>삭제</Button>
-                            </Td>
-                </Tr>
-                                    {isdecledata&&<AdminDeclesdata noticeid={data.num} isdecles={setIsdecledata}/>}
-                </> )
+            <Td $align="center"><Mono>{data.num}</Mono></Td>
+            <Td $align="center">
+                <Profile src={profileimage(data.userprofile)} alt=""/>
+            </Td>
+            <Td>
+                <UserMenu email={data.username} nickname={data.nickname}>
+                    <Clamp as="span" $lines={1}>{data.username}</Clamp>
+                </UserMenu>
+            </Td>
+            <Td>
+                <UserMenu email={data.username} nickname={data.nickname}>
+                    <Clamp as="span" $lines={1}>{data.nickname}</Clamp>
+                </UserMenu>
+            </Td>
+
+            <Td style={{minWidth:"240px",maxWidth:"420px"}}>
+                <Linkcell onClick={()=>noticedetail(data.num)}>
+                    <Clamp $lines={2}>{data.title}</Clamp>
+                </Linkcell>
+            </Td>
+
+            <Td><Mono>{data.red}</Mono></Td>
+            <Td $align="center">{data.likes}</Td>
+
+            <Td $align="center">
+                <Countcell>
+                    {data.commentcount}
+                    <Iconbutton type="button" title="이 글의 댓글 보기"
+                        onClick={()=>commentsearch(data.num)}>
+                        <FontAwesomeIcon icon={faComment}/>
+                    </Iconbutton>
+                </Countcell>
+            </Td>
+
+            <Td $align="center">
+                <Countcell>
+                    {filecount}
+                    {filecount>0 &&
+                    <Iconbutton type="button" title="이미지 보기"
+                        onClick={()=>setIsimagebook(!isimagebook)}>
+                        <FontAwesomeIcon icon={faImages}/>
+                    </Iconbutton>}
+                </Countcell>
+            </Td>
+
+            <Td $align="center">
+                <Countcell>
+                    {data.declaircount}
+                    <Iconbutton type="button" title="신고 내역 보기"
+                        onClick={()=>setIsdecledata(!isdecledata)}>
+                        <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                    </Iconbutton>
+                </Countcell>
+            </Td>
+
+            <Td $align="center">
+                <Countcell>
+                    <Button type="button" $small onClick={()=>setIsupdate(true)}>수정</Button>
+                    <Button type="button" $small $variant="danger"
+                        onClick={()=>deletes(data.num)}>삭제</Button>
+                </Countcell>
+            </Td>
+        </Tr>
+    </>)
 }

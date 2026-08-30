@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { handletext } from "../../customhook/Userhandle";
 import CreateAxios from "../../customhook/CreateAxios";
 import Userdata from "../../UI/Modals/Userdata";
 import Usermodal from "../../UI/Modals/Usermodal";
@@ -21,16 +22,16 @@ const Searchdiv=styled.div`
       display: flex;
     position: relative;
 
-height: 60px;
     align-items:center;
     gap: 3px;
-    padding: 5px;
+    padding: 8px 10px;
 `
 const Searchicon=styled(FontAwesomeIcon)`
     position: absolute;
-   color: black;
-    top: 51%;
-    margin-left: 9px;
+   color: ${(props)=>props.theme.textFaint};
+   font-size: 13px;
+    top: 50%;
+    margin-left: 11px;
       transform: translateY(-50%);
       
   
@@ -38,72 +39,97 @@ const Searchicon=styled(FontAwesomeIcon)`
 
 `
 const Inputcss=styled.input`
-width: 85%;
-margin-left: 3px;
-border-radius: 5px;
-padding: 3px 3px 3px 26px;
- border: 1px solid #ccc;
- font-style: italic;
+width: 100%;
+height: 32px;
+border-radius: ${(props)=>props.theme.radiusPill};
+padding: 0 10px 0 30px;
+border: 1px solid ${(props)=>props.theme.border};
+background: ${(props)=>props.theme.surfaceAlt};
+color: ${(props)=>props.theme.text};
+font-size: 13px;
    box-sizing: border-box; /* 패딩 포함 너비 계산 */
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
     outline: none;          /* 기본 파란 윤곽선 제거 */
-    border-color: #4a90e2;  /* 파란색 테두리 */
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* 은은한 그림자 */
+    border-color: ${(props)=>props.theme.accent};
+    box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+    background: ${(props)=>props.theme.surface};
   }
 
   &::placeholder {
-    color: #aaa;            /* 연한 회색 플레이스홀더 */
-    font-style: italic;
+    color: ${(props)=>props.theme.textFaint};
   }
 `
+// 닉네임 + 이메일
 const Userdatadiv=styled.div`
-    
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 `
 const Usernamediv=styled.div`
-    
-      font-size: 14px;
-    color: #d3d0d0;
+    font-size: 12px;
+    line-height: 1.35;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 const Usernicknamediv=styled.div`
- font-size: 17px;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: ${(props)=>props.theme.text};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 const Userlistdiv=styled.div`
     display: flex;
     
     flex-direction: column;
 `
+// 목록 한 줄
 const Userlist=styled.div`
-   
-      display: flex;
-    border :1px solid gray;
-    margin: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    transition: background ${(props)=>props.theme.transition};
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: ${(props)=>props.theme.surfaceHover}; }
 `
 const Profilecss=styled.div`
-      margin-right: 4px;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-
 `
 
 const Followdiv=styled.div`
       margin-left: auto;
+      flex-shrink: 0;
      display: flex;
      justify-content: center; /* 가로 방향 중앙 정렬 */
     align-items: center; /* 세로 방향 중앙 정렬 */
+    gap: 8px;
 `
+// 즐겨찾기 목록의 별은 항상 채워진 상태다. 기존엔 흰색이라 안 보였다.
 const Favoriteicon=styled(FontAwesomeIcon)`
-    border-radius: 15%;
-    height: 17px;
-   padding-right: 5px;
-    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    color: #f5a623;
+    transition: color ${(props)=>props.theme.transition},
+                transform ${(props)=>props.theme.transition};
 
     :hover{
-        color: red;
+        color: #e04545;
+        transform: scale(1.15);
     }
 `
 
@@ -113,9 +139,10 @@ function Favoritelist(props){
     const queryclient=useQueryClient()
     const [searchkeyword,Setsearchkeyword]=useState("");
 
-    //회원정보 모달 누르기 
-    const [ismodal,setIsmodal]=useState(false)
-    const modalref=useRef();
+    //회원정보 모달 - "어떤 유저의 모달인지"를 담는다. null 이면 닫힌 상태.
+    //boolean 하나를 목록 전체가 공유하면, map 안의 <Usermodal> 이 사람 수만큼
+    //한꺼번에 렌더되고 전부 같은 좌표에 겹쳐서 엉뚱한 사람의 메뉴가 보인다.
+    const [selecteduser,setSelecteduser]=useState(null)
     const [modalcss,setModalcss]=useState(
         {
             x:0,
@@ -175,7 +202,7 @@ function Favoritelist(props){
 
         return (
         <Wrapper>
-        <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Searchdiv>
         < Searchicon icon={search}/>
         <Inputcss />
         </Searchdiv>
@@ -199,13 +226,13 @@ function Favoritelist(props){
                     
                     <Userlist
                     onClick={(e)=>{
-                        console.log("클릭")
                         e.preventDefault();
-                        setIsmodal(true)
+                        //클릭한 행의 유저를 지정한다. 모달은 map 밖에서 하나만 렌더된다.
+                        setSelecteduser(data)
                         setModalcss({x:e.clientX,y:e.clientY})
-                        
+
                     }}
-                    ref={modalref} 
+                    key={data.username}
                     >
                       
                         <Profilecss>
@@ -221,7 +248,7 @@ function Favoritelist(props){
                                 
                             
                             <Usernamediv>
-                            {data.username}
+                            {handletext(data.profileid,data.username)}
                             </Usernamediv>
                             </Userdatadiv>
                     
@@ -235,13 +262,6 @@ function Favoritelist(props){
 
                     
                         </Followdiv>
-                        {ismodal&&<Usermodal 
-                        username={data.username} usernickname={data.nickname} 
-                        ModalX={modalcss.x} ModalY={modalcss.y} 
-                        chatroomdata={chatroomdata}
-                        setismodal={setIsmodal}
-                        profileid={data.profileid}
-                        />}
                         </Userlist>
                     
                     
@@ -249,6 +269,16 @@ function Favoritelist(props){
             })
             }
            </Userlistdiv>
+
+        {/* 모달은 목록 밖에서 딱 하나만 렌더한다. 선택된 유저가 있을 때만 열린다. */}
+        {selecteduser&&<Usermodal
+            username={selecteduser.username}
+            usernickname={selecteduser.nickname}
+            ModalX={modalcss.x} ModalY={modalcss.y}
+            chatroomdata={chatroomdata}
+            setismodal={()=>setSelecteduser(null)}
+            profileid={selecteduser.profileid}
+            />}
         </Wrapper>
     )
 }

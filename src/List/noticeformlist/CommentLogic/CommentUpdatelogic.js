@@ -24,7 +24,8 @@ export default function CommentUpdatelogic(){
         onSuccess:(_data,variables)=>{
             alert("수정완료")
             
-            queryclient.invalidateQueries(["comments",variables.noticeid,variables.page])
+            //v5 형식. 이 글의 모든 페이지를 접두사로 무효화한다.
+            queryclient.invalidateQueries({queryKey:["comments",Number(variables.noticeid)]})
         },
         onError:()=>{
             alert("수정오류")

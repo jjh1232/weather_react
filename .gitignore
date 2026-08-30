@@ -1,7 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-#이미지도 올라가는듯?
-.public/noticeimages
-.public/userprofileimg
+# 사용자가 올린 이미지. 소스가 아니라 데이터라 추적하지 않는다.
+# 예전엔 앞에 점이 붙은 ".public/..." 이라 아무것도 걸러지지 않았고,
+# 그 탓에 게시글 이미지와 프로필 사진이 저장소에 그대로 커밋돼 있었다.
+public/noticeimages
+public/userprofileimg
+public/userbackgroundimg
 
 # dependencies
 /node_modules

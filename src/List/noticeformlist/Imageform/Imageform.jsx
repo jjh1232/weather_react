@@ -7,19 +7,28 @@ import Imageformlist from "./Imageformlist";
 import AuthCheck from "../../../customhook/authCheck";
 import CreateAxios from "../../../customhook/CreateAxios";
 import { useSearchParams } from "react-router-dom";
+import { API_BASE } from "../../../config/api";
 
+// 고정폭 타일을 flex-wrap 으로 흘리면 남는 자리가 생기고 화면마다 줄이 달라진다.
+// auto-fill 로 칸 수를 브라우저가 정하게 하면 어떤 폭에서도 꽉 찬다.
 const Wrapper=styled.div`
 position: relative;
 
 width:100%;
-height:100%;
-display: flex;
-flex-wrap: wrap;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 10px;
+padding: 12px;
+
  color:${props => props.theme.text};
- background:${props => props.theme.background};
- top: 8%;
-// border: 1px solid red;
-gap: 5px;
+ /* 배경은 바깥 MainCss 패널이 갖는다 */
+ background: transparent;
+
+@media (max-width: 620px) {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
 `
 
 export default function Imageform(){
@@ -27,7 +36,7 @@ export default function Imageform(){
     const {data : imgnoticelist}=useQuery({
         queryKey:["imgnoticelist"],
         queryFn:async ()=>{
-            const res=await axios.get("/open/notice/imagelist")
+            const res=await axios.get(`${API_BASE}/open/notice/imagelist`)
             console.log(res)
             return res.data.content;
         }

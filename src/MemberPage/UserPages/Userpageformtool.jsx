@@ -1,135 +1,71 @@
-import React, { useState } from "react";
-import { createSearchParams, NavLink, useNavigate } from "react-router-dom";
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass as icon } from "@fortawesome/free-solid-svg-icons";
+
+/* 유저페이지 탭.
+   검색은 Userpagesearch 로 떼어내 프로필 헤더 줄로 올렸고,
+   여기는 탭만 남아 한 줄을 다 쓴다. */
+
 const MenuDiv=styled.div`
   display: flex;
-`
-const Buttontool=styled.div`
-  display: flex;
-  border: 1px solid blue;
-  width: 65%;
+  width: 100%;
+  border-bottom: 1px solid ${(props)=>props.theme.border};
 `
 const ActiveLink=styled(NavLink)`
-  display: flex;
-  cursor: pointer;
-  flex: 1;
-  font-size: 18px;
-  font-weight: 800;
-  color: ${(props)=>props.Active? `${props.theme.text}`:"#8d8d8d"};
-  justify-content: center;
-  align-items: center;
-  padding: 5px 5px;
-  :hover{
-   background-color: rgba(216, 216, 216, 0.747);
-  }
-`
-const Searchdiv=styled.div`
-  margin-left: auto;
+  position: relative;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1px;
-  //border: 1px solid blue;
-`
-const Searchform=styled.input`
- padding: 2px 2px;
- width: 65%;
-font-size: 15px;
-`
-const Searchbox=styled.select`
-  padding: 1px 1px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+  padding: 13px 5px;
+
   font-size: 15px;
-
-  &:focus {
-    border-color: #40a9ff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
-  
-  option {
-    padding: 10px;
-  }
-`
-const Submitdiv=styled.div`
-  display: flex;
-  align-items: center;
-  margin-left:5px;
-  justify-content: center;
-
-  background-color: ${props=>props.theme.text};//검-화
-  color: ${props=>props.theme.primary};
+  font-weight: ${(props)=>props.Active?750:600};
+  letter-spacing: -0.02em;
+  color: ${(props)=>props.Active?props.theme.text:props.theme.textMuted};
   cursor: pointer;
-`
-const Searchicon=styled(FontAwesomeIcon)`
-   padding: 3px 3px;
-   
+  transition: background ${(props)=>props.theme.transition},
+              color ${(props)=>props.theme.transition};
+
+  &:hover{
+    background: ${(props)=>props.theme.surfaceHover};
+    color: ${(props)=>props.theme.text};
+  }
+
+  /* 활성 탭 밑줄 - 예전엔 회색 배경만 깔려서 어디가 켜졌는지 잘 안 보였다 */
+  &::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    transform: translateX(-50%);
+    width: ${(props)=>props.Active?"56px":"0px"};
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: ${(props)=>props.theme.accent};
+    transition: width ${(props)=>props.theme.transition};
+  }
 `
 
 export default function Userpageformtool({profileid}){
+  const location=useLocation();
 
-    const isPostsActive = location.pathname === `/userpage/${profileid}`;
-  const isPhotoActive = location.pathname === `/userpage/${profileid}/photo`;
+  const isPostsActive     = location.pathname === `/userpage/${profileid}`;
+  const isPhotoActive     = location.pathname === `/userpage/${profileid}/photo`;
   const isHighlightActive = location.pathname === `/userpage/${profileid}/highlight`;
 
-    const [searchOption,setSearchOption]=useState("title")
-    const [searchtext,setSearchtext]=useState("");
-
-    const navigate=useNavigate();
-     const basePath = 
-    location.pathname.includes("/photo")
-      ? `/userpage/${profileid}/photo`
-      : location.pathname.includes("/highlight")
-      ? `/userpage/${profileid}/highlight`
-      : `/userpage/${profileid}`;
-
-  const Searchsubmit=()=>{
-    const params= createSearchParams({
-      option:searchOption,
-      query:searchtext
-    });
-
-    navigate({
-      pathname:basePath,
-      search:`?${params.toString()}`
-    })
-  }
-  const handlechange=()=>{
-    setSearchOption("title")
-    setSearchtext("")
-    
-  }
-      return (
+  return (
     <MenuDiv>
-      <Buttontool>
-
-     
-      <ActiveLink to={`/userpage/${profileid}`} Active={isPostsActive}end onClick={handlechange}>
+      <ActiveLink to={`/userpage/${profileid}`} Active={isPostsActive} end>
         Posts
       </ActiveLink>
-      <ActiveLink to={`/userpage/${profileid}/photo`} Active={isPhotoActive} onClick={handlechange}>
+      <ActiveLink to={`/userpage/${profileid}/photo`} Active={isPhotoActive}>
         Image
       </ActiveLink>
-      <ActiveLink to={`/userpage/${profileid}/highlight`} Active={isHighlightActive} onClick={handlechange}>
+      {/* 좋아요 많은 순으로 정렬된 인기글 */}
+      <ActiveLink to={`/userpage/${profileid}/highlight`} Active={isHighlightActive}>
         Highlight
       </ActiveLink>
-       </Buttontool>
-       <Searchdiv>
-        <Searchbox onChange={(e)=>setSearchOption(e.target.value)}>
-          <option value="title">제목</option>
-          <option value="content">내용</option>
-        </Searchbox>
-        <Searchform  onChange={(e)=>setSearchtext(e.target.value)} placeholder="search"/>
-        <Submitdiv onClick={Searchsubmit}>
-          <Searchicon icon={icon} />
-        </Submitdiv>
-
-       </Searchdiv>
-      
     </MenuDiv>
   );
 }

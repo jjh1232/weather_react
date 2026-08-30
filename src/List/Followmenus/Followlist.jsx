@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { handletext } from "../../customhook/Userhandle";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useEffect } from "react";
 import Usermodal from "../../UI/Modals/Usermodal";
@@ -24,7 +25,7 @@ const Searchdiv=styled.div`
 
     align-items:center;
     gap: 3px;
-    padding: 5px;
+    padding: 8px 10px;
 `
 const Userlistdiv=styled.div`
    
@@ -33,85 +34,130 @@ const Userlistdiv=styled.div`
     
 `
 
+// 목록 한 줄. 고정 높이 50px + overflow:hidden 때문에 이메일이 잘렸었다.
 const Userlist=styled.div`
     display: flex;
-    border :1px solid gray;
-    height: 50px;
-    margin: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    transition: background ${(props)=>props.theme.transition};
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: ${(props)=>props.theme.surfaceHover}; }
 `
+// 닉네임 + 이메일 (남는 폭을 다 쓰고, 넘치면 말줄임)
 const Userprofilediv=styled.div`
-    margin-right: auto;
-    width: 80%;
-    
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 `
 const Userprofileimage=styled.div`
- 
-    margin-right: 4px;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    
- 
 `
 const Usernickdiv=styled.div`
     display: flex;
-    
+    align-items: center;
+    min-width: 0;
 `
 const Usernicknamediv=styled.div`
-    font-size: 17px;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: ${(props)=>props.theme.text};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 const Usernamediv=styled.div`
-    font-size: 14px;
-    color: #d3d0d0;
+    font-size: 12px;
+    line-height: 1.35;
+    color: ${(props)=>props.theme.textMuted};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
+// 언팔로우 버튼 - 평소엔 조용한 아웃라인, 올리면 빨갛게
 const FollowButton=styled.button`
-    margin-left: 5px;
-    margin-top: 3px;
-    border-radius: 15%;
-    background-color: skyblue;
-    color: black;
+    flex-shrink: 0;
+    height: 28px;
+    padding: 0 12px;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background-color: transparent;
+    color: ${(props)=>props.theme.textMuted};
+    font-size: 12px;
+    font-weight: 650;
     cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition},
+                border-color ${(props)=>props.theme.transition};
+
     :hover{
-        background-color: red;
+        background-color: rgba(224, 69, 69, 0.10);
+        border-color: #e04545;
+        color: #e04545;
     }
 `
+// 오른쪽 액션 묶음 (언팔로우 버튼 + 즐겨찾기 별)
 const Favoritediv=styled.div`
     margin-left: auto;
+    flex-shrink: 0;
     display: flex;
     justify-content: center; /* 가로 방향 중앙 정렬 */
     align-items: center; /* 세로 방향 중앙 정렬 */
-    width: 10%;
-    
+    gap: 8px;
+`
+// 별 아이콘. 기존엔 흰색이라 흰 배경에서 안 보였다.
+const Staricon=styled(FontAwesomeIcon)`
+    font-size: 15px;
+    cursor: pointer;
+    color: ${(props)=>props.active==="true"
+        ? "#f5a623"
+        : props.theme.textFaint};
+    transition: color ${(props)=>props.theme.transition},
+                transform ${(props)=>props.theme.transition};
+
+    &:hover {
+        color: #f5a623;
+        transform: scale(1.15);
+    }
 `
 const Inputcss=styled.input`
-width: 85%;
-margin-left: 3px;
-border-radius: 5px;
-padding: 3px 3px 3px 26px;
- border: 1px solid #ccc;
- font-style: italic;
+width: 100%;
+height: 32px;
+border-radius: ${(props)=>props.theme.radiusPill};
+padding: 0 10px 0 30px;
+border: 1px solid ${(props)=>props.theme.border};
+background: ${(props)=>props.theme.surfaceAlt};
+color: ${(props)=>props.theme.text};
+font-size: 13px;
    box-sizing: border-box; /* 패딩 포함 너비 계산 */
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
     outline: none;          /* 기본 파란 윤곽선 제거 */
-    border-color: #4a90e2;  /* 파란색 테두리 */
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* 은은한 그림자 */
+    border-color: ${(props)=>props.theme.accent};
+    box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+    background: ${(props)=>props.theme.surface};
   }
 
   &::placeholder {
-    color: #aaa;            /* 연한 회색 플레이스홀더 */
-    font-style: italic;
+    color: ${(props)=>props.theme.textFaint};
   }
 `
 const Searchicon=styled(FontAwesomeIcon)`
     position: absolute;
-   color: black;
-    top: 51%;
-    margin-left: 9px;
+   color: ${(props)=>props.theme.textFaint};
+   font-size: 13px;
+    top: 50%;
+    margin-left: 11px;
       transform: translateY(-50%);
       
   
@@ -129,9 +175,12 @@ function Followlist(props){
     const [searchkeyword,Setsearchkeyword]=useState("");
 
     const queryclient=useQueryClient();
-     //회원정보 모달 누르기 
-     const [ismodal,setIsmodal]=useState(false)
-     const modalref=useRef();
+     //회원정보 모달 - "어떤 유저의 모달인지"를 담는다. null 이면 닫힌 상태.
+     //이전에는 boolean 하나를 목록 전체가 공유했다. 그래서 한 명을 클릭하면
+     //map 안의 <Usermodal> 이 팔로우한 사람 수만큼 한꺼번에 렌더되고,
+     //전부 같은 좌표에 겹쳐서 맨 마지막 사람의 메뉴만 보였다.
+     //(클릭한 사람이 아닌 엉뚱한 사람이 팔로우 해제되던 원인)
+     const [selecteduser,setSelecteduser]=useState(null)
      const [modalcss,setModalcss]=useState(
          {
              x:0,
@@ -139,26 +188,11 @@ function Followlist(props){
          }
      );
      const [usercookie]=useCookies(["userinfo"])
- 
-     useEffect(()=>{
-         console.log("실행감지")
-         document.addEventListener("mousedown",modalclose)
-          //리턴으로 이벤트 안지우면 계속실행됨
-         return ()=>document.removeEventListener('mousedown',modalclose);
-     },[ismodal])
- 
-     
-     const modalclose=(e)=>{
- 
-       
-        if(ismodal&&!modalref.current.contains(e.target)){
-            console.log("모달열려있음")
-            setIsmodal(false)
-        }
- 
-         
-     }
- 
+
+     //바깥 클릭으로 닫는 처리는 Usermodal 내부의 Outdiv onClick 이 담당한다.
+     //Usermodal 은 createPortal 로 #phone-ui 에 렌더되므로, 여기서 목록 행의
+     //ref.contains(e.target) 으로는 절대 판별되지 않는다(항상 false -> 즉시 닫힘).
+
 
 
 
@@ -191,9 +225,7 @@ function Followlist(props){
              );
               queryclient.setQueryData(["followlistdata", usercookie.userinfo.userid], newdata);
             }
-
-           
-           alert("성공적으로 즐겨찾기에추가했습니다")
+           //성공 알림 없음. 별표 아이콘이 즉시 채워지는 것으로 결과가 보인다.
         }
        })
     const favoritefollow=(friendname)=>{
@@ -213,13 +245,7 @@ function Followlist(props){
              );
               queryclient.setQueryData(["followlistdata", usercookie.userinfo.userid], newdata);
             }
-         
-           
-                  
-          
-        
-            alert("즐겨찾기를해제하였습니다")
-            
+            //성공 알림 없음. 별표 아이콘이 즉시 비워지는 것으로 결과가 보인다.
         }
     })
     const favoriteunfollow=(friendname)=>{
@@ -228,28 +254,27 @@ function Followlist(props){
 
     //언팔로우뮤테이션
     const unfollowmutation=useMutation({
+        //return 이 없으면 리액트쿼리가 즉시 성공으로 처리한다.
+        //서버가 실패해도 onSuccess 가 돌아서 목록에서 사라지고, onError 는 영원히 안 뜬다.
         mutationFn:(username)=>{
-            axiosinstance.delete(`/followdelete/${username}`)
+            return axiosinstance.delete(`/followdelete/${username}`)
         },
         onSuccess:(data,friendname)=>{
+            //즐겨찾기 mutation 과 동일하게 단수형(getQueryData/setQueryData)을 쓴다.
+            const olddata=queryclient.getQueryData(["followlistdata",usercookie.userinfo.userid])
 
-            const olddata=queryclient.getQueriesData(["followlistdata",usercookie.userinfo.userid])
-            //삭제라 필터
-            const newdata= olddata[0][1].filter((data)=>{
-         
-            
-                return  data.username!==friendname
-
-                 })
-                      
-                 queryclient.setQueriesData(["followlistdata",usercookie.userinfo.userid],newdata)
-                  alert("팔로우를해제하였습니다")
+            if(olddata){
+                //삭제라 필터
+                const newdata= olddata.filter((data)=> data.username!==friendname)
+                queryclient.setQueryData(["followlistdata",usercookie.userinfo.userid],newdata)
+            }
+            //성공 알림 없음. 목록에서 즉시 사라지는 것으로 충분하다.
 
         },onError:()=>{
             alert("잠시후실행해주세요")
         }
 
-        
+
     })
 
     const unfollow =(username)=>{
@@ -264,7 +289,7 @@ function Followlist(props){
 
     return (
         <Wrapper>
-        <Searchdiv style={{width:"100%",height:"100%", overflow:"auto"}}>
+        <Searchdiv>
             
         <Searchicon icon={search} />
         <Inputcss onChange={(e)=>{Setsearchkeyword(e.target.value)}} 
@@ -286,11 +311,11 @@ function Followlist(props){
             return(
                 
                 <Userlist  onClick={(e)=>{
-                    setIsmodal(true)
+                    //클릭한 행의 유저를 지정한다. 모달은 map 밖에서 하나만 렌더된다.
+                    setSelecteduser(data)
                     setModalcss({x:e.clientX,y:e.clientY})
                }}
-               ref={modalref}
-               key={key}
+               key={data.username}
                >
                 
                     <Userprofileimage>
@@ -303,36 +328,30 @@ function Followlist(props){
                     <Usernicknamediv>
                  {data.nickname}
                     </Usernicknamediv>
-                    <FollowButton onClick={(e)=>{
-                        e.stopPropagation()
-                        unfollow(data.username)}}>unfollow</FollowButton>
                 </Usernickdiv>
             
                     <Usernamediv>
-                     {data.username}
+                     {handletext(data.profileid,data.username)}
                     </Usernamediv>
                    
-                    </Userprofilediv>    
-                    {ismodal&&<Usermodal username={data.username} usernickname={data.nickname} 
-                        ModalX={modalcss.x} ModalY={modalcss.y} 
-                        chatroomdata={chatroomdata}
-                        setismodal={setIsmodal}
-                        profileid={data.profileid}
-                        />}
+                    </Userprofilediv>
 
-              
+                {/* 언팔로우 버튼과 즐겨찾기 별은 오른쪽에 함께 모은다.
+                    (닉네임 옆에 버튼이 붙어 있어 이메일과 뒤엉켜 보였다) */}
                 <Favoritediv>
-                 {data.favorite?<FontAwesomeIcon icon={favorite} onClick={(e)=>{
+                    <FollowButton onClick={(e)=>{
+                        e.stopPropagation()
+                        unfollow(data.username)}}>unfollow</FollowButton>
+
+                 {data.favorite?<Staricon icon={favorite} active="true" onClick={(e)=>{
                     e.stopPropagation()
                     favoriteunfollow(data.username)}}
-                     style={{color:"white", }}
                     />
                     
                 
-                :<FontAwesomeIcon icon={unfavorite} onClick={(e)=>{
+                :<Staricon icon={unfavorite} active="false" onClick={(e)=>{
                     e.stopPropagation()
                     favoritefollow(data.username)}}
-                style={{color:"white"}}
                 />
                 }
                 </Favoritediv>
@@ -342,6 +361,16 @@ function Followlist(props){
         })}
         
         </Userlistdiv>
+
+        {/* 모달은 목록 밖에서 딱 하나만 렌더한다. 선택된 유저가 있을 때만 열린다. */}
+        {selecteduser&&<Usermodal
+            username={selecteduser.username}
+            usernickname={selecteduser.nickname}
+            ModalX={modalcss.x} ModalY={modalcss.y}
+            chatroomdata={chatroomdata}
+            setismodal={()=>setSelecteduser(null)}
+            profileid={selecteduser.profileid}
+            />}
         </Wrapper>
     )
 }

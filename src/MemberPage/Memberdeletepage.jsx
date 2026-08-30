@@ -7,11 +7,10 @@ import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
 const Wrapper=styled.div`
 position: relative;
-left:28.5%;
-width:43%;
-height:100%;
- border: 1px solid;
- top: 8%;
+width:100%;
+/* left/width/top 은 grid 이전의 고정 레이아웃 보정값이었다.
+   특히 top:8% 는 부모 높이 기준이라 내용이 길어질수록 아래로 밀린다. */
+padding: 18px;
 `
 function Memberdeletepage(){
     const [loginuser,Setloginuser,removeloginuser]=useCookies()

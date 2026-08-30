@@ -8,13 +8,20 @@ import Replycomment from "../UI/Replycomment";
 import Commentupdateitem from "./noticeformlist/Commentupdateitem";
 import Commentview from "./noticeformlist/Commentview";
 
+/* 댓글 한 칸.
+   줄 전체가 클릭 영역(누르면 답글창이 열린다)이라 호버 배경으로 그걸 알려준다. */
 const Wrapper=styled.div`
   display: flex;
-border-bottom:1px solid gray;
-gap: 5px;
-padding-top: 5px;
-padding-bottom: 8px;
+  gap: 12px;
+  padding: 12px 12px 12px 10px;
+  border-bottom: 1px solid ${(props)=>props.theme.border};
+  border-radius: ${(props)=>props.theme.radiusSm};
+  cursor: ${(props)=>props.$editing?"default":"pointer"};
+  transition: background ${(props)=>props.theme.transition};
 
+  &:hover {
+    background: ${(props)=>props.$editing?"transparent":props.theme.surfaceHover};
+  }
 `
 
 function Commentlistitem(props){
@@ -33,7 +40,7 @@ function Commentlistitem(props){
   return (
     <React.Fragment>
       {isupdate?
-      <Wrapper className="isupdate">
+      <Wrapper className="isupdate" $editing>
         <Commentupdateitem data={data} Setisupdate={Setisupdate} noticeid={noticeid} page={page}/>
         </Wrapper>
       :<Wrapper  onClick={()=>{

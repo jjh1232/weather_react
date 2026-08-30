@@ -1,186 +1,128 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Pagenation from "../../customhook/Pagenation";
 import { useSearchParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import AdminSearchtools from "../../customhook/AdminSearchtools";
 import AdminMembercreate from "../../customhook/Admintools/AdminMembercreate";
-import AdminUpdateform from "../../customhook/Admintools/AdminUpdateform";
 import Membermanagelist from "./list/Membermanagelist";
-import AdminHeader from "../../customhook/Admintools/AdminCss/AdminHeader";
+import { useConfirm, useToast } from "../../UI/Feedback/FeedbackProvider";
+import { Page, Pagehead, Pagetitle, Pagemeta, Headright, Panel,
+         Tablewrap, Table, Th, Emptyrow, Button, Adminpaging } from "../AdminUI";
 
-
-
-const Wrapper=styled.div`
-    width: 1000px;
-    height: 1000px;
-    z-index: 100px;
-    position: absolute;
-    top: 0%;
-   // left:18%;
-    //width: 80%;
-    //height: 99%;
-    border: 1px solid black;
-    text-align: center;
-    
-
-`
-
-const Memcrbutton=styled.button`
-    position: relative;
-    float:left;
-    top: 25%;
-    border: 1px solid black;
-`
-const Usersearch=styled.div`
-    position: relative;
-    float: right;
-    right: 0%;
-    top: 21%;
-    border: 1px solid red;
-   
-`
-const Maintable=styled.table`
-position: relative;
-bottom: 42px;
-width:100%;
-height: 10px;
- border: 1px solid black;
-float   :left ;
-background-color: white;
-border-spacing: 0px;
-`
-const TableHeader=styled.thead`
-    background-color:rgb(44,44,44);
-`
-const Thcss=styled.th`
-    color: white;
-`
-
+//회원 목록. 화면 골격(좌측 네비·여백)은 AdminLayout 이 잡는다.
 export default function Membermanage(){
 
     const axiosinstance=CreateAxios();
+    const confirm=useConfirm();
+    const toast=useToast();
     const [memberlist,setMemberlist]=useState();
-       const [totalpage,setTotalpage]=useState();
-        const [totalelement,setTotalelement]=useState();
+    const [totalpage,setTotalpage]=useState();
+    const [totalelement,setTotalelement]=useState();
     const [iscreate,setIscreate]=useState(false);
-    
-//유저검색
-const options = [
-    {value:"email",name:"이메일"}, 
-    {value:"nickname",name:"닉네임"}, 
-    
-  ]
 
-        const [query,setQuery]=useSearchParams();
-            const navigate=useNavigate();
-            const querydata={
-                page:parseInt(query.get("page")) || 1,
-                option:query.get("option") ,
-                keyword:query.get("keyword") 
-        
-            }
+    //유저검색
+    const options = [
+        {value:"email",name:"이메일"},
+        {value:"nickname",name:"닉네임"},
+    ]
 
- 
-useEffect(()=>{
-    getmember()
-},[querydata.page,querydata.option,querydata.keyword])
-
-
-   const getmember=()=>{
-    axiosinstance.get("/admin/membermanage",{
-        params:{page:querydata.page,
-            option:querydata.option,
-            searchtext:querydata.keyword
-        }
-    }).then((res)=>{
-        setMemberlist(res.data.content)
-        setTotalpage(res.data.totalPages)
-    })
-   }
-    
-
-    const deletemember=(userid)=>{
-        if(window.confirm("정말로삭제하겠습니까?")){
-            axiosinstance.delete(`/admin/member/${userid}/delete`)
-            .then((res)=>{
-                alert(res.data)
-                getmember();
-            }).catch((err)=>{
-                alert("삭제실패")
-            })
-        }
-        else{
-            alert("삭제가취소되었습니다")
-        }
+    const [query]=useSearchParams();
+    const querydata={
+        page:parseInt(query.get("page")) || 1,
+        option:query.get("option") ,
+        keyword:query.get("keyword")
     }
 
-  
-    
+    useEffect(()=>{
+        getmember()
+    },[querydata.page,querydata.option,querydata.keyword])
+
+    const getmember=()=>{
+        axiosinstance.get("/admin/membermanage",{
+            params:{page:querydata.page,
+                option:querydata.option,
+                searchtext:querydata.keyword
+            }
+        }).then((res)=>{
+            setMemberlist(res.data.content)
+            setTotalpage(res.data.totalPages)
+            setTotalelement(res.data.totalElements)
+        })
+    }
+
+    //window.confirm 과 달리 확인창이 실행을 멈추지 않는다. 답을 await 로 받는다.
+    const deletemember=async(userid)=>{
+        const ok=await confirm({
+            title:"이 회원을 삭제할까요?",
+            description:"회원이 쓴 글·댓글도 함께 사라집니다. 되돌릴 수 없습니다.",
+            confirmText:"삭제",
+            danger:true,
+        })
+        if(!ok) return;
+
+        axiosinstance.delete(`/admin/member/${userid}/delete`)
+        .then((res)=>{
+            toast.success(res.data||"삭제되었습니다.")
+            getmember();
+        }).catch((err)=>{
+            toast.error(err)
+        })
+    }
 
     return (
+        <Page>
+            <Pagehead>
+                <Pagetitle>회원 관리</Pagetitle>
+                <Pagemeta>총 {totalelement??0}명 · {totalpage??1}페이지</Pagemeta>
 
-        <Wrapper>
-          <AdminHeader>
-            
-            <h2 style={{color:"white", position:"relative",top:"30%",right:"5%"}}>회원정보관리</h2>
-            <Usersearch>
-            <AdminSearchtools
-                    searchdatas={querydata}
-                    options={options}
-                    url={"/admin/member"}
+                <Headright>
+                    <AdminSearchtools
+                        searchdatas={querydata}
+                        options={options}
+                        url={"/admin/member"}
                     />
-            </Usersearch>
+                    <Button type="button" $variant="primary" onClick={()=>setIscreate(true)}>
+                        회원 추가
+                    </Button>
+                </Headright>
+            </Pagehead>
 
-                      <Memcrbutton onClick={()=>{
-                setIscreate(true)
-            }}>회원추가</Memcrbutton>
+            {iscreate && <AdminMembercreate setIscreate={setIscreate}/>}
 
-                    </AdminHeader>
+            <Panel>
+                <Tablewrap>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <Th $align="center">번호</Th>
+                                <Th>이메일</Th>
+                                <Th>닉네임</Th>
+                                <Th $align="center">가입경로</Th>
+                                <Th $align="center">권한</Th>
+                                <Th>주소</Th>
+                                <Th $align="center">게시글</Th>
+                                <Th $align="center">댓글</Th>
+                                <Th $align="center">채팅방</Th>
+                                <Th>가입일</Th>
+                                <Th $align="center">관리</Th>
+                            </tr>
+                        </thead>
 
+                        {memberlist && memberlist.length>0
+                            ? <tbody>
+                                {memberlist.map((data)=>(
+                                    <Membermanagelist key={data.id} data={data}
+                                        deletemember={deletemember}/>
+                                ))}
+                              </tbody>
+                            : <Emptyrow colspan={11}>
+                                {querydata.keyword?"검색 결과가 없습니다":"회원이 없습니다"}
+                              </Emptyrow>}
+                    </Table>
+                </Tablewrap>
+            </Panel>
 
-            {iscreate?<AdminMembercreate setIscreate={setIscreate}/>:""}
-                          
-            <br/>
-                                        
-            <Maintable>
-            <TableHeader>
-                <tr>
-                    <Thcss>회원번호</Thcss>
-                    <Thcss>회원이메일</Thcss>
-                    <Thcss>회원닉네임</Thcss>
-                    
-                    <Thcss>회원가입사이트</Thcss>
-                    <Thcss>회원권한</Thcss>
-                    <Thcss>회원주소</Thcss>
-                    <Thcss>작성게시글</Thcss>
-                    <Thcss>작성코멘트</Thcss>
-                    <Thcss>참여채팅방</Thcss>
-                    <Thcss>가입날자</Thcss>
-                    <Thcss>회원정보관리</Thcss>
-                </tr>
-                </TableHeader>
-                
-            {memberlist&&memberlist.map((data,key)=>{
-                return(
-                   <>
-                    <Membermanagelist data={data} key={key}
-                    deletemember={deletemember}
-                    />
-                        
-                   </>
-                )
-                
-            })}
-           
-            </Maintable>
-             <Pagenation  totalpage={totalpage}
-                      url={"/admin/member"}
-                        querydata={querydata}
-                      />
-        </Wrapper>
+            <Adminpaging totalpage={totalpage} url={"/admin/member"} querydata={querydata}/>
+        </Page>
     )
 }

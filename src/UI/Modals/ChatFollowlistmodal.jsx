@@ -1,98 +1,226 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
 import CreateAxios from "../../customhook/CreateAxios";
-import { Mutation, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Profilediv from "./Profilediv";
 
+//=====================================================================
+// 채팅방 초대 - 팔로우 목록에서 골라 초대한다.
+//  - 예전엔 배경이 greenyellow 에 blue/red/yellow 테두리, 닫기 버튼은
+//    8px 검은 선 두 개로 그린 X 였다. 전부 테마 토큰으로 바꿨다.
+//  - 폰 화면(#phone-ui) 전체를 덮는다. 설정 서랍 위에 얹힌다.
+//=====================================================================
+
+const slideup=keyframes`
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+`
+
 const Modal = styled.div.attrs({ className: "chatroommenu" })`
- position:absolute;
- display: flex;
- flex-direction:column;
-height:100%;
-width:100%;
-background:greenyellow;
-
-animation: modaldown 0.5s linear;
-`
-
-const Headers = styled.div.attrs({ className: "chatroommenu" })`
+    position: absolute;
+    inset: 0;
+    z-index: 320;
     display: flex;
-    border:1px solid blue;
-`
+    flex-direction: column;
+    background: ${(props)=>props.theme.surface};
+    color: ${(props)=>props.theme.text};
+    animation: ${slideup} 180ms ${(props)=>props.theme.ease};
 
-const ExitButton = styled.div.attrs({ className: "chatroommenu" })`
-    position: relative;
+    @media (prefers-reduced-motion: reduce) { animation: none; }
+`
+const Headers = styled.div.attrs({ className: "chatroommenu" })`
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-bottom: 1px solid ${(props)=>props.theme.border};
+    background: ${(props)=>props.theme.surfaceAlt};
+`
+const ExitButton = styled.button.attrs({ className: "chatroommenu" })`
+    flex: none;
     width: 30px;
     height: 30px;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: ${(props)=>props.theme.textMuted};
+    cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
 
-    &::before{
-        content: " ";
-        position: absolute;
-        top: 40%;
-        width: 30px;
-        border-bottom: 8px solid black;
-        transform: rotate(45deg);
+    &:hover {
+        background: ${(props)=>props.theme.surfaceHover};
+        color: ${(props)=>props.theme.text};
     }
-    &::after{
-        content: " ";
-        position: absolute;
-        top: 40%;
-        width: 30px;
-        border-bottom: 8px solid black;
-        transform: rotate(-45deg);
+    &:focus-visible {
+        outline: 2px solid ${(props)=>props.theme.accent};
+        outline-offset: 1px;
     }
 `
-const Invitebutton = styled.button.attrs({ className: "chatroommenu" })`
-margin-left: auto;
-width:55px;
-background: rgb(247,150,192);
-background: radial-gradient(circle, rgba(247,150,192,1) 0%, rgba(118,174,241,1) 100%);
-  line-height: 15px;
-  padding: 0;
-  border: none;
-
-`
-const Userprofilecss=styled.div`
-    width:40px;
-    height:40px;
-`
+const Closeicon=()=>(
+    <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor"
+            strokeWidth="2.2" strokeLinecap="round"/>
+    </svg>
+)
 const HeaderText = styled.div`
-    text-align:center;
-   
-    width: 200px;
-    
-    `
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+`
+//선택한 사람이 없으면 눌러도 경고만 뜨므로, 그 상태를 색으로 먼저 알려준다.
+const Invitebutton = styled.button.attrs({ className: "chatroommenu" })`
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 30px;
+    padding: 0 13px;
+    border: 1px solid transparent;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    ${(props)=>props.active
+        ? `
+        background: ${props.theme.accent};
+        color: #fff;
+        &:hover { background: ${props.theme.accentHover}; }
+        `
+        : `
+        background: ${props.theme.accentSoft};
+        color: ${props.theme.accent};
+        `}
+
+    &:focus-visible {
+        outline: 2px solid ${(props)=>props.theme.accent};
+        outline-offset: 2px;
+    }
+`
+const Searchwrap = styled.div`
+    flex: none;
+    padding: 10px 12px 6px;
+`
 const Searchinput = styled.input.attrs({ className: "chatroommenu" })`
-    
+    width: 100%;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid ${(props)=>props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.surfaceAlt};
+    color: ${(props)=>props.theme.text};
+    font-size: 13px;
+    outline: none;
+    transition: border-color ${(props)=>props.theme.transition},
+                box-shadow ${(props)=>props.theme.transition},
+                background ${(props)=>props.theme.transition};
+
+    &::placeholder { color: ${(props)=>props.theme.textFaint}; }
+    &:focus {
+        border-color: ${(props)=>props.theme.accent};
+        background: ${(props)=>props.theme.surface};
+        box-shadow: 0 0 0 3px ${(props)=>props.theme.accentSoft};
+    }
 `
 const Userlist = styled.div.attrs({ className: "chatroommenu" })`
-    border:1px solid red;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 8px 10px;
+
+    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+        background-color: ${(props)=>props.theme.borderStrong};
+        border-radius: 4px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
 `
-const Userli = styled.div.attrs({ className: "chatroommenu" })`
-    border: 1px solid yellow;
+const Emptytext=styled.div`
+    padding: 24px 12px;
+    text-align: center;
+    font-size: 12.5px;
+    color: ${(props)=>props.theme.textMuted};
+`
+//label 로 감싸 줄 어디를 눌러도 체크된다. 이미 방에 있는 사람은 눌러도 소용없으니 흐리게.
+const Userli = styled.label.attrs({ className: "chatroommenu" })`
     display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border-radius: ${(props)=>props.theme.radius};
+    cursor: ${(props)=>props.joined?"default":"pointer"};
+    opacity: ${(props)=>props.joined?0.55:1};
+    transition: background ${(props)=>props.theme.transition};
+
+    &:hover { background: ${(props)=>props.joined?"transparent":props.theme.surfaceHover}; }
+`
+const Userprofilecss=styled.div`
+    flex: none;
+    width: 36px;
+    height: 36px;
+`
+const Username = styled.div.attrs({ className: "chatroommenu" })`
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+`
+const Nickname=styled.div`
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`
+const Useremail=styled.div`
+    font-size: 11.5px;
+    color: ${(props)=>props.theme.textMuted};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`
+const Joinedtag=styled.span`
+    margin-left: auto;
+    flex: none;
+    padding: 3px 9px;
+    border-radius: ${(props)=>props.theme.radiusPill};
+    background: ${(props)=>props.theme.surfaceAlt};
+    border: 1px solid ${(props)=>props.theme.border};
+    font-size: 11px;
+    font-weight: 600;
+    color: ${(props)=>props.theme.textMuted};
 `
 const Usercheck = styled.input.attrs({ className: "chatroommenu" })`
     margin-left: auto;
-    width: 20px;
-    margin-right:10px;
-`
-const Username = styled.div.attrs({ className: "chatroommenu" })`
-
+    flex: none;
+    width: 18px;
+    height: 18px;
+    accent-color: ${(props)=>props.theme.accent};
+    cursor: pointer;
 `
 const ChatFollowlistmodal = (props) => {
-    const { close, roomid, roomusers, invite, isinvitelist } = props;
+    const { close, roomid, roomusers } = props;
     const axiosinstance = CreateAxios();
 
     const [checklist, setChecklist] = useState([])
-    const [selectlist, setSelectlist] = useState([]);
-    const [ischeck, setIscheck] = useState(false)
-    const [search, setSearch] = useState(" ");
+    const [search, setSearch] = useState("");
 
     const queryclient = useQueryClient();
 
-    const { data: followlist, isLoading, error } = useQuery({
+    const { data: followlist } = useQuery({
         queryKey: ['invitelist'],
         queryFn: async () => {
             const res = await axiosinstance.get("/followlist")
@@ -102,14 +230,11 @@ const ChatFollowlistmodal = (props) => {
     })
 
     const clossmodal = () => {
-        console.log("클릭")
-
         close();
     }
 
     //체크박스 데이터
     const checkhandler = (check, value) => {
-        console.log("체크핸들러시작")
         if (check) {
             setChecklist((prev) => [...prev, value])
 
@@ -128,15 +253,20 @@ const ChatFollowlistmodal = (props) => {
     const Userinvite = useMutation({
         mutationFn: ({ roomid, checklist }) => {
 
-            axiosinstance.post("/chatroominvite", {
+            //return 이 없으면 요청이 끝나기 전에 onSuccess 가 돌아
+            //아직 반영 안 된 목록을 다시 받아온다.
+            return axiosinstance.post("/chatroominvite", {
                 roomid: roomid,
                 userlist: checklist
             })
         },
-        onSuccess: (res) => {
+        onSuccess: () => {
             alert("성공적으로초대하였습니다")
             //다른컴포넌트라그냥새로
+            //초대해도 방 정보(대화상대 목록)를 다시 안 받아오면 화면이 그대로다
+            queryclient.invalidateQueries({ queryKey: ["roominfo", roomid] })
             queryclient.invalidateQueries("chatdata")
+            close();
         },
         onError: (err) => {
             alert(err)
@@ -150,17 +280,18 @@ const ChatFollowlistmodal = (props) => {
         Userinvite.mutate({ roomid, checklist })
         }
     }
-    //채팅창 유저비교 
-
-    const existinguser = (usernickname) => {
+    //채팅창 유저비교
+    //닉네임은 겹칠 수 있어서 로그인 아이디로 맞춘다.
+    //(팔로우목록의 username == 방 멤버의 email == member.username)
+    const existinguser = (username) => {
 
         let value = false;
 
+        const members = roomusers || [];
 
         //roomusers.forEach((data)=>{})} 포이치문브레이크안되서효율이안조흐..return도continue고..
-        for (var i = 0; i < roomusers.length; i++) {
-            console.log("유저데이터:" + roomusers[i].membernickname)
-            if (usernickname === roomusers[i].membernickname) {
+        for (var i = 0; i < members.length; i++) {
+            if (username === members[i].email) {
 
 
                 value = true;
@@ -168,114 +299,82 @@ const ChatFollowlistmodal = (props) => {
             }
 
         }
-        console.log("끝")
         return value;
 
 
     }
 
-
+    //검색어를 지우면 search 가 "" 가 되는데, 예전 조건(=== " ")은 그때
+    //아무 줄도 통과시키지 않아 목록이 통째로 사라졌다.
+    const keyword = search.trim();
+    const visiblelist = (followlist||[]).filter((data) => {
+        if (keyword === "") return true;
+        return data.nickname.includes(keyword) || data.username.includes(keyword);
+    })
 
     return (
         <Modal className="chatroommenu">
             <Headers>
-                <ExitButton onClick={clossmodal}></ExitButton>
+                <ExitButton type="button" aria-label="닫기" onClick={clossmodal}>
+                    <Closeicon/>
+                </ExitButton>
 
-                <HeaderText>팔로우목록</HeaderText>
+                <HeaderText>팔로우 목록</HeaderText>
 
-                <Invitebutton onClick={() => {
+                <Invitebutton type="button" active={checklist.length>0}
+                    onClick={() => {
                     Invite(roomid, checklist)
 
                 }} >
 
-                    초대하기</Invitebutton>
+                    초대{checklist.length>0 && ` ${checklist.length}`}</Invitebutton>
 
             </Headers>
-            {/*여기에 초대누른목록 추가 */}
-            {/*검색 */}
 
+            <Searchwrap>
+                <Searchinput type="text" placeholder="닉네임 또는 아이디 검색"
+                    value={search}
+                    onChange={(e) => {
 
-            <Searchinput type="text" style={{ position: "relative", width: "80%" }}
-                onChange={(e) => {
-
-                    setSearch(e.target.value);
-                }}
-            />
-
+                        setSearch(e.target.value);
+                    }}
+                />
+            </Searchwrap>
 
             <Userlist>
                 {/*친구목록 */}
-                {followlist && followlist.filter((filter) => {
-                    //하나씩 조건통과하면 리턴 아니면 리턴안함 ㅇ
-                    if (search === " ") {
-                        return filter
-                    }
+                {visiblelist.length===0 &&
+                <Emptytext>
+                    {keyword===""?"팔로우한 사람이 없습니다":"검색 결과가 없습니다"}
+                </Emptytext>}
 
-                    else if (filter.nickname.includes(search)) {
-                        return filter;
-                    }
-                    else if (filter.username.includes(search)) {
-                        return filter;
-                    }
-                })
+                {visiblelist.map((data) => {
+                        //이프로검사 - 이미 방에 있으면 체크박스 없이 "참여중"만 보여준다
+                        const joined = existinguser(data.username);
 
-                    .map((data) => {
-                        //이프로검사
-                        if (existinguser(data.nickname)) {
-                            console.log("기존에있는경우!")
-                            return (
-                                <Userli>
-                                    
-                                    <Userprofilecss>
-                                        <Profilediv url={data.profileurl} />
-                                     </Userprofilecss>
-                                    {data.nickname}
-                                    <br />
-                                    {data.username}
+                        return (
+                            <Userli key={data.username} htmlFor={joined?undefined:data.username}
+                                joined={joined?1:0}>
+                                <Userprofilecss>
+                                    <Profilediv url={data.profileurl} />
+                                </Userprofilecss>
+                                <Username>
+                                    <Nickname>{data.nickname}</Nickname>
+                                    <Useremail>{data.username}</Useremail>
+                                </Username>
 
-                                </Userli>
-                            )
-                        }
-                        else {
-
-                            return (
-
-                                <label for={data.username} >
-                                    <Userli>
-                                        <Userprofilecss>
-                                        <Profilediv url={data.profileurl} />
-                                        </Userprofilecss>
-                                        <Username>
-                                            {data.nickname}
-                                            <br />
-                                            {data.username}
-                                        </Username>
-                                        <Usercheck id={data.username} type="checkbox"
-                                            //checked={checked}
-                                            onChange={(e) => {
-                                                console.log("온채인지")
-                                                checkhandler(e.target.checked, e.target.id)
-                                            }}
-                                            style={{ float: "right", borderRadius: "10px" }} />
-
-
-                                        <br />
-
-                                    </Userli>
-                                </label>
-
-
-
-
-                            )
-                        }
+                                {joined
+                                    ? <Joinedtag>참여중</Joinedtag>
+                                    : <Usercheck id={data.username} type="checkbox"
+                                        checked={checklist.includes(data.username)}
+                                        onChange={(e) => {
+                                            checkhandler(e.target.checked, e.target.id)
+                                        }} />}
+                            </Userli>
+                        )
 
                     })}
             </Userlist>
-            {checklist.map((data) => {
-                return (<>
-                    {data}</>)
-            })}
         </Modal>
 
 

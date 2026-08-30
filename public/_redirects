@@ -1,0 +1,5 @@
+# SPA 라우팅. Cloudflare Pages 가 읽는다.
+# 이게 없으면 /login 같은 내부 주소에서 새로고침할 때
+# Pages 가 그 경로의 파일을 찾다가 404 를 낸다.
+# 모든 경로를 index.html 로 넘겨 react-router 가 처리하게 한다.
+/*  /index.html  200
