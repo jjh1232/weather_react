@@ -770,6 +770,7 @@ const [ismenu,setismenu]=useState(false);
 
      {isSimpleprofile?<><Simpleprofile
       username={post.username} nickname={post.nickname} profileimg={post.userprofile}
+      profileid={post.profileid}
       mousexy={xy} onmouseEnter={ProfileKeepOpen} onmouseLeave={ProfileMouseLeave}
       /></>:""}
     
