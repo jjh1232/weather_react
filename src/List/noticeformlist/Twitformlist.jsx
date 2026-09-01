@@ -74,13 +74,17 @@ const Nameheader=styled.div`
 `
 const Nickname=styled.div`
   font-weight: 650;
-  font-size: 15px;
+  /* 한 줄에서 제일 먼저 읽혀야 하는 정보라 아이디·시간보다 확실히 키운다. */
+  font-size: 16px;
   letter-spacing: -0.02em;
   white-space: nowrap;
 `
 const Username=styled.div`
  position: relative;
-  color: ${(props)=>props.theme.textMuted};
+  /* 옆의 "· 4분전"(Timecss)과 같은 textFaint 를 쓴다.
+     닉네임(진하고 큼) / 아이디·시간(흐리고 작음) 으로 위계를 나눈다.
+     예전엔 textMuted 라 닉네임과 명도 차이가 크지 않아 둘이 비슷하게 보였다. */
+  color: ${(props)=>props.theme.textFaint};
   font-size: 13px;
   margin-left: 6px;
   white-space: nowrap;
