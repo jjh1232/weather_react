@@ -15,6 +15,8 @@ export default function Noticemanage(){
     const [totalpage,setTotalpage]=useState();
     const [totalelement,setTotalelement]=useState();
     const [iscreate,setIscreate]=useState(false);
+    //목록을 못 불러온 상태. "비어 있음" 과 구분해서 보여준다.
+    const [loaderror,setLoaderror]=useState(false);
 
     const options = [
         {value:"title",name:"제목"},
@@ -43,9 +45,15 @@ export default function Noticemanage(){
             }
         })
         .then((res)=>{
+            setLoaderror(false)
             setNotice(res.data.content)
             setTotalpage(res.data.totalPages)
             setTotalelement(res.data.totalElements)
+        }).catch(()=>{
+            //실패를 조용히 넘기면 "게시글이 없습니다" 라고 거짓말을 하게 된다.
+            setLoaderror(true)
+            setNotice([])
+            setTotalelement(0)
         })
     }
 
@@ -105,7 +113,9 @@ export default function Noticemanage(){
                                 ))}
                               </tbody>
                             : <Emptyrow colspan={11}>
-                                {querydata.keyword?"검색 결과가 없습니다":"게시글이 없습니다"}
+                                {loaderror
+                                    ? "목록을 불러오지 못했습니다. 새로고침하거나 광고 차단 확장을 꺼보세요."
+                                    : querydata.keyword?"검색 결과가 없습니다":"게시글이 없습니다"}
                               </Emptyrow>}
                     </Table>
                 </Tablewrap>

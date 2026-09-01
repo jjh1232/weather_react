@@ -19,6 +19,8 @@ export default function Membermanage(){
     const [totalpage,setTotalpage]=useState();
     const [totalelement,setTotalelement]=useState();
     const [iscreate,setIscreate]=useState(false);
+    //목록을 못 불러온 상태. "비어 있음" 과 구분해서 보여준다.
+    const [loaderror,setLoaderror]=useState(false);
 
     //유저검색
     const options = [
@@ -44,9 +46,18 @@ export default function Membermanage(){
                 searchtext:querydata.keyword
             }
         }).then((res)=>{
+            setLoaderror(false)
             setMemberlist(res.data.content)
             setTotalpage(res.data.totalPages)
             setTotalelement(res.data.totalElements)
+        }).catch(()=>{
+            /* 실패를 조용히 넘기면 화면이 "회원이 없습니다" 라고 거짓말을 한다.
+               실제로 광고 차단 확장이 /admin/ 요청을 막아서 회원 3명이
+               0명으로 보인 적이 있다. 서버 로그에는 요청 흔적조차 없어서
+               원인을 찾는 데 한참 걸렸다. */
+            setLoaderror(true)
+            setMemberlist([])
+            setTotalelement(0)
         })
     }
 
@@ -116,7 +127,9 @@ export default function Membermanage(){
                                 ))}
                               </tbody>
                             : <Emptyrow colspan={11}>
-                                {querydata.keyword?"검색 결과가 없습니다":"회원이 없습니다"}
+                                {loaderror
+                                    ? "목록을 불러오지 못했습니다. 새로고침하거나 광고 차단 확장을 꺼보세요."
+                                    : querydata.keyword?"검색 결과가 없습니다":"회원이 없습니다"}
                               </Emptyrow>}
                     </Table>
                 </Tablewrap>
