@@ -1,5 +1,6 @@
 import React from "react";
 import Chatroomlistitem from "./Chatroomlistitem" 
+import EmptyState from "../UI/Feedback/EmptyState";
 import { useState,useEffect } from "react";
 import CreateAxios from "../customhook/CreateAxios";
 import styled from "styled-components";
@@ -94,7 +95,12 @@ function Chatroomlist(props){
             
             )
         })
-    :<>친구와채팅을 이용해보세요!</>
+    ://맨 텍스트 대신 공용 빈 상태 화면을 쓴다.
+     <EmptyState
+       variant="chat"
+       title="아직 대화가 없어요"
+       desc="팔로우한 친구에게 먼저 말을 걸어보세요"
+     />
     }
     
        
