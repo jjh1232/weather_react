@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Validators } from "../UI/Modals/Validators";
+import { apiUrl } from "../config/api";
 import BrandMark from "../UI/BrandMark";
 import { useToast, messageFromError } from "../UI/Feedback/FeedbackProvider";
 import { oauthredirect } from "../UI/Authmarks";
@@ -244,7 +245,11 @@ const Navitag=styled.button`
 function Memberpasswordfind(){
 
 const [email,Setemail]=useState("");
-const url=`/open/passwordfind`
+/* 상대경로로 두면 요청이 백엔드가 아니라 프론트 도메인으로 간다.
+   Pages 는 _redirects 규칙 때문에 index.html 을 200 으로 돌려줘서,
+   에러도 성공도 뜨지 않고 메일도 안 나갔다.
+   여기는 설정된 instance 가 아니라 순수 axios 를 쓰므로 baseURL 이 없다. */
+const url=apiUrl("/open/passwordfind")
 const navigate=useNavigate();
 const toast=useToast();
 const [valierr,setvalierr]=useState();

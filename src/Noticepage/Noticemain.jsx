@@ -2,6 +2,7 @@ import React,{useState,useEffect} from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Button from "../UI/Button";
+import { apiUrl } from "../config/api";
 import Loginpage from "../MemberPage/Loginpage";
 import AuthCheck from "../customhook/authCheck";
 import SelectBox from "../UI/SelectBox";
@@ -38,8 +39,10 @@ const [selectoption,Setselectoption]=useState("title");
 const [page,setPage]=useState(1);
 const [searchtext,Setsearchtext]=useState("")
 
-const url=`/open/notice`;
-const searchurl=`/open/noticesearch`
+//상대경로면 프론트 도메인으로 간다(Memberpasswordfind 와 같은 함정).
+//이 화면은 현재 라우팅에 걸려 있지 않지만 살릴 때를 대비해 맞춰둔다.
+const url=apiUrl("/open/notice");
+const searchurl=apiUrl("/open/noticesearch")
 //const [searchis,Setsearchis]=useState(false)
 
 
