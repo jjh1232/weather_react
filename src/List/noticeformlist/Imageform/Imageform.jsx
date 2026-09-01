@@ -7,10 +7,16 @@ import Imageformlist from "./Imageformlist";
 import AuthCheck from "../../../customhook/authCheck";
 import CreateAxios from "../../../customhook/CreateAxios";
 import { useSearchParams } from "react-router-dom";
-import { API_BASE } from "../../../config/api";
+import { API_BASE, apiUrl } from "../../../config/api";
+import EmptyState from "../../../UI/Feedback/EmptyState";
 
 // 고정폭 타일을 flex-wrap 으로 흘리면 남는 자리가 생기고 화면마다 줄이 달라진다.
 // auto-fill 로 칸 수를 브라우저가 정하게 하면 어떤 폭에서도 꽉 찬다.
+//빈 상태는 그리드가 아니라 가운데 정렬된 한 칸이어야 한다.
+const Emptywrap=styled.div`
+  width: 100%;
+  padding: 8px;
+`
 const Wrapper=styled.div`
 position: relative;
 
@@ -63,8 +69,16 @@ export default function Imageform(){
     }= useInfiniteQuery({
             queryKey:["imgnoticelist",query.get("selectoptions"),query.get("keywords")],
             queryFn: async ({pageParam=1})=>{
+                /* 로그인 여부에 따라 인스턴스가 갈린다.
+                   axiosinstance 는 baseURL 이 있지만 순수 axios 는 없다.
+                   그래서 비로그인일 때 상대경로로 부르면 요청이 프론트 도메인으로 가고,
+                   Pages 가 index.html 을 200 으로 돌려준다.
+                   그러면 res.data 가 HTML 문자열이 되어 data.content 가 undefined 가 되고
+                   아래 .map() 에서 렌더 중 예외가 난다(화면 전체가 에러 화면으로 바뀐다).
+                   비로그인 쪽만 절대주소로 만들어 준다. */
                 const logch=loginuser? axiosinstance :axios
-                const res=await logch.get("/open/notice/imagelist",{
+                const listurl=loginuser?"/open/notice/imagelist":apiUrl("/open/notice/imagelist")
+                const res=await logch.get(listurl,{
                     params:{page:pageParam,
                             option:query.get("selectoptions"),
                             keyword:query.get("keywords"),
@@ -78,7 +92,8 @@ export default function Imageform(){
                 //올페이지는 지금까지 fetchNextPage로받아온 모든응답데이터가 배열로쌓여서 들어옴
                 //그래서 allPages.length로 페이징도가능
              
-                if(lastPage.last) return undefined;
+                //응답이 예상 모양이 아니면(HTML 등) 더 받으려 하지 않는다.
+                if(!lastPage || lastPage.last) return undefined;
 
                 //number는 서버가 마지막으로반환한값 1로처리했지만 0시작임으로 0이들어옴 때문에
                 //2를해야 1번데이터 거기서 3이되서 2번데이터 그담2를받고2더해4를 넘기면 3데이터
@@ -93,15 +108,45 @@ export default function Imageform(){
         }
     },[inView,hasNextPage,isFetchingNextPage,fetchNextPage])
 
+    //받아온 사진이 하나도 없는지. "아직 안 받음" 과 "받았는데 0장" 을 구분한다.
+    const loaded=!!imgnoticelist;
+    const total=loaded
+        ? imgnoticelist.pages.reduce((sum,p)=>sum+(p?.content?.length??0),0)
+        : 0;
+
+    if(status==="error"){
+        return (
+            <Emptywrap>
+                <EmptyState variant="search"
+                    title="사진을 불러오지 못했습니다"
+                    desc="잠시 후 새로고침해 주세요."/>
+            </Emptywrap>
+        );
+    }
+
+    if(loaded && total===0){
+        return (
+            <Emptywrap>
+                <EmptyState variant="cloud"
+                    title={query.get("keywords")
+                        ? `'${query.get("keywords")}' 검색 결과가 없어요`
+                        : "아직 올라온 사진이 없어요"}
+                    desc={query.get("keywords")
+                        ? "다른 낱말로 찾아보세요."
+                        : "사진을 넣어 글을 쓰면 여기에 모입니다."}/>
+            </Emptywrap>
+        );
+    }
+
     return (
         <Wrapper>
-        
+
 
         {imgnoticelist&&imgnoticelist.pages.map((data,key)=>{
             return (
                 <React.Fragment key={key}>
                 
-                {data.content.map((da,key)=>{
+                {(data?.content ?? []).map((da,key)=>{
                     return (
                         
                         <Imageformlist content={da} key={key} option={query.get("selectoptions")} keyword={query.get("keywords")}/>
