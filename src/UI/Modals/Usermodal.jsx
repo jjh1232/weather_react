@@ -177,9 +177,9 @@ function Usermodal(props){
                 makechatroom(e)}}>채팅하기</Menulist>
             <Menulist onClick={()=>navigate(`/userpage/${profileid}`)}>유저페이지</Menulist>
 
-<Menulist>
-    프로필아이디:{profileid}
-</Menulist>
+            {/* "프로필아이디:xxx" 줄은 뺐다. 메뉴는 할 수 있는 동작을 고르는 곳인데
+                누를 수 없는 정보 한 줄이 섞여 있어 눌러도 아무 일이 안 일어났다.
+                아이디는 바로 위 목록에 이미 @아이디로 보인다. */}
         </Wrapper>
         </Outdiv>
     ,document.getElementById('phone-ui')  
