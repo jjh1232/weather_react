@@ -386,9 +386,13 @@ const LikeButtonhandler=(noticeid)=>{
               <Menudiv onClick={()=>{setIsmenu(!ismenu)}} ref={noticemenuref}>
                 <FontAwesomeIcon onClick={()=>{setIsmenu(!ismenu)}}icon={faEllipsis} fontSize={"25px"}/>
                 
-                  {ismenu&&<Noticemenu 
+                  {/* 예전엔 isclose 로 넘겼는데 Noticemenu 는 closeisMenu 로 받는다.
+                      이름이 안 맞아서 메뉴 안에서 closeisMenu 가 undefined 였고,
+                      바깥 클릭으로 닫기와 비로그인 처리가 죽어 있었다.
+                      setisblock 도 null 이라 차단 해제 성공 시 예외가 났다. */}
+                  {ismenu&&<Noticemenu
                     updatemethod={postUpdate} deletemethod={postDelete} noticeuser={post?.username} noticeid={post?.id}
-                    setisblock={null} isclose={setIsmenu}
+                    setisblock={()=>{}} closeisMenu={()=>setIsmenu(false)}
               />}
             
               </Menudiv>

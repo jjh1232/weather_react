@@ -264,11 +264,10 @@ export default function Noticemenu(props){
                 console.log('✅ Outclickdiv 클릭됨!');
         closeisMenu();
      }}></Outclickdiv>
-                <Innerdiv onClick={()=>{usermove()}}>
-                      
-                        
-                    </Innerdiv>
-                  
+                {/* 내 글에는 팔로우/차단/신고를 띄우지 않는다.
+                    자기 자신을 팔로우하거나 자기 글을 신고하는 건 말이 안 되는데
+                    isowner 를 수정/삭제에만 쓰고 있어서 그대로 노출돼 있었다. */}
+                {!isowner&&<>
                     {followcheck?<Innerdiv onClick={()=>{unfollowhandler()}}>
                         <Iconslot><FontAwesomeIcon icon={faUserMinus}/></Iconslot>
                         팔로우 해제
@@ -299,9 +298,11 @@ export default function Noticemenu(props){
                         <Iconslot><FontAwesomeIcon icon={faFlag}/></Iconslot>
                         이 게시글 신고
                     </Innerdiv>}
+                </>}
 
+                   {/* 내 글이면 위쪽 그룹(팔로우/차단/신고)이 통째로 없으므로
+                       구분선도 필요 없다. 그리면 메뉴 맨 위에 줄만 덩그러니 남는다. */}
                    {isowner&&<>
-                    <Groupline/>
                 <Innerdiv onClick={()=>{updatemethod()}}>
                 <Iconslot><FontAwesomeIcon icon={faPen}/></Iconslot>
                 게시글 수정
