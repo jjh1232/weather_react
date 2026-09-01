@@ -470,13 +470,28 @@ const BANIMAGE="/front/Subimages/chdan.png";
 //서버가 붙이는 차단 주소와 같은 규칙(adminService.bannedurl)
 const bannedurl=(id)=>`${BANIMAGE}?ban=${id}`;
 
-//에디터에 열어둔 본문의 <img src> 도 서버와 같은 모습이 되게 맞춰준다
+/* 에디터에 열어둔 본문의 <img src> 도 서버와 같은 모습이 되게 맞춰준다.
+
+   ★ 예전엔 API_BASE+from → API_BASE+to 로만 바꿨다. 그런데 detachfiles.path 는
+     이미 절대주소로 저장된다("https://weave-api.../noticeimages/...").
+     거기에 API_BASE 를 또 붙이면 "https://weave-api.comhttps://weave-api..." 가 되어
+     본문에서 아무것도 못 찾는다.
+     그 상태로 "글수정하기" 를 누르면 치환에 실패한 본문이 그대로 서버로 가서,
+     백엔드가 제대로 바꿔둔 본문을 도로 원본으로 덮어썼다.
+     (그래서 첨부목록은 차단으로 보이는데 본문 이미지는 멀쩡히 보였다)
+
+   본문에 어떤 형태로 들어 있든 잡히도록 두 가지를 다 바꾼다.
+   to 는 백엔드가 쓰는 값과 같아야 하므로 접두어를 붙이지 않는다
+   (adminService.banimage 도 notice.text.replace(oldpath, banned) 로 쓴다). */
 const swapinbody=(from,to)=>{
-    setCrnotice((prev)=>({
-        ...prev,
-        text:(prev.text||"").split(API_BASE+from)
-                            .join(API_BASE+to)
-    }))
+    if(!from || !to) return;
+    setCrnotice((prev)=>{
+        let text=prev.text||"";
+        //접두어가 붙은 긴 형태를 먼저 바꾼다. 짧은 쪽을 먼저 바꾸면 긴 쪽이 잘린다.
+        text=text.split(API_BASE+from).join(to);
+        text=text.split(from).join(to);
+        return {...prev,text};
+    })
 }
 
 const imageban=(data)=>{
