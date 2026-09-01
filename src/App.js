@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { BrowserRouter,Routes,Route, useNavigate } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
+import ErrorBoundary from "./UI/Feedback/ErrorBoundary";
 import Noticemain from "./Noticepage/Noticemain";
 import Noticemainex from "./Noticepage/Noticeex";
 import Noticecreate from "./Noticepage/Noticecreate";
@@ -169,6 +170,11 @@ const updatetime=()=>{
         라우트가 바뀌어도 떠 있는 알림이 사라지지 않는다. */}
     <FeedbackProvider>
 
+    {/* 렌더 중 예외가 나도 화면 전체가 백지가 되지 않게 한다.
+        ThemeProvider 안쪽이라 안내 화면도 테마 색을 그대로 쓴다.
+        라우터를 감싸므로 어느 페이지에서 터져도 잡힌다. */}
+    <ErrorBoundary>
+
     <BrowserRouter>
     
   
@@ -295,6 +301,8 @@ const updatetime=()=>{
 
         </BrowserRouter>
 
+
+    </ErrorBoundary>
     </FeedbackProvider>
     </ThemeProvider>
     </SseProvider>
