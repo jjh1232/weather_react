@@ -13,6 +13,8 @@ import { faStar as unfavorite } from "@fortawesome/free-regular-svg-icons";
 import { faMagnifyingGlass as search } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
+import EmptyState from "../../UI/Feedback/EmptyState";
+import { filterUsers } from "../../config/userSearch";
 import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
@@ -287,26 +289,29 @@ function Followlist(props){
             props.setRoomid(roomid);
         }
 
+    //검색어로 걸러진 목록. 화면과 빈 상태 판단이 같은 배열을 본다.
+    const shownlist=filterUsers(followlist,searchkeyword);
+
     return (
         <Wrapper>
         <Searchdiv>
-            
+
         <Searchicon icon={search} />
         <Inputcss onChange={(e)=>{Setsearchkeyword(e.target.value)}} 
         placeholder="닉네임이나 이메일을 입력해주세요"/> 
         </Searchdiv>
         <Userlistdiv>
-        {followlist&&followlist.filter((val,index)=>{
-            //필터로 키워드에 알맞은값을 리턴한다 여러개값일때테스트필요한듯
-            if(searchkeyword==""){
-                return val
-            }
-            else if(val.nickname.includes(searchkeyword)){
-                return val
-            }else if(val.username.includes(searchkeyword)){
-                return val
-            }
-        }) .map((data,key)=>{          
+        {/* 걸러진 배열을 먼저 만든다. 길이가 0 이면 빈 상태 화면을 그린다.
+            검색 결과가 없는 것과 애초에 팔로우가 없는 것은 다른 상황이라 문구를 나눈다. */}
+        {shownlist.length===0
+        ?(searchkeyword.trim()!==""
+            ?<EmptyState variant="search"
+                title={`'${searchkeyword}' 검색 결과가 없어요`}
+                desc="닉네임이나 이메일 일부만 입력해도 찾을 수 있어요"/>
+            :<EmptyState variant="follow"
+                title="아직 팔로우한 사람이 없어요"
+                desc="위 검색창에서 닉네임으로 찾아 팔로우해보세요"/>)
+        :shownlist.map((data,key)=>{
           
             return(
                 

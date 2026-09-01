@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as favoriteicon} from "@fortawesome/free-solid-svg-icons";
 import { faStar as unfavoriteicon } from "@fortawesome/free-regular-svg-icons";
 import { faMagnifyingGlass as search } from "@fortawesome/free-solid-svg-icons";
+import EmptyState from "../../UI/Feedback/EmptyState";
+import { filterUsers } from "../../config/userSearch";
 import { useCookies } from "react-cookie";
 
 const Wrapper=styled.div`
@@ -200,28 +202,31 @@ function Favoritelist(props){
     }
 
 
+        //검색어로 걸러진 목록. 화면과 빈 상태 판단이 같은 배열을 본다.
+        const shownlist=filterUsers(favoritefollow,searchkeyword);
+
         return (
         <Wrapper>
         <Searchdiv>
         < Searchicon icon={search}/>
-        <Inputcss />
+        {/* onChange 가 없어서 입력해도 아무 일도 일어나지 않았다.
+            searchkeyword 상태와 필터는 이미 있었고 연결만 빠져 있었다.
+            나머지 두 탭과 placeholder 도 맞춘다. */}
+        <Inputcss onChange={(e)=>{Setsearchkeyword(e.target.value)}}
+        placeholder="닉네임이나 이메일을 입력해주세요"/>
         </Searchdiv>
 
         <Userlistdiv>
-        {favoritefollow && 
-            favoritefollow.filter((list)=>{
-                if(searchkeyword==""){
-                    return list
-                }
-                else if(list.nickname.includes(searchkeyword)){
-                    return list
-                }
-                else if(list.username.includes(searchkeyword)){
-                    return list
-                }
-            })
-                
-                .map((data)=>{
+        {/* 검색 결과가 없는 것과 애초에 즐겨찾기가 없는 것은 다른 상황이라 문구를 나눈다. */}
+        {shownlist.length===0
+        ?(searchkeyword.trim()!==""
+            ?<EmptyState variant="search"
+                title={`'${searchkeyword}' 검색 결과가 없어요`}
+                desc="닉네임이나 이메일 일부만 입력해도 찾을 수 있어요"/>
+            :<EmptyState variant="favorite"
+                title="즐겨찾기가 비어 있어요"
+                desc="자주 보는 사람을 별표로 모아두면 여기에 나타납니다"/>)
+        :shownlist.map((data)=>{
                 return(
                     
                     <Userlist

@@ -7,6 +7,8 @@ import { useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
 import Profilediv from "../../UI/Modals/Profilediv";
+import EmptyState from "../../UI/Feedback/EmptyState";
+import { filterUsers } from "../../config/userSearch";
 import { useCookies } from "react-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass as search } from "@fortawesome/free-solid-svg-icons";
@@ -247,28 +249,28 @@ function Followerlist(props){
         props.setRoomid(roomid);
     }
         
+    //검색어로 걸러진 목록. 화면과 빈 상태 판단이 같은 배열을 본다.
+    const shownlist=filterUsers(followerlist,searchkeyword);
+
     return (
         <Wrapper>
         <Searchdiv>
-                    
+
                 <Searchicon icon={search} />
                 <Inputcss onChange={(e)=>{Setsearchkeyword(e.target.value)}} 
                 placeholder="닉네임이나 이메일을 입력해주세요"/> 
                 </Searchdiv>
          <Userlistdiv>
-        {followerlist&&followerlist.filter((list)=>{
-            if(searchkeyword==""){
-                return list;
-            }
-            else if(list.nickname.includes(searchkeyword)){
-                return list;
-            }
-            else if(list.username.includes(searchkeyword)){
-                return list;
-            }
-           
-        })
-          .map((data)=>{
+        {/* 검색 결과가 없는 것과 애초에 팔로워가 없는 것은 다른 상황이라 문구를 나눈다. */}
+        {shownlist.length===0
+        ?(searchkeyword.trim()!==""
+            ?<EmptyState variant="search"
+                title={`'${searchkeyword}' 검색 결과가 없어요`}
+                desc="닉네임이나 이메일 일부만 입력해도 찾을 수 있어요"/>
+            :<EmptyState variant="follower"
+                title="아직 팔로워가 없어요"
+                desc="글을 남기면 사람들이 찾아옵니다"/>)
+        :shownlist.map((data)=>{
             return(
                 
                 <Userlist onClick={(e)=>{
