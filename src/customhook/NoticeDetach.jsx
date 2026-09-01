@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useConfirm } from "../UI/Feedback/FeedbackProvider";
 import { API_BASE } from "../config/api";
+import { detachimage } from "../UI/profileimage";
 
 //=====================================================================
 // 글에 붙은 이미지 목록(첨부목록).
@@ -201,7 +202,7 @@ export default function NoticeDetach(props){
                         const canrestore=banned && !!data.originalpath;
                         return (
                             <Item key={data.id??key}>
-                                <Thumb src={API_BASE+data.path} alt=""/>
+                                <Thumb src={detachimage(data.path)} alt=""/>
                                 <Meta>
                                     <Filename title={data.filename}>{data.filename}</Filename>
                                     {banned && <Banned>차단됨</Banned>}

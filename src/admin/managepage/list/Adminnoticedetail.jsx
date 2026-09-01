@@ -10,7 +10,7 @@ import { Page, Pagehead, Pagetitle, Pagemeta, Headright, Panel, Button, Badge }
     from "../../AdminUI";
 import { useConfirm, useToast } from "../../../UI/Feedback/FeedbackProvider";
 import UserMenu from "../../UserMenu";
-import profileimage from "../../../UI/profileimage";
+import profileimage, { detachimage } from "../../../UI/profileimage";
 import { API_BASE } from "../../../config/api";
 
 //=====================================================================
@@ -386,7 +386,7 @@ export default function Adminnoticedetail(props){
                         : <Sidebody>
                             {files.map((m,key)=>(
                                 <Detachitem key={m.id??key}>
-                                    <Detachimg src={API_BASE+m.path} alt=""/>
+                                    <Detachimg src={detachimage(m.path)} alt=""/>
                                     <Detachname title={m.filename}>{m.filename}</Detachname>
                                 </Detachitem>
                             ))}

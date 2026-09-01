@@ -81,3 +81,38 @@ export function backgroundimage(path){
 
     return API_BASE + "/userbackgroundimg" + (value.startsWith("/") ? value : "/"+value);
 }
+
+/** 차단된 첨부 이미지 자리에 보여주는 안내 이미지. 프론트 번들의 정적 자산이다. */
+export const BANNED_IMAGE = "/front/Subimages/chdan.png";
+
+/**
+ * 게시글 첨부 이미지(detachfiles) 의 <img src> 를 만든다.
+ *
+ * 경로가 두 갈래인 것이 핵심이다.
+ *   업로드 파일   "/noticeimages/2026/09/01/uuid.png"  → 서버가 내보낸다   → API_BASE
+ *   차단 안내이미지 "/front/Subimages/chdan.png?ban=3"  → 프론트 정적 자산 → PUBLIC_URL
+ *
+ * 예전에는 여섯 군데가 전부 API_BASE 를 붙이고 있었다. 그래서 이미지를 차단하면
+ * 백엔드에 없는 /front/... 를 요청하게 되고, 차단 안내 이미지마저 깨져서
+ * "차단됨" 딱지만 뜨고 그림은 빈칸으로 남았다.
+ * (Imageformlist 한 곳만 PUBLIC_URL 로 올바르게 쓰고 있었다)
+ */
+export function detachimage(path){
+    if(path===null || path===undefined || String(path).trim()===""){
+        return null;
+    }
+
+    const value = String(path);
+
+    //이미 전체 주소면 그대로 쓴다(originalpath 는 절대 주소로 저장된다).
+    if(value.startsWith("http://") || value.startsWith("https://")){
+        return value;
+    }
+
+    //프론트 정적 자산. 뒤에 ?ban=3 같은 쿼리가 붙어 있어도 그대로 통과한다.
+    if(value.startsWith("/front/")){
+        return process.env.PUBLIC_URL + value;
+    }
+
+    return API_BASE + (value.startsWith("/") ? value : "/"+value);
+}

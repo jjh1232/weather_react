@@ -8,7 +8,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { Button } from "../admin/AdminUI";
 import { Modalout, Modalin, Head, Headtitle, Headsub, Closebutton, Emptybox }
     from "../admin/AdminModal";
-import profileimage from "../UI/profileimage";
+import profileimage, { detachimage } from "../UI/profileimage";
 import { API_BASE } from "../config/api";
 
 //=====================================================================
@@ -357,7 +357,7 @@ export default function Imagebook(props){
                                 <FontAwesomeIcon icon={faChevronLeft}/>
                             </Navbutton>}
 
-                        {current && <Bigimage src={API_BASE+current.path} alt=""/>}
+                        {current && <Bigimage src={detachimage(current.path)} alt=""/>}
                         {current && isbanned(current.path) && <Bannedmark>차단됨</Bannedmark>}
 
                         {activeindex<list.length-1 &&
@@ -400,7 +400,7 @@ export default function Imagebook(props){
                                                 checked={checkboxdata.includes(String(data.id))}
                                                 onChange={(e)=>{Checkhandler(e.target.checked,e.target.value)}}
                                                 onClick={(e)=>e.stopPropagation()}/>}
-                                        <Thumbimg src={API_BASE+data.path} $dim={banned} alt=""/>
+                                        <Thumbimg src={detachimage(data.path)} $dim={banned} alt=""/>
                                         {banned && <Thumbbanned>차단됨</Thumbbanned>}
                                     </Thumbbox>
                                 )

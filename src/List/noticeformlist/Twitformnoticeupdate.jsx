@@ -7,6 +7,7 @@ import CreateAxios from "../../customhook/CreateAxios";
 import styled from "styled-components";
 import { useConfirm, useToast } from "../../UI/Feedback/FeedbackProvider";
 import { API_BASE } from "../../config/api";
+import { detachimage } from "../../UI/profileimage";
 
 //=====================================================================
 // 글 수정(서비스). 피드 카드의 ··· 메뉴에서 연다.
@@ -460,7 +461,7 @@ useEffect(()=>{
                         : <Filelist>
                             {files.map((list,index)=>(
                                 <Fileitem key={list.id??index}>
-                                    <Filethumb src={API_BASE+list.path} alt=""/>
+                                    <Filethumb src={detachimage(list.path)} alt=""/>
                                     <Filename title={list.filename}>{list.filename}</Filename>
                                     <Smallbutton type="button"
                                         onClick={()=>{filedelete(list.id,list.rangeindex)}}>제거</Smallbutton>

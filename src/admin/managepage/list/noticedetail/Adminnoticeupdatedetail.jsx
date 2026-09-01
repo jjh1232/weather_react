@@ -10,6 +10,7 @@ import { Page, Pagehead, Pagetitle, Pagemeta, Headright, Panel, Button }
     from "../../../AdminUI";
 import { useConfirm, useToast } from "../../../../UI/Feedback/FeedbackProvider";
 import { API_BASE } from "../../../../config/api";
+import { detachimage } from "../../../../UI/profileimage";
 
 //=====================================================================
 // 관리자 게시글 수정.
@@ -451,7 +452,7 @@ export default function Adminnoticeupdatedetail(props){
                         : <Sidebody>
                             {files.map((list,key)=>(
                                 <Detachitem key={list.id??key}>
-                                    <Detachimg src={API_BASE+list.path} alt=""/>
+                                    <Detachimg src={detachimage(list.path)} alt=""/>
                                     <Detachmeta>
                                         <Detachname title={list.filename}>{list.filename}</Detachname>
                                         <Detachidx>idx {list.idx}</Detachidx>
