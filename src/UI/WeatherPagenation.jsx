@@ -1,193 +1,143 @@
 import React from "react";
-import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay as front } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
-const Wrapper=styled.div`
+//=====================================================================
+// 지역 검색 결과 페이지 이동.
+//
+// 예전 모습:  [...1] [◀] [1][2][3][4][5] [▶] [...21]
+//   - 색이 gray/black/red 로 박혀 있어 다크모드에서 밑줄이 안 보이고
+//     현재 페이지는 회색 배경 + 빨간 글씨가 됐다.
+//   - "...1", "...21" 은 무슨 버튼인지 알기 어렵다.
+//   - 숨김 처리를 visibility 로 해서 안 보이는 자리가 그대로 남아
+//     페이지를 넘길 때마다 숫자들이 좌우로 흔들렸다.
+//
+// 지금 모습:  [‹] 1 … 5 [6] 7 … 21 [›]
+//   흔한 형태로 바꾸고 색은 전부 테마 토큰에서 가져온다.
+//=====================================================================
+
+const Wrapper=styled.nav`
     display: flex;
-    position: relative;
-    width: 300px;
-    
-    float: left;
- 
+    align-items: center;
+    justify-content: center;
     gap: 4px;
-`
-const Firstdiv=styled.div`
-display: flex;
-   gap: 4px;
-`
-const Pagediv=styled.div`
-    display: flex;
-    
-    //border: 1px solid red;
-       gap: 5px;
-`
-const Lastdiv=styled.div`
-    display: flex;
-    gap: 4px;
+    /* 예전엔 float:left 에 width:300px 이 박혀 있었다.
+       부모가 flex 라 흐름만 어긋나고 폭은 결과 수와 상관없이 고정이었다. */
 `
 
-const Numbutton=styled.button`
-    position: relative;
-    background: ${(props)=>props.current?"gray":"none"};
-    border:0.5px solid  gray;
-  //  border: 1px solid gray;
-     cursor: pointer;
-     /*가상 요소로 밑줄 만들기 */
-     &::after{
-        content: ""; //가상요소생성필수
-        position: absolute; //위치고정용
-        left: 20%;
-        bottom: 1px; //버튼텍스트바로아래위치
-        width: 70%;
-        height: 2px; //밑줄두께
-        background-color: black; //줄색
-         transform-origin: left;      /* 확장 애니메이션 시작점: 왼쪽에서 */
-        transform: scaleX(0);        /* 시작은 밑줄 안 보이게(길이 0) */
-        //transition: transform 0.3s ease; /* 부드럽게 변하도록 */
-    }
-      /* 마우스 올릴 때: 밑줄 길이를 100%로 확대 */
-  &:hover::after {
-    transform: scaleX(1);
-  }
-    
-`
-//따로태그만드는게더쉬울듯
-const Numspan=styled.span`
-    position: relative;
-    color:${(props)=>props.current?"red":"black"};
-    
-`
-const Pagebutton=styled.button`
-    visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
-   
-    background: none;
+const Cell=styled.button`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 8px;
+
+    border: 1px solid ${(props)=>props.$on?"transparent":props.theme.border};
+    border-radius: ${(props)=>props.theme.radiusSm};
+    background: ${(props)=>props.$on?props.theme.accent:"transparent"};
+    color: ${(props)=>props.$on?"#fff":props.theme.textMuted};
+
+    font-size: 13px;
+    font-weight: ${(props)=>props.$on?700:500};
+    font-variant-numeric: tabular-nums;   /* 자릿수가 달라도 폭이 안 흔들린다 */
     cursor: pointer;
-    position: relative;
-    border:0.5px solid  gray;
-     /*가상 요소로 밑줄 만들기 */
-     &::after{
-        content: ""; //가상요소생성필수
-        position: absolute; //위치고정용
-        left: 20%;
-        bottom: 1px; //버튼텍스트바로아래위치
-        width: 70%;
-        height: 2px; //밑줄두께
-        background-color: black; //줄색
-         transform-origin: left;      /* 확장 애니메이션 시작점: 왼쪽에서 */
-        transform: scaleX(0);        /* 시작은 밑줄 안 보이게(길이 0) */
-        //transition: transform 0.3s ease; /* 부드럽게 변하도록 */
+    transition: background ${(props)=>props.theme.transition},
+                color ${(props)=>props.theme.transition};
+
+    &:hover:not(:disabled){
+        background: ${(props)=>props.$on?props.theme.accentHover:props.theme.surfaceHover};
+        color: ${(props)=>props.$on?"#fff":props.theme.text};
     }
-      /* 마우스 올릴 때: 밑줄 길이를 100%로 확대 */
-  &:hover::after {
-    transform: scaleX(1);
-  }
-`
-const Playimo=styled(FontAwesomeIcon)`
-    
-`
-const Backimo=styled(FontAwesomeIcon)`
-    transform: scaleX(-1);//좌우뒤집기
+    &:disabled{
+        opacity: .35;
+        cursor: default;
+    }
 `
 
+//누를 수 없는 자리라 button 이 아니라 span 이다.
+const Gap=styled.span`
+    min-width: 18px;
+    text-align: center;
+    color: ${(props)=>props.theme.textFaint};
+    font-size: 13px;
+    user-select: none;
+`
 
 function WeatherPagenation(props){
 
     const {currentpage,getpagedata,totalpages}=props;
 
-   
+    //결과가 한 쪽뿐이면 페이지 이동 자체가 필요 없다.
+    if(!totalpages || totalpages<=1) return null;
 
-   
+    const maxpageshow=5;
     let startpage,endpage;
-    const maxpageshow=5;//보여줄양
 
-    if(totalpages <=maxpageshow){
+    if(totalpages<=maxpageshow){
         startpage=1;
         endpage=totalpages;
     }else{
-        const middle=Math.floor(maxpageshow/2);//페이지가 소수가 될수있어서 버려야함
+        const middle=Math.floor(maxpageshow/2);
 
         if(currentpage<=middle+1){
             startpage=1;
             endpage=maxpageshow;
-        }else if(currentpage >=totalpages-middle){
-            startpage=totalpages-maxpageshow+1;//4가차이나야하니까 +1
+        }else if(currentpage>=totalpages-middle){
+            startpage=totalpages-maxpageshow+1;
             endpage=totalpages;
         }else{
             startpage=currentpage-middle;
             endpage=currentpage+middle;
         }
     }
+
     const pagearray=[];
-            
-const setPage=(currentpagedata)=>{
-    getpagedata(currentpagedata);
+    for(let i=startpage;i<=endpage;i++){
+        pagearray.push(i);
+    }
+
+    const move=(e,page)=>{
+        e.preventDefault();
+        if(page<1||page>totalpages||page===currentpage) return;
+        getpagedata(page);
+    };
+
+    return (
+        <Wrapper aria-label="지역 검색 결과 페이지">
+
+            <Cell type="button" disabled={currentpage<=1}
+                aria-label="이전 페이지"
+                onClick={(e)=>move(e,currentpage-1)}>
+                <FontAwesomeIcon icon={faChevronLeft}/>
+            </Cell>
+
+            {/* 창이 1쪽부터 시작하지 않으면 첫 쪽으로 가는 길을 열어둔다 */}
+            {startpage>1 &&
+                <Cell type="button" onClick={(e)=>move(e,1)}>1</Cell>}
+            {startpage>2 && <Gap>…</Gap>}
+
+            {pagearray.map((p)=>(
+                <Cell key={p} type="button" $on={p===currentpage}
+                    aria-current={p===currentpage?"page":undefined}
+                    onClick={(e)=>move(e,p)}>
+                    {p}
+                </Cell>
+            ))}
+
+            {endpage<totalpages-1 && <Gap>…</Gap>}
+            {endpage<totalpages &&
+                <Cell type="button" onClick={(e)=>move(e,totalpages)}>{totalpages}</Cell>}
+
+            <Cell type="button" disabled={currentpage>=totalpages}
+                aria-label="다음 페이지"
+                onClick={(e)=>move(e,currentpage+1)}>
+                <FontAwesomeIcon icon={faChevronRight}/>
+            </Cell>
+
+        </Wrapper>
+    );
 }
 
-for (let i=startpage ; i<=endpage;i++){
-    pagearray.push(i)
-}
-
-
-            return(<Wrapper key="pagenation">
-                    
-                <Firstdiv>
-
-            
-         
-             <Pagebutton hidden={startpage>1?false:true} 
-             onClick={(e)=>{ e.preventDefault()
-                 setPage(1)}}>...1</Pagebutton>
-           
-             <Pagebutton hidden={startpage<2?true:false} 
-              onClick={(e)=>{ e.preventDefault()
-                 setPage(startpage-1)}}>
-                    <Backimo icon={front}/>
-
-                 </Pagebutton>
-
-                </Firstdiv>
-               
-                <Pagediv>
-             {pagearray.map((p,key)=>{
-                
-               return (
-                  
-                       
-                        
-                        <Numbutton key={key} current={p===currentpage?true:false} onClick={(e)=>{
-                            e.preventDefault();
-                            setPage(p)}
-                        }>
-                            <Numspan current={p===currentpage?true:false}>{p}</Numspan>
-                        </Numbutton> 
-
-                   
-                )
-
-             })}
-             </Pagediv>
-              <Lastdiv>
-                <Pagebutton hidden={endpage===totalpages?true:false} 
-                onClick={(e)=>{e.preventDefault()
-                    setPage(endpage+1)}}>
-                    <Playimo icon={front} />
-
-                    </Pagebutton>
-
-                <Pagebutton hidden={endpage===totalpages?true:false}
-                onClick={(e)=>{e.preventDefault()
-                    setPage(totalpages)}}>...{totalpages}</Pagebutton>
-              
-               </Lastdiv>
-            
-
-             </Wrapper>   
-            )
-    
-    
-
-
-}
 export default WeatherPagenation;
