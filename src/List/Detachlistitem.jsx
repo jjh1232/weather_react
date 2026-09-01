@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { API_BASE } from "../config/api";
+import { detachimage } from "../UI/profileimage";
 
 function Detachlistitem(props){
 
@@ -40,7 +41,8 @@ function Detachlistitem(props){
     const downloadfiles=async(path,filename)=>{
         //업로드된 첨부파일은 프론트 정적 자산이 아니라 백엔드가 내보내는 파일이다.
         //PUBLIC_URL 을 쓰면 배포했을 때 프론트 도메인을 가리켜 404 가 난다.
-        const url= API_BASE+path;
+        //첨부 경로는 이미 절대주소로 저장돼 있다. API_BASE 를 또 붙이면 주소가 깨진다.
+        const url= detachimage(path);
         const download=document.createElement(`a`);
 
         download.href=url;

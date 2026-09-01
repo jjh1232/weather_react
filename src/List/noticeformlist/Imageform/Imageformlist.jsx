@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { faChartSimple as view } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "../DateCom/Viewtrans";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
-import profileimage from "../../../UI/profileimage";
+import profileimage, { detachimage } from "../../../UI/profileimage";
 import { API_BASE } from "../../../config/api";
 
 
@@ -221,7 +221,7 @@ export default function Imageformlist(props){
 
             {content.blockcheck
             ? <MainImage src={process.env.PUBLIC_URL+"/front/Subimages/chdan.png"}/>
-            : <MainImage src={API_BASE+content.mainimage}/>}
+            : <MainImage src={detachimage(content.mainimage)}/>}
 
             {/* 작성자 + 이미지 장수를 한 줄에 */}
             <Topbar>
