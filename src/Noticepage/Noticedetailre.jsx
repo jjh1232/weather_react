@@ -437,7 +437,12 @@ const LikeButtonhandler=(noticeid)=>{
         }
         <Commentform noticenum={post?.id} depth={0} cnum={0} page={page} setPage={setPage} />
         {commentloading&&<>댓글불러오는중....</>}
-        {comment&&<>
+        {/* 게시글과 댓글은 각각 별도 쿼리라 도착 순서가 보장되지 않는다.
+            comment 만 보고 그리면, 댓글이 먼저 온 경우 post 가 아직 undefined 인데
+            post.id 를 읽어서 렌더 중 예외가 난다. 에러 경계가 없어서 화면이 통째로
+            백지가 되고, 새로고침하면 타이밍이 달라져 우연히 넘어간다.
+            Commentlist 는 게시글 id 가 있어야 동작하므로 둘 다 기다린다. */}
+        {post&&comment&&<>
             <Commentlist comments={comment.content} noticeid={post.id} page={page} ref={pageref} />
             <Pagenationcss>
             <CommentPagination currentpage={page} totalpage={comment?.totalPages} setpage={setPage}/>
