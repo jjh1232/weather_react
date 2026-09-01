@@ -9,7 +9,7 @@ import FileResizer from "react-image-file-resizer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import CreateAxios from "../../customhook/CreateAxios";
-import profileimage from "../../UI/profileimage";
+import profileimage, { backgroundimage } from "../../UI/profileimage";
 import { API_BASE } from "../../config/api";
 
 /* ─────────────────────────────────────────────────────────────
@@ -422,7 +422,7 @@ export default function UserProfileEditmodal(props) {
             </Buttondiv>
         </Headerdiv>
         <Bodydiv>
-            <Backgrounddiv src={Backgroundsrc||(userinfo.profilebackground?API_BASE+"/userbackgroundimg"+userinfo.profilebackground:null)}>
+            <Backgrounddiv src={Backgroundsrc||backgroundimage(userinfo.profilebackground)}>
               <PhotoButton onClick={HandleBackClick}>
                     <Photoicon icon={photoicon}/>
               </PhotoButton>

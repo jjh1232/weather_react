@@ -21,7 +21,7 @@ import { faHeart as fullheart } from "@fortawesome/free-solid-svg-icons";
 import Viewtrans from "../List/noticeformlist/DateCom/Viewtrans";
 import AuthCheck from "../customhook/authCheck";
 import { useConfirm } from "../UI/Feedback/FeedbackProvider";
-import { API_BASE } from "../config/api";
+import profileimage from "../UI/profileimage";
 
 const Wrapper=styled.div`
    position: relative;
@@ -362,7 +362,7 @@ const LikeButtonhandler=(noticeid)=>{
            
       
         <Profilediv>
-       <Userprofile src={API_BASE+"/userprofileimg/"+post.userprofile }/>
+       <Userprofile src={profileimage(post.userprofile)}/>
        </Profilediv>
        <Headdatadiv>
             <Userdiv>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CommentUpdatelogic from "../List/noticeformlist/CommentLogic/CommentUpdatelogic";
 import Datefor from "../List/noticeformlist/DateCom/Datefor";
 import { handletext } from "../customhook/Userhandle";
-import { API_BASE } from "../config/api";
+import profileimage from "../UI/profileimage";
 
 /* 대댓글 수정 모드 - 읽기 모드(ReplyShowUI)와 같은 치수로 맞춰서
    수정 버튼을 눌러도 줄이 튀지 않게 했다. */
@@ -160,7 +160,7 @@ export default function ReplyUpdateUI(props){
     return (
          <Wrapper>
                  <Profilediv>
-                   <Profileimg src={API_BASE+"/userprofileimg/"+data.userprofile}/>
+                   <Profileimg src={profileimage(data.userprofile)}/>
                  </Profilediv>
                  <Maindiv>
                    <MainHeader>

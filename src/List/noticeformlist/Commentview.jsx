@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis  } from "@fortawesome/free-solid-svg-icons";
 import { handletext } from "../../customhook/Userhandle";
 import CommentMenu from "../../UI/Buttonlist/CommentMenu";
-import { API_BASE } from "../../config/api";
+import profileimage from "../../UI/profileimage";
 
 /* ─────────────────────────────────────────────────────────────
    댓글 한 줄(읽기 모드)
@@ -149,7 +149,7 @@ export default function Commentview(props){
     return (
         <>
         <Profilediv>
-        <Profileimg src={API_BASE+"/userprofileimg/"+data.userprofile}/>
+        <Profileimg src={profileimage(data.userprofile)}/>
         
       </Profilediv>
       <Maindiv>

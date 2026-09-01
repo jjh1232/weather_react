@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { handletext } from "../customhook/Userhandle";
 import CommentMenu from "./Buttonlist/CommentMenu";
-import { API_BASE } from "../config/api";
+import profileimage from "../UI/profileimage";
 
 /* ─────────────────────────────────────────────────────────────
    대댓글 한 줄(읽기 모드)
@@ -149,7 +149,7 @@ export default function ReplyShowUI(props){
     return (
           <>
                 <Profilediv>
-                <Profileimg src={API_BASE+"/userprofileimg/"+data.userprofile}/>
+                <Profileimg src={profileimage(data.userprofile)}/>
                 
               </Profilediv>
               <Maindiv>

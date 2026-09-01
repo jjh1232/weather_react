@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Datefor from "./DateCom/Datefor";
 import { handletext } from "../../customhook/Userhandle";
 import CommentUpdatelogic from "./CommentLogic/CommentUpdatelogic";
-import { API_BASE } from "../../config/api";
+import profileimage from "../../UI/profileimage";
 
 /* ─────────────────────────────────────────────────────────────
    댓글 수정 모드
@@ -168,7 +168,7 @@ export default function Commentupdateitem(props){
     return (
         <Wrapper>
           <Profilediv>
-            <Profileimg src={API_BASE+"/userprofileimg/"+data.userprofile}/>
+            <Profileimg src={profileimage(data.userprofile)}/>
           </Profilediv>
           <Maindiv>
             <MainHeader>

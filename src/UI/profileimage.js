@@ -54,3 +54,30 @@ export default function profileimage(path){
 
     return base + "/userprofileimg" + (value.startsWith("/") ? value : "/"+value);
 }
+
+/**
+ * 배경 이미지 <img src> 를 만든다. 규칙은 profileimage 와 같다.
+ *
+ * 기본 이미지는 없다. 값이 없으면 null 을 돌려주고, 호출부가
+ * "배경 없음" 스타일을 그리게 한다.
+ *
+ * 예전에는 호출부에서 API_BASE + "/userbackgroundimg" + 값 으로 이어붙였다.
+ * 저장된 값이 "/uuid.png" 처럼 앞 슬래시를 갖고 있어서 우연히 맞았을 뿐이고,
+ * 슬래시 없는 값이 하나라도 들어오면 바로 깨진다.
+ */
+export function backgroundimage(path){
+    if(path===null || path===undefined || String(path).trim()===""){
+        return null;
+    }
+
+    const value = String(path);
+
+    if(value.startsWith("/userbackgroundimg")){
+        return API_BASE + value;
+    }
+    if(value.startsWith("http://") || value.startsWith("https://")){
+        return value;
+    }
+
+    return API_BASE + "/userbackgroundimg" + (value.startsWith("/") ? value : "/"+value);
+}

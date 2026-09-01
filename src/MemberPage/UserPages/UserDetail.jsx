@@ -15,7 +15,7 @@ import { handletext } from "../../customhook/Userhandle";
 import { useQueryClient } from "@tanstack/react-query";
 import AuthCheck from "../../customhook/authCheck";
 import { useToast, messageFromError } from "../../UI/Feedback/FeedbackProvider";
-import profileimage from "../../UI/profileimage";
+import profileimage, { backgroundimage } from "../../UI/profileimage";
 import { API_BASE } from "../../config/api";
 
 const Wrapper=styled.div`
@@ -321,9 +321,7 @@ export default function UserDetail(props){
         
         <Usercss> 
             {isEdit&&<UserProfileEditmodal setisedit={setIsEdit} userinfo={userinfo}/>}
-            <UserBackground src={userinfo.profilebackground
-                ?API_BASE+"/userbackgroundimg"+userinfo.profilebackground
-                :null}>
+            <UserBackground src={backgroundimage(userinfo.profilebackground)}>
 
             </UserBackground>
                         <Userheaderdiv>
