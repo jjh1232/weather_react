@@ -7,6 +7,7 @@ import Twitformlist from "../../List/noticeformlist/Twitformlist";
 import { useQuery } from "@tanstack/react-query";
 import {format} from "date-fns"
 import Viewtrans from "../../List/noticeformlist/DateCom/Viewtrans";
+import { parseServerDate } from "../../List/noticeformlist/DateCom/Datefor";
 import { useCookies } from "react-cookie";
 import Userpageformtool from "./Userpageformtool";
 import Userpagesearch from "./Userpagesearch";
@@ -310,8 +311,12 @@ export default function UserDetail(props){
  
 
     //가입날짜포맷
+    //서버 형식("2026.09.15/09:09:7")을 문자열째 넘기면 date-fns 가 new Date() 로 읽는데,
+    //파이어폭스는 이 형식을 못 읽어 「Invalid time value」 로 유저 페이지가 통째로 깨졌다.
     const JoinDate=(joindate)=>{
-        const formatted=format(joindate,'yyyy MMMM d')
+        const d=parseServerDate(joindate)
+        if(isNaN(d.getTime())) return <>{joindate||""}</>
+        const formatted=format(d,'yyyy MMMM d')
         return <>{formatted}</>
     }
 
