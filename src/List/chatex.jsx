@@ -749,6 +749,12 @@ function Chatex(props) {
     setChatdata(chatlist?.chatList);
   }, [chatlist, roomid]);
 
+  /* 입장·퇴장(System) 메시지는 「대화」 로 치지 않는다.
+     그 줄은 가운데 회색으로 보여주되, 실제 대화가 없으면 「아직 대화가 없어요」 도 같이 띄운다.
+     목록의 미리보기·안 읽은 수도 서버에서 같은 기준으로 센다. */
+  const hasRealChat = !!chatdata && Object.values(chatdata)
+      .some((chats) => Array.isArray(chats) && chats.some((c) => c?.messagetype !== "System"));
+
 //유즈이펙트로 최근에읽은곳가기
     useEffect(()=>{
            
@@ -984,6 +990,14 @@ function Chatex(props) {
 
                         })
                         }
+
+                    {!chatloading && !chaterror && chatdata && Object.keys(chatdata).length>0 && !hasRealChat && (
+                        <Statebox>
+                            <Stateicon><FontAwesomeIcon icon={faComments}/></Stateicon>
+                            <Statetitle>아직 대화가 없어요</Statetitle>
+                            <div>첫 메시지를 보내 대화를 시작해 보세요.</div>
+                        </Statebox>
+                    )}
 
                     {//아래로 내리기위한 div태그
                     }

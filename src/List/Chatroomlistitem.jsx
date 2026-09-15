@@ -207,7 +207,8 @@ function Chatroomlistitem(props){
        
        
        <MainBottom>
-        {chatroomdata.lastMessageContent}
+        {/* 입장·퇴장 메시지는 대화로 치지 않는다 — 서버가 실제 대화가 없는 방은 메타를 안 준다 */}
+        {chatroomdata.lastMessageContent ?? <span style={{opacity:.6}}>아직 대화가 없어요</span>}
         </MainBottom>
         
        
@@ -216,7 +217,7 @@ function Chatroomlistitem(props){
 
         <Optiondiv>
             <Menudiv>
-                  <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/> 
+                  {chatroomdata.lastMessageCreatedAt && <Datefor inputdate={chatroomdata.lastMessageCreatedAt}/>}
                 <Submenuicon icon={faGear}
                     onClick={(e)=>{
                         e.stopPropagation();
@@ -232,7 +233,7 @@ function Chatroomlistitem(props){
               
            
             
-                 {chatroomdata&&chatroomdata.unreadCount!==0&&
+                 {chatroomdata&&chatroomdata.unreadCount>0&&
             
             <Circlediv>
                 {chatroomdata.unreadCount>99?<>99+</>:chatroomdata.unreadCount}
